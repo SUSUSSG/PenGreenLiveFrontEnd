@@ -38,7 +38,7 @@
           "
         >
           <img
-            src="@/assets/images/logo/logo.svg"
+            src="@/assets/images/logo/pengreenlive-logo-white.png"
             alt=""
             v-if="
               !this.$store.themeSettingsStore.isDark &&
@@ -47,7 +47,8 @@
           />
 
           <img
-            src="@/assets/images/logo/logo-white.svg"
+          src="@/assets/images/logo/pengreenlive-logo-dark.png"
+
             alt=""
             v-if="
               this.$store.themeSettingsStore.isDark ||
