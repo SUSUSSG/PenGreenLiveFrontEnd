@@ -6,12 +6,60 @@ import user4Img from "@/assets/images/all-img/user4.png";
 export const menuItems = [
   {
     isHeadr: true,
-    title: "menu",
+    title: "메뉴",
   },
   {
-    title: "Dashboard",
+    title: "분석",
     icon: "heroicons-outline:home",
     link: "home",
+    isOpen: true,
+    child: [
+        {
+        childtitle: "리뷰 통계",
+        childlink: "home",
+        },
+        {
+        childtitle: "상품 통계",
+        childlink: "ecommerce",
+        },
+        {
+          childtitle: "방송 통계",
+          childlink: "ecommerce",
+        },
+    ],
+  },
+  {
+    title: "상품",
+    icon: "heroicons-outline:chat",
+    link: "chat",
+    isOpen: false,
+    child: [
+        {
+        childtitle: "상품 목록",
+        childlink: "home",
+        },
+        {
+        childtitle: "상품 카테고리",
+        childlink: "ecommerce",
+        },
+    ],
+  },
+
+  {
+    title: "정보 관리",
+    icon: "heroicons-outline:mail",
+    link: "email",
+    isOpen: false,
+    child: [
+        {
+        childtitle: "계정 정보 관리",
+        childlink: "home",
+        },
+        {
+        childtitle: "상점 정보 관리",
+        childlink: "ecommerce",
+        },
+    ],
   },
 ];
 // menuseetins
