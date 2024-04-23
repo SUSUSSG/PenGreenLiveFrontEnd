@@ -67,7 +67,7 @@
         @after-leave="afterLeave"
       >
         <!-- !! SubMenu !! -->
-        <ul class="sub-menu " v-if="i === activeSubmenu">
+        <ul calss="sub-menu " v-if="i === activeSubmenu">
           <li
             v-for="(ci, index) in item.child"
             :key="index"
@@ -108,136 +108,6 @@
         <span class="menu-icon"><Icon icon="heroicons:document" /></span>
         <div class="text-box">Documentation</div>
       </a>
-    </li>
-    <!-- 분석 서브메뉴 -->
-    <li
-      :class="{
-        'item-has-children': true,
-        open: activeSubmenu === items.length,
-        'menu-item-active': this.$route.name === 'new-menu'
-      }"
-      class="single-sidebar-menu"
-      @click="toggleSubmenu(items.length)"
-    >
-      <div class="menu-link">
-        <span class="menu-icon">
-          <Icon icon="heroicons:folder-open" />
-        </span>
-        <div class="text-box">분석</div>
-        <div class="menu-arrow">
-          <Icon icon="heroicons-outline:chevron-right" />
-        </div>
-      </div>
-      <Transition
-        enter-active-class="submenu_enter-active"
-        leave-active-class="submenu_leave-active"
-      >
-        <ul class="sub-menu" v-if="activeSubmenu === items.length">
-          <li class="block ltr:pl-8 rtl:pr-4 ltr:pr-1 rtl:-l-1 mb-4 first:mt-4">
-            <router-link to="/new-submenu-link">
-              <span class="text-sm">
-                ㄴ 리뷰 통계
-              </span>
-            </router-link>
-          </li>
-          <li class="block ltr:pl-8 rtl:pr-4 ltr:pr-1 rtl:-l-1 mb-4 first:mt-4">
-            <router-link to="/new-submenu-link">
-              <span class="text-sm">
-                ㄴ 상품 통계
-              </span>
-            </router-link>
-          </li>
-          <li class="block ltr:pl-8 rtl:pr-4 ltr:pr-1 rtl:-l-1 mb-4 first:mt-4">
-            <router-link to="/new-submenu-link">
-              <span class="text-sm">
-                ㄴ 방송 통계
-              </span>
-            </router-link>
-          </li>
-        </ul>
-      </Transition>
-    </li>
-    <!-- 상품 서브메뉴 -->
-    <li
-      :class="{
-        'item-has-children': true,
-        open: activeSubmenu === items.length,
-        'menu-item-active': this.$route.name === 'new-menu'
-      }"
-      class="single-sidebar-menu"
-      @click="toggleSubmenu(items.length)"
-    >
-      <div class="menu-link">
-        <span class="menu-icon">
-          <Icon icon="heroicons:folder-open" />
-        </span>
-        <div class="text-box">상품</div>
-        <div class="menu-arrow">
-          <Icon icon="heroicons-outline:chevron-right" />
-        </div>
-      </div>
-      <Transition
-        enter-active-class="submenu_enter-active"
-        leave-active-class="submenu_leave-active"
-      >
-        <ul class="sub-menu" v-if="activeSubmenu === items.length">
-          <li class="block ltr:pl-8 rtl:pr-4 ltr:pr-1 rtl:-l-1 mb-4 first:mt-4">
-            <router-link to="/new-submenu-link">
-              <span class="text-sm">
-                ㄴ 상품 목록
-              </span>
-            </router-link>
-          </li>
-          <li class="block ltr:pl-8 rtl:pr-4 ltr:pr-1 rtl:-l-1 mb-4 first:mt-4">
-            <router-link to="/new-submenu-link">
-              <span class="text-sm">
-                ㄴ 상품 카테고리
-              </span>
-            </router-link>
-          </li>
-        </ul>
-      </Transition>
-    </li>
-    <!-- 설정 서브메뉴 -->
-    <li
-      :class="{
-        'item-has-children': true,
-        open: activeSubmenu === items.length,
-        'menu-item-active': this.$route.name === 'new-menu'
-      }"
-      class="single-sidebar-menu"
-      @click="toggleSubmenu(items.length)"
-    >
-      <div class="menu-link">
-        <span class="menu-icon">
-          <Icon icon="heroicons:folder-open" />
-        </span>
-        <div class="text-box">설정</div>
-        <div class="menu-arrow">
-          <Icon icon="heroicons-outline:chevron-right" />
-        </div>
-      </div>
-      <Transition
-        enter-active-class="submenu_enter-active"
-        leave-active-class="submenu_leave-active"
-      >
-        <ul class="sub-menu" v-if="activeSubmenu === items.length">
-          <li class="block ltr:pl-8 rtl:pr-4 ltr:pr-1 rtl:-l-1 mb-4 first:mt-4">
-            <router-link to="/new-submenu-link">
-              <span class="text-sm">
-                ㄴ 계정 정보 관리
-              </span>
-            </router-link>
-          </li>
-          <li class="block ltr:pl-8 rtl:pr-4 ltr:pr-1 rtl:-l-1 mb-4 first:mt-4">
-            <router-link to="/new-submenu-link">
-              <span class="text-sm">
-                ㄴ 상점 정보 관리
-              </span>
-            </router-link>
-          </li>
-        </ul>
-      </Transition>
     </li>
   </ul>
 </template>
