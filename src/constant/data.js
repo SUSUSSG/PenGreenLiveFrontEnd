@@ -12,7 +12,7 @@ export const menuItems = [
     title: "분석",
     icon: "heroicons-outline:home",
     link: "home",
-    isOpen: true,
+    isOpen: false,
     child: [
         {
         childtitle: "리뷰 통계",
