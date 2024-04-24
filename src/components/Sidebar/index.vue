@@ -115,26 +115,40 @@
             simplebarInstance = instance;
           }
         "
-      >
+        >
+        <div class="px-4 py-2">
+          <Button btnClass="btn btn-dark d-flex align-items-center justify-content-center">
+            <Icon icon="heroicons-outline:plus-circle" class="me-2 mr-2" />
+            라이브 만들기
+          </Button>
+        </div>
+        <div class="px-4 py-2">
+          <Button btnClass="btn btn-dark light d-flex align-items-center justify-content-center">
+            <Icon icon="heroicons-outline:video-camera" class="me-2 mr-2" />
+            실시간 라이브
+          </Button>
+        </div>
         <Navmenu :items="menuItems" />
       </SimpleBar>
     </div>
   </div>
 </template>
 <script>
-// import { Icon } from "@iconify/vue";
+import { Icon } from "@iconify/vue";
 import { defineComponent } from "vue";
 import { menuItems } from "../../constant/data";
 import Navmenu from "./Navmenu";
 import { gsap } from "gsap";
 import { SimpleBar } from "simplebar-vue3";
 import { ref, onMounted } from "vue";
+import Button from "@/components/Button";
 
 export default defineComponent({
   components: {
-    // Icon,
     Navmenu,
     SimpleBar,
+    Button,
+    Icon,
   },
   data() {
     return {
@@ -200,5 +214,23 @@ export default defineComponent({
 }
 .logo-segment.logo-hovered {
   width: 248px !important;
+}
+.sidebar-menu .btn-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px; // 버튼 사이의 간격 조절
+}
+
+.sidebar-menu .btn-dark {
+  width: 100%; // 버튼이 컨테이너의 전체 너비를 차지하도록 설정
+  padding: 10px; // 버튼의 패딩을 조절하여 더 눈에 띄게 함
+}
+.icon-before {
+  margin-right: 8px; // 아이콘과 텍스트 사이 간격
+}
+.btn div{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
