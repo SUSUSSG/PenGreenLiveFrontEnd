@@ -1,13 +1,8 @@
 <template>
-  <LiveBoardTime></LiveBoardTime>
+  
 </template>
 <script>
-import LiveBoardTime from '../components/LiveBoard/LiveBoardTime.vue';
 
-export default {
-  components: {
-    LiveBoardTime,
-  }
-};
+export default {};
 </script>
 <style lang=""></style>
