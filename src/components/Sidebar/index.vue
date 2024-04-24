@@ -123,7 +123,7 @@
           </Button>
         </div>
         <div class="px-4 py-2">
-          <Button btnClass="btn btn-dark light d-flex align-items-center justify-content-center">
+          <Button btnClass="btn btn-outline-dark light d-flex align-items-center justify-content-center">
             <Icon icon="heroicons-outline:video-camera" class="me-2 mr-2" />
             실시간 라이브
           </Button>
@@ -221,10 +221,12 @@ export default defineComponent({
   gap: 10px; // 버튼 사이의 간격 조절
 }
 
-.sidebar-menu .btn-dark {
+.sidebar-menu .btn-dark,
+.sidebar-menu .btn-outline-dark {
   width: 100%; // 버튼이 컨테이너의 전체 너비를 차지하도록 설정
   padding: 10px; // 버튼의 패딩을 조절하여 더 눈에 띄게 함
 }
+
 .icon-before {
   margin-right: 8px; // 아이콘과 텍스트 사이 간격
 }
