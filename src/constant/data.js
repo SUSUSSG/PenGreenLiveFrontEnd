@@ -62,6 +62,38 @@ export const menuItems = [
     ],
   },
 ];
+export const userMenuItems = [
+  {
+    isHeadr: true,
+    title: "메뉴",
+  },
+  {
+    title: "정보 수정",
+    icon: "heroicons-outline:user-circle", // 사용자 정보 수정 관련 아이콘
+    link: "edit-profile",
+  },
+  {
+    title: "주문 내역",
+    icon: "heroicons-outline:clipboard-list", // 주문 내역 관련 아이콘
+    link: "order-history",
+  },
+  {
+    title: "구독 설정",
+    icon: "heroicons-outline:refresh", // 구독 설정 관련 아이콘
+    link: "subscription-settings",
+  },
+  {
+    title: "시청 기록",
+    icon: "heroicons-outline:eye", // 시청 기록 관련 아이콘
+    link: "view-history",
+  },
+  {
+    title: "결제수단 등록",
+    icon: "heroicons-outline:credit-card", // 결제수단 등록 관련 아이콘
+    link: "payment-methods",
+  },
+];
+
 // menuseetins
 
 export const ProfileMenu = [
