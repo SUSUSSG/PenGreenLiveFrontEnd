@@ -1,12 +1,14 @@
 <template>
-  <div class="btn inline-flex justify-center btn-outline-danger rounded-[999px]">
-    {{ buttonText2 }}
+  <div v-if="isBraodcasting">
+    <Button v-on:click="toggleBroadcase()">방송 종료</Button>
+    <Button text="danger" btnClass="btn-outline-danger rounded-[999px]">방송 중</Button>
   </div>
-  <div>
-    <Button text="Dark" btnClass="btn-dark">{{ buttonText }}</Button>
+  <div v-else>
+    <Button v-on:click="toggleBroadcase()" text="Dark" btnClass="btn-dark">방송 시작</Button>
+    <Button text="dark" btnClass="btn-outline-dark rounded-[999px]">방송 대기</Button>
   </div>
   <div class="row">
-    <div v-for="(item, i) in statistics" :key="i">
+    <div v-for="(item, i) in statistics" v-on:key="i">
       <Card>
         <div>
           <div></div>
@@ -59,10 +61,23 @@ export default {
           icon: "clock",
         }
       ],
-      buttonText2: "방송중",
-      buttonText: "방송종료",
+      isBraodcasting: false,
     }
   },
+  computed: {
+    broadcastAction() {
+      return this.isBraodcasting ? "방송종료" : "방송시작";
+    },
+    broadcastStatus() {
+      return this.isBraodcasting ? "방송중" : "방송대기";
+    }
+  },
+  methods: {
+    toggleBroadcase() {
+      this.isBraodcasting = !this.isBraodcasting;
+      //console.log("isBraodcasting 상태:", this.isBraodcasting);
+    }
+  }
 };
 </script>
 
