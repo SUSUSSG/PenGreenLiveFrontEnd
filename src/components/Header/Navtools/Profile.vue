@@ -15,7 +15,7 @@
       >
         <span
           class="overflow-hidden text-ellipsis whitespace-nowrap w-[85px] block"
-          >Albert Flores</span
+          >여진구민석</span
         >
         <span class="text-base inline-block ltr:ml-[10px] rtl:mr-[10px]"
           ><Icon icon="heroicons-outline:chevron-down"></Icon
@@ -57,69 +57,42 @@ export default {
     MenuItem,
   },
   data() {
-    return {
-      profileImg,
-      ProfileMenu: [
-        {
-          label: "Profile",
-          icon: "heroicons-outline:user",
-          link: () => {
-            this.$router.push("profile");
-          },
+  return {
+    profileImg,
+    ProfileMenu: [
+      {
+        label: "프로필",
+        icon: "heroicons-outline:user", // 프로필을 나타내는 아이콘
+        link: () => {
+          this.$router.push("profile");
         },
-        {
-          label: "Chat",
-          icon: "heroicons-outline:chat",
-          link: () => {
-            this.$router.push("chat");
-          },
+      },
+      {
+        label: "주문 내역",
+        icon: "heroicons-outline:clipboard-list", // 주문 내역을 나타내는 아이콘
+        link: () => {
+          this.$router.push("chat");
         },
-        {
-          label: "Email",
-          icon: "heroicons-outline:mail",
-          link: () => {
-            this.$router.push("email");
-          },
+      },
+      {
+        label: "설정",
+        icon: "heroicons-outline:cog", // 설정을 나타내는 아이콘
+        link: () => {
+          this.$router.push("email");
         },
-        {
-          label: "Todo",
-          icon: "heroicons-outline:clipboard-check",
-          link: () => {
-            this.$router.push("todo");
-          },
+      },
+      {
+        label: "Logout",
+        icon: "heroicons-outline:logout", // 로그아웃을 나타내는 아이콘
+        link: () => {
+          this.$router.push("/");
+          localStorage.removeItem("activeUser");
         },
-        {
-          label: "Settings",
-          icon: "heroicons-outline:cog",
-          link: () => {
-            this.$router.push("settings");
-          },
-        },
-        {
-          label: "Price",
-          icon: "heroicons-outline:credit-card",
-          link: () => {
-            this.$router.push("pricing");
-          },
-        },
-        {
-          label: "Faq",
-          icon: "heroicons-outline:information-circle",
-          link: () => {
-            this.$router.push("faq");
-          },
-        },
-        {
-          label: "Logout",
-          icon: "heroicons-outline:login",
-          link: () => {
-            this.$router.push("/");
-            localStorage.removeItem("activeUser");
-          },
-        },
-      ],
-    };
-  },
+      },
+    ],
+  };
+},
+
 };
 </script>
 <style lang=""></style>

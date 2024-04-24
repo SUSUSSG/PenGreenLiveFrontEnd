@@ -128,31 +128,23 @@ const isOpen = ref(false);
 const searchList = [
   {
     id: 1,
-    name: "What is Dashcode ?",
+    name: "정보 수정",
   },
   {
     id: 2,
-    name: "Our Services",
+    name: "주문 내역",
   },
   {
     id: 3,
-    name: "Our Team",
+    name: "구독 설정",
   },
   {
     id: 4,
-    name: "Our Clients",
+    name: "시청 기록",
   },
   {
     id: 5,
-    name: "Our Partners",
-  },
-  {
-    id: 6,
-    name: "Our Blog",
-  },
-  {
-    id: 7,
-    name: "Our Contact",
+    name: "결제수단 등록",
   },
 ];
 
