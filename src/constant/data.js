@@ -11,36 +11,36 @@ export const menuItems = [
   {
     title: "분석",
     icon: "heroicons-outline:home",
-    link: "home",
+    link: "statistics",
     isOpen: false,
     child: [
         {
         childtitle: "리뷰 통계",
-        childlink: "home",
+        childlink: "review-statistics",
         },
         {
         childtitle: "상품 통계",
-        childlink: "ecommerce",
+        childlink: "product-statistics",
         },
         {
-          childtitle: "방송 통계",
-          childlink: "ecommerce",
+        childtitle: "방송 통계",
+        childlink: "broadcast-statistics",
         },
     ],
   },
   {
     title: "상품",
     icon: "heroicons-outline:chat",
-    link: "chat",
-    isOpen: false,
+    link: "product",
+    isOpen: true,
     child: [
         {
         childtitle: "상품 목록",
-        childlink: "home",
+        childlink: "product-list",
         },
         {
         childtitle: "상품 카테고리",
-        childlink: "ecommerce",
+        childlink: "product-category",
         },
     ],
   },
@@ -48,16 +48,16 @@ export const menuItems = [
   {
     title: "정보 관리",
     icon: "heroicons-outline:mail",
-    link: "email",
+    link: "info",
     isOpen: false,
     child: [
         {
         childtitle: "계정 정보 관리",
-        childlink: "home",
+        childlink: "user-info",
         },
         {
         childtitle: "상점 정보 관리",
-        childlink: "ecommerce",
+        childlink: "channel-info",
         },
     ],
   },
