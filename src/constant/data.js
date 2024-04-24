@@ -6,14 +6,94 @@ import user4Img from "@/assets/images/all-img/user4.png";
 export const menuItems = [
   {
     isHeadr: true,
-    title: "menu",
+    title: "메뉴",
   },
   {
-    title: "Dashboard",
-    icon: "heroicons-outline:home",
-    link: "home",
+    title: "분석",
+    icon: "heroicons-outline:chart-bar",
+    link: "statistics",
+    isOpen: false,
+    child: [
+        {
+        childtitle: "리뷰 통계",
+        childlink: "review-statistics",
+        },
+        {
+        childtitle: "상품 통계",
+        childlink: "product-statistics",
+        },
+        {
+        childtitle: "방송 통계",
+        childlink: "broadcast-statistics",
+        },
+    ],
+  },
+  {
+    title: "상품",
+    icon: "heroicons-outline:shopping-cart",
+    link: "product",
+    isOpen: true,
+    child: [
+        {
+        childtitle: "상품 목록",
+        childlink: "product-list",
+        },
+        {
+        childtitle: "상품 카테고리",
+        childlink: "product-category",
+        },
+    ],
+  },
+
+  {
+    title: "정보 관리",
+    icon: "heroicons-outline:information-circle",
+    link: "info",
+    isOpen: false,
+    child: [
+        {
+        childtitle: "계정 정보 관리",
+        childlink: "user-info",
+        },
+        {
+        childtitle: "상점 정보 관리",
+        childlink: "channel-info",
+        },
+    ],
   },
 ];
+export const userMenuItems = [
+  {
+    isHeadr: true,
+    title: "메뉴",
+  },
+  {
+    title: "정보 수정",
+    icon: "heroicons-outline:user-circle", // 사용자 정보 수정 관련 아이콘
+    link: "edit-profile",
+  },
+  {
+    title: "주문 내역",
+    icon: "heroicons-outline:clipboard-list", // 주문 내역 관련 아이콘
+    link: "order-history",
+  },
+  {
+    title: "구독 설정",
+    icon: "heroicons-outline:refresh", // 구독 설정 관련 아이콘
+    link: "subscription-settings",
+  },
+  {
+    title: "시청 기록",
+    icon: "heroicons-outline:eye", // 시청 기록 관련 아이콘
+    link: "view-history",
+  },
+  {
+    title: "결제수단 등록",
+    icon: "heroicons-outline:credit-card", // 결제수단 등록 관련 아이콘
+    link: "payment-methods",
+  },
+];
+
 // menuseetins
 
 export const ProfileMenu = [
