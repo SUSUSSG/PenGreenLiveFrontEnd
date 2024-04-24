@@ -10,7 +10,7 @@ export const menuItems = [
   },
   {
     title: "분석",
-    icon: "heroicons-outline:home",
+    icon: "heroicons-outline:chart-bar",
     link: "statistics",
     isOpen: false,
     child: [
@@ -30,7 +30,7 @@ export const menuItems = [
   },
   {
     title: "상품",
-    icon: "heroicons-outline:chat",
+    icon: "heroicons-outline:shopping-cart",
     link: "product",
     isOpen: true,
     child: [
@@ -47,7 +47,7 @@ export const menuItems = [
 
   {
     title: "정보 관리",
-    icon: "heroicons-outline:mail",
+    icon: "heroicons-outline:information-circle",
     link: "info",
     isOpen: false,
     child: [
