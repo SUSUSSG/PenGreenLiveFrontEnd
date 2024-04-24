@@ -15,7 +15,7 @@
       >
         <span
           class="overflow-hidden text-ellipsis whitespace-nowrap w-[85px] block"
-          >여진구민석</span
+          >슈슈슉</span
         >
         <span class="text-base inline-block ltr:ml-[10px] rtl:mr-[10px]"
           ><Icon icon="heroicons-outline:chevron-down"></Icon
@@ -79,6 +79,13 @@ export default {
         icon: "heroicons-outline:cog", // 설정을 나타내는 아이콘
         link: () => {
           this.$router.push("email");
+        },
+      },
+      {
+        label: "대시보드",
+        icon: "heroicons-outline:home", // 대시보드를 나타내는 아이콘
+        link: () => {
+          this.$router.push("dashboard");
         },
       },
       {
