@@ -17,6 +17,7 @@
             src="@/assets/images/logo/pengreenlive-logo-white.png"
             alt="Pengreen Live"
             v-if="!$store.themeSettingsStore.isDark && !$store.themeSettingsStore.semidark"
+            
           />
           <img
             src="@/assets/images/logo/pengreenlive-logo-dark.png"
@@ -139,7 +140,7 @@ export default {
   @apply md:mx-6 md:my-8 mx-[15px] my-[15px] rounded-md;
 }
 img{
-  height: 40px;
+  width: 140px;
 }
 
 </style>
