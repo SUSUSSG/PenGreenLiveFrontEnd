@@ -72,7 +72,7 @@
                         <p
                           className="text-slate-500-600 text-base dark:text-white"
                         >
-                          No result found
+                          검색 결과가 없습니다.
                         </p>
                       </div>
                     </div>

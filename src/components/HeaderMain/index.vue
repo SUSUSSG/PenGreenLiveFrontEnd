@@ -139,7 +139,7 @@ export default {
   @apply md:mx-6 md:my-8 mx-[15px] my-[15px] rounded-md;
 }
 img{
-  height: 30px;
+  height: 40px;
 }
 
 </style>
