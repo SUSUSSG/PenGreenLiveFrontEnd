@@ -40,10 +40,9 @@
 <script>
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Header from "../components/HeaderMain";
 import Settings from "../components/Settings";
 import Sidebar from "../components/Sidebar/";
-// import Sidebar from "../components/UserSidebar/";
 import window from "@/mixins/window";
 import MobileSidebar from "@/components/Sidebar/MobileSidebar.vue";
 import FooterMenu from "@/components/Footer/FooterMenu.vue";
@@ -61,16 +60,7 @@ export default {
   },
   methods: {
     switchHeaderClass() {
-      if (
-        this.$store.themeSettingsStore.menuLayout === "horizontal" ||
-        this.$store.themeSettingsStore.sidebarHidden
-      ) {
-        return "ltr:ml-0 rtl:mr-0";
-      } else if (this.$store.themeSettingsStore.sidebarCollasp) {
-        return "ltr:ml-[72px] rtl:mr-[72px]";
-      } else {
-        return "ltr:ml-[248px] rtl:mr-[248px]";
-      }
+      return "ltr:ml-0 rtl:mr-0";
     },
   },
 };
