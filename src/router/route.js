@@ -12,6 +12,19 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/main",
+    components: {
+      default: () => import("@/Layout/main-index.vue"),
+    },
+    children: [
+      {
+        path: "",
+        name: "main-home",
+        component: () => import("@/views/main/index.vue"),
+      },
+    ],
+  },
 ];
 
 export default routes;
