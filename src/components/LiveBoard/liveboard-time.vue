@@ -9,19 +9,19 @@
   </div>
   <div class="row">
     <div v-for="(item, i) in statistics" :key="i">
-      <div class="flex space-x-3 rtl:space-x-reverse">
+      <div class="inline-flex space-x-3 bg-white rounded pt-3 px-4 mt-4">
         <div class="flex-none">
-          <div class="bg-white rounded pt-3 px-4">
-            <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl"
-              :class="`${item.bg} ${item.text}`">
-              <Icon :icon="`heroicons:clock`"></Icon>
-            </div>
-            <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
-              {{ item.title }}
-            </div>
-            <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
-              {{ item.time }}
-            </div>
+          <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl"
+            :class="`${item.bg} ${item.text}`">
+            <Icon :icon="`heroicons:clock`" />
+          </div>
+        </div>
+        <div class="flex-1">
+          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
+            {{ item.title }}
+          </div>
+          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
+            {{ item.time }}
           </div>
         </div>
       </div>
