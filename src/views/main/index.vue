@@ -37,39 +37,9 @@
       </swiper-slide>
     </swiper>
   </div>
-  <div class="container mt-8">
-    <div class="d-flex justify-content-center my-2" style="display:flex;justify-content: space-evenly;">
-      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
-        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
-        <span>전체</span>
-      </div>
-      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
-        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
-        <span>뷰티</span>
-      </div>
-      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
-        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
-        <span>식품</span>
-      </div>
-      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
-        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
-        <span>패션</span>
-      </div>
-      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
-        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
-        <span>라이프</span>
-      </div>
-      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
-        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
-        <span>유아동</span>
-      </div>
-      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
-        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
-        <span>테크</span>
-      </div>
-    </div>
-</div>
-
+  <hr />
+  <Categories />
+  <hr />
 </template>
 
 <script>
@@ -78,6 +48,7 @@ import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import Categories from "@/components/Category/Categories.vue";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
@@ -85,6 +56,7 @@ export default {
   components: {
     Swiper,
     SwiperSlide,
+    Categories,
   },
   data() {
     return {
