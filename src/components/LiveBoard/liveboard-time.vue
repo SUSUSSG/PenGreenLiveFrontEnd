@@ -51,7 +51,7 @@ export default {
         {
           name: "time2",
           title: "경과시간",
-          time: "00:00:00",
+          time: '00:00:00',
         },
         {
           name: "time3",
@@ -60,19 +60,31 @@ export default {
         }
       ],
       isBroadcasting: false,
+      elapsedTime: 0, //초단위 저장
+      intervalId: null
     }
   },
   mounted() {
     this.getCurrentTime();
     setInterval(this.getCurrentTime, 1000);
+    setInterval(this.getElapsedTime, 1000);
   },
   methods: {
     toggleBroadcast() {
       this.isBroadcasting = !this.isBroadcasting;
     },
     getCurrentTime() {
-      const now = new Date();
+      let now = new Date();
       this.statistics[0].time = this.addZero(now.getHours()) + ":" + this.addZero(now.getMinutes()) + ":" + this.addZero(now.getSeconds());
+    },
+    getElapsedTime() {
+      if (this.isBroadcasting == true) {
+        this.elapsedTime++;
+        let seconds = this.elapsedTime % 60;
+        let minutes = Math.floor(this.elapsedTime / 60) % 60;
+        let hours = Math.floor(this.elapsedTime / 3600);
+        this.statistics[1].time = `${this.addZero(hours)}:${this.addZero(minutes)}:${this.addZero(seconds)}`
+      } 
     },
     addZero(number) {
       return number < 10 ? "0" + number : number;
