@@ -49,7 +49,7 @@
       :pagination="{ clickable: true }"
       class="hot-live-caro"
       :loop="false"
-      :navigation="true"
+      :navigation="false"
       :autoplay="{ delay: 5000, disableOnInteraction: false }"
       style="width: 100%; margin: auto"
     >
@@ -74,8 +74,8 @@
               />
             </div>
             <div class="additional-text-container">
-              <h4 v-if="item.viewersCount">{{ item.viewersCount }}명이 보는 중</h4>
-              <h2 v-if="item.title">{{ item.title }}</h2>
+              <h5 v-if="item.viewersCount" class="mb-4">{{ item.viewersCount }}명이 보는 중!</h5>
+              <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
               <p v-if="item.description">{{ item.description }}</p>
             </div>
           </div>
@@ -150,7 +150,7 @@ export default {
           title: "첫 번째 슬라이드",
           description: "첫 번째 슬라이드에 대한 설명입니다.",
           additionalImages: [
-            "http://via.placeholder.com/80x80",
+            "https://emoji.slack-edge.com/T0674GTPH0A/%25EB%258D%25A4%25EB%25B8%2594%25EB%258F%2584%25EC%2596%25B4%25EB%25B0%2595%25EC%2588%2598/cf86b0e2fc5e5f82.gif",
             "http://via.placeholder.com/80x80",
           ],
         },
@@ -253,8 +253,9 @@ export default {
   position: absolute;
   display: flex;
   flex-direction: row;
-  height: 100%;
-  top: 0%;
+  height: 90%;
+  left: 31%;
+  top: 10%;
   text-align: left;
   color: rgb(60, 60, 60);
   z-index: 2;
@@ -268,14 +269,16 @@ export default {
 .hot-live-caro .additional-images-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  justify-content: flex-end;
+  margin-right: 2rem;
+  margin-bottom: 8px;
+  gap: 8px;
 }
 
 .hot-live-caro .additional-image {
-  width: 80px; /* 추가 이미지의 크기를 설정 */
+  width: 80px;
   height: 80px;
   object-fit: cover;
-  border-radius: 10px; /* 이미지의 둥근 모서리 스타일링 */
 }
 .hot-live-caro .slide-background {
   width: 100%;
@@ -287,6 +290,6 @@ export default {
 .hot-live-caro .background-image {
   width: 30%;
   height: 100%;
-  object-fit: cover; /* 이미지가 컨테이너를 꽉 채우도록 설정 */
+  object-fit: cover;
 }
 </style>
