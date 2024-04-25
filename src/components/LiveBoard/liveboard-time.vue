@@ -46,7 +46,7 @@ export default {
         {
           name: "time1",
           title: "현재시간",
-          time: "00:00:00",
+          time: '',
         },
         {
           name: "time2",
@@ -62,10 +62,21 @@ export default {
       isBroadcasting: false,
     }
   },
+  mounted() {
+    this.getCurrentTime();
+    setInterval(this.getCurrentTime, 1000);
+  },
   methods: {
     toggleBroadcast() {
       this.isBroadcasting = !this.isBroadcasting;
-    }
+    },
+    getCurrentTime() {
+      const now = new Date();
+      this.statistics[0].time = this.addZero(now.getHours()) + ":" + this.addZero(now.getMinutes()) + ":" + this.addZero(now.getSeconds());
+    },
+    addZero(number) {
+      return number < 10 ? "0" + number : number;
+    },
   }
 };
 </script>
