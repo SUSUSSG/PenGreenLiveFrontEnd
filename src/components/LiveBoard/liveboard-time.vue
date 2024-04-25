@@ -8,8 +8,8 @@
     <Button text="dark" btnClass="btn-outline-dark rounded-[999px]">대기</Button>
   </div>
   <div class="row">
-    <div v-for="(item, i) in statistics" :key="i">
-      <div class="inline-flex space-x-3 bg-white rounded pt-3 px-4 mt-4">
+    <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
+      <div class="inline-flex  bg-white rounded pt-3 px-4 mt-4 pl-0">
         <div class="flex-none">
           <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl"
             :class="`${item.bg} ${item.text}`">
