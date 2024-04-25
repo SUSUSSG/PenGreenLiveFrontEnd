@@ -83,6 +83,59 @@
       </swiper-slide>
     </swiper>
   </section>
+  <hr/>
+  <section class="under-category-section" style="width: 60%; margin: auto;">
+    <h6 class="mb-6 pt-12 pl-6 pr-6">예정 라이브</h6>
+    <swiper
+      :slidesPerView="1"
+      :centeredSlides="false"
+      :spaceBetween="30"
+      :pagination="{ clickable: true }"
+      class="hot-live-caro"
+      :loop="false"
+      :navigation="false"
+      :autoplay="{ delay: 5000, disableOnInteraction: false }"
+      style="width: 100%; margin: auto"
+    >
+      <swiper-slide
+        v-for="(item, index) in hotLiveCarousels"
+        :key="index"
+        class="carousel-slide"
+      >
+        <div class="slide-background">
+          <img
+            :src="item.mainImage"
+            alt="Carousel Image"
+            class="background-image"
+          />
+          <div class="slide-content">
+            <div class="additional-images-container">
+              <img
+                v-for="(additionalImage, subIndex) in item.additionalImages"
+                :src="additionalImage"
+                :key="'additional-image-' + index + '-' + subIndex"
+                class="additional-image"
+              />
+            </div>
+            <div class="additional-text-container">
+              <h5 v-if="item.viewersCount" class="mb-4">{{ item.viewersCount }}명이 보는 중!</h5>
+              <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
+              <p v-if="item.description">{{ item.description }}</p>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper>
+  </section>
+
+  <CardComponent
+      imageSrc="http://via.placeholder.com/150x150"
+      title="Title"
+      text="Supporting or descriptive text for the card goes here like a pro."
+      date="4월 15일"
+      time="23:00"
+      buttonText="알림 설정"
+    />
 </template>
 
 <script>
@@ -92,6 +145,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Categories from "@/components/Category/Categories.vue";
+import CardComponent from "@/components/Card/BroadcastCard.vue";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
@@ -100,6 +154,7 @@ export default {
     Swiper,
     SwiperSlide,
     Categories,
+    CardComponent,
   },
   data() {
     return {
