@@ -30,10 +30,10 @@
                         <span v-if="props.column.field == 'price'">
                             {{ props.row.price }}
                         </span>
-                        <span v-if="props.column.field == 'customer'" class="flex customer-column" >
+                        <span v-if="props.column.field == 'customer'" class="flex">
                             <img v-for="entry in props.row.customer" :key="entry.name" :src="entry.image"
                                 :alt="entry.name" class="object-cover w-full h-full rounded-full"
-                                style="width: 24px; margin-right: 5px; &:last-child{margin-left: 0;}" />
+                                style="width: 24px; margin-right: 5px;" />
                         </span>
                     </template>
                     <template #pagination-bottom="props">
@@ -104,20 +104,15 @@ export default {
                 {
                     label: "인증",
                     field: "customer",
-                    className: 'customer-column',
+                    width : '130px',
                 },
             ],
         };
     },
-
 };
 </script>
 <style lang="scss" scoped>
 .action-btn {
     @apply h-6 w-6 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-700 rounded;
 }
-.vgt-table .customer-column {
-    width: 100px !important; /* 또는 다른 값 */
-}
-
 </style>
