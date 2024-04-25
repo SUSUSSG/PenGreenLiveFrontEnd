@@ -38,7 +38,6 @@
   </main>
 </template>
 <script>
-import Breadcrumbs from "@/components/Breadcrumbs";
 import Footer from "../components/Footer";
 import Header from "../components/HeaderMain";
 import Settings from "../components/Settings";
@@ -54,7 +53,6 @@ export default {
     Footer,
     Sidebar,
     Settings,
-    Breadcrumbs,
     FooterMenu,
     MobileSidebar,
   },
