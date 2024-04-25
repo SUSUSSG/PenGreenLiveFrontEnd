@@ -43,11 +43,11 @@
                         <Textinput label="카테고리" type="text" name="editcategorycode" v-model="categorycode"
                             class="mb-2" />
                         <Textinput label="정가" type="number" name="editlistprice" v-model="listprice" class="mb-2" />
-                        <!-- 이미지 업로드 및 표시 영역 -->
+
                         <div>
                             <label class="ltr:inline-block rtl:block input-label">인증</label><br>
-                            <div v-for="(image, index) in customer" :key="index">
-                                <img :src="image" alt="인증" style="max-width: 100px">
+                            <div v-for="(entry, index) in customer" :key="index">
+                                <img :src="entry.image" alt="인증 이미지" style="max-width: 100px">
                                 <button @click="removeImage(index)">삭제</button>
                             </div>
                             <input type="file" @change="addImage" accept="image/jpeg, image/png, image/gif">
@@ -144,6 +144,7 @@ export default {
             perpage: 10,
             pageRange: 5,
             searchTerm: "",
+            customer: [],
             options: [
                 {
                     value: "1",
@@ -201,15 +202,35 @@ export default {
             this.productname = row.productName;
             this.categorycode = row.category;
             this.listprice = row.price;
+            this.customer = [...row.customer];
 
             this.$refs.editModal.openModal();
         },
         closeEditModal() {
             this.$refs.editModal.closeModal();
         },
+        addImage(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // 이미지 데이터를 배열에 추가
+                    this.customer.push({ image: e.target.result });
+                };
+                reader.readAsDataURL(file);
+            }
+        },
+
+        removeImage(index) {
+            this.customer.splice(index, 1);
+        },
         saveProductDetails() {
-            // Implement saving logic
-            console.log("Saving product details...");
+
+            const productToUpdate = this.advancedTable.find(product => product.productCode === this.productcode);
+            if (productToUpdate) {
+                productToUpdate.customer = this.customer;
+            }
+
             this.$refs.editModal.closeModal();
         },
         openAddModal() {
