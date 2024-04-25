@@ -68,7 +68,7 @@ export default {
   mounted() {
     this.getCurrentTime();
     setInterval(this.getCurrentTime, 1000);
-    setInterval(this.getElapsedTime, 1000);
+    setInterval(this.updateTimes, 1000);
   },
   methods: {
     toggleBroadcast() {
