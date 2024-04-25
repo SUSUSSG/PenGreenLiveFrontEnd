@@ -10,6 +10,11 @@ const routes = [
         name: "home",
         component: () => import("@/views/index.vue"),
       },
+      {
+        path: "/broadcast/register-live",
+        name: "register-live",
+        component: () => import("@/views/broadcast/register-live.vue")
+      }
     ],
   },
   {
