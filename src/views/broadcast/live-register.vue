@@ -196,8 +196,8 @@ export default {
       benefits: [],
       productsToRegister: [
         // Example products (this would normally come from a server)
-        { name: 'Product A', code: 'A001', price: 10000, discountRate: 0, discountedPrice: 10000 },
-        { name: 'Product B', code: 'B001', price: 20000, discountRate: 0, discountedPrice: 20000 }
+        {name: 'Product A', code: 'A001', price: 10000, discountRate: 0, discountedPrice: 10000},
+        {name: 'Product B', code: 'B001', price: 20000, discountRate: 0, discountedPrice: 20000}
       ],
       registeredProducts: [],
       newQuestion: '',
@@ -229,7 +229,7 @@ export default {
       return this.newProduct.name && this.newProduct.code && this.newProduct.price && this.products.length < 8;
     }
   },
-  watch:{
+  watch: {
     'newProduct.discountRate': function (newRate) {
       if (newRate) {
         const discount = (this.newProduct.price * newRate) / 100;
@@ -277,14 +277,14 @@ export default {
     },
     addAnswer() {
       if (this.newQuestion.trim() && this.newAnswer.trim()) {
-        this.qa.push({ question: this.newQuestion, answer: this.newAnswer }); // Add as an object
+        this.qa.push({question: this.newQuestion, answer: this.newAnswer}); // Add as an object
         this.newQuestion = '';
         this.newAnswer = '';
       }
     },
     addProduct() {
       if (this.canAddProduct) {
-        this.products.push({ ...this.newProduct });
+        this.products.push({...this.newProduct});
         // Reset newProduct for the next entry
         this.newProduct = {
           name: '',
