@@ -2,18 +2,13 @@
     <div>
         <Card title="상품목록" noborder>
             <div class="-mx-6">
-                <vue-good-table
-                    :columns="columns"
-                    styleClass=" vgt-table centered lesspadding2 table-head "
-                    :rows="advancedTable"
-                    :pagination-options="{
+                <vue-good-table :columns="columns" styleClass=" vgt-table centered lesspadding2 table-head "
+                    :rows="advancedTable" :pagination-options="{
                         enabled: true,
                         perPage: perpage,
-                    }"
-                    :sort-options="{
+                    }" :sort-options="{
                         enabled: false,
-                    }"
-                    :select-options="{
+                    }" :select-options="{
                         enabled: true,
                         selectOnCheckboxOnly: true,
                         selectioninfoClass: 'custom-class',
@@ -21,41 +16,31 @@
                         clearSelectionText: 'clear',
                         disableSelectinfo: true,
                         selectAllByGroup: true,
-                    }"
-                >
-                <template v-slot:table-row="props">
-    <span v-if="props.column.field == 'productCode'">
-        {{ props.row.productCode }}
-    </span>
-    <span v-if="props.column.field == 'productName'">
-        {{ props.row.productName }}
-    </span>
-    <span v-if="props.column.field == 'category'">
-        {{ props.row.category }}
-    </span>
-    <span v-if="props.column.field == 'price'">
-        {{ props.row.price }}
-    </span>
-    <span v-if="props.column.field == 'customer'" class="flex">
-        <img
-            :src="props.row.customer.image"
-            :alt="props.row.customer.name"
-            class="object-cover w-full h-full rounded-full"
-            style="width: 24px;"
-        />
-    </span>
-</template>
+                    }">
+                    <template v-slot:table-row="props">
+                        <span v-if="props.column.field == 'productCode'">
+                            {{ props.row.productCode }}
+                        </span>
+                        <span v-if="props.column.field == 'productName'">
+                            {{ props.row.productName }}
+                        </span>
+                        <span v-if="props.column.field == 'category'">
+                            {{ props.row.category }}
+                        </span>
+                        <span v-if="props.column.field == 'price'">
+                            {{ props.row.price }}
+                        </span>
+                        <span v-if="props.column.field == 'customer'" class="flex customer-column" >
+                            <img v-for="entry in props.row.customer" :key="entry.name" :src="entry.image"
+                                :alt="entry.name" class="object-cover w-full h-full rounded-full"
+                                style="width: 24px; margin-right: 5px; &:last-child{margin-left: 0;}" />
+                        </span>
+                    </template>
                     <template #pagination-bottom="props">
                         <div class="py-4 px-3 flex justify-center">
-                            <Pagination
-                                :total="50"
-                                :current="current"
-                                :per-page="perpage"
-                                :pageRange="pageRange"
-                                @page-changed="current = $event"
-                                :pageChanged="props.pageChanged"
-                                :perPageChanged="props.perPageChanged"
-                            >
+                            <Pagination :total="50" :current="current" :per-page="perpage" :pageRange="pageRange"
+                                @page-changed="current = $event" :pageChanged="props.pageChanged"
+                                :perPageChanged="props.perPageChanged">
                             </Pagination>
                         </div>
                     </template>
@@ -119,6 +104,7 @@ export default {
                 {
                     label: "인증",
                     field: "customer",
+                    className: 'customer-column',
                 },
             ],
         };
@@ -130,4 +116,8 @@ export default {
 .action-btn {
     @apply h-6 w-6 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-700 rounded;
 }
+.vgt-table .customer-column {
+    width: 100px !important; /* 또는 다른 값 */
+}
+
 </style>
