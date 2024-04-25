@@ -39,7 +39,50 @@
   </div>
   <hr />
   <Categories />
-  <hr />
+  <hr class="mt-6"/>
+  <section class="under-category-section" style="width: 60%; margin: auto">
+    <h6 class="mb-6 mt-12">인기 라이브</h6>
+    <swiper
+      :slidesPerView="1"
+      :centeredSlides="false"
+      :spaceBetween="30"
+      :pagination="{ clickable: true }"
+      class="hot-live-caro"
+      :loop="false"
+      :navigation="true"
+      :autoplay="{ delay: 5000, disableOnInteraction: false }"
+      style="width: 100%; margin: auto"
+    >
+      <swiper-slide
+        v-for="(item, index) in hotLiveCarousels"
+        :key="index"
+        class="carousel-slide"
+      >
+        <div class="slide-background">
+          <img
+            :src="item.mainImage"
+            alt="Carousel Image"
+            class="background-image"
+          />
+          <div class="slide-content">
+            <div class="additional-images-container">
+              <img
+                v-for="(additionalImage, subIndex) in item.additionalImages"
+                :src="additionalImage"
+                :key="'additional-image-' + index + '-' + subIndex"
+                class="additional-image"
+              />
+            </div>
+            <div class="additional-text-container">
+              <h4 v-if="item.viewersCount">{{ item.viewersCount }}명이 보는 중</h4>
+              <h2 v-if="item.title">{{ item.title }}</h2>
+              <p v-if="item.description">{{ item.description }}</p>
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
+    </swiper>
+  </section>
 </template>
 
 <script>
@@ -99,6 +142,37 @@ export default {
           ],
         },
       ],
+      hotLiveCarousels: [
+        {
+          viewersCount: 158,
+          mainImage:
+            "https://img.etoday.co.kr/pto_db/2024/04/20240419110132_2014644_647_358.jpg",
+          title: "첫 번째 슬라이드",
+          description: "첫 번째 슬라이드에 대한 설명입니다.",
+          additionalImages: [
+            "http://via.placeholder.com/80x80",
+            "http://via.placeholder.com/80x80",
+          ],
+        },
+        {
+          viewersCount: 163,
+          mainImage: "https://i.ytimg.com/vi/7DSJl9e-UUE/maxresdefault.jpg",
+          title: "두 번째 슬라이드",
+          description: "두 번째 슬라이드에 대한 설명입니다.",
+          additionalImages: [
+            "http://via.placeholder.com/80x80",
+            "http://via.placeholder.com/80x80",
+          ],
+        },
+        {
+          viewersCount: 179,
+          mainImage:
+            "https://i.ytimg.com/vi/mZPkoLfdGQg/oardefault.jpg?sqp=-oaymwEYCJUDENAFSFqQAgHyq4qpAwcIARUAAIhC&rs=AOn4CLCFJ-0K3KXYHBQNleHWKeh-ljm5Nw",
+          title: "3 번째 슬라이드",
+          description: "3 번째 슬라이드에 대한 설명입니다.",
+          additionalImages: ["http://via.placeholder.com/80x80"],
+        },
+      ],
     };
   },
 };
@@ -108,7 +182,6 @@ export default {
 .main-caro .carousel-slide {
   max-width: 700px;
   height: 400px;
-  border-radius: 10px;
   overflow: hidden;
 }
 
@@ -168,5 +241,52 @@ export default {
   height: 80px;
   object-fit: cover;
   border-radius: 10px; /* 이미지의 둥근 모서리 스타일링 */
+}
+.hot-live-caro .carousel-slide {
+  max-width: 100%;
+  height: 400px;
+  margin: auto;
+  overflow: hidden;
+}
+
+.hot-live-caro .slide-content {
+  position: absolute;
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  top: 0%;
+  text-align: left;
+  color: rgb(60, 60, 60);
+  z-index: 2;
+}
+
+.hot-live-caro .additional-text-container h2,
+.hot-live-caro .additional-text-container p {
+  font-size: 1.2em; 
+}
+
+.hot-live-caro .additional-images-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hot-live-caro .additional-image {
+  width: 80px; /* 추가 이미지의 크기를 설정 */
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px; /* 이미지의 둥근 모서리 스타일링 */
+}
+.hot-live-caro .slide-background {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: white;
+}
+
+.hot-live-caro .background-image {
+  width: 30%;
+  height: 100%;
+  object-fit: cover; /* 이미지가 컨테이너를 꽉 채우도록 설정 */
 }
 </style>
