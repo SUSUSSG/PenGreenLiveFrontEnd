@@ -1,22 +1,26 @@
 <template>
   <div>
-    <div>메인페이지입니다.</div>
     <swiper
-      :modules="modules"
-      :slides-per-view="3"
-      :space-between="10"
-      :effect="'coverflow'"
-      :coverflowEffect="{
-        rotate: 50,
-        stretch: 0,
-        depth: 100,
-        modifier: 1,
-        slideShadows: true,
+      :slidesPerView="'auto'"
+      :centeredSlides="true"
+      :spaceBetween="30"
+      :pagination="{
+        clickable: true,
       }"
-      :pagination="{ clickable: true }"
-      class="main-caro"
+      :modules="modules"
+      class="main-caro overflow-x-visible"
+      :loop="true"
+      :navigation="true"
+      :autoplay="{
+        delay: 3000,
+        disableOnInteraction: false,
+      }"
     >
-      <swiper-slide v-for="(item, i) in carousels" :key="i">
+      <swiper-slide
+        v-for="(item, i) in carousels"
+        :key="i"
+        class="max-w-[700px]"
+      >
         <div
           class="single-slide bg-no-repeat bg-cover bg-center rounded-md min-h-[400px]"
           :style="{
@@ -40,7 +44,6 @@
     </swiper>
   </div>
 </template>
-
 <script>
 // import Swiper core and required modules
 import {
@@ -109,7 +112,7 @@ export default {
   },
   setup() {
     return {
-      modules: [Navigation, Pagination, Scrollbar, A11y, Autoplay, EffectCoverflow],
+      modules: [Pagination, Navigation, Autoplay],
     };
   },
 };
@@ -138,6 +141,10 @@ export default {
 
     &.swiper-pagination-bullet-active {
       @apply bg-opacity-100;
+    }
+    .swiper {
+      width: 70%;
+      margin: 0 auto;
     }
   }
 }
