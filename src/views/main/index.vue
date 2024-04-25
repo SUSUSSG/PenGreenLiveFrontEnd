@@ -16,7 +16,11 @@
         class="carousel-slide"
       >
         <div class="slide-background">
-          <img :src="item.mainImage" alt="Carousel Image" class="background-image">
+          <img
+            :src="item.mainImage"
+            alt="Carousel Image"
+            class="background-image"
+          />
           <div class="slide-content">
             <h2 v-if="item.title">{{ item.title }}</h2>
             <p v-if="item.description">{{ item.description }}</p>
@@ -26,28 +30,61 @@
                 :src="additionalImage"
                 :key="'additional-image-' + index + '-' + subIndex"
                 class="additional-image"
-              >
+              />
             </div>
           </div>
         </div>
       </swiper-slide>
     </swiper>
   </div>
+  <div class="container mt-8">
+    <div class="d-flex justify-content-center my-2" style="display:flex;justify-content: space-evenly;">
+      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
+        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
+        <span>전체</span>
+      </div>
+      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
+        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
+        <span>뷰티</span>
+      </div>
+      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
+        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
+        <span>식품</span>
+      </div>
+      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
+        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
+        <span>패션</span>
+      </div>
+      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
+        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
+        <span>라이프</span>
+      </div>
+      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
+        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
+        <span>유아동</span>
+      </div>
+      <div class="mx-4" style="display:flex; flex-direction:column; justify-content: center; align-items: center;">
+        <img src="http://via.placeholder.com/80x80" class="mb-1" alt="Description" style="width: 64px; height: 64px; border-radius: 50%" />
+        <span>테크</span>
+      </div>
+    </div>
+</div>
+
 </template>
 
 <script>
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import { Swiper, SwiperSlide } from "swiper/vue";
+import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 export default {
   components: {
     Swiper,
-    SwiperSlide
+    SwiperSlide,
   },
   data() {
     return {
@@ -55,7 +92,7 @@ export default {
       carousels: [
         {
           mainImage:
-            "http://via.placeholder.com/700x300",
+            "https://img.etoday.co.kr/pto_db/2024/04/20240419110132_2014644_647_358.jpg",
           title: "첫 번째 슬라이드",
           description: "첫 번째 슬라이드에 대한 설명입니다.",
           additionalImages: [
@@ -64,38 +101,34 @@ export default {
           ],
         },
         {
-          mainImage:
-            "http://via.placeholder.com/700x300",
+          mainImage: "https://i.ytimg.com/vi/7DSJl9e-UUE/maxresdefault.jpg",
           title: "두 번째 슬라이드",
           description: "두 번째 슬라이드에 대한 설명입니다.",
           additionalImages: [
-          "http://via.placeholder.com/80x80",
-          "http://via.placeholder.com/80x80",
-
+            "http://via.placeholder.com/80x80",
+            "http://via.placeholder.com/80x80",
           ],
         },
         {
           mainImage:
-            "http://via.placeholder.com/700x300",
+            "https://i.ytimg.com/vi/mZPkoLfdGQg/oardefault.jpg?sqp=-oaymwEYCJUDENAFSFqQAgHyq4qpAwcIARUAAIhC&rs=AOn4CLCFJ-0K3KXYHBQNleHWKeh-ljm5Nw",
           title: "3 번째 슬라이드",
           description: "3 번째 슬라이드에 대한 설명입니다.",
-          additionalImages: [
-          "http://via.placeholder.com/80x80",
-          ],
+          additionalImages: ["http://via.placeholder.com/80x80"],
         },
         {
           mainImage:
-            "http://via.placeholder.com/700x300",
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIRG7wmkHtth99WlKY9lAjoeQ_UYo1Gx8SJmcOEseQ8U93wnGFikyhOaxhWv0jOg4of1o&usqp=CAU",
           title: "4 번째 슬라이드",
           description: "4 번째 슬라이드에 대한 설명입니다.",
           additionalImages: [
-          "http://via.placeholder.com/80x80",
-          "http://via.placeholder.com/80x80",
+            "http://via.placeholder.com/80x80",
+            "http://via.placeholder.com/80x80",
           ],
         },
       ],
     };
-  }
+  },
 };
 </script>
 
