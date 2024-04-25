@@ -1,6 +1,10 @@
 <template>
     <div>
         <Card title="상품목록" noborder>
+            <div class="buttons-container">
+                <button class="btn inline-flex justify-center btn-dark btn-sm mr-3"><span>상품등록</span></button>
+                <button class="btn inline-flex justify-center btn-outline-dark btn-sm "><span>상품삭제</span></button>
+            </div>
             <div class="-mx-6">
                 <vue-good-table :columns="columns" styleClass=" vgt-table centered lesspadding2 table-head "
                     :rows="advancedTable" :pagination-options="{
@@ -115,4 +119,17 @@ export default {
 .action-btn {
     @apply h-6 w-6 flex flex-col items-center justify-center border border-slate-200 dark:border-slate-700 rounded;
 }
+.btn-primary
+{
+    @apply ltr:border-r ltr:border-r-white rtl:border-l rtl:border-l-white ltr:border-opacity-10 rtl:border-opacity-10  last:border-r-0 hover:ring-0 hover:ring-offset-0 bg-opacity-90;
+    &.active {
+      @apply bg-opacity-100;
+    }
+}
+.buttons-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px; // Adjust spacing as needed
+}
+
 </style>
