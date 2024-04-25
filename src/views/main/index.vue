@@ -128,14 +128,16 @@
     </swiper>
   </section>
 
-  <CardComponent
-      imageSrc="http://via.placeholder.com/150x150"
-      title="Title"
-      text="Supporting or descriptive text for the card goes here like a pro."
-      date="4월 15일"
-      time="23:00"
-      buttonText="알림 설정"
+  <div v-for="(card, index) in cardsData" :key="'card-' + index">
+    <CardComponent
+      :imageSrc="card.imageSrc"
+      :title="card.title"
+      :text="card.text"
+      :date="card.date"
+      :time="card.time"
+      :buttonText="card.buttonText"
     />
+  </div>
 </template>
 
 <script>
@@ -227,6 +229,40 @@ export default {
           description: "3 번째 슬라이드에 대한 설명입니다.",
           additionalImages: ["http://via.placeholder.com/80x80"],
         },
+      ],
+      cardsData: [
+        {
+          imageSrc: "http://via.placeholder.com/150x150",
+          title: "Title 1",
+          text: "This is the description for card 1.",
+          date: "4월 15일",
+          time: "23:00",
+          buttonText: "알림 설정"
+        },
+        {
+          imageSrc: "http://via.placeholder.com/150x150",
+          title: "Title 2",
+          text: "This is the description for card 2.",
+          date: "4월 16일",
+          time: "23:00",
+          buttonText: "알림 설정"
+        },
+        {
+          imageSrc: "http://via.placeholder.com/150x150",
+          title: "Title 3",
+          text: "This is the description for card 3.",
+          date: "4월 17일",
+          time: "23:00",
+          buttonText: "알림 설정"
+        },
+        {
+          imageSrc: "http://via.placeholder.com/150x150",
+          title: "Title 4",
+          text: "This is the description for card 4.",
+          date: "4월 18일",
+          time: "23:00",
+          buttonText: "알림 설정"
+        }
       ],
     };
   },
