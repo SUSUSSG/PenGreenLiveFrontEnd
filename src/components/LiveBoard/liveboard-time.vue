@@ -9,14 +9,13 @@
   </div>
   <div class="row">
     <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
-      <div class="inline-flex  bg-white rounded pt-3 px-4 mt-4 pl-0">
-        <div class="flex-none">
-          <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl"
-            :class="`${item.bg} ${item.text}`">
+      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-0" id="timeCard">
+        <div class="">
+          <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl">
             <Icon :icon="`heroicons:clock`" />
           </div>
         </div>
-        <div class="flex-1">
+        <div class="">
           <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
             {{ item.title }}
           </div>
@@ -101,4 +100,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+#timeCard{
+  width: 150px;
+}
+</style>
