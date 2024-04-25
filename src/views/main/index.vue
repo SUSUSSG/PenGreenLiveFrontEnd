@@ -4,39 +4,29 @@
       :slidesPerView="'auto'"
       :centeredSlides="true"
       :spaceBetween="30"
-      :pagination="{
-        clickable: true,
-      }"
-      :modules="modules"
-      class="main-caro overflow-x-visible"
-      :loop="true"
+      :pagination="{ clickable: true }"
+      class="main-caro"
+      :loop="false"
       :navigation="true"
-      :autoplay="{
-        delay: 3000,
-        disableOnInteraction: false,
-      }"
+      :autoplay="{ delay: 3000, disableOnInteraction: false }"
     >
       <swiper-slide
-        v-for="(item, i) in carousels"
-        :key="i"
-        class="max-w-[700px]"
+        v-for="(item, index) in carousels"
+        :key="index"
+        class="carousel-slide"
       >
-        <div
-          class="single-slide bg-no-repeat bg-cover bg-center rounded-md min-h-[400px]"
-          :style="{
-            backgroundImage: 'url(' + item.img + ')',
-          }"
-        >
-          <div
-            class="pt-20 container text-center px-4 slider-content h-full w-full min-h-[400px] rounded-md flex flex-col items-center justify-center text-white"
-          >
-            <div class="max-w-sm">
-              <h2 v-if="item.title" class="text-xl font-medium text-white">
-                {{ item.title }}
-              </h2>
-              <p v-if="item.description" class="text-sm">
-                {{ item.description }}
-              </p>
+        <div class="slide-background">
+          <img :src="item.mainImage" alt="Carousel Image" class="background-image">
+          <div class="slide-content">
+            <h2 v-if="item.title">{{ item.title }}</h2>
+            <p v-if="item.description">{{ item.description }}</p>
+            <div class="additional-images-container">
+              <img
+                v-for="(additionalImage, subIndex) in item.additionalImages"
+                :src="additionalImage"
+                :key="'additional-image-' + index + '-' + subIndex"
+                class="additional-image"
+              >
             </div>
           </div>
         </div>
@@ -44,108 +34,134 @@
     </swiper>
   </div>
 </template>
+
 <script>
-// import Swiper core and required modules
-import {
-  Navigation,
-  Pagination,
-  Scrollbar,
-  A11y,
-  Autoplay,
-  EffectCoverflow,
-} from "swiper";
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
-// Import Swiper Vue.js components
-import { Swiper, SwiperSlide } from "swiper/vue";
-
-// Import Swiper styles
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
-import "swiper/css/effect-coverflow";
+SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 export default {
   components: {
     Swiper,
-    SwiperSlide,
-  },
-  props: {
-    sliderPreview: {
-      type: Number,
-      default: 1,
-    },
-    space: {
-      type: Number,
-      default: 0,
-    },
-    carousels: {
-      type: Array,
-      default: [],
-    },
+    SwiperSlide
   },
   data() {
     return {
+      modules: [Navigation, Pagination, Autoplay],
       carousels: [
         {
-          img: "https://i.namu.wiki/i/aC6h0MKu3PAAegyUIPps5zOdQ1efqgNSTHKDzj1BL-bB0n8IZQALvtXp73MNCasoMpYCGKIQ4C8WWi3_E7-kwg.gif",
+          mainImage:
+            "http://via.placeholder.com/700x300",
           title: "첫 번째 슬라이드",
-          description: "이것은 첫 번째 슬라이드에 대한 설명입니다.",
+          description: "첫 번째 슬라이드에 대한 설명입니다.",
+          additionalImages: [
+            "http://via.placeholder.com/80x80",
+            "http://via.placeholder.com/80x80",
+          ],
         },
         {
-          img: "https://i.ytimg.com/vi/7DSJl9e-UUE/maxresdefault.jpg",
+          mainImage:
+            "http://via.placeholder.com/700x300",
           title: "두 번째 슬라이드",
           description: "두 번째 슬라이드에 대한 설명입니다.",
+          additionalImages: [
+          "http://via.placeholder.com/80x80",
+          "http://via.placeholder.com/80x80",
+
+          ],
         },
         {
-          img: "http://via.placeholder.com/800x500",
-          title: "세 번째 슬라이드",
-          description: "세 번째 슬라이드의 설명입니다.",
+          mainImage:
+            "http://via.placeholder.com/700x300",
+          title: "3 번째 슬라이드",
+          description: "3 번째 슬라이드에 대한 설명입니다.",
+          additionalImages: [
+          "http://via.placeholder.com/80x80",
+          ],
         },
         {
-          img: "https://i.ytimg.com/vi/h8eQxRIrK_s/maxres2.jpg?sqp=-oaymwEoCIAKENAF8quKqQMcGADwAQH4AbYIgAK4CIoCDAgAEAEYSiBYKGUwDw==&rs=AOn4CLClrIaPLDGOqflkWdL_AzMByrUgDw",
-          title: "네 번째 슬라이드",
-          description: "마지막 슬라이드에 대한 설명입니다.",
+          mainImage:
+            "http://via.placeholder.com/700x300",
+          title: "4 번째 슬라이드",
+          description: "4 번째 슬라이드에 대한 설명입니다.",
+          additionalImages: [
+          "http://via.placeholder.com/80x80",
+          "http://via.placeholder.com/80x80",
+          ],
         },
       ],
     };
-  },
-  setup() {
-    return {
-      modules: [Pagination, Navigation, Autoplay],
-    };
-  },
+  }
 };
 </script>
 
-<style lang="scss">
-.main-caro {
-  .swiper-button-next:after,
-  .swiper-button-prev:after {
-    font-family: unset !important;
-    @apply rtl:rotate-180;
-  }
+<style scoped>
+.main-caro .carousel-slide {
+  max-width: 700px;
+  height: 400px;
+  border-radius: 10px;
+  overflow: hidden;
+}
 
-  .swiper-button-next:after {
-    content: url("https://api.iconify.design/heroicons-outline/chevron-right.svg?color=white&width=24");
-  }
+.slide-background {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: white;
+}
 
-  .swiper-button-prev:after {
-    content: url("https://api.iconify.design/heroicons-outline/chevron-left.svg?color=white&width=24");
-  }
+.background-image {
+  width: 50%;
+  height: 100%;
+  object-fit: cover; /* 이미지가 컨테이너를 꽉 채우도록 설정 */
+}
 
-  .swiper-pagination-bullet {
-    height: 2px;
-    width: 24px;
-    @apply rounded-[1px] bg-white bg-opacity-70;
+.main-caro .slide-content {
+  position: absolute;
+  top: 50%;
+  right: -3%;
+  transform: translate(-50%, -50%);
+  text-align: left;
+  color: rgb(60, 60, 60);
+  z-index: 2;
+}
 
-    &.swiper-pagination-bullet-active {
-      @apply bg-opacity-100;
-    }
-    .swiper {
-      width: 70%;
-      margin: 0 auto;
-    }
-  }
+.main-caro h2 {
+  font-size: 2em; /* 제목의 크기를 설정 */
+  margin-bottom: 1em;
+}
+
+.main-caro p {
+  font-size: 1em; /* 설명 텍스트의 크기를 설정 */
+  margin-bottom: 2em;
+}
+
+.main-caro .start-button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #000;
+  color: white;
+  cursor: pointer;
+  border-radius: 20px; /* 버튼의 둥근 모서리 스타일링 */
+  font-size: 0.9em;
+  outline: none;
+}
+
+.main-caro .additional-images-container {
+  display: flex;
+  justify-content: left;
+  gap: 10px;
+  margin-top: 10rem;
+}
+
+.main-caro .additional-image {
+  width: 80px; /* 추가 이미지의 크기를 설정 */
+  height: 80px;
+  object-fit: cover;
+  border-radius: 10px; /* 이미지의 둥근 모서리 스타일링 */
 }
 </style>
