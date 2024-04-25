@@ -3,7 +3,7 @@
     <swiper
       :slidesPerView="'auto'"
       :centeredSlides="true"
-      :spaceBetween="30"
+      :spaceBetween="0"
       :pagination="{ clickable: true }"
       class="main-caro"
       :loop="false"
@@ -40,8 +40,8 @@
   <hr />
   <Categories />
   <hr class="mt-6"/>
-  <section class="under-category-section" style="width: 60%; margin: auto">
-    <h6 class="mb-6 mt-12">인기 라이브</h6>
+  <section class="under-category-section" style="width: 60%; margin: auto;">
+    <h6 class="mb-6 pt-12 pl-6 pr-6">인기 라이브</h6>
     <swiper
       :slidesPerView="1"
       :centeredSlides="false"
@@ -189,7 +189,7 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: white;
+  background-color: #FAFAFA;
 }
 
 .background-image {
@@ -291,5 +291,9 @@ export default {
   width: 30%;
   height: 100%;
   object-fit: cover;
+}
+.under-category-section{
+  border-left: 1px solid #e6e7eb;
+  border-right: 1px solid #e6e7eb;
 }
 </style>

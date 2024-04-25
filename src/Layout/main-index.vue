@@ -110,8 +110,8 @@ export default {
   animation: slideLeftTransition 0.24s reverse;
 }
 
-.page-content {
-  @apply md:pt-6 md:pb-[37px] md:px-6 pt-[15px] px-[15px] pb-24;
+body.light{
+  background-color:white;
 }
 .page-min-height {
   min-height: calc(var(--vh, 1vh) * 100 - 132px);
