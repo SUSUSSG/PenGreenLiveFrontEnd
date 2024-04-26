@@ -5,7 +5,7 @@
                 <LiveBoardTime></LiveBoardTime>
             </div>
             <div class="inline-flex" id="body">
-                <div>
+                <div id="main">
                     <div class="inline-flex">
                         <LiveboardBroad></LiveboardBroad>
                         <LiveBoardChat></LiveBoardChat>
@@ -45,6 +45,16 @@ export default {
 };
 </script>
 <style>
+#body {
+    width: 1920px;
+    height: 900px;
+}
+#main {
+    width: 1657px;
+}
+#sideber {
+    margin-top: 50px;
+}
 .scroll-container {
   overflow-x: auto;
 }
