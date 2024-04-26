@@ -89,7 +89,7 @@ export default {
   
 <style>
 #statisticsCard {
-    width: 800px;
+    width: 820px;
     height: 250px;
 }
 

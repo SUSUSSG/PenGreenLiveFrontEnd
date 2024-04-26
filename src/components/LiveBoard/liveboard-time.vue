@@ -1,26 +1,29 @@
 <template>
-  <div v-if="isBroadcasting">
-    <Button v-on:click="toggleBroadcast()">라이브 종료</Button>
-    <Button text="danger" btnClass="btn-outline-danger rounded-[999px]">라이브</Button>
-  </div>
-  <div v-else>
-    <Button v-on:click="toggleBroadcast()" text="Dark" btnClass="btn-dark">라이브 시작</Button>
-    <Button text="dark" btnClass="btn-outline-dark rounded-[999px]">대기</Button>
-  </div>
-  <div class="row">
-    <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
-      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-0" id="timeCard">
-        <div>
-          <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl">
-            <Icon :icon="`heroicons:clock`" />
+  <div class="inline-flex">
+    <div v-if="isBroadcasting">
+      <Button v-on:click="toggleBroadcast()">라이브 종료</Button>
+      <Button text="danger" btnClass="btn-outline-danger rounded-[999px]">라이브</Button>
+    </div>
+    <div v-else>
+      <Button v-on:click="toggleBroadcast()" text="Dark" btnClass="btn-dark">라이브 시작</Button>
+      <Button text="dark" btnClass="btn-outline-dark rounded-[999px]">대기</Button>
+    </div>
+
+    <div class="row" id="times">
+      <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
+        <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-0" id="timeCard">
+          <div>
+            <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl">
+              <Icon :icon="`heroicons:clock`" />
+            </div>
           </div>
-        </div>
-        <div>
-          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
-            {{ item.title }}
-          </div>
-          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
-            {{ item.time }}
+          <div>
+            <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
+              {{ item.title }}
+            </div>
+            <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
+              {{ item.time }}
+            </div>
           </div>
         </div>
       </div>
@@ -101,7 +104,7 @@ export default {
 </script>
 
 <style>
-#timeCard{
+#timeCard {
   width: 150px;
 }
 </style>

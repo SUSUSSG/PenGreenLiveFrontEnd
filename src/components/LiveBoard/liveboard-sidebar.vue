@@ -63,6 +63,6 @@ export default {
 <style>
 #sidebar {
     width: 70px;
-    height: 700px;
+    height: 600px;
 }
 </style>

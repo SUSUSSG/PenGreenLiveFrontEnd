@@ -1,11 +1,23 @@
 <template>
-    <LiveboardProduct></LiveboardProduct>
-    <LiveboardPrompt></LiveboardPrompt>
-    <LiveboardSidebar></LiveboardSidebar>
-    <LiveBoardStatistics></LiveBoardStatistics>
-    <LiveBoardTime></LiveBoardTime>
-    <LiveBoardChat></LiveBoardChat>
-    <LiveboardBroad></LiveboardBroad>
+    <div>
+        <LiveBoardTime></LiveBoardTime>
+    </div>
+    <div class="inline-flex">
+    <div>
+        <div class="inline-flex">
+            <LiveboardBroad></LiveboardBroad>
+            <LiveBoardChat></LiveBoardChat>
+            <LiveboardProduct></LiveboardProduct>
+        </div>
+        <div class="inline-flex">
+            <LiveBoardStatistics></LiveBoardStatistics>
+            <LiveboardPrompt></LiveboardPrompt>
+        </div>
+    </div>
+    <div>
+        <LiveboardSidebar></LiveboardSidebar>
+    </div>
+</div>
 </template>
 <script>
 import LiveBoardTime from '@/components/LiveBoard/liveboard-time.vue';
