@@ -13,7 +13,7 @@ const routes = [
       {
         path: "/broadcast/register-live",
         name: "register-live",
-        component: () => import("@/views/broadcast/register-live.vue")
+        component: () => import("@/views/broadcast/live-register.vue")
       }
     ],
   },

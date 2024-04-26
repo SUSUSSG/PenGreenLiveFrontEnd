@@ -1,23 +1,27 @@
 <template>
-    <div>
-        <LiveBoardTime></LiveBoardTime>
-    </div>
-    <div class="inline-flex">
-    <div>
-        <div class="inline-flex">
-            <LiveboardBroad></LiveboardBroad>
-            <LiveBoardChat></LiveBoardChat>
-            <LiveboardProduct></LiveboardProduct>
+    <div class="scroll-container">
+        <div class="scroll-content">
+            <div>
+                <LiveBoardTime></LiveBoardTime>
+            </div>
+            <div class="inline-flex" id="body">
+                <div>
+                    <div class="inline-flex">
+                        <LiveboardBroad></LiveboardBroad>
+                        <LiveBoardChat></LiveBoardChat>
+                        <LiveboardProduct></LiveboardProduct>
+                    </div>
+                    <div class="inline-flex">
+                        <LiveBoardStatistics></LiveBoardStatistics>
+                        <LiveboardPrompt></LiveboardPrompt>
+                    </div>
+                </div>
+                <div id="sidebar">
+                    <LiveboardSidebar></LiveboardSidebar>
+                </div>
+            </div>
         </div>
-        <div class="inline-flex">
-            <LiveBoardStatistics></LiveBoardStatistics>
-            <LiveboardPrompt></LiveboardPrompt>
-        </div>
     </div>
-    <div>
-        <LiveboardSidebar></LiveboardSidebar>
-    </div>
-</div>
 </template>
 <script>
 import LiveBoardTime from '@/components/LiveBoard/liveboard-time.vue';
@@ -40,5 +44,12 @@ export default {
     }
 };
 </script>
-<style lang=""></style>
-  
+<style>
+.scroll-container {
+  overflow-x: auto;
+}
+
+.scroll-content {
+  display: inline-block;
+}
+</style>
