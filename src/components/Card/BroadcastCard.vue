@@ -35,8 +35,7 @@
     align-items: center;
     border: 1px solid #ccc;
     border-radius: 8px;
-    padding: 16px;
-    width: 328px; /* 가정한 너비 */
+    width: 200px; /* 가정한 너비 */
   }
   
   .card-header {
