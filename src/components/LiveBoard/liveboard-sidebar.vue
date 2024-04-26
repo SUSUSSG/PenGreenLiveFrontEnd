@@ -1,6 +1,6 @@
 <template>
     <div class="bg-white rounded pt-3 px-4 mt-4 ml-5" id="sidebar">
-        <div class="grid gap-4 mt-20" style="grid-template-rows: repeat(6, 1fr);">
+        <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(6, 1fr);">
             <div v-for="(item, i) in statistics" :key="i"
                 class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black"
                 v-on:click="toggleIcon(item)">
@@ -63,6 +63,13 @@ export default {
 <style>
 #sidebar {
     width: 70px;
-    height: 600px;
+    height: 550px;
+    margin-top: 100px;
+    max-width: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 </style>

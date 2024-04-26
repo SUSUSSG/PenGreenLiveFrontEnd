@@ -91,6 +91,13 @@ export default {
 #statisticsCard {
     width: 820px;
     height: 250px;
+    max-width: 100%;
+    max-height: 500px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 0.5rem;
+    background: white;
+    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 
 #basicCard {
