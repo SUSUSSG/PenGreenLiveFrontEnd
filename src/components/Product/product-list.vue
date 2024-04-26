@@ -3,55 +3,66 @@
         <Card title="상품목록" noborder>
             <div class="buttons-container">
                 <Modal title="상품등록" label="상품등록" labelClass="btn inline-flex justify-center btn-dark btn-sm mr-3"
-                    ref="modal1">
+                    ref="modal1" @closed="resetModalData">
                     <div class="text-base text-slate-600 dark:text-slate-300">
-                        <Textinput label="상품코드" type="text" name="productcode" v-model="productcode" placeholder="P001"
-                            class="mb-2" />
-                        <div class="flex items-center"> <!-- flex 컨테이너 추가 -->
-                            <Textinput label="녹색제품 통합ID" type="text" name="greenrpdouct" v-model="greenrpdouct"
-                                placeholder="KR232148" class="mb-2 flex-grow" />
+                        <Textinput label="상품코드" type="text" name="productcode" v-model="addModalData.productcode"
+                            placeholder="P001" class="mb-2" />
+                        <div class="flex items-center">
+
+                            <Textinput label="녹색제품 통합ID" type="text" name="greenrpdouct"
+                                v-model="addModalData.greenrpdouct" placeholder="KR232148" class="mb-2 flex-grow" />
+
                             <button
                                 class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5"><span>인증하기</span></button>
                         </div>
-                        <Textinput label="상품명" type="text" name="productname" v-model="productname" placeholder="테스트상품1"
+                        <Textinput label="상품명" type="text" name="productname" v-model="addModalData.productname"
+                            placeholder="테스트상품1" class="mb-2" />
+                        <Textinput label="카테고리" type="text" name="categorycode" v-model="addModalData.categorycode"
+                            placeholder="식품" class="mb-2" />
+                        <Textinput label="정가" type="number" name="listprice" v-model="addModalData.listprice"
+                            placeholder="정가" class="mb-2" />
+                        <Textinput label="브랜드" type="text" name="brand" v-model="addModalData.brand" placeholder="갯벌"
                             class="mb-2" />
-                        <Textinput label="상품설명" type="text" name="productdescription" v-model="productdescription"
-                            placeholder="테스트상품 설명" class="mb-2" />
-                        <Textinput label="카테고리" type="text" name="categorycode" v-model="categorycode" placeholder="식품"
-                            class="mb-2" />
-                        <Textinput label="정가" type="number" name="listprice" v-model="listprice" placeholder="정가"
-                            class="mb-2" />
-                        <Textinput label="브랜드" type="text" name="brand" v-model="brand" placeholder="갯벌" class="mb-2" />
                         <label class="ltr:inline-block rtl:block input-label">상품이미지</label><br>
-                        <input type="file" id="imageUpload" @change="handleImageUpload"
+                        <input type="file" id="imageUpload" @change="handleAddImageUpload"
                             accept="image/jpeg, image/png, image/gif"
                             class="mt-2 text-base text-slate-600 dark:text-slate-300" />
-                        <img v-if="imageSrc" :src="imageSrc" alt="대표 이미지 미리보기" style="max-width: 100px">
+                        <img v-if="addModalData.imageSrc" :src="addModalData.imageSrc" alt="대표 이미지 미리보기"
+                            style="max-width: 100px">
                     </div>
                     <template v-slot:footer>
                         <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal()" />
-                        <Button text="등록" btnClass="btn-dark btn-sm" @click="$refs.modal1.closeModal()" />
+                        <Button text="등록" btnClass="btn-dark btn-sm" @click="$refs.modal1.closeModal(); resetModalData()" />
                     </template>
                 </Modal>
 
                 <button class="btn inline-flex justify-center btn-outline-dark btn-sm "><span>상품삭제</span></button>
 
-                <Modal title="상품 정보 수정" ref="editModal" :showButtons="false">
+                <Modal title="상품 정보 수정" ref="editModal" :showButtons="false" @closed="resetEditModalData">
                     <div class="text-base text-slate-600 dark:text-slate-300">
-                        <Textinput label="상품코드" type="text" name="editproductcode" v-model="productcode" class="mb-2" />
-                        <Textinput label="상품명" type="text" name="editproductname" v-model="productname" class="mb-2" />
-                        <Textinput label="카테고리" type="text" name="editcategorycode" v-model="categorycode"
+                        <Textinput label="상품코드" type="text" name="editproductcode" v-model="editModalData.productcode"
                             class="mb-2" />
-                        <Textinput label="정가" type="number" name="editlistprice" v-model="listprice" class="mb-2" />
-
-                        <div>
-                            <label class="ltr:inline-block rtl:block input-label">인증</label><br>
-                            <div v-for="(entry, index) in customer" :key="index">
-                                <img :src="entry.image" alt="인증 이미지" style="max-width: 100px">
-                                <button @click="removeImage(index)">삭제</button>
-                            </div>
-                            <input type="file" @change="addImage" accept="image/jpeg, image/png, image/gif">
+                        <div class="flex items-center">
+                            <Textinput label="녹색제품 통합ID" type="text" name="greenrpdouct"
+                                v-model="editModalData.greenrpdouct" class="mb-2 flex-grow" />
+                            <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5">
+                                <span>인증하기</span></button>
                         </div>
+                        <Textinput label="상품명" type="text" name="editproductname" v-model="editModalData.productname"
+                            class="mb-2" />
+                        <Textinput label="카테고리" type="text" name="editcategorycode" v-model="editModalData.categorycode"
+                            class="mb-2" />
+                        <Textinput label="정가" type="number" name="editlistprice" v-model="editModalData.listprice"
+                            class="mb-2" />
+                        <Textinput label="브랜드" type="text" name="brand" v-model="editModalData.brand" class="mb-2" />
+                        <label class="ltr:inline-block rtl:block input-label">상품이미지</label><br>
+                        <input type="file" id="imageUpload" @change="handleEditImageUpload"
+                            accept="image/jpeg, image/png, image/gif"
+                            class="mt-2 text-base text-slate-600 dark:text-slate-300" />
+
+                        <img v-if="editModalData.imageSrc" :src="editModalData.imageSrc" alt="대표 이미지 미리보기"
+                            style="max-width: 100px">
+
                     </div>
                     <template v-slot:footer>
                         <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="closeEditModal" />
@@ -82,6 +93,9 @@
                             class="cursor-pointer">
                             {{ props.row.productCode }}
                         </span>
+                        <span v-if="props.column.field == 'greenproduct'">
+                            {{ props.row.greenproduct }}
+                        </span>
                         <span v-if="props.column.field == 'productName'">
                             {{ props.row.productName }}
                         </span>
@@ -90,6 +104,9 @@
                         </span>
                         <span v-if="props.column.field == 'price'">
                             {{ props.row.price }}
+                        </span>
+                        <span v-if="props.column.field == 'brand'">
+                            {{ props.row.brand }}
                         </span>
                         <span v-if="props.column.field == 'customer'" class="flex">
                             <img v-for="entry in props.row.customer" :key="entry.name" :src="entry.image"
@@ -133,12 +150,24 @@ export default {
     },
     data() {
         return {
-            productcode: '',
-            productname: '',
-            categorycode: '',
-            listprice: '',
-            imageFile: null,
-            imageSrc: null,
+            addModalData: {
+                productcode: '',
+                productname: '',
+                categorycode: '',
+                listprice: '',
+                brand: '',
+                greenrpdouct: '',
+                imageSrc: null,
+            },
+            editModalData: {
+                productcode: '',
+                productname: '',
+                categorycode: '',
+                listprice: '',
+                brand: '',
+                greenrpdouct: '',
+                imageSrc: null,
+            },
             advancedTable,
             current: 1,
             perpage: 10,
@@ -165,6 +194,10 @@ export default {
                     field: "productCode",
                 },
                 {
+                    label: "녹색제품 통합ID",
+                    field: "greenproduct",
+                },
+                {
                     label: "상품명",
                     field: "productName",
                 },
@@ -173,8 +206,12 @@ export default {
                     field: "category",
                 },
                 {
-                    label: "판매 가격",
+                    label: "정가",
                     field: "price",
+                },
+                {
+                    label: "브랜드",
+                    field: "brand",
                 },
                 {
                     label: "인증",
@@ -185,25 +222,40 @@ export default {
         };
     },
     methods: {
-        handleImageUpload(event) {
+        handleAddImageUpload(event) {
             const file = event.target.files[0];
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    this.imageSrc = e.target.result;
+                    this.addModalData.imageSrc = e.target.result;
                 };
                 reader.readAsDataURL(file);
             } else {
-                this.imageSrc = null;
+                this.addModalData.imageSrc = null;
+            }
+        },
+        handleEditImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    this.editModalData.imageSrc = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                this.editModalData.imageSrc = null;
             }
         },
         openEditModal(row) {
-            this.productcode = row.productCode;
-            this.productname = row.productName;
-            this.categorycode = row.category;
-            this.listprice = row.price;
-            this.customer = [...row.customer];
-
+            this.editModalData = {
+                productcode: row.productCode,
+                greenrpdouct: row.greenproduct,
+                productname: row.productName,
+                categorycode: row.category,
+                listprice: row.price,
+                brand: row.brand,
+                imageSrc: row.imageUrl, 
+            };
             this.$refs.editModal.openModal();
         },
         closeEditModal() {
@@ -214,7 +266,7 @@ export default {
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    // 이미지 데이터를 배열에 추가
+
                     this.customer.push({ image: e.target.result });
                 };
                 reader.readAsDataURL(file);
@@ -234,14 +286,40 @@ export default {
             this.$refs.editModal.closeModal();
         },
         openAddModal() {
-            this.productcode = '';
-            this.productname = '';
-            this.categorycode = '';
-            this.listprice = '';
-            this.imageSrc = null;
-
+            this.addModalData = {
+                productcode: '',
+                productname: '',
+                categorycode: '',
+                listprice: '',
+                brand: '',
+                greenrpdouct: '',
+                imageSrc: null,
+            };
             this.$refs.modal1.openModal();
-        }
+        },
+        resetModalData() {
+        this.addModalData = {
+            productcode: '',
+            productname: '',
+            categorycode: '',
+            listprice: '',
+            brand: '',
+            greenrpdouct: '',
+            imageSrc: null,
+        };
+    },
+
+    resetEditModalData() {
+        this.editModalData = {
+            productcode: '',
+            productname: '',
+            categorycode: '',
+            listprice: '',
+            brand: '',
+            greenrpdouct: '',
+            imageSrc: null,
+        };
+    },
     }
 
 };
