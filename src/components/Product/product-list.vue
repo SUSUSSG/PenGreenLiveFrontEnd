@@ -36,7 +36,7 @@
 
                 <button class="btn inline-flex justify-center btn-outline-dark btn-sm "><span>상품삭제</span></button>
 
-                <Modal title="상품 정보 수정" ref="editModal">
+                <Modal title="상품 정보 수정" ref="editModal" :showButtons="false">
                     <div class="text-base text-slate-600 dark:text-slate-300">
                         <Textinput label="상품코드" type="text" name="editproductcode" v-model="productcode" class="mb-2" />
                         <Textinput label="상품명" type="text" name="editproductname" v-model="productname" class="mb-2" />
