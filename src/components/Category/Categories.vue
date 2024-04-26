@@ -40,7 +40,7 @@ export default {
         { imgSrc: "http://via.placeholder.com/80x80", name: "테크" },
         // 다른 카테고리들...
       ],
-      selectedCategory: null, // 선택된 카테고리의 이름을 저장
+      selectedCategory: "전체", // 선택된 카테고리의 이름을 저장
     };
   },
   methods: {
