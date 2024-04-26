@@ -1,8 +1,8 @@
 <template>
   <div class="card-component">
     <div class="card-header">
-      <span v-if="timeDifference">{{ timeDifference }}뒤</span>
-      <span v-else>실시간 방송중!!</span>
+      <span class="remain-time" v-if="timeDifference">{{ timeDifference }} 뒤</span>
+      <span class="remain-time" v-else>실시간 방송중!!</span>
 
       <div class="card-time">
         <span>{{ formattedDatetime }}</span>
@@ -10,10 +10,9 @@
     </div>
     <div class="card-body">
       <img :src="imageSrc" alt="Card image" class="card-image" />
-      <h1 class="card-title">{{ title }}</h1>
+      <h3 class="card-title">{{ title }}</h3>
       <p class="card-text">{{ text }}</p>
     </div>
-    <button class="card-button">{{ buttonText }}</button>
   </div>
 </template>
 
@@ -40,13 +39,13 @@ export default {
     timeDifference() {
       const now = new Date();
       const eventTime = new Date(this.parseDateTime(this.datetime));
-      const diff = Math.abs(now - eventTime) / 36e5; // 시간 단위로 변환
+      const diff = Math.abs(now - eventTime) / 36e5;
       if (diff < 1) {
         return '';
       } else if (diff < 24) {
-        return `${Math.floor(diff)}시간`;
+        return `${Math.floor(diff)} 시간`;
       } else {
-        return `${Math.floor(diff / 24)}일`;
+        return `${Math.floor(diff / 24)} 일`;
       }
     },
   },
@@ -66,12 +65,19 @@ export default {
     flex-direction: column;
     align-items: center;
     border: 1px solid #ccc;
-    width: 200px; /* 가정한 너비 */
+    width: 200px;
+    padding-top: 0.5rem;
+    background-color: white;
   }
   
+  .remain-time{
+    font-size: 20px;
+  }
   .card-header {
     width: 100%;
     margin-bottom: 16px;
+    padding-left: 0.5rem;
+
   }
   
   .card-time {
@@ -92,22 +98,15 @@ export default {
   }
   
   .card-title {
-    font-size: 24px;
+    font-size: 20px;
     margin-bottom: 8px;
+    margin-left: 0.5rem;
   }
   
   .card-text {
-    font-size: 16px;
-    text-align: center;
-    margin-bottom: 16px;
-  }
-  
-  .card-button {
-    padding: 8px 16px;
-    border: none;
-    background-color: black;
-    color: white;
-    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+    margin-left: 0.5rem;
   }
   </style>
   

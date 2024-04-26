@@ -84,21 +84,26 @@
         </div>
       </swiper-slide>
     </swiper>
-    <hr/>
+    <hr />
     <h6 class="mb-6 pt-12 pl-6 pr-6">예정된 라이브</h6>
-
-    <div style="display:flex; flex-direction:row; gap:20px;">
-      <div v-for="(card, index) in cardsData" :key="'card-' + index">
-      <CardComponent
-        :imageSrc="card.imageSrc"
-        :title="card.title"
-        :text="card.text"
-        :datetime="card.datetime"
-        :buttonText="card.buttonText"
-      />
-      </div>
-    </div>
-    
+    <swiper
+      :slidesPerView="4.5"
+      :spaceBetween="20"
+      :pagination="false"
+      :navigation="true"
+      :grabCursor="true"
+      style="width: 100%; margin: auto"
+    >
+      <swiper-slide v-for="(card, index) in cardsData" :key="'card-' + index">
+        <CardComponent
+          :imageSrc="card.imageSrc"
+          :title="card.title"
+          :text="card.text"
+          :datetime="card.datetime"
+          :buttonText="card.buttonText"
+        />
+      </swiper-slide>
+    </swiper>
   </section>
   <hr />
 </template>
@@ -248,14 +253,21 @@ export default {
   },
 };
 </script>
-
 <style scoped>
 .main-caro .carousel-slide {
   max-width: 700px;
   height: 400px;
   overflow: hidden;
 }
+/* 메인 캐러셀 슬라이드 */
+.main-caro .swiper-slide {
+  opacity: 0.4; /* 앞뒤 슬라이드를 어둡게 설정 */
+  transition: opacity 0.3s ease; /* 부드러운 전환 효과를 위해 */
+}
 
+.main-caro .swiper-slide-active {
+  opacity: 1; /* 현재 활성화된 슬라이드는 불투명 */
+}
 .slide-background {
   width: 100%;
   height: 100%;
@@ -366,5 +378,8 @@ export default {
 .under-category-section {
   border-left: 1px solid #e6e7eb;
   border-right: 1px solid #e6e7eb;
+}
+.under-category-section::-webkit-scrollbar {
+  display: none;
 }
 </style>
