@@ -54,14 +54,14 @@
                                                 <li class="flex-1">
                                                     <div id="kakao-login"></div>
                                                     <button class="kakao h-[44px] w-full">
-                                                        <img src="/src/views/user/kakaologo.png" alt="kakao">
+                                                        <img src="/src/assets/images/logo/kakao-logo.png" alt="kakao">
                                                         <span>카카오 로그인</span>
                                                     </button>
                                                 </li>
                                                 <li class="flex-1">
                                                     <div id="naver-login"></div>
                                                     <button class="naver h-[44px] w-full">
-                                                        <img src="/src/views/user/naverlogo.png" alt="naver">
+                                                        <img src="/src/assets/images/logo/naver-logo.png" alt="naver">
                                                         <span>네이버 로그인</span>
                                                     </button>
                                                 </li>

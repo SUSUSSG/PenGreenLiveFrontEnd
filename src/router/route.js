@@ -27,6 +27,11 @@ const routes = [
     name: "enterprise-join",
     component: () => import("@/views/enterprise/join.vue"),
   },
+  {
+    path: "/member/login",
+    name: "member-login",
+    component: () => import("@/views/user/login.vue"),
+  },
 ];
 
 export default routes;
