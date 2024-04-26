@@ -1,5 +1,5 @@
 <template>
-  <button type="button" @click="openModal" class="btn" :class="labelClass">
+  <button type="button" @click="openModal" class="btn" :class="labelClass" v-if="showButtons">
     {{ label }}
   </button>
 
@@ -145,6 +145,10 @@ export default defineComponent({
   },
 
   props: {
+    showButtons: {
+        type: Boolean,
+        default: true
+    },
     labelClass: {
       type: String,
       default: "btn-primary",
