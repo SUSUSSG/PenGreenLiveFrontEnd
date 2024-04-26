@@ -9,7 +9,25 @@ const routes = [
         path: "/home",
         name: "home",
         component: () => import("@/views/index.vue"),
+      },
+      {
+        path: "/broadcast/register-live",
+        name: "register-live",
+        component: () => import("@/views/broadcast/register-live.vue")
       }
+    ],
+  },
+  {
+    path: "/main",
+    components: {
+      default: () => import("@/Layout/main-index.vue"),
+    },
+    children: [
+      {
+        path: "",
+        name: "main-home",
+        component: () => import("@/views/main/index.vue"),
+      },
     ],
   },
   {

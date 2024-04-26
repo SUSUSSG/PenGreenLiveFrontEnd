@@ -12,24 +12,38 @@
       `"
     >
       <div class="flex justify-between items-center h-full">
+        <div>
+          <img
+            src="@/assets/images/logo/pengreenlive-logo-white.png"
+            alt="Pengreen Live"
+            v-if="!$store.themeSettingsStore.isDark && !$store.themeSettingsStore.semidark"
+            
+          />
+          <img
+            src="@/assets/images/logo/pengreenlive-logo-dark.png"
+            alt="Pengreen Live"
+            v-if="$store.themeSettingsStore.isDark || $store.themeSettingsStore.semidark"
+          />
+        </div>  
         <div
           v-if="this.$store.themeSettingsStore.menuLayout === 'vertical'"
           class="flex items-center md:space-x-4 space-x-2 rtl:space-x-reverse"
         >
-          <button
-            class="ltr:mr-5 rtl:ml-5 text-xl text-slate-900 dark:text-white"
-            v-if="this.$store.themeSettingsStore.sidebarCollasp && window.width > 1280"
-            @click="this.$store.themeSettingsStore.sidebarCollasp = false"
-          >
-            <Icon
-              icon="akar-icons:arrow-right"
-              v-if="!this.$store.themeSettingsStore.direction"
-            />
-            <Icon
-              icon="akar-icons:arrow-left"
-              v-if="this.$store.themeSettingsStore.direction"
-            />
-          </button>
+        <button
+          class="ltr:mr-5 rtl:ml-5 text-xl text-slate-900 dark:text-white button-expand"
+          v-if="this.$store.themeSettingsStore.sidebarCollasp && window.width > 1280"
+          @click="this.$store.themeSettingsStore.sidebarCollasp = false"
+        >
+          <Icon
+            icon="akar-icons:arrow-right"
+            v-if="!this.$store.themeSettingsStore.direction"
+          />
+          <Icon
+            icon="akar-icons:arrow-left"
+            v-if="this.$store.themeSettingsStore.direction"
+          />
+        </button>
+
           <MobileLogo v-if="window.width < 1280" />
           <handle-mobile-menu
             v-if="window.width < 1280 && window.width > 768"
@@ -66,14 +80,10 @@
 </template>
 <script>
 import Profile from "./Navtools/Profile.vue";
-import Notification from "./Navtools/Notification.vue";
-import Message from "./Navtools/Message.vue";
 import SwitchDark from "./Navtools/SwitchDark.vue";
-import MonochromeMode from "./Navtools/MonochromeMode.vue";
 import Mainnav from "./horizental-nav.vue";
 import Icon from "../Icon";
 import SearchModal from "./Navtools/SearchModal.vue";
-import LanguageVue from "./Navtools/Language.vue";
 import Logo from "./Navtools/Logo.vue";
 import MobileLogo from "./Navtools/MobileLogo.vue";
 import window from "@/mixins/window";
@@ -83,13 +93,9 @@ export default {
   mixins: [window],
   components: {
     Profile,
-    // Notification,
-    // Message,
     SwitchDark,
-    // MonochromeMode,
     Mainnav,
     Icon,
-    // LanguageVue,
     SearchModal,
     Logo,
     MobileLogo,
@@ -133,4 +139,8 @@ export default {
 .floating .app-header {
   @apply md:mx-6 md:my-8 mx-[15px] my-[15px] rounded-md;
 }
+img{
+  width: 140px;
+}
+
 </style>

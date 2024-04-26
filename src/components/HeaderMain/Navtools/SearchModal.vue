@@ -1,14 +1,13 @@
 <template>
   <div>
     <button
-      @click="openModal"
-      class="flex items-center xl:text-sm text-lg xl:text-slate-400 text-slate-800 dark:text-slate-300 px-1 space-x-3 rtl:space-x-reverse"
-    >
-      <Icon icon="heroicons-outline:search" /><span
-        class="xl:inline-block hidden"
-        >Search...</span
-      >
-    </button>
+    @click="openModal"
+    class="flex items-center justify-between w-full text-sm text-gray-500 bg-white border border-gray-200 rounded-full pr-80 py-2 pl-4 space-x-2 hover:bg-gray-50 focus:outline-none "
+  >
+  <Icon icon="heroicons-outline:search" class="w-4 h-4" />
+    <span class="flex-grow">검색어를 입력해주세요...</span>
+  </button>
+
   </div>
   <TransitionRoot :show="isOpen" as="template">
     <Dialog
@@ -73,7 +72,7 @@
                         <p
                           className="text-slate-500-600 text-base dark:text-white"
                         >
-                          No result found
+                          검색 결과가 없습니다.
                         </p>
                       </div>
                     </div>

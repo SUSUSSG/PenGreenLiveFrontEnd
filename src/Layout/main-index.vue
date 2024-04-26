@@ -3,27 +3,6 @@
     <Header :class="window.width > 1280 ? switchHeaderClass() : ''" />
     <!-- end header -->
 
-    <Sidebar
-      v-if="
-        this.$store.themeSettingsStore.menuLayout === 'vertical' &&
-        this.$store.themeSettingsStore.sidebarHidden === false &&
-        window.width > 1280
-      "
-    />
-    <!-- main sidebar end -->
-    <Transition name="mobilemenu">
-      <mobile-sidebar
-        v-if="window.width < 1280 && this.$store.themeSettingsStore.mobielSidebar"
-      />
-    </Transition>
-    <Transition name="overlay-fade">
-      <div
-        v-if="window.width < 1280 && this.$store.themeSettingsStore.mobielSidebar"
-        class="overlay bg-slate-900 bg-opacity-70 backdrop-filter backdrop-blur-[3px] backdrop-brightness-10 fixed inset-0 z-[999]"
-        @click="this.$store.themeSettingsStore.mobielSidebar = false"
-      ></div>
-    </Transition>
-    <!-- mobile sidebar -->
     <Settings />
 
     <div
@@ -59,12 +38,10 @@
   </main>
 </template>
 <script>
-import Breadcrumbs from "@/components/Breadcrumbs";
 import Footer from "../components/Footer";
-import Header from "../components/Header";
+import Header from "../components/HeaderMain";
 import Settings from "../components/Settings";
 import Sidebar from "../components/Sidebar/";
-// import Sidebar from "../components/UserSidebar/";
 import window from "@/mixins/window";
 import MobileSidebar from "@/components/Sidebar/MobileSidebar.vue";
 import FooterMenu from "@/components/Footer/FooterMenu.vue";
@@ -76,22 +53,12 @@ export default {
     Footer,
     Sidebar,
     Settings,
-    Breadcrumbs,
     FooterMenu,
     MobileSidebar,
   },
   methods: {
     switchHeaderClass() {
-      if (
-        this.$store.themeSettingsStore.menuLayout === "horizontal" ||
-        this.$store.themeSettingsStore.sidebarHidden
-      ) {
-        return "ltr:ml-0 rtl:mr-0";
-      } else if (this.$store.themeSettingsStore.sidebarCollasp) {
-        return "ltr:ml-[72px] rtl:mr-[72px]";
-      } else {
-        return "ltr:ml-[248px] rtl:mr-[248px]";
-      }
+      return "ltr:ml-0 rtl:mr-0";
     },
   },
 };
@@ -143,8 +110,8 @@ export default {
   animation: slideLeftTransition 0.24s reverse;
 }
 
-.page-content {
-  @apply md:pt-6 md:pb-[37px] md:px-6 pt-[15px] px-[15px] pb-24;
+body.light{
+  background-color:white;
 }
 .page-min-height {
   min-height: calc(var(--vh, 1vh) * 100 - 132px);

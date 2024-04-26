@@ -116,23 +116,8 @@
           }
         "
         >
-        <div class="px-4 py-2">
-          <Button
-              btnClass="btn btn-dark d-flex align-items-center justify-content-center"
-              @click="toggleModal"
-          >
-            <Icon icon="heroicons-outline:plus-circle" class="me-2 mr-2" />
-            라이브 만들기
-          </Button>
-          <LivePrepareModal v-if="showModal" @close="showModal = false" />
-        </div>
-        <div class="px-4 py-2">
-          <Button btnClass="btn btn-outline-dark light d-flex align-items-center justify-content-center">
-            <Icon icon="heroicons-outline:video-camera" class="me-2 mr-2" />
-            실시간 라이브
-          </Button>
-        </div>
-        <Navmenu :items="menuItems" />
+        
+        <Navmenu :items="userMenuItems" />
       </SimpleBar>
     </div>
   </div>
@@ -140,17 +125,15 @@
 <script>
 import { Icon } from "@iconify/vue";
 import { defineComponent } from "vue";
-import { menuItems } from "../../constant/data";
+import { userMenuItems } from "../../constant/data";
 import Navmenu from "./Navmenu";
 import { gsap } from "gsap";
 import { SimpleBar } from "simplebar-vue3";
 import { ref, onMounted } from "vue";
 import Button from "@/components/Button";
-import LivePrepareModal from "@/components/Modal/live-prepare-modal.vue";
 
 export default defineComponent({
   components: {
-    LivePrepareModal,
     Navmenu,
     SimpleBar,
     Button,
@@ -158,8 +141,7 @@ export default defineComponent({
   },
   data() {
     return {
-      showModal: false,
-      menuItems,
+      userMenuItems,
       openClass: "w-[248px]",
       closeClass: "w-[72px] close_sidebar",
     };
@@ -189,11 +171,6 @@ export default defineComponent({
       shadowbase,
     };
   },
-  methods:{
-    toggleModal() {
-      this.showModal = !this.showModal; // showModal 값을 토글하는 메소드
-    }
-  }
 });
 </script>
 <style lang="scss">
@@ -233,12 +210,10 @@ export default defineComponent({
   gap: 10px; // 버튼 사이의 간격 조절
 }
 
-.sidebar-menu .btn-dark,
-.sidebar-menu .btn-outline-dark {
+.sidebar-menu .btn-dark {
   width: 100%; // 버튼이 컨테이너의 전체 너비를 차지하도록 설정
   padding: 10px; // 버튼의 패딩을 조절하여 더 눈에 띄게 함
 }
-
 .icon-before {
   margin-right: 8px; // 아이콘과 텍스트 사이 간격
 }
