@@ -39,8 +39,8 @@
   </div>
   <hr />
   <Categories />
-  <hr class="mt-6"/>
-  <section class="under-category-section" style="width: 60%; margin: auto;">
+  <hr class="mt-6" />
+  <section class="under-category-section" style="width: 60%; margin: auto">
     <h6 class="mb-6 pt-12 pl-6 pr-6">인기 라이브</h6>
     <swiper
       :slidesPerView="1"
@@ -74,7 +74,9 @@
               />
             </div>
             <div class="additional-text-container">
-              <h5 v-if="item.viewersCount" class="mb-4">{{ item.viewersCount }}명이 보는 중!</h5>
+              <h5 v-if="item.viewersCount" class="mb-4">
+                {{ item.viewersCount }}명이 보는 중!
+              </h5>
               <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
               <p v-if="item.description">{{ item.description }}</p>
             </div>
@@ -82,62 +84,23 @@
         </div>
       </swiper-slide>
     </swiper>
-  </section>
-  <hr/>
-  <section class="under-category-section" style="width: 60%; margin: auto;">
-    <h6 class="mb-6 pt-12 pl-6 pr-6">예정 라이브</h6>
-    <swiper
-      :slidesPerView="1"
-      :centeredSlides="false"
-      :spaceBetween="30"
-      :pagination="{ clickable: true }"
-      class="hot-live-caro"
-      :loop="false"
-      :navigation="false"
-      :autoplay="{ delay: 5000, disableOnInteraction: false }"
-      style="width: 100%; margin: auto"
-    >
-      <swiper-slide
-        v-for="(item, index) in hotLiveCarousels"
-        :key="index"
-        class="carousel-slide"
-      >
-        <div class="slide-background">
-          <img
-            :src="item.mainImage"
-            alt="Carousel Image"
-            class="background-image"
-          />
-          <div class="slide-content">
-            <div class="additional-images-container">
-              <img
-                v-for="(additionalImage, subIndex) in item.additionalImages"
-                :src="additionalImage"
-                :key="'additional-image-' + index + '-' + subIndex"
-                class="additional-image"
-              />
-            </div>
-            <div class="additional-text-container">
-              <h5 v-if="item.viewersCount" class="mb-4">{{ item.viewersCount }}명이 보는 중!</h5>
-              <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
-              <p v-if="item.description">{{ item.description }}</p>
-            </div>
-          </div>
-        </div>
-      </swiper-slide>
-    </swiper>
-  </section>
+    <hr/>
+    <h6 class="mb-6 pt-12 pl-6 pr-6">예정된 라이브</h6>
 
-  <div v-for="(card, index) in cardsData" :key="'card-' + index">
-    <CardComponent
-      :imageSrc="card.imageSrc"
-      :title="card.title"
-      :text="card.text"
-      :date="card.date"
-      :time="card.time"
-      :buttonText="card.buttonText"
-    />
-  </div>
+    <div style="display:flex; flex-direction:row; gap:20px;">
+      <div v-for="(card, index) in cardsData" :key="'card-' + index">
+      <CardComponent
+        :imageSrc="card.imageSrc"
+        :title="card.title"
+        :text="card.text"
+        :datetime="card.datetime"
+        :buttonText="card.buttonText"
+      />
+      </div>
+    </div>
+    
+  </section>
+  <hr />
 </template>
 
 <script>
@@ -235,34 +198,51 @@ export default {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 1",
           text: "This is the description for card 1.",
-          date: "4월 15일",
-          time: "23:00",
-          buttonText: "알림 설정"
+          datetime: "2024-04-26T10:30:00",
+          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 2",
           text: "This is the description for card 2.",
-          date: "4월 16일",
-          time: "23:00",
-          buttonText: "알림 설정"
+          datetime: "2024-04-26T12:30:00",
+          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 3",
           text: "This is the description for card 3.",
-          date: "4월 17일",
-          time: "23:00",
-          buttonText: "알림 설정"
+          datetime: "2024-04-26T17:30:00",
+          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 4",
           text: "This is the description for card 4.",
-          date: "4월 18일",
-          time: "23:00",
-          buttonText: "알림 설정"
-        }
+          datetime: "2024-04-27T10:30:00",
+          buttonText: "알림 설정",
+        },
+        {
+          imageSrc: "http://via.placeholder.com/150x150",
+          title: "Title 4",
+          text: "This is the description for card 4.",
+          datetime: "2024-04-27T12:30:00",
+          buttonText: "알림 설정",
+        },
+        {
+          imageSrc: "http://via.placeholder.com/150x150",
+          title: "Title 4",
+          text: "This is the description for card 4.",
+          datetime: "2024-04-28T11:30:00",
+          buttonText: "알림 설정",
+        },
+        {
+          imageSrc: "http://via.placeholder.com/150x150",
+          title: "Title 4",
+          text: "This is the description for card 4.",
+          datetime: "2024-04-28T19:30:00",
+          buttonText: "알림 설정",
+        },
       ],
     };
   },
@@ -280,7 +260,7 @@ export default {
   width: 100%;
   height: 100%;
   position: relative;
-  background-color: #FAFAFA;
+  background-color: #fafafa;
 }
 
 .background-image {
@@ -354,7 +334,7 @@ export default {
 
 .hot-live-caro .additional-text-container h2,
 .hot-live-caro .additional-text-container p {
-  font-size: 1.2em; 
+  font-size: 1.2em;
 }
 
 .hot-live-caro .additional-images-container {
@@ -383,7 +363,7 @@ export default {
   height: 100%;
   object-fit: cover;
 }
-.under-category-section{
+.under-category-section {
   border-left: 1px solid #e6e7eb;
   border-right: 1px solid #e6e7eb;
 }
