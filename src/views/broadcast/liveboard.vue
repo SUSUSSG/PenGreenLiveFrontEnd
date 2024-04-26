@@ -1,5 +1,7 @@
 <template>
-    <LiveboardPrompt></LiveboardPrompt><LiveboardSidebar></LiveboardSidebar>
+    <LiveboardProduct></LiveboardProduct>
+    <LiveboardPrompt></LiveboardPrompt>
+    <LiveboardSidebar></LiveboardSidebar>
     <LiveBoardStatistics></LiveBoardStatistics>
     <LiveBoardTime></LiveBoardTime>
     <LiveBoardChat></LiveBoardChat>
@@ -12,6 +14,7 @@ import LiveboardBroad from '@/components/LiveBoard/liveboard-broad.vue';
 import LiveBoardStatistics from '@/components/LiveBoard/liveboard-statistics.vue';
 import LiveboardPrompt from '@/components/LiveBoard/liveboard-prompt.vue';
 import LiveboardSidebar from '@/components/LiveBoard/liveboard-sidebar.vue';
+import LiveboardProduct from '@/components/LiveBoard/liveboard-product.vue';
 
 export default {
     components: {
@@ -20,7 +23,8 @@ export default {
         LiveboardBroad,
         LiveBoardStatistics,
         LiveboardPrompt,
-        LiveboardSidebar
+        LiveboardSidebar,
+        LiveboardProduct
     }
 };
 </script>
