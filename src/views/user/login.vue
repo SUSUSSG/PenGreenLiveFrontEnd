@@ -68,26 +68,20 @@
                                             </ul>
                                         </div>
                                         <div class="md:max-w-[345px] mt-6 mx-auto font-normal text-slate-500 dark:text-slate-400mt-12 uppercase text-sm">아직 회원이 아니신가요?
-                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/register">회원가입하기</a>
+                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/join-first">회원가입하기</a>
+                                        </div>
+
+                                        <div class="font-normal text-slate-500 dark:text-slate-400 mt-12 text-sm text-right">
+                                            <!-- <div class="mt-12"></div> -->
+                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/login">판매자 로그인</a>
                                         </div>
                                     </div>
+                        
                                     <div class="auth-footer text-center">©  susussg, Co., Ltd.. All Rights Reserved</div>
                                 </div>
                             </div>
-                            <div class="left-column bg-cover bg-no-repeat bg-center " style="background-image: url(&quot;/assets/login-bg.4b614fc6.png&quot;);">
-                                <div class="flex flex-col h-full justify-center">
-                                    <div class="flex-1 flex flex-col justify-center items-center">
-                                        <a href="/">
-                                            <img src="/assets/logo-white.5e389a51.svg" alt="" class="mb-10">
-                                        </a>
-                                    </div>
-                                    <div>
-                                        <div class="black-500-title max-w-[525px] mx-auto pb-20 text-center">Unlock your Project
-                                            <span class="text-white font-bold">performance</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <div class="left-column bg-cover bg-no-repeat bg-center " style="background-image: url(&quot;/assets/login-bg.4b614fc6.png&quot;);"><div class="flex flex-col h-full justify-center"><div class="flex-1 flex flex-col justify-center items-center"><a href="/"><img src="/assets/logo-white.5e389a51.svg" alt="" class="mb-10"></a></div><div><div class="black-500-title max-w-[525px] mx-auto pb-20 text-center">Unlock your Project<span class="text-white font-bold">performance</span></div></div></div></div>
+                            
                         </div>
                     </div>
                 </main>
