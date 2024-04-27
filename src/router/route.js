@@ -18,12 +18,17 @@ const routes = [
       {
         path: "product-list",
         name: "product-list",
-        component: () => import("@/views/dashboard/dashboard-index.vue")
+        component: () => import("@/views/dashboard/product-list.vue")
       },
       {
         path: "live-register",
         name: "live-register",
         component: () => import("@/views/broadcast/live-register.vue")
+      },
+      {
+        path: "shop-modify",
+        name: "상점 정보 입력",
+        component: () => import("@/views/dashboard/shop-modify.vue")
       }
     ]
   },
