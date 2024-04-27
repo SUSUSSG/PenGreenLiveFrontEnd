@@ -21,22 +21,8 @@ export const useTodoStore = defineStore('todo',{
         todos: [
             {
                 id: uuidv4(),
-                image: [
-                    {
-                        image: av1Img,
-                        title: "Mahedi Amin",
-                    },
-                    {
-                        image: av2Img,
-                        title: "Sovo Haldar",
-                    },
-                    {
-                        image: av2Img,
-                        title: "Rakibul Islam",
-                    },
-                ],
                 title:
-                    "laboriosam mollitia et enim quasi adipisci quia provident illum",
+                    "냉장",
                 isDone: false,
                 isfav: false,
                 catagory: [
@@ -55,7 +41,7 @@ export const useTodoStore = defineStore('todo',{
                     },
                 ],
                 title:
-                    "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
+                    "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint45.",
                 isDone: true,
                 isfav: true,
                 catagory: [
@@ -78,7 +64,7 @@ export const useTodoStore = defineStore('todo',{
                     },
                 ],
                 title:
-                    "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.",
+                    "Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet 55sint.",
                 isDone: true,
                 isfav: true,
                 catagory: [
@@ -108,7 +94,7 @@ export const useTodoStore = defineStore('todo',{
                         title: "Rakibul Islam",
                     },
                 ],
-                title: "illo expedita consequatur quia in",
+                title: "illo expedita consequatur quia in525",
                 isDone: false,
                 isfav: false,
                 catagory: [
@@ -130,7 +116,7 @@ export const useTodoStore = defineStore('todo',{
                         title: "Rakibul Islam",
                     },
                 ],
-                title: "illo expedita consequatur quia in",
+                title: "illo expedita consequatur quia i121n",
                 isDone: false,
                 isfav: false,
                 catagory: [

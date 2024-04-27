@@ -814,52 +814,35 @@ export const TodoList = [
   },
 ];
 
-//  todo fillter
+//  상품 카테고리
 export const fillters = [
   {
-    value: "all",
-    name: "My Task",
-    icon: "uil:image-v",
+    value: "food",
+    name: "식품",
+    subCategories: [
+      { value: "refrigerated", name: "냉장" },
+      { value: "frozen", name: "냉동" },
+      { value: "room_temperature", name: "실온" },
+    ],
   },
   {
-    value: "fav",
-    name: "Starred",
-    icon: "heroicons:star",
+    value: "electronics",
+    name: "전자제품",
+    subCategories: [
+      { value: "tv", name: "TV" },
+      { value: "computer", name: "컴퓨터" },
+      { value: "laptop", name: "노트북" },
+    ],
   },
   {
-    value: "done",
-    name: "Completed",
-    icon: "heroicons:document-check",
+    value: "gifts",
+    name: "선물",
+    subCategories: [],
   },
   {
-    value: "trash",
-    name: "Trash",
-    icon: "heroicons:trash",
-  },
-  {
-    name: "Team",
-    icon: "heroicons:users",
-    value: "team",
-  },
-  {
-    name: "low",
-    icon: "heroicons:flag",
-    value: "low",
-  },
-  {
-    name: "medium",
-    icon: "heroicons:flag",
-    value: "medium",
-  },
-  {
-    name: "high",
-    icon: "heroicons:flag",
-    value: "high",
-  },
-  {
-    name: "update",
-    icon: "heroicons:refresh",
-    value: "update",
+    value: "fashion",
+    name: "패션",
+    subCategories: [],
   },
 ];
 

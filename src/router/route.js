@@ -17,7 +17,7 @@ const routes = [
     children: [
       {
         path: "product-list",
-        name: "product-list",
+        name: "상품목록",
         component: () => import("@/views/dashboard/product-list.vue")
       },
       {
@@ -29,6 +29,11 @@ const routes = [
         path: "shop-modify",
         name: "상점 정보 입력",
         component: () => import("@/views/dashboard/shop-modify.vue")
+      },
+      {
+        path: "product-category",
+        name: "상품 카테고리 목록",
+        component: () => import("@/views/dashboard/product-category.vue")
       }
     ]
   },
