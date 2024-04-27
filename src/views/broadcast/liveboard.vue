@@ -1,6 +1,6 @@
 <template>
-    <!-- <div class="scroll-container">
-        <div class="scroll-content"> -->
+    <div class="scroll-container">
+        <div class="scroll-content">
             <div>
                 <LiveBoardTime></LiveBoardTime>
             </div>
@@ -8,7 +8,7 @@
                 <div id="main">
                     <div class="inline-flex">
                         <LiveboardBroad></LiveboardBroad>
-                        <LiveBoardChat></LiveBoardChat>
+                        <LiveBoardChat class="ml-5"></LiveBoardChat>
                         <LiveboardProduct></LiveboardProduct>
                     </div>
                     <div class="inline-flex">
@@ -20,8 +20,8 @@
                     <LiveboardSidebar></LiveboardSidebar>
                 </div>
             </div>
-        <!-- </div> -->
-    <!-- </div> -->
+        </div>
+    </div>
 </template>
 <script>
 import LiveBoardTime from '@/components/LiveBoard/liveboard-time.vue';
@@ -52,12 +52,12 @@ export default {
 #main {
     width: 1657px;
 }
-/* 
+
 .scroll-container {
   overflow-x: auto;
 }
 
 .scroll-content {
   display: inline-block;
-} */
+}
 </style>
