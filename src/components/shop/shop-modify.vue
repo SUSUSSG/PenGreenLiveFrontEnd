@@ -11,7 +11,7 @@
 
     <div class="text-center">
       <button class="btn inline-flex justify-center btn-sm btn-dark mr-3 mt-3"><span>저장</span></button>
-      <button class="btn inline-flex justify-center btn-sm  btn-dark"><span>취소</span></button>
+      <button class="btn inline-flex justify-center btn-sm  btn-dark" @click="resetForm"><span>취소</span></button>
     </div>
   </div>
 
@@ -46,6 +46,11 @@ export default {
         this.previewImage = null;
       }
     },
+    resetForm() {
+
+      this.previewImage = null;
+
+    }
   },
 };
 </script>
