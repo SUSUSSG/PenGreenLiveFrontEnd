@@ -98,12 +98,13 @@
       <router-link to="/more" class="more-link">더 보기</router-link>
     </div>
     <swiper
-      :slidesPerView="5.5"
-      :spaceBetween="20"
-      :pagination="false"
-      :navigation="true"
-      :grabCursor="true"
-      style="width: 100%; margin: auto"
+    :slidesPerView="'auto'"
+        :spaceBetween="10"
+        :pagination="{ clickable: true }"
+        class="live-caro"
+        :loop="false"
+        :navigation="true"
+        :autoplay="{ delay: 3000, disableOnInteraction: false }"
     >
       <swiper-slide v-for="(card, index) in cardsData" :key="'card-' + index">
         <CardComponent
@@ -115,8 +116,36 @@
         />
       </swiper-slide>
     </swiper>
-    <div class="pb-20"/>
+    <h6 class="mb-6 pt-12 pl-6 pr-6 live-title">바로 지금! 라이브 찬스</h6>
 
+    <div class="live-section">
+      <swiper
+        :slidesPerView="'auto'"
+        :spaceBetween="10"
+        :pagination="{ clickable: true }"
+        class="live-caro"
+        :loop="false"
+        :navigation="true"
+        :autoplay="{ delay: 3000, disableOnInteraction: false }"
+      >
+        <swiper-slide v-for="(item, index) in liveItems" :key="index">
+          <img :src="item.mainImage" alt="Main Image" class="main-image" />
+          <p class="live-main-title">{{ item.mainTitle }}</p>
+          <div class="live-item">
+            <img
+              :src="item.thumbnail"
+              alt="Live Thumbnail"
+              class="live-thumbnail"
+            />
+            <div class="live-info">
+              <div class="live-title">{{ item.title }}</div>
+              <div class="live-discount">{{ item.discount }}</div>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
+    </div>
+    <div class="pb-20" />
   </section>
   <hr />
 </template>
@@ -270,6 +299,71 @@ export default {
           buttonText: "알림 설정",
         },
       ],
+      liveItems: [
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀1",
+          title: "제로스토킹 네이버 가젯의 단 상품대",
+          discount: "64% 49,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+      ],
     };
   },
 };
@@ -415,5 +509,48 @@ export default {
   text-align: right;
   text-decoration: underline;
 }
+.live-caro .swiper-slide {
+  width: auto;
+}
 
+.live-caro .live-item {
+  display: flex;
+  align-items: center;
+}
+
+.live-caro .live-thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.live-caro .live-info {
+  display: flex;
+  flex-direction: column;
+  width: 130px;
+}
+
+.live-caro .live-title {
+  font-weight: bold;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.live-caro .live-discount {
+  color: red;
+  font-weight: bold;
+}
+
+.live-section .main-image {
+  width: 180px;
+  height: auto;
+}
+
+.live-caro .live-main-title{
+  font-weight: bold;
+  font-size:16px;
+}
 </style>
