@@ -18,7 +18,8 @@ export const liveProductTable = [
       productName: "휴지",
       discountRate: "45",
       discountPrice: "13,500",
-      originalPrice : "30,000"
+      originalPrice : "30,000",
+      productCode: "A04B02" //상품번호 추가
     },
     {
         productImg: "www.daum.com",
