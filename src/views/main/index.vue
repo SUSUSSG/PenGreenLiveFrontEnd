@@ -51,14 +51,14 @@
   <section class="under-category-section" style="width: 77%; margin: auto">
     <h6 class="mb-6 pt-12 pl-6 pr-6">인기 라이브</h6>
     <swiper
-      :slidesPerView="1"
+      :slidesPerView="2"
       :centeredSlides="false"
       :spaceBetween="30"
       :pagination="{ clickable: true }"
       class="hot-live-caro"
       :loop="false"
       :navigation="false"
-      :autoplay="{ delay: 50000000, disableOnInteraction: false }"
+      :autoplay="{ delay: 6000, disableOnInteraction: false }"
       style="width: 100%; margin: auto"
     >
       <swiper-slide
@@ -74,10 +74,10 @@
           />
           <div class="slide-content">
             <div class="additional-text-container">
-              <h5 v-if="item.viewersCount" class="mb-4">
+              <h6 v-if="item.viewersCount" class="mb-4">
                 {{ item.viewersCount }}명이 보는 중!
-              </h5>
-              <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
+              </h6>
+              <h4 v-if="item.title" class="mb-2">{{ item.title }}</h4>
               <p v-if="item.description">{{ item.description }}</p>
             </div>
             <div class="additional-images-container">
@@ -99,7 +99,7 @@
     </div>
     <swiper
     :slidesPerView="'auto'"
-        :spaceBetween="10"
+        :spaceBetween="30"
         :pagination="{ clickable: true }"
         class="live-caro"
         :loop="false"
@@ -121,7 +121,7 @@
     <div class="live-section">
       <swiper
         :slidesPerView="'auto'"
-        :spaceBetween="10"
+        :spaceBetween="30"
         :pagination="false"
         class="live-caro"
         :loop="false"
