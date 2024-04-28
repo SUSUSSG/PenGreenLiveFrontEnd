@@ -1,31 +1,37 @@
 <template>
-  <div class="inline-flex">
-    <div v-if="isBroadcasting">
-      <Button v-on:click="toggleBroadcast()">라이브 종료</Button>
-      <Button text="danger" btnClass="btn-outline-danger rounded-[999px]">라이브</Button>
+  <div class="inline-flex pt-5 ml-5" id="header">
+    <img src="/src/assets/images/logo/pengreenlive-logo-white.png" id="logo">
+
+    <div id="resultDisplay" :class="[isBroadcasting ? 'red-style' : 'black-style']" class="mr-4"> {{ resultDispalyText }}
     </div>
-    <div v-else>
-      <Button v-on:click="toggleBroadcast()" text="Dark" btnClass="btn-dark">라이브 시작</Button>
-      <Button text="dark" btnClass="btn-outline-dark rounded-[999px]">대기</Button>
+    <div class="row">
+      <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"> {{ boradcastTitle }}</div>
+      <div> {{ "라이브 일시 " + boradcastDate }}</div>
     </div>
 
-    <div class="row" id="times">
-      <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
-        <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-0" id="timeCard">
-          <div>
-            <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl">
-              <Icon :icon="`heroicons:clock`" />
+    <div class="inline-flex flex-grow items-center justify-end">
+      <div class="row ml-10" id="times">
+        <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
+          <div class="inline-flex bg-white rounded pt-3 px-4 pl-0" id="timeCard">
+            <div>
+              <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl">
+                <Icon :icon="`heroicons:clock`" />
+              </div>
             </div>
-          </div>
-          <div>
-            <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
-              {{ item.title }}
-            </div>
-            <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
-              {{ item.time }}
+            <div>
+              <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
+                {{ item.title }}
+              </div>
+              <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
+                {{ item.time }}
+              </div>
             </div>
           </div>
         </div>
+      </div>
+      <div class="inline-flex flex-grow items-center justify-end">
+        <Button v-on:click="toggleBroadcast()" :text="isBroadcasting ? '라이브 종료' : '라이브 시작'"
+          :btnClass="isBroadcasting ? 'btn-primary h-12' : 'btn-dark h-12'" id="broadcastControllButton" />
       </div>
     </div>
   </div>
@@ -64,7 +70,10 @@ export default {
       isBroadcasting: false,
       //초 단위
       elapsedTime: 0,
-      remainingTime: 3600
+      remainingTime: 3600,
+      boradcastTitle: "어린이날 맞이 깜짝 라이브 이벤트!! 독도 토너~",
+      boradcastDate: "2024-03-24 14:30 ~ 15:30",
+      resultDispalyText: '대기',
     }
   },
   mounted() {
@@ -75,6 +84,7 @@ export default {
   methods: {
     toggleBroadcast() {
       this.isBroadcasting = !this.isBroadcasting;
+      this.updateResultDisplayText();
     },
     getCurrentTime() {
       let now = new Date();
@@ -99,12 +109,45 @@ export default {
     addZero(number) {
       return number < 10 ? "0" + number : number;
     },
+    updateResultDisplayText() {
+      this.resultDispalyText = this.isBroadcasting ? '라이브' : '대기';
+    }
   }
 };
 </script>
 
 <style>
+#header {
+  width: 1730px;
+  height: 100px;
+}
+
 #timeCard {
   width: 150px;
+}
+
+#resultDisplay {
+  width: 80px;
+  height: 30px;
+  border-radius: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.red-style {
+  color: red;
+  border: 1px solid red;
+}
+
+.black-style {
+  color: black;
+  border: 1px solid black;
+}
+
+#logo {
+  width: 150px;
+  height: 50px;
+  margin-right: 20px;
 }
 </style>

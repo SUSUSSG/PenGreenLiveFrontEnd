@@ -16,9 +16,9 @@
                         <LiveboardPrompt></LiveboardPrompt>
                     </div>
                 </div>
-                <div class="right-side">
+                <!-- <div class="right-side"> -->
                     <LiveboardSidebar></LiveboardSidebar>
-                </div>
+                <!-- </div> -->
             </div>
         </div>
     </div>
