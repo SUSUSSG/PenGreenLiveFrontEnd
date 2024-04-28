@@ -493,8 +493,8 @@ export default {
 }
 
 .hot-live-caro .additional-image {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
 }
 .under-category-section {
