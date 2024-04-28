@@ -122,7 +122,7 @@
       <swiper
         :slidesPerView="'auto'"
         :spaceBetween="10"
-        :pagination="{ clickable: true }"
+        :pagination="false"
         class="live-caro"
         :loop="false"
         :navigation="true"
@@ -416,6 +416,9 @@ export default {
 
 .main-caro p {
   font-size: 1em;
+  color:darkgreen;
+  font-weight: bold;
+
 }
 
 .main-caro .start-button {
@@ -540,7 +543,7 @@ export default {
 }
 
 .live-caro .live-discount {
-  color: red;
+  color: darkgreen;
   font-weight: bold;
 }
 
