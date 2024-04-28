@@ -117,10 +117,14 @@
         "
         >
         <div class="px-4 py-2">
-          <Button btnClass="btn btn-dark d-flex align-items-center justify-content-center">
+          <Button
+              btnClass="btn btn-dark d-flex align-items-center justify-content-center"
+              @click="toggleModal"
+          >
             <Icon icon="heroicons-outline:plus-circle" class="me-2 mr-2" />
             라이브 만들기
           </Button>
+          <LivePrepareModal v-if="showModal" @close="showModal = false" />
         </div>
         <div class="px-4 py-2">
           <Button btnClass="btn btn-outline-dark light d-flex align-items-center justify-content-center">
@@ -142,9 +146,11 @@ import { gsap } from "gsap";
 import { SimpleBar } from "simplebar-vue3";
 import { ref, onMounted } from "vue";
 import Button from "@/components/Button";
+import LivePrepareModal from "@/components/Modal/live-prepare-modal.vue";
 
 export default defineComponent({
   components: {
+    LivePrepareModal,
     Navmenu,
     SimpleBar,
     Button,
@@ -152,6 +158,7 @@ export default defineComponent({
   },
   data() {
     return {
+      showModal: false,
       menuItems,
       openClass: "w-[248px]",
       closeClass: "w-[72px] close_sidebar",
@@ -182,6 +189,11 @@ export default defineComponent({
       shadowbase,
     };
   },
+  methods:{
+    toggleModal() {
+      this.showModal = !this.showModal; // showModal 값을 토글하는 메소드
+    }
+  }
 });
 </script>
 <style lang="scss">
