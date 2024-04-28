@@ -98,7 +98,7 @@
       <router-link to="/more" class="more-link">더 보기</router-link>
     </div>
     <swiper
-      :slidesPerView="4.5"
+      :slidesPerView="5.5"
       :spaceBetween="20"
       :pagination="false"
       :navigation="true"
@@ -115,6 +115,8 @@
         />
       </swiper-slide>
     </swiper>
+    <div class="pb-20"/>
+
   </section>
   <hr />
 </template>
@@ -413,4 +415,5 @@ export default {
   text-align: right;
   text-decoration: underline;
 }
+
 </style>
