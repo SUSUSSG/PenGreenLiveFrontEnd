@@ -10,7 +10,7 @@
       :navigation="true"
       :autoplay="{ delay: 3000, disableOnInteraction: false }"
     >
-    <swiper-slide
+      <swiper-slide
         v-for="(item, index) in carousels"
         :key="index"
         class="carousel-slide"
@@ -61,40 +61,42 @@
       :autoplay="{ delay: 50000000, disableOnInteraction: false }"
       style="width: 100%; margin: auto"
     >
-    <swiper-slide
-  v-for="(item, index) in hotLiveCarousels"
-  :key="index"
-  class="carousel-slide"
->
-  <div class="slide-container">
-    <img
-      :src="item.mainImage"
-      alt="Carousel Image"
-      class="background-image"
-    />
-    <div class="slide-content">
-      <div class="additional-text-container">
-        <h5 v-if="item.viewersCount" class="mb-4">
-          {{ item.viewersCount }}명이 보는 중!
-        </h5>
-        <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
-        <p v-if="item.description">{{ item.description }}</p>
-      </div>
-      <div class="additional-images-container">
-        <img
-          v-for="(additionalImage, subIndex) in item.additionalImages"
-          :key="'additional-image-' + index + '-' + subIndex"
-          :src="additionalImage"
-          class="additional-image"
-        />
-      </div>
-      
-    </div>
-  </div>
-</swiper-slide>
+      <swiper-slide
+        v-for="(item, index) in hotLiveCarousels"
+        :key="index"
+        class="carousel-slide"
+      >
+        <div class="slide-container">
+          <img
+            :src="item.mainImage"
+            alt="Carousel Image"
+            class="background-image"
+          />
+          <div class="slide-content">
+            <div class="additional-text-container">
+              <h5 v-if="item.viewersCount" class="mb-4">
+                {{ item.viewersCount }}명이 보는 중!
+              </h5>
+              <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
+              <p v-if="item.description">{{ item.description }}</p>
+            </div>
+            <div class="additional-images-container">
+              <img
+                v-for="(additionalImage, subIndex) in item.additionalImages"
+                :key="'additional-image-' + index + '-' + subIndex"
+                :src="additionalImage"
+                class="additional-image"
+              />
+            </div>
+          </div>
+        </div>
+      </swiper-slide>
     </swiper>
     <hr />
     <h6 class="mb-6 pt-12 pl-6 pr-6">예정된 라이브</h6>
+    <div class="more-link-wrapper">
+      <router-link to="/more" class="more-link">더 보기</router-link>
+    </div>
     <swiper
       :slidesPerView="4.5"
       :spaceBetween="20"
@@ -149,8 +151,7 @@ export default {
             "https://phinf.pstatic.net/dthumb/?src=%22https%3A%2F%2Fshop-phinf.pstatic.net%2F20240125_192%2F1706144165346yli4D_JPEG%2F107279949049973868_573632295.jpg%22&service=selective&type=f240_240_q90",
           ],
           additionalImagesTitle: ["테스트 상품1", "테스트 상품2"],
-          additionalImagesPrice: ['10,000원', '15,000원'],
-
+          additionalImagesPrice: ["10,000원", "15,000원"],
         },
         {
           mainImage: "https://i.ytimg.com/vi/7DSJl9e-UUE/maxresdefault.jpg",
@@ -161,8 +162,7 @@ export default {
             "http://via.placeholder.com/80x80",
           ],
           additionalImagesTitle: ["테스트 상품3", "테스트 상품4"],
-          additionalImagesPrice: ['10,000원', '15,000원'],
-
+          additionalImagesPrice: ["10,000원", "15,000원"],
         },
         {
           mainImage:
@@ -171,8 +171,7 @@ export default {
           description: "3 번째 슬라이드에 대한 설명입니다.",
           additionalImages: ["http://via.placeholder.com/80x80"],
           additionalImagesTitle: ["테스트 상품2"],
-          additionalImagesPrice: ['10,000원'],
-
+          additionalImagesPrice: ["10,000원"],
         },
         {
           mainImage:
@@ -184,7 +183,7 @@ export default {
             "http://via.placeholder.com/80x80",
           ],
           additionalImagesTitle: ["테스트 상품1", "테스트 상품2"],
-          additionalImagesPrice: ['10,000원', '15,000원'],
+          additionalImagesPrice: ["10,000원", "15,000원"],
         },
       ],
       hotLiveCarousels: [
@@ -282,7 +281,7 @@ export default {
 /* 메인 캐러셀 슬라이드 */
 .main-caro .swiper-slide {
   opacity: 0.4;
-  transition: opacity 0.3s ease; 
+  transition: opacity 0.3s ease;
 }
 
 .main-caro .swiper-slide-active {
@@ -408,5 +407,10 @@ export default {
 }
 .under-category-section::-webkit-scrollbar {
   display: none;
+}
+.more-link-wrapper {
+  margin: 0 24px 24px 0;
+  text-align: right;
+  text-decoration: underline;
 }
 </style>
