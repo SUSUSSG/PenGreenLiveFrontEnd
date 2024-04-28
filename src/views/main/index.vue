@@ -48,7 +48,7 @@
   <hr />
   <Categories />
   <hr class="mt-6" />
-  <section class="under-category-section" style="width: 60%; margin: auto">
+  <section class="under-category-section" style="width: 77%; margin: auto">
     <h6 class="mb-6 pt-12 pl-6 pr-6">인기 라이브</h6>
     <swiper
       :slidesPerView="1"
@@ -58,39 +58,40 @@
       class="hot-live-caro"
       :loop="false"
       :navigation="false"
-      :autoplay="{ delay: 5000, disableOnInteraction: false }"
+      :autoplay="{ delay: 50000000, disableOnInteraction: false }"
       style="width: 100%; margin: auto"
     >
-      <swiper-slide
-        v-for="(item, index) in hotLiveCarousels"
-        :key="index"
-        class="carousel-slide"
-      >
-        <div class="slide-background">
-          <img
-            :src="item.mainImage"
-            alt="Carousel Image"
-            class="background-image"
-          />
-          <div class="slide-content">
-            <div class="additional-images-container">
-              <img
-                v-for="(additionalImage, subIndex) in item.additionalImages"
-                :key="'additional-image-' + index + '-' + subIndex"
-                :src="additionalImage"
-                class="additional-image"
-              />
-            </div>
-            <div class="additional-text-container">
-              <h5 v-if="item.viewersCount" class="mb-4">
-                {{ item.viewersCount }}명이 보는 중!
-              </h5>
-              <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
-              <p v-if="item.description">{{ item.description }}</p>
-            </div>
-          </div>
-        </div>
-      </swiper-slide>
+    <swiper-slide
+  v-for="(item, index) in hotLiveCarousels"
+  :key="index"
+  class="carousel-slide"
+>
+  <div class="slide-container">
+    <img
+      :src="item.mainImage"
+      alt="Carousel Image"
+      class="background-image"
+    />
+    <div class="slide-content">
+      <div class="additional-text-container">
+        <h5 v-if="item.viewersCount" class="mb-4">
+          {{ item.viewersCount }}명이 보는 중!
+        </h5>
+        <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
+        <p v-if="item.description">{{ item.description }}</p>
+      </div>
+      <div class="additional-images-container">
+        <img
+          v-for="(additionalImage, subIndex) in item.additionalImages"
+          :key="'additional-image-' + index + '-' + subIndex"
+          :src="additionalImage"
+          class="additional-image"
+        />
+      </div>
+      
+    </div>
+  </div>
+</swiper-slide>
     </swiper>
     <hr />
     <h6 class="mb-6 pt-12 pl-6 pr-6">예정된 라이브</h6>
@@ -280,8 +281,8 @@ export default {
 }
 /* 메인 캐러셀 슬라이드 */
 .main-caro .swiper-slide {
-  opacity: 0.4; /* 앞뒤 슬라이드를 어둡게 설정 */
-  transition: opacity 0.3s ease; /* 부드러운 전환 효과를 위해 */
+  opacity: 0.4;
+  transition: opacity 0.3s ease; 
 }
 
 .main-caro .swiper-slide-active {
@@ -355,23 +356,32 @@ export default {
   border-radius: 10px;
   border: 1px solid lightgray;
 }
-.hot-live-caro .carousel-slide {
-  max-width: 100%;
-  height: 400px;
-  margin: auto;
-  overflow: hidden;
+.hot-live-caro .slide-container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  background-color: white;
+}
+
+.hot-live-caro .background-image {
+  width: 360px;
+  height: auto;
+  object-fit: cover;
+  aspect-ratio: 9/16;
 }
 
 .hot-live-caro .slide-content {
-  position: absolute;
   display: flex;
-  flex-direction: row;
-  height: 90%;
-  left: 31%;
-  top: 10%;
+  flex-direction: column;
   text-align: left;
   color: rgb(60, 60, 60);
   z-index: 2;
+  align-items: start;
+  justify-content: space-between;
+  padding: 2rem;
+  margin-top: 2rem;
 }
 
 .hot-live-caro .additional-text-container h2,
@@ -384,25 +394,12 @@ export default {
   flex-direction: column;
   justify-content: flex-end;
   margin-right: 2rem;
-  margin-bottom: 2rem;
   gap: 8px;
 }
 
 .hot-live-caro .additional-image {
   width: 80px;
   height: 80px;
-  object-fit: cover;
-}
-.hot-live-caro .slide-background {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  background-color: white;
-}
-
-.hot-live-caro .background-image {
-  width: 30%;
-  height: 100%;
   object-fit: cover;
 }
 .under-category-section {
