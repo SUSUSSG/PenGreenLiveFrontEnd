@@ -7,10 +7,14 @@
             <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
                 :rows="liveProductTable" :pagination-options="{ enabled: false }" :sort-options="{ enabled: false }">
                 <template v-slot:table-row="props">
-                    <span v-if="props.column.field == 'productImg'" class="cursor-pointer relative">
+                    <span v-if="props.column.field == 'productImg'" class="cursor-pointer relative"
+                        @click="openEditModal(props.row)">
                         <img :src="props.row.productImg" alt="Product Image" class="w-20 h-20 object-cover" />
                         <img v-if="props.row.showNowImg" :src="nowImg" alt="Now Image"
                             class="w-10 h-10 absolute top-0 left-0 z-10" id="nowImg" />
+                        <Modal title="실시간 상품 정보" ref="showProductInfo" :showButtons="false">
+                            
+                        </Modal>
                     </span>
                     <span v-if="props.column.field == 'auth'" class="flex">
                         <img v-for="entry in props.row.auth" :key="entry.name" :src="entry.image" :alt="entry.name"
@@ -43,10 +47,12 @@
 import { liveProductTable } from "@/constant/live-product-data";
 import Switch from '@/components/Switch';
 import nowImg from '@/assets/images/all-img/now.png'
+import Modal from "../Modal/Modal.vue";
 
 export default {
     components: {
         Switch,
+        Modal
     },
     data() {
         return {
@@ -88,6 +94,12 @@ export default {
     methods: {
         toggleNowImage(row) {
             row.showNowImg = !row.showNowImg;
+        },
+        showProductInfo() {
+            this.isOpen = true;
+        },
+        openEditModal(row) {
+            this.$refs.showProductInfo.openModal();
         }
     }
 }
@@ -104,13 +116,16 @@ export default {
     background: white;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
+
 #tableCard {
     width: 760px;
 }
+
 #nowImg {
     widows: 70px;
     height: 20px;
 }
+
 .relative {
     position: relative;
 }
@@ -130,8 +145,9 @@ export default {
 .z-10 {
     z-index: 10;
 }
+
 .vgt-table {
-  width: 750px;
-  max-width: 100%;
+    width: 750px;
+    max-width: 100%;
 }
 </style>
