@@ -10,7 +10,7 @@
       :navigation="true"
       :autoplay="{ delay: 3000, disableOnInteraction: false }"
     >
-      <swiper-slide
+    <swiper-slide
         v-for="(item, index) in carousels"
         :key="index"
         class="carousel-slide"
@@ -22,15 +22,23 @@
             class="background-image"
           />
           <div class="slide-content">
-            <h2 v-if="item.title">{{ item.title }}</h2>
-            <p v-if="item.description">{{ item.description }}</p>
+            <div>
+              <h2 v-if="item.title">{{ item.title }}</h2>
+              <p v-if="item.description">{{ item.description }}</p>
+            </div>
             <div class="additional-images-container">
-              <img
+              <div
                 v-for="(additionalImage, subIndex) in item.additionalImages"
-                :src="additionalImage"
                 :key="'additional-image-' + index + '-' + subIndex"
-                class="additional-image"
-              />
+              >
+                <img :src="additionalImage" class="additional-image" />
+                <div class="additional-image-title">
+                  {{ item.additionalImagesTitle[subIndex] }}
+                </div>
+                <div class="additional-image-price">
+                  {{ item.additionalImagesPrice[subIndex] }}
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -68,8 +76,8 @@
             <div class="additional-images-container">
               <img
                 v-for="(additionalImage, subIndex) in item.additionalImages"
-                :src="additionalImage"
                 :key="'additional-image-' + index + '-' + subIndex"
+                :src="additionalImage"
                 class="additional-image"
               />
             </div>
@@ -132,13 +140,16 @@ export default {
       carousels: [
         {
           mainImage:
-            "https://img.etoday.co.kr/pto_db/2024/04/20240419110132_2014644_647_358.jpg",
-          title: "첫 번째 슬라이드",
-          description: "첫 번째 슬라이드에 대한 설명입니다.",
+            "https://g-selected.pstatic.net/MjAyNDA0MjNfMjI5/MDAxNzEzODQ5MDI3MDE3.A_xY4KPpLycWqmbe8uKSRHR8evuG_uOTK92gplRC0tcg.4mFLnckQ8tHdxJf3jt0cJYrOb-lgIzzyaHv3KSbfZfog.PNG/live_up1.png?type=w600_q90",
+          title: "이찬원과 함께하는 가정의 달",
+          description: "6,506명이 기다리는 중",
           additionalImages: [
-            "http://via.placeholder.com/80x80",
-            "http://via.placeholder.com/80x80",
+            "https://phinf.pstatic.net/dthumb/?src=%22https%3A%2F%2Fshop-phinf.pstatic.net%2F20240125_126%2F17061434095045bT0Y_JPEG%2F107279237300263844_1793856330.jpg%22&service=selective&type=f240_240_q90",
+            "https://phinf.pstatic.net/dthumb/?src=%22https%3A%2F%2Fshop-phinf.pstatic.net%2F20240125_192%2F1706144165346yli4D_JPEG%2F107279949049973868_573632295.jpg%22&service=selective&type=f240_240_q90",
           ],
+          additionalImagesTitle: ["테스트 상품1", "테스트 상품2"],
+          additionalImagesPrice: ['10,000원', '15,000원'],
+
         },
         {
           mainImage: "https://i.ytimg.com/vi/7DSJl9e-UUE/maxresdefault.jpg",
@@ -148,6 +159,9 @@ export default {
             "http://via.placeholder.com/80x80",
             "http://via.placeholder.com/80x80",
           ],
+          additionalImagesTitle: ["테스트 상품3", "테스트 상품4"],
+          additionalImagesPrice: ['10,000원', '15,000원'],
+
         },
         {
           mainImage:
@@ -155,6 +169,9 @@ export default {
           title: "3 번째 슬라이드",
           description: "3 번째 슬라이드에 대한 설명입니다.",
           additionalImages: ["http://via.placeholder.com/80x80"],
+          additionalImagesTitle: ["테스트 상품2"],
+          additionalImagesPrice: ['10,000원'],
+
         },
         {
           mainImage:
@@ -165,6 +182,8 @@ export default {
             "http://via.placeholder.com/80x80",
             "http://via.placeholder.com/80x80",
           ],
+          additionalImagesTitle: ["테스트 상품1", "테스트 상품2"],
+          additionalImagesPrice: ['10,000원', '15,000원'],
         },
       ],
       hotLiveCarousels: [
@@ -269,6 +288,7 @@ export default {
   opacity: 1; /* 현재 활성화된 슬라이드는 불투명 */
 }
 .slide-background {
+  display: flex;
   width: 100%;
   height: 100%;
   position: relative;
@@ -278,27 +298,28 @@ export default {
 .background-image {
   width: 50%;
   height: 100%;
-  object-fit: cover; /* 이미지가 컨테이너를 꽉 채우도록 설정 */
+  object-fit: cover;
+  padding: 2rem 0 2rem 2rem;
 }
 
 .main-caro .slide-content {
-  position: absolute;
-  top: 50%;
-  right: -3%;
-  transform: translate(-50%, -50%);
+  flex: 1;
   text-align: left;
   color: rgb(60, 60, 60);
   z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 3rem 1rem;
 }
 
 .main-caro h2 {
   font-size: 2em; /* 제목의 크기를 설정 */
-  margin-bottom: 1em;
+  margin-bottom: 0.5em;
 }
 
 .main-caro p {
-  font-size: 1em; /* 설명 텍스트의 크기를 설정 */
-  margin-bottom: 2em;
+  font-size: 1em;
 }
 
 .main-caro .start-button {
@@ -314,16 +335,25 @@ export default {
 
 .main-caro .additional-images-container {
   display: flex;
-  justify-content: left;
+  justify-content: flex-start;
   gap: 10px;
-  margin-top: 10rem;
 }
-
+.main-caro .additional-image-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 120px;
+}
+.main-caro .additional-image-title {
+  text-align: start;
+  font-size: 0.8em;
+  margin-top: 5px;
+}
 .main-caro .additional-image {
-  width: 80px; /* 추가 이미지의 크기를 설정 */
-  height: 80px;
-  object-fit: cover;
-  border-radius: 10px; /* 이미지의 둥근 모서리 스타일링 */
+  width: 100px;
+  height: 100px;
+  border-radius: 10px;
+  border: 1px solid lightgray;
 }
 .hot-live-caro .carousel-slide {
   max-width: 100%;
@@ -354,7 +384,7 @@ export default {
   flex-direction: column;
   justify-content: flex-end;
   margin-right: 2rem;
-  margin-bottom: 8px;
+  margin-bottom: 2rem;
   gap: 8px;
 }
 
