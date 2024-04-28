@@ -10,7 +10,7 @@
                     <span v-if="props.column.field == 'productImg'" class="cursor-pointer relative">
                         <img :src="props.row.productImg" alt="Product Image" class="w-20 h-20 object-cover" />
                         <img v-if="props.row.showNowImg" :src="nowImg" alt="Now Image"
-                            class="w-10 h-10 absolute top-0 left-0 z-10" />
+                            class="w-10 h-10 absolute top-0 left-0 z-10" id="nowImg" />
                     </span>
                     <span v-if="props.column.field == 'auth'" class="flex">
                         <img v-for="entry in props.row.auth" :key="entry.name" :src="entry.image" :alt="entry.name"
@@ -31,7 +31,7 @@
                     <span v-if="props.column.field == 'switch'">
                         <Switch :activeClass="`bg-primary-500`" class="mb-5" badge :active="props.row.switch"
                             :prevIcon="`heroicons-outline:volume-on`" :nextIcon="`heroicons-outline:volume-off`"
-                            :class="['mb-5', switchClass]" @click="toggleNowImage(props.row)" />
+                            :class="['mb-5', switchClass]" v-on:click="toggleNowImage(props.row)" />
                     </span>
                 </template>
             </vue-good-table>
@@ -106,6 +106,10 @@ export default {
 }
 #tableCard {
     width: 760px;
+}
+#nowImg {
+    widows: 70px;
+    height: 20px;
 }
 .relative {
     position: relative;
