@@ -9,6 +9,11 @@ const routes = [
         name: "home",
         component: () => import("@/views/main/index.vue"),
       },
+      {
+        path: "schedule",
+        name: "home",
+        component: () => import("@/views/main/schedule.vue"),
+      },
     ],
   },
 
