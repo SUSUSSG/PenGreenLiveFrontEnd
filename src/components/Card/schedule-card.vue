@@ -1,7 +1,7 @@
 <template>
   <div class="group" style="display: flex !important">
     <div class="flex-row-wrapper">
-      <h6 class="text-time">09:10</h6>
+      <h6 class="live-time">09:10</h6>
       <img
         class="live-thumbnail-image"
         src="https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90"
@@ -72,7 +72,7 @@
   max-height: 240px;
 }
 .live-title {
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .live-product-image {
