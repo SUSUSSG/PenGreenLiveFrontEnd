@@ -53,7 +53,7 @@ export default {
   font-size: 1.2rem;
   width: 25.6%;
   height: 100%;
-  position: relative; /* 이 부분 추가 */
+  position: relative; 
 
   a {
     display: flex;
@@ -63,17 +63,17 @@ export default {
   }
 
   a.active {
-    color: #1C6D16;
+    color: #D4B886;
   }
 
-  a.active::after { /* 이 부분 추가 */
+  a.active::after { 
     content: "";
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     height: 2px;
-    background-color: #1C6D16;
+    background-color: #D4B886;
   }
 }
 </style>
