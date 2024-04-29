@@ -1,7 +1,7 @@
 <template>
     <div class="document">
         <div class="doc-member">
-            <div class="fence w-[610px] mx-auto">
+            <div class="fence mx-auto">
                 <h1 class="text-center doc-title" data-type="A">회원가입</h1>
                 
                 <div class="member-join-type">
@@ -46,8 +46,10 @@ import Button from "@/components/Button";
 </script>
 
 <style scoped>
+
+
 .document .fence {
-    width: 1080px;
+    width: 610px;
     margin-right: auto;
     margin-left: auto;
     padding-bottom: 90px;
@@ -67,6 +69,7 @@ import Button from "@/components/Button";
     font-weight: bold;
     font-size: 26px;
     letter-spacing: -1px;
+    padding-top: 57px;
 }
 
 .doc-title[data-type="A"] {
