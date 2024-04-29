@@ -23,9 +23,20 @@
                 </div>
 
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-                    @click="toggleIcon(statistics[3]); editBroadcastInfo()">
+                    @click="toggleIcon(statistics[3]); editBroadcastInfoModal()">
                     <Icon :icon="statistics[3].icon"></Icon>
                     <Modal title="방송 정보 편집" ref="editBroadcastInfo" :showButtons="false">
+                        <div class="flex items-center">
+                            <label for="boardcastTitle" class="block text-sm font-medium text-gray-700 w-20">방송 제목</label>
+                            <input id="newBoardcastTitle" type="text" v-model="newBroadcastTitle" placeholder="변경할 방송 제목 입력"
+                                @input="updateNewBroadcastTitle"
+                                class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md ml-5" />
+                            <Button type="button"
+                                class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150 ml-3"
+                                @click="saveChangeBroadcastTitle()">
+                                등록
+                            </Button>
+                        </div>
                     </Modal>
                 </div>
 
@@ -106,7 +117,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </Modal>
                 </div>
             </div>
@@ -128,6 +138,12 @@ export default {
         Button,
         LivePrepareModal,
         Textarea
+    },
+    props: {
+        broadcastTitle: {
+            type: String,
+            required: true
+        }
     },
     data() {
         return {
@@ -168,7 +184,8 @@ export default {
             showLivePrepareModal: false,
             question: '',
             answer: '',
-            FaqList: []
+            FaqList: [],
+            newBroadcastTitle: ""
         }
     },
     methods: {
@@ -179,7 +196,7 @@ export default {
             this.showLivePrepareModal = !this.showLivePrepareModal;
             this.$refs.broadcastDeviceControl.openModal();
         },
-        editBroadcastInfo() {
+        editBroadcastInfoModal() {
             this.isOpen = true;
             this.$refs.editBroadcastInfo.openModal();
         },
@@ -209,6 +226,12 @@ export default {
         },
         removeFaq() {
             this.FaqList.splice(index, 1);
+        },
+        updateNewBroadcastTitle(event) {
+            this.newBroadcastTitle = event.target.value;
+        },
+        saveChangeBroadcastTitle() {
+            this.$emit("save-title", this.newBroadcastTitle);
         }
     }
 }
@@ -232,4 +255,5 @@ export default {
     height: 40px;
     font-size: 16px;
     margin: 0 auto;
-}</style>
+}
+</style>
