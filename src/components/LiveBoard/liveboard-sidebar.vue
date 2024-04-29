@@ -25,17 +25,49 @@
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
                     @click="toggleIcon(statistics[3]); editBroadcastInfoModal()">
                     <Icon :icon="statistics[3].icon"></Icon>
-                    <Modal title="방송 정보 편집" ref="editBroadcastInfo" :showButtons="false">
-                        <div class="flex items-center">
-                            <label for="boardcastTitle" class="block text-sm font-medium text-gray-700 w-20">방송 제목</label>
-                            <input id="newBoardcastTitle" type="text" v-model="newBroadcastTitle" placeholder="변경할 방송 제목 입력"
-                                @input="updateNewBroadcastTitle"
-                                class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md ml-5" />
-                            <Button type="button"
-                                class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150 ml-3"
-                                @click="saveChangeBroadcastTitle()">
-                                등록
-                            </Button>
+                    <Modal title="방송 정보 편집" ref="editBroadcastInfo" :showButtons="false" :sizeClass="'max-w-2xl'">
+                        <div class="space-y-4">
+                            <!-- 방송 제목 -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <label for="boardcastTitle" class="block text-sm font-medium text-gray-700">방송
+                                        제목</label>
+                                    <input id="newBoardcastTitle" type="text" v-model="newBroadcastTitle"
+                                        placeholder="방송 제목 입력" @input="updateNewBroadcastTitle"
+                                        class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md mt-3" />
+                                </div>
+                                <div class="flex items-center">
+                                    <Button type="button" id="basicButton"
+                                        class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150">
+                                        등록
+                                    </Button>
+                                </div>
+                            </div>
+
+                            <!-- 방송 썸네일 -->
+                            <div class="flex items-center justify-between">
+                                <div class="flex flex-col">
+                                    <label for="boardcastThumbnail"
+                                        class="block text-sm font-medium text-gray-700 mt-10">썸네일</label>
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0">
+                                            <img :src="imageSrc" alt="대표 이미지 미리보기" style="max-width: 400px;" />
+                                        </div>
+                                        <div class="ml-4">
+                                            <p>최대 용량 : 1mb</p>
+                                            <p>권장 사이즈 : 400 x 400</p>
+                                            <input type="file" id="imageUpload" @change="handleImageUpload"
+                                                accept="image/jpeg, image/png, image/gif" class="mb-2" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="flex items-center">
+                                    <Button type="button" id="basicButton"
+                                        class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150">
+                                        등록
+                                    </Button>
+                                </div>
+                            </div>
                         </div>
                     </Modal>
                 </div>
@@ -95,7 +127,7 @@
                                     </div>
                                     <Button type="button"
                                         class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-                                        @click="submitFaq()" id="faqButton">
+                                        @click="submitFaq()" id="basicButton">
                                         등록
                                     </Button>
                                 </div>
@@ -227,11 +259,11 @@ export default {
         removeFaq() {
             this.FaqList.splice(index, 1);
         },
-        updateNewBroadcastTitle(event) {
-            this.newBroadcastTitle = event.target.value;
-        },
         saveChangeBroadcastTitle() {
-            this.$emit("save-title", this.newBroadcastTitle);
+            // 후에 작성하기
+        },
+        saveChangeThumbnail() {
+            // 후에 작성하기
         }
     }
 }
@@ -250,7 +282,7 @@ export default {
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 
-#faqButton {
+#basicButton {
     width: 100px;
     height: 40px;
     font-size: 16px;
