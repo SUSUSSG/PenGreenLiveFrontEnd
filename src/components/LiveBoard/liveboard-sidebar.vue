@@ -14,7 +14,7 @@
                 </div>
 
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-                     @click="toggleIcon(statistics[2]); broadcastDeviceControl()">
+                    @click="toggleIcon(statistics[2]); broadcastDeviceControl()">
                     <Icon :icon="statistics[2].icon"></Icon>
                     <Modal title="방송 기기 설정" ref="broadcastDeviceControl" :showButtons="false">
                     </Modal>
@@ -28,9 +28,34 @@
                 </div>
 
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-                    @click="toggleIcon(statistics[4]); addNotice()">
+                    @click="toggleIcon(statistics[4]); addNoticeModal()">
                     <Icon :icon="statistics[4].icon"></Icon>
-                    <Modal title="공지사항 등록" ref="addNotice" :showButtons="false">
+                    <Modal title="공지사항 등록" ref="addNoticeModal" :showButtons="false">
+                        <!-- 공지사항 등록 -->
+                        <div class="flex flex-col space-y-2 mb-4">
+                            <label for="addNotice" class="text-sm font-medium text-gray-700">공지사항 등록</label>
+                            <div class="flex items-center space-x-2">
+                                <input id="addNotice" type="text" name="addNotice" v-model="notice" placeholder="공지사항 입력"
+                                    class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
+                                <Button type="button"
+                                    class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
+                                    @click="submitNotice()">
+                                    등록
+                                </Button>
+                            </div>
+                        </div>
+                        <!-- 공지사항 목록-->
+                        <div class="space-y-2">
+                            <label for="addNotice" class="text-sm font-medium text-gray-700">공지사항 목록</label>
+                            <div v-for="(word, index) in noticeList" :key="index"
+                                class="flex items-center justify-between bg-gray-100 p-2 rounded">
+                                <span>{{ word }}</span>
+                                <button @click="removeNotice(index)"
+                                    class="bg-red-500 hover:bg-red-600 text-white rounded p-1">
+                                    <Icon icon="heroicons-outline:x" />
+                                </button>
+                            </div>
+                        </div>
                     </Modal>
                 </div>
 
@@ -48,11 +73,13 @@
 <script>
 import Icon from "@/components/Icon";
 import Modal from "../Modal/Modal.vue";
+import Button from "@/components/Button";
 
 export default {
     components: {
         Icon,
-        Modal
+        Modal,
+        Button
     },
     data() {
         return {
@@ -87,7 +114,9 @@ export default {
                     // activeIcon: "material-symbols:maps-ugc-rounded",
                     // isActive: false
                 },
-            ]
+            ],
+            notice: '',
+            noticeList: [],
         }
     },
     methods: {
@@ -102,14 +131,23 @@ export default {
             this.isOpen = true;
             this.$refs.editBroadcastInfo.openModal();
         },
-        addNotice() {
+        addNoticeModal() {
             this.isOpen = true;
-            this.$refs.addNotice.openModal();
+            this.$refs.addNoticeModal.openModal();
         },
         addFaQ() {
             this.isOpen = true;
             this.$refs.addFaQ.openModal();
-        }
+        },
+        submitNotice() {
+            if (this.notice.trim()) {
+                this.noticeList.push(this.notice)
+                this.notice = ''
+            }
+        },
+        removeNotice(index) {
+            this.noticeList.splice(index, 1);
+        },
     }
 }
 </script>
