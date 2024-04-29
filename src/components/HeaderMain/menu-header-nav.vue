@@ -53,27 +53,32 @@ export default {
   font-size: 1.2rem;
   width: 25.6%;
   height: 100%;
-  position: relative; 
+  position: relative;
 
   a {
     display: flex;
     align-items: center;
     gap: 0.5rem;
     color: lightgray;
+    transition: color 0.3s;
+
+    &:hover {
+      color: #1C6D16;
+    }
   }
 
   a.active {
     color: #D4B886;
-  }
 
-  a.active::after { 
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    background-color: #D4B886;
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: #D4B886;
+    }
   }
 }
 </style>

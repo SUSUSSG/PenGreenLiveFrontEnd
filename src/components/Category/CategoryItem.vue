@@ -61,6 +61,6 @@ img {
 img:hover {
   transition: transform 0.2s ease;
   transform: scale(1.1);
-  border: 2px solid lightgray;
+  border: 2px solid #ECE6CC;
 }
 </style>
