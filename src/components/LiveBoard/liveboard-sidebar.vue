@@ -13,11 +13,16 @@
                     <Icon :icon="statistics[1].isActive ? statistics[1].activeIcon : statistics[1].icon"></Icon>
                 </div>
 
-                <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-                    @click="toggleIcon(statistics[2]); broadcastDeviceControl()">
-                    <Icon :icon="statistics[2].icon"></Icon>
-                    <Modal title="방송 기기 설정" ref="broadcastDeviceControl" :showButtons="false">
-                    </Modal>
+                <div>
+                    <!-- 아이콘 클릭 시 LivePrepareModal 표시 -->
+                    <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
+                        @click="openBroadcastDeviceControl()">
+                        <Icon :icon="statistics[2].icon"></Icon>
+                    </div>
+
+                    <!-- LivePrepareModal -->
+                    <LivePrepareModal v-if="showLivePrepareModal" title="방송 기기 설정" ref="broadcastDeviceControl"
+                        :showButtons="false"></LivePrepareModal>
                 </div>
 
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
@@ -74,12 +79,14 @@
 import Icon from "@/components/Icon";
 import Modal from "../Modal/Modal.vue";
 import Button from "@/components/Button";
+import LivePrepareModal from "@/components/Modal/live-prepare-modal.vue"
 
 export default {
     components: {
         Icon,
         Modal,
-        Button
+        Button,
+        LivePrepareModal
     },
     data() {
         return {
@@ -117,14 +124,15 @@ export default {
             ],
             notice: '',
             noticeList: [],
+            showLivePrepareModal: false
         }
     },
     methods: {
         toggleIcon(item) {
             item.isActive = !item.isActive;
         },
-        broadcastDeviceControl() {
-            this.isOpen = true;
+        openBroadcastDeviceControl() {
+            this.showLivePrepareModal = !this.showLivePrepareModal;
             this.$refs.broadcastDeviceControl.openModal();
         },
         editBroadcastInfo() {
