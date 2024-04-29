@@ -19,6 +19,7 @@ const routes = [
         name: "environment",
         component: () => import("@/views/main/environment.vue"),
       },
+      {
         path: "/join-first",
         name: "join-first",
         component: () => import("@/views/user/join-first.vue"),
@@ -80,7 +81,7 @@ const routes = [
     path: "/live-viewing",
     name: "live-viewing",
     component: () => import("../views/broadcast/live-viewing.vue"),
-  },
+  }
 ];
 
 export default routes;
