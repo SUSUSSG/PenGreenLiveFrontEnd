@@ -1,8 +1,9 @@
 <template>
   <div class="live-container">
     <LiveboardChat :card-width="'33vw'" :card-height="'100vh'"/>
-    <Live class="live-section"></Live>
-    <div class="live-section empty-space"></div>
+    <Live class="live-section" show-icon-side-bar="false" show-title-bar="false"></Live>
+    <div class="live-section empty-space">
+    </div>
   </div>
 </template>
 
@@ -14,7 +15,11 @@ export default {
   name: "live-viewing",
   components: {
     LiveboardChat,
-    Live
+    Live,
+  },
+  data(){
+    return {
+    }
   }
 };
 </script>
