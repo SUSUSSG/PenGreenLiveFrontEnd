@@ -5,7 +5,8 @@
         this.$store.themeSettingsStore.navbarColor
       }
       ${
-        this.$store.themeSettingsStore.menuLayout === 'horizontal' && window.width > 1280
+        this.$store.themeSettingsStore.menuLayout === 'horizontal' &&
+        window.width > 1280
           ? 'py-1'
           : 'md:py-6 py-3'
       }
@@ -16,21 +17,32 @@
           v-if="this.$store.themeSettingsStore.menuLayout === 'vertical'"
           class="flex items-center md:space-x-4 space-x-2 rtl:space-x-reverse"
         >
-        <div>
-          <img
-            src="@/assets/images/logo/pengreenlive-logo-white.png"
-            alt="Pengreen Live"
-            v-if="!$store.themeSettingsStore.isDark && !$store.themeSettingsStore.semidark"
-          />
-          <img
-            src="@/assets/images/logo/pengreenlive-logo-dark.png"
-            alt="Pengreen Live"
-            v-if="$store.themeSettingsStore.isDark || $store.themeSettingsStore.semidark"
-          />
-        </div>  
+          <router-link to="/">
+            <div>
+              <img
+                src="@/assets/images/logo/pengreenlive-logo-white.png"
+                alt="Pengreen Live"
+                v-if="
+                  !$store.themeSettingsStore.isDark &&
+                  !$store.themeSettingsStore.semidark
+                "
+              />
+              <img
+                src="@/assets/images/logo/pengreenlive-logo-dark.png"
+                alt="Pengreen Live"
+                v-if="
+                  $store.themeSettingsStore.isDark ||
+                  $store.themeSettingsStore.semidark
+                "
+              />
+            </div>
+          </router-link>
           <button
             class="ltr:mr-5 rtl:ml-5 text-xl text-slate-900 dark:text-white"
-            v-if="this.$store.themeSettingsStore.sidebarCollasp && window.width > 1280"
+            v-if="
+              this.$store.themeSettingsStore.sidebarCollasp &&
+              window.width > 1280
+            "
             @click="this.$store.themeSettingsStore.sidebarCollasp = false"
           >
             <Icon
@@ -58,7 +70,8 @@
         </div>
         <Mainnav
           v-if="
-            this.$store.themeSettingsStore.menuLayout === 'horizontal' && window.width > 1280
+            this.$store.themeSettingsStore.menuLayout === 'horizontal' &&
+            window.width > 1280
           "
         />
         <div

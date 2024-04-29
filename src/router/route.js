@@ -9,6 +9,11 @@ const routes = [
         name: "home",
         component: () => import("@/views/main/index.vue"),
       },
+      {
+        path: "schedule",
+        name: "schedule",
+        component: () => import("@/views/main/schedule.vue"),
+      },
     ],
   },
   {
@@ -63,9 +68,10 @@ const routes = [
     ]
   },
   {
-      path: "/liveboard",
-      name: "Liveboard",
-      component: () => import("@/views/broadcast/liveboard.vue")
+    path: "/liveboard",
+    name: "Liveboard",
+    component: () => import("@/views/broadcast/liveboard.vue")
   }
 ];
+
 export default routes;
