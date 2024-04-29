@@ -78,11 +78,9 @@
         <div
           class="nav-tools flex items-center lg:space-x-6 space-x-3 rtl:space-x-reverse"
         >
-          <!-- <LanguageVue /> -->
-          <SwitchDark />
-          <!-- <MonochromeMode /> -->
-          <!-- <Message v-if="window.width > 768" /> -->
-          <!-- <Notification v-if="window.width > 768" /> -->
+          <router-link to="/schedule">
+            <Icon icon="ic:baseline-calendar-month" class="text-xl" />
+          </router-link>
           <Profile v-if="window.width > 768" />
           <handle-mobile-menu v-if="window.width < 768" />
         </div>
