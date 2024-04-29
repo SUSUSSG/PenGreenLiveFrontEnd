@@ -18,6 +18,7 @@ export default {
 <style scoped>
 .content-wrapper {
   width: 77%;
+  height: 100vh;
   margin: auto;
   display: flex !important;
   flex-direction: column;

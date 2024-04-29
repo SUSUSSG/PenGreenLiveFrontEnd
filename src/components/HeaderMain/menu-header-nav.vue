@@ -40,16 +40,20 @@ export default {
   flex-direction: row;
   width: 100%;
   height: 4rem;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
 }
 
 .menu-item {
   display: flex;
   flex-direction: row;
+  justify-content: center;
   gap: 0.5rem;
   align-items: center;
   font-size: 1.2rem;
+  width: 25.6%;
+  height: 100%;
+  position: relative; /* 이 부분 추가 */
 
   a {
     display: flex;
@@ -60,6 +64,16 @@ export default {
 
   a.active {
     color: #1C6D16;
+  }
+
+  a.active::after { /* 이 부분 추가 */
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #1C6D16;
   }
 }
 </style>
