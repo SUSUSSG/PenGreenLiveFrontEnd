@@ -10,7 +10,7 @@
       <div class="content-wrapper">
         <div class="live-title">live title test</div>
         <div class="live-benefit-title">라이브 한정 추가 쿠폰 제공</div>
-        <hr class="mt-2 mb-2"/>
+        <hr class="mt-2 mb-2" />
         <div class="product-wrapper">
           <img
             class="live-product-image"
@@ -18,8 +18,10 @@
             alt="Image"
           />
           <div class="product-content-wrapper">
-            <div class="product-title">상품 이름 - 상품 설명이 위치하는 영역입니다.</div>
-            <div class="product-price">60% 할인  123,450원</div>
+            <div class="product-title">
+              상품 이름 - 상품 설명이 위치하는 영역입니다.
+            </div>
+            <div class="product-price">60% 할인 123,450원</div>
           </div>
         </div>
       </div>
@@ -57,7 +59,7 @@
   flex-direction: row;
   gap: 2rem;
   padding-left: 2rem;
-  padding-right:2rem;
+  padding-right: 2rem;
   align-items: center;
 }
 .image-wrapper {
@@ -80,21 +82,21 @@
   width: 60px;
   object-fit: cover;
 }
-.live-benefit-title{
-    color: darkgreen;
+.live-benefit-title {
+  color: darkgreen;
 }
-.product-wrapper{
-    display: flex!important;
-    align-items: center;
-    flex-direction: row;
-    gap:10px;
+.product-wrapper {
+  display: flex !important;
+  align-items: center;
+  flex-direction: row;
+  gap: 10px;
 }
-.product-content-wrapper{
-    display:flex!important;
-    flex-direction:column;
+.product-content-wrapper {
+  display: flex !important;
+  flex-direction: column;
 }
-.product-price{
-    font-weight: bold;
-    color: darkgreen;
+.product-price {
+  font-weight: bold;
+  color: darkgreen;
 }
 </style>
