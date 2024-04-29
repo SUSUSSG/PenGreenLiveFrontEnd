@@ -5,44 +5,55 @@
         this.$store.themeSettingsStore.navbarColor
       }
       ${
-        this.$store.themeSettingsStore.menuLayout === 'horizontal' && window.width > 1280
+        this.$store.themeSettingsStore.menuLayout === 'horizontal' &&
+        window.width > 1280
           ? 'py-1'
           : 'md:py-6 py-3'
       }
       `"
     >
       <div class="flex justify-between items-center h-full">
-        <div>
-          <img
-            src="@/assets/images/logo/pengreenlive-logo-white.png"
-            alt="Pengreen Live"
-            v-if="!$store.themeSettingsStore.isDark && !$store.themeSettingsStore.semidark"
-            
-          />
-          <img
-            src="@/assets/images/logo/pengreenlive-logo-dark.png"
-            alt="Pengreen Live"
-            v-if="$store.themeSettingsStore.isDark || $store.themeSettingsStore.semidark"
-          />
-        </div>  
+        <router-link to="/">
+          <div>
+            <img
+              src="@/assets/images/logo/pengreenlive-logo-white.png"
+              alt="Pengreen Live"
+              v-if="
+                !$store.themeSettingsStore.isDark &&
+                !$store.themeSettingsStore.semidark
+              "
+            />
+            <img
+              src="@/assets/images/logo/pengreenlive-logo-dark.png"
+              alt="Pengreen Live"
+              v-if="
+                $store.themeSettingsStore.isDark ||
+                $store.themeSettingsStore.semidark
+              "
+            />
+          </div>
+        </router-link>
         <div
           v-if="this.$store.themeSettingsStore.menuLayout === 'vertical'"
           class="flex items-center md:space-x-4 space-x-2 rtl:space-x-reverse"
         >
-        <button
-          class="ltr:mr-5 rtl:ml-5 text-xl text-slate-900 dark:text-white button-expand"
-          v-if="this.$store.themeSettingsStore.sidebarCollasp && window.width > 1280"
-          @click="this.$store.themeSettingsStore.sidebarCollasp = false"
-        >
-          <Icon
-            icon="akar-icons:arrow-right"
-            v-if="!this.$store.themeSettingsStore.direction"
-          />
-          <Icon
-            icon="akar-icons:arrow-left"
-            v-if="this.$store.themeSettingsStore.direction"
-          />
-        </button>
+          <button
+            class="ltr:mr-5 rtl:ml-5 text-xl text-slate-900 dark:text-white button-expand"
+            v-if="
+              this.$store.themeSettingsStore.sidebarCollasp &&
+              window.width > 1280
+            "
+            @click="this.$store.themeSettingsStore.sidebarCollasp = false"
+          >
+            <Icon
+              icon="akar-icons:arrow-right"
+              v-if="!this.$store.themeSettingsStore.direction"
+            />
+            <Icon
+              icon="akar-icons:arrow-left"
+              v-if="this.$store.themeSettingsStore.direction"
+            />
+          </button>
 
           <MobileLogo v-if="window.width < 1280" />
           <handle-mobile-menu
@@ -60,7 +71,8 @@
         </div>
         <Mainnav
           v-if="
-            this.$store.themeSettingsStore.menuLayout === 'horizontal' && window.width > 1280
+            this.$store.themeSettingsStore.menuLayout === 'horizontal' &&
+            window.width > 1280
           "
         />
         <div
@@ -139,8 +151,7 @@ export default {
 .floating .app-header {
   @apply md:mx-6 md:my-8 mx-[15px] my-[15px] rounded-md;
 }
-img{
+img {
   width: 140px;
 }
-
 </style>

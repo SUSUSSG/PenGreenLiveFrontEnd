@@ -16,7 +16,6 @@ const routes = [
       },
     ],
   },
-
   {
     path: "/join-first",
     name: "join-first",
@@ -42,31 +41,6 @@ const routes = [
     name: "login",
     component: () => import("@/views/enterprise/login.vue"),
   },
-  // {
-  //   path: "/main",
-  //   components: {
-  //     default: () => import("@/Layout/main-index.vue"),
-  //   },
-  //   children: [
-  //     {
-  //       path: "",
-  //       name: "main-home",
-  //       component: () => import("@/views/main/index.vue"),
-  //     },
-  //   ],
-  // },
-  // {
-  //   path: "/",
-  //   name: "main",
-  //   component: () => import("@/Layout/main-index.vue"),
-  //   children: [
-  //     {
-  //       path: "",
-  //       name: "main",
-  //       component: () => import("@/views/main/index.vue"),
-  //     },
-  //   ],
-  // },
   {
     path: "/",
     component: () => import("@/Layout/index.vue"),
@@ -84,9 +58,10 @@ const routes = [
     ]
   },
   {
-      path: "/liveboard",
-      name: "Liveboard",
-      component: () => import("@/views/broadcast/liveboard.vue")
+    path: "/liveboard",
+    name: "Liveboard",
+    component: () => import("@/views/broadcast/liveboard.vue")
   }
 ];
+
 export default routes;
