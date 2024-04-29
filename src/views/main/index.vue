@@ -476,7 +476,7 @@ export default {
   text-align: left;
   color: rgb(60, 60, 60);
   z-index: 2;
-  align-items: start;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 2rem;
   margin-top: 2rem;
