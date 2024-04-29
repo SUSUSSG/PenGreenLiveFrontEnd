@@ -12,6 +12,31 @@ const routes = [
     ],
   },
   {
+    path: "/join-first",
+    name: "join-first",
+    component: () => import("@/views/user/join-first.vue"),
+  },
+  {
+    path: "/join",
+    name: "join",
+    component: () => import("@/views/user/join.vue"),
+  },
+  {
+    path: "/member/login",
+    name: "member-login",
+    component: () => import("@/views/user/login.vue"),
+  },
+  {
+    path: "/enterprise/join",
+    name: "enterprise-join",
+    component: () => import("@/views/enterprise/join.vue"),
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/enterprise/login.vue"),
+  },
+  {
     path: "/",
     component: () => import("@/Layout/index.vue"),
     children: [
@@ -37,6 +62,10 @@ const routes = [
       }
     ]
   },
+  {
+      path: "/liveboard",
+      name: "Liveboard",
+      component: () => import("@/views/broadcast/liveboard.vue")
+  }
 ];
-
 export default routes;
