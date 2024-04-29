@@ -2,9 +2,6 @@
   <main class="app-wrapper">
     <Header :class="window.width > 1280 ? switchHeaderClass() : ''" />
     <!-- end header -->
-
-    <Settings />
-
     <div
       class="content-wrapper transition-all duration-150"
       :class="window.width > 1280 ? switchHeaderClass() : ''"
@@ -41,7 +38,6 @@
 <script>
 import Footer from "../components/Footer";
 import Header from "../components/HeaderMain";
-import Settings from "../components/Settings";
 import Sidebar from "../components/Sidebar/";
 import window from "@/mixins/window";
 import MobileSidebar from "@/components/Sidebar/MobileSidebar.vue";
@@ -53,7 +49,6 @@ export default {
     Header,
     Footer,
     Sidebar,
-    Settings,
     FooterMenu,
     MobileSidebar,
   },
