@@ -71,7 +71,12 @@ const routes = [
     path: "/liveboard",
     name: "Liveboard",
     component: () => import("@/views/broadcast/liveboard.vue")
-  }
+  },
+  {
+    path: "/live-viewing",
+    name: "live-viewing",
+    component: () => import("../views/broadcast/live-viewing.vue"),
+  },
 ];
 
 export default routes;
