@@ -37,13 +37,16 @@
       <header class="px-4 pt-4 pb-3 mb-3">
         <h5 class="card-title mb-0">중분류 카테고리</h5>
       </header>
-      <vue-good-table :columns="secondcolumns" :rows="secondTableData" styleClass=" vgt-table" :sort-options="{
-        enabled: false, }" id="categorytable"/>
+      <vue-good-table :columns="secondcolumns" :rows="secondTableData" styleClass=" vgt-table2" :sort-options="{
+      enabled: false, }" :row-style-class="rowStyleClass" id="categorytable">
       <template v-slot:table-row="props">
-        <span v-if="props.column.field == 'secondcategory'" class="cursor-pointer">
-          {{ props.row.secondcategory }}
-        </span>
+        <div :class="{ 'selected-row': selectedCategory === props.row.secondcategory }" style="padding : 1rem;">
+          <span v-if="props.column.field == 'secondcategory'" @click="selectCategory(props.row.secondcategory)" class="cursor-pointer">
+            {{ props.row.secondcategory }}
+          </span>
+        </div>
       </template>
+    </vue-good-table>
     </Card>
   </div>
 
@@ -105,6 +108,9 @@ export default {
   },
   rowStyleClass(row) {
     if (this.active_row === row.firstcategory) {
+      return 'selected-row';
+    }
+    else if(this.active_row === row.secondcategory){
       return 'selected-row';
     }
     return '';
