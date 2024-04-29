@@ -1,4 +1,6 @@
 <template>
+  <MenuHeaderNav />
+  <hr />
   <div>
     <swiper
       :slidesPerView="'auto'"
@@ -160,6 +162,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Categories from "@/components/Category/Categories.vue";
 import CardComponent from "@/components/Card/BroadcastCard.vue";
+import menuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
+import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
@@ -169,6 +173,7 @@ export default {
     SwiperSlide,
     Categories,
     CardComponent,
+    MenuHeaderNav,
   },
   data() {
     return {
@@ -510,8 +515,8 @@ export default {
   align-items: flex-end;
   margin: 0 24px 24px 0;
 }
-.more-link{
-  text-decoration: underline; 
+.more-link {
+  text-decoration: underline;
 }
 .live-caro .swiper-slide {
   width: auto;
