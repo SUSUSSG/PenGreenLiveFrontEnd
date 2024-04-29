@@ -1,107 +1,100 @@
 <template>
-    <div class="box">
-      <div class="group">
-        <div class="text-wrapper">09:10</div>
-        <img class="image" src="path/to/image" alt="Image" />
-        <div class="group-2">
-          <div class="text-wrapper-2">adsf asdfsonsaurus test</div>
-          <div class="text-wrapper-3">초특가 대방출</div>
-          <button class="button-small">알림 신청</button>
+  <div class="group" style="display: flex !important">
+    <div class="flex-row-wrapper">
+      <h6 class="text-time">09:10</h6>
+      <img
+        class="live-thumbnail-image"
+        src="https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90"
+        alt="Image"
+      />
+      <div class="content-wrapper">
+        <div class="live-title">live title test</div>
+        <div class="live-benefit-title">라이브 한정 추가 쿠폰 제공</div>
+        <hr class="mt-2 mb-2"/>
+        <div class="product-wrapper">
+          <img
+            class="live-product-image"
+            src="https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90"
+            alt="Image"
+          />
+          <div class="product-content-wrapper">
+            <div class="product-title">상품 이름 - 상품 설명이 위치하는 영역입니다.</div>
+            <div class="product-price">60% 할인  123,450원</div>
+          </div>
         </div>
-        <div class="list-one-line">testshop</div>
       </div>
     </div>
-  </template>
-  
-  <style scoped>
-  .box {
-    height: 200px;
-    position: relative;
-    width: 1760px;
-  }
-  
-  .box .group {
-    height: 200px;
-    left: 0;
-    position: fixed;
-    top: 0;
-    width: 1762px;
-  }
-  
-  .box .text-wrapper {
-    color: #000000;
-    font-family: ".SF NS Rounded-RegularG1", Helvetica;
-    font-size: 32px;
-    font-weight: 400;
-    left: 0;
-    letter-spacing: 0;
-    line-height: 24px;
-    position: absolute;
-    top: 84px;
-    width: 104px;
-  }
-  
-  .box .image {
-    height: 200px !important;
-    left: 152px !important;
-    position: absolute !important;
-    top: 0 !important;
-    width: 200px !important;
-  }
-  
-  .box .group-2 {
-    height: 154px;
-    left: 400px;
-    position: absolute;
-    top: 23px;
-    width: 494px;
-  }
-  
-  .box .text-wrapper-2 {
-    color: #1a1a1a;
-    font-family: "Redacted Script-Regular", Helvetica;
-    font-size: 40px;
-    font-weight: 400;
-    left: 0;
-    letter-spacing: 0;
-    line-height: 24px;
-    position: absolute;
-    top: 0;
-    width: 490px;
-  }
-  
-  .box .text-wrapper-3 {
-    color: #666666;
-    font-family: "Balsamiq Sans-Regular", Helvetica;
-    font-size: 14px;
-    font-weight: 400;
-    left: 0;
-    letter-spacing: 0;
-    line-height: 20px;
-    position: absolute;
-    top: 40px;
-    width: 337px;
-  }
-  
-  .box .button-small {
-    background-color: #ffffff;
-    border: 1px solid #000000;
-    border-radius: 4px;
-    color: #000000;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    padding: 0 16px;
-    height: 30px;
-    font-size: 12px;
-  }
-  
-  .box .list-one-line {
-    display: inline-flex;
-    left: 1613px;
-    position: absolute;
-    top: 72px;
-    white-space: nowrap;
-    width: fit-content;
-  }
-  </style>
+
+    <div class="image-wrapper">
+      <img
+        class="live-thumbnail-image"
+        src="https://phinf.pstatic.net/dthumb/?src=%22http%3A%2F%2Fshop1.phinf.naver.net%2F20220412_182%2F1649725677134MWG9L_PNG%2F50861519847511263_1050462988.png%22&service=selective&type=f180_180_q90"
+        alt="Image"
+      />
+      <div class="list-one-line">testshop</div>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.content-wrapper {
+  width: 100%;
+}
+.group {
+  display: flex !important;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  height: 240px;
+}
+.image-wrapper img {
+  width: 60px;
+  height: 60px;
+}
+.flex-row-wrapper {
+  width: 100%;
+  display: flex !important;
+  flex-direction: row;
+  gap: 2rem;
+  padding-left: 2rem;
+  padding-right:2rem;
+  align-items: center;
+}
+.image-wrapper {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  gap: 1rem;
+  padding-right: 2rem;
+}
+.live-thumbnail-image {
+  max-height: 240px;
+}
+.live-title {
+  font-size: 24px;
+}
+
+.live-product-image {
+  height: 60px;
+  width: 60px;
+  object-fit: cover;
+}
+.live-benefit-title{
+    color: darkgreen;
+}
+.product-wrapper{
+    display: flex!important;
+    align-items: center;
+    flex-direction: row;
+    gap:10px;
+}
+.product-content-wrapper{
+    display:flex!important;
+    flex-direction:column;
+}
+.product-price{
+    font-weight: bold;
+    color: darkgreen;
+}
+</style>

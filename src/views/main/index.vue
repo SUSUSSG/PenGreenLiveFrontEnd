@@ -95,7 +95,7 @@
     <hr />
     <h6 class="mb-6 pt-12 pl-6 pr-6">예정된 라이브</h6>
     <div class="more-link-wrapper">
-      <router-link to="/more" class="more-link">더 보기</router-link>
+      <router-link to="/schedule" class="more-link">더 보기</router-link>
     </div>
     <swiper
     :slidesPerView="'auto'"

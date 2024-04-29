@@ -1,17 +1,16 @@
 <template>
-  <div class="ml-4 mr-4">
-    <CardSchedule/>
+  <div class="content-wrapper">
+    <CardSchedule />
+    <Categories />
+    <hr class="mt-6" />
+
+    <hr />
   </div>
-  <Categories />
-  <hr class="mt-6" />
-  
-  <hr />
 </template>
 
 <script>
 import Categories from "@/components/Category/Categories.vue";
 import CardSchedule from "@/components/Card/schedule-card.vue";
-
 
 export default {
   components: {
@@ -19,14 +18,20 @@ export default {
     CardSchedule,
   },
   data() {
-    return {
-      
-    };
+    return {};
   },
 };
 </script>
 <style scoped>
-
+.content-wrapper {
+  width: 100%;
+  padding-left:11.5%;
+  padding-right:11.5%;
+  display:flex!important;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+}
 .under-category-section {
   border-left: 1px solid #e6e7eb;
   border-right: 1px solid #e6e7eb;
