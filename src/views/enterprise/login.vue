@@ -46,7 +46,7 @@
                                             </button>
                                         </form>
                                         <div class="md:max-w-[345px] mt-6 mx-auto font-normal text-slate-500 dark:text-slate-400mt-12 uppercase text-sm">아직 회원이 아니신가요?
-                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/join-first">회원가입하기</a>
+                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/enterprise/join">회원가입하기</a>
                                         </div>
 
                                         <div class="font-normal text-slate-500 dark:text-slate-400 mt-12 text-sm text-right">
