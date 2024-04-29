@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 space-y-4">
+  <div class="p-4 space-y-4 liveregister">
     <!-- 라이브 제목 입력 -->
     <Textinput
         label="라이브 제목"
@@ -318,3 +318,10 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+.liveregister {
+  background-color: white;
+  border-radius: 0.375rem;
+  padding: 1.5rem;
+}
+</style>

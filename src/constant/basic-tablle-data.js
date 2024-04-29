@@ -1,4 +1,33 @@
-import customer1 from "@/assets/images/all-img/customer_1.png"
+export const firstTableData = [
+  {
+    firstcategory : "식품",
+  },
+  {
+    firstcategory : "전자제품",
+  },
+  {
+    firstcategory : "패션",
+  },
+  {
+    firstcategory : "뷰티",
+  },
+  {
+    firstcategory : "키즈",
+  }
+]
+
+export const secondTableData = [
+  {
+    secondcategory : "냉장",
+  },
+  {
+    secondcategory : "냉동",
+  },
+  {
+    secondcategory : "실온",
+  },
+]
+
 import logo1 from "@/assets/images/all-img/logo1.png"
 import logo2 from "@/assets/images/all-img/logo2.png"
 import logo3 from "@/assets/images/all-img/logo3.png"
