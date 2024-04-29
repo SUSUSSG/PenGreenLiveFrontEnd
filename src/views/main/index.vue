@@ -9,7 +9,7 @@
       :pagination="{ clickable: true }"
       class="main-caro"
       :loop="false"
-      :navigation="true"
+      :navigation="false"
       :autoplay="{ delay: 5000, disableOnInteraction: false }"
     >
       <swiper-slide
@@ -51,7 +51,7 @@
   <Categories />
   <hr class="mt-6" />
   <section class="under-category-section" style="width: 77%; margin: auto">
-    <h4 class="mb-6 pt-12 pl-6 pr-6">인기 라이브</h4>
+    <h4 class="pt-12" style="padding-left : 32px;">인기 라이브</h4>
     <swiper
       :slidesPerView="1"
       :centeredSlides="false"
@@ -96,7 +96,7 @@
     </swiper>
     <hr />
     <div class="more-link-wrapper">
-      <h4 class="mb-6 pt-12 pl-6 pr-6 live-title">예정된 라이브</h4>
+      <h4 class="mb-6 pt-12 live-title" style="padding-left : 32px;">예정된 라이브</h4>
       <router-link to="/schedule" class="more-link">더 보기</router-link>
     </div>
     <swiper
@@ -107,7 +107,7 @@
       :loop="false"
       :navigation="true"
       :autoplay="{ delay: 4000, disableOnInteraction: false }"
-      style="padding-left: 24px"
+      style="padding-left: 32px"
     >
       <swiper-slide v-for="(card, index) in cardsData" :key="'card-' + index">
         <CardComponent
@@ -119,7 +119,7 @@
         />
       </swiper-slide>
     </swiper>
-    <h4 class="mb-6 pt-12 pl-6 pr-6 live-title">바로 지금! 라이브 찬스</h4>
+    <h4 class="mb-6 pt-12 live-title" style="padding-left : 32px;">바로 지금! 라이브 찬스</h4>
 
     <div class="live-section">
       <swiper
@@ -130,7 +130,7 @@
         :loop="false"
         :navigation="true"
         :autoplay="{ delay: 5000, disableOnInteraction: false }"
-        style="padding-left: 24px"
+        style="padding-left: 32px"
       >
         <swiper-slide v-for="(item, index) in liveItems" :key="index">
           <img :src="item.mainImage" alt="Main Image" class="main-image" />
@@ -413,6 +413,7 @@ export default {
 .main-caro h2 {
   font-size: 2em;
   margin-bottom: 0.5em;
+  font-weight: 500!important;
 }
 
 .main-caro p {
@@ -443,7 +444,12 @@ export default {
   align-items: center;
   width: 120px;
 }
+.main-caro .additional-image-price{
+  padding-left: 4px;
+  font-weight: bold;
+}
 .main-caro .additional-image-title {
+  padding-left: 4px;
   text-align: start;
   font-size: 0.8em;
   margin-top: 5px;
@@ -513,6 +519,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
+  color: #134010;
   margin: 0 24px 24px 0;
 }
 .more-link {
