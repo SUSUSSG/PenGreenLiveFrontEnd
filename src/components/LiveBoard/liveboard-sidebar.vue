@@ -14,13 +14,10 @@
                 </div>
 
                 <div>
-                    <!-- 아이콘 클릭 시 LivePrepareModal 표시 -->
                     <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
                         @click="openBroadcastDeviceControl()">
                         <Icon :icon="statistics[2].icon"></Icon>
                     </div>
-
-                    <!-- LivePrepareModal -->
                     <LivePrepareModal v-if="showLivePrepareModal" title="방송 기기 설정" ref="broadcastDeviceControl"
                         :showButtons="false"></LivePrepareModal>
                 </div>
@@ -65,9 +62,44 @@
                 </div>
 
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-                    @click="toggleIcon(statistics[5]); addFaQ()">
+                    @click="toggleIcon(statistics[5]); addFaqModal()">
                     <Icon :icon="statistics[5].icon"></Icon>
-                    <Modal title="자주 묻는 질문 등록" ref="addFaQ" :showButtons="false">
+                    <Modal title="자주 묻는 질문 등록" ref="addFaqRef" :showButtons="false" id="addFaq" :sizeClass="'max-w-4xl'">
+                        <div class="inline-flex">
+                            <!-- 질문 및 답변 등록 -->
+                            <div class="row">
+                                <label for="addFaq" class="text-sm font-medium text-gray-700">질문 및 답변 등록</label>
+                                <div class="flex items-center space-x-2">
+                                    <input id="addQuestion" type="text" name="addFaq" placeholder="질문 입력" v-model="question"
+                                        class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
+                                    <textarea id="addAnswer" type="text" name="addFaq" placeholder="여기에 작성해주세요" rows="8"
+                                        v-model="answer"
+                                        class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
+                                    <Button type="button"
+                                        class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
+                                        @click="submitFaq()">
+                                        등록
+                                    </Button>
+                                </div>
+                            </div>
+                            <!-- 질문 및 답변 목록 -->
+                            <div class="row">
+                                <div class="space-y-2">
+                                    <label for="addFaq" class="text-sm font-medium text-gray-700">질문 및 답변 목록</label>
+                                    <div v-for="(faq, index) in FaqList" :key="index"
+                                        class="flex flex-col bg-gray-100 p-2 rounded">
+                                        <div class="flex justify-between items-center">
+                                            <span class="font-medium">{{ faq.question }}</span>
+                                            <button @click="removeFaq(index)"
+                                                class="bg-red-500 hover:bg-red-600 text-white rounded p-1">
+                                                <Icon icon="heroicons-outline:x" />
+                                            </button>
+                                        </div>
+                                        <p class="text-sm text-gray-600">{{ faq.answer }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </Modal>
                 </div>
             </div>
@@ -79,14 +111,16 @@
 import Icon from "@/components/Icon";
 import Modal from "../Modal/Modal.vue";
 import Button from "@/components/Button";
-import LivePrepareModal from "@/components/Modal/live-prepare-modal.vue"
+import LivePrepareModal from "@/components/Modal/live-prepare-modal.vue";
+import Textarea from "@/components/Textarea";
 
 export default {
     components: {
         Icon,
         Modal,
         Button,
-        LivePrepareModal
+        LivePrepareModal,
+        Textarea
     },
     data() {
         return {
@@ -124,7 +158,10 @@ export default {
             ],
             notice: '',
             noticeList: [],
-            showLivePrepareModal: false
+            showLivePrepareModal: false,
+            question: '',
+            answer: '',
+            FaqList: []
         }
     },
     methods: {
@@ -143,9 +180,9 @@ export default {
             this.isOpen = true;
             this.$refs.addNoticeModal.openModal();
         },
-        addFaQ() {
+        addFaqModal() {
             this.isOpen = true;
-            this.$refs.addFaQ.openModal();
+            this.$refs.addFaqRef.openModal();
         },
         submitNotice() {
             if (this.notice.trim()) {
@@ -156,6 +193,16 @@ export default {
         removeNotice(index) {
             this.noticeList.splice(index, 1);
         },
+        submitFaq() {
+            if (this.question.trim() && this.answer.trim()) {
+                this.FaqList.push({ question: this.question, answer: this.answer });
+                this.question = '';
+                this.answer = '';
+            }
+        },
+        removeFaq() {
+            this.FaqList.splice(index, 1);
+        }
     }
 }
 </script>
