@@ -1,28 +1,30 @@
 <template>
-  <div class="bg-white rounded pt-3 px-4 mt-4" id="chatCard" :style="{ height: cardHeight, width: cardWidth }">
+  <div class="chat-card bg-white rounded pt-3 px-4 mt-4" :style="{ height: cardHeight, width: cardWidth }">
     <div class="d-flex justify-content-between align-items-center">
       <div class="text-base">채팅</div>
       <div class="text-end">
-        <Button v-if="showEditButton" icon="fluent:add-48-filled" @click="editChatting" btnClass="btn-dark rounded-full p-0 h-8 w-8 flex items-center justify-center"/>
+        <Button v-if="showEditButton" icon="fluent:add-48-filled" @click="editChatting"
+                btnClass="btn-dark rounded-full p-0 h-8 w-8 flex items-center justify-center"/>
       </div>
     </div>
     <div class="mt-3">
       <Alert type="primary-light" dismissible>{{ notice }}</Alert>
     </div>
     <div class="scroll-wrapper">
-    <div class="chat-container flex flex-col justify-end">
-      <ul class="chat-messages">
-        <li v-for="message in chatMessages" :key="message.seq" class="chat-message">
-          <div class="chat-message-content">
-            <span class="chat-user-id">{{ message.userId }}</span>
-            <span class="chat-text">{{ message.content }}</span>
-          </div>
-        </li>
-      </ul>
-    </div>
+      <div class="chat-container flex flex-col justify-end">
+        <ul class="chat-messages">
+          <li v-for="message in chatMessages" :key="message.seq" class="chat-message">
+            <div class="chat-message-content">
+              <span class="chat-user-id">{{ message.userId }}</span>
+              <span class="chat-text">{{ message.content }}</span>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
     <div class="chat-input-container">
-      <textarea type="text" placeholder="Type your message..." v-model="newMessage" class="chat-input-field" @keyup.enter="sendChat"/>
+      <textarea type="text" placeholder="Type your message..." v-model="newMessage" class="chat-input-field"
+                @keyup.enter="sendChat"/>
       <button type="button" class="chat-send-button" @click="sendChat">
         <Icon icon="heroicons-outline:paper-airplane" class="transform rotate-[60deg]"/>
       </button>
@@ -83,7 +85,7 @@
                 @click="removeForbiddenword(index)"
                 class="bg-red-500 hover:bg-red-600 text-white rounded p-1"
             >
-              <Icon icon="heroicons-outline:x" />
+              <Icon icon="heroicons-outline:x"/>
             </button>
           </div>
         </div>
@@ -129,21 +131,21 @@ export default {
     return {
       notice: "채팅 공지사항이 올라올 곳입니다.",
       isOpen: false, // 모달 상태,
-      chatNotice:'',
+      chatNotice: '',
       forbiddenword: '',
       forbiddenwordList: [],
       chatMessages: [
         // 샘플 채팅 데이터
-        { seq: 1, userId: '혜지', content: '롯데 이겼어?', timestamp: '11:00 AM' },
-        { seq: 2, userId: '민석', content: '아니 졌어', timestamp: '11:00 AM' },
-        { seq: 3, userId: '소진', content: 'NC 이겼어?', timestamp: '11:00 AM' },
-        { seq: 4, userId: '진욱', content: '아니 졌어', timestamp: '11:00 AM' },
-        { seq: 5, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
-        { seq: 6, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
-        { seq: 7, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
-        { seq: 8, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
-        { seq: 9, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
-        { seq: 10, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
+        {seq: 1, userId: '혜지', content: '롯데 이겼어?', timestamp: '11:00 AM'},
+        {seq: 2, userId: '민석', content: '아니 졌어', timestamp: '11:00 AM'},
+        {seq: 3, userId: '소진', content: 'NC 이겼어?', timestamp: '11:00 AM'},
+        {seq: 4, userId: '진욱', content: '아니 졌어', timestamp: '11:00 AM'},
+        {seq: 5, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
+        {seq: 6, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
+        {seq: 7, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
+        {seq: 8, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
+        {seq: 9, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
+        {seq: 10, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM'},
       ],
       maxChatMessages: 50
     }
@@ -153,12 +155,12 @@ export default {
       this.isOpen = true; // 모달 상태를 true로 설정하여 직접 열기
     },
     submitNotice() {
-      if (this.chatNotice.trim()){
+      if (this.chatNotice.trim()) {
         this.notice = this.chatNotice;
       }
     },
     submitForbiddenword() {
-      if (this.forbiddenword.trim()){
+      if (this.forbiddenword.trim()) {
         this.forbiddenwordList.push(this.forbiddenword)
         this.forbiddenword = ''
       }
@@ -171,16 +173,17 @@ export default {
 </script>
 
 <style>
-#chatCard {
-  width: 400px;
+.chat-card {
   max-width: 100%;
-  max-height: 500px;
+  max-height: 100%;
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* 넘치는 내용이 없도록 함 */
 }
+
 
 .scroll-wrapper {
   flex-grow: 1;
@@ -208,7 +211,7 @@ export default {
 }
 
 .chat-text {
-  margin-left:0.5rem;
+  margin-left: 0.5rem;
   margin-top: 0.5rem;
   word-break: break-word;
 }
