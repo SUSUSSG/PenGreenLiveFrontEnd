@@ -1,4 +1,6 @@
 <template>
+
+
     <orderlist v-for="(item, index) in orderData" 
     :key="index" 
     :deliveryStatus="item.deliveryStatus"
@@ -6,12 +8,15 @@
     :orderDate="item.orderDate" 
     :productName="item.productName" 
     :price="item.price" class="mt-3" />
+
 </template>
 <script>
 import orderlist from '@/components/Order/order-list.vue';
+import reviewtab from '@/components/Order/review-tab.vue';
 export default {
     components: {
-        orderlist
+        orderlist,
+        reviewtab
     },
     data() {
         return {
