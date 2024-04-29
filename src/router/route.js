@@ -15,6 +15,10 @@ const routes = [
         component: () => import("@/views/main/schedule.vue"),
       },
       {
+        path: "environment",
+        name: "environment",
+        component: () => import("@/views/main/environment.vue"),
+      },
         path: "/join-first",
         name: "join-first",
         component: () => import("@/views/user/join-first.vue"),

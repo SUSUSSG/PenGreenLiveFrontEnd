@@ -1,4 +1,6 @@
 <template>
+  <MenuHeaderNav />
+  <hr />
   <div>
     <swiper
       :slidesPerView="'auto'"
@@ -7,8 +9,8 @@
       :pagination="{ clickable: true }"
       class="main-caro"
       :loop="false"
-      :navigation="true"
-      :autoplay="{ delay: 3000, disableOnInteraction: false }"
+      :navigation="false"
+      :autoplay="{ delay: 5000, disableOnInteraction: false }"
     >
       <swiper-slide
         v-for="(item, index) in carousels"
@@ -49,9 +51,9 @@
   <Categories />
   <hr class="mt-6" />
   <section class="under-category-section" style="width: 77%; margin: auto">
-    <h6 class="mb-6 pt-12 pl-6 pr-6">인기 라이브</h6>
+    <h4 class="pt-12" style="padding-left : 32px;">인기 라이브</h4>
     <swiper
-      :slidesPerView="2"
+      :slidesPerView="1"
       :centeredSlides="false"
       :spaceBetween="30"
       :pagination="{ clickable: true }"
@@ -77,7 +79,7 @@
               <h6 v-if="item.viewersCount" class="mb-4">
                 {{ item.viewersCount }}명이 보는 중!
               </h6>
-              <h4 v-if="item.title" class="mb-2">{{ item.title }}</h4>
+              <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
               <p v-if="item.description">{{ item.description }}</p>
             </div>
             <div class="additional-images-container">
@@ -93,18 +95,19 @@
       </swiper-slide>
     </swiper>
     <hr />
-    <h6 class="mb-6 pt-12 pl-6 pr-6">예정된 라이브</h6>
     <div class="more-link-wrapper">
+      <h4 class="mb-6 pt-12 live-title" style="padding-left : 32px;">예정된 라이브</h4>
       <router-link to="/schedule" class="more-link">더 보기</router-link>
     </div>
     <swiper
-    :slidesPerView="'auto'"
-        :spaceBetween="30"
-        :pagination="{ clickable: true }"
-        class="live-caro"
-        :loop="false"
-        :navigation="true"
-        :autoplay="{ delay: 3000, disableOnInteraction: false }"
+      :slidesPerView="'auto'"
+      :spaceBetween="30"
+      :pagination="false"
+      class="live-caro"
+      :loop="false"
+      :navigation="true"
+      :autoplay="{ delay: 4000, disableOnInteraction: false }"
+      style="padding-left: 32px"
     >
       <swiper-slide v-for="(card, index) in cardsData" :key="'card-' + index">
         <CardComponent
@@ -116,7 +119,7 @@
         />
       </swiper-slide>
     </swiper>
-    <h6 class="mb-6 pt-12 pl-6 pr-6 live-title">바로 지금! 라이브 찬스</h6>
+    <h4 class="mb-6 pt-12 live-title" style="padding-left : 32px;">바로 지금! 라이브 찬스</h4>
 
     <div class="live-section">
       <swiper
@@ -126,7 +129,8 @@
         class="live-caro"
         :loop="false"
         :navigation="true"
-        :autoplay="{ delay: 3000, disableOnInteraction: false }"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }"
+        style="padding-left: 32px"
       >
         <swiper-slide v-for="(item, index) in liveItems" :key="index">
           <img :src="item.mainImage" alt="Main Image" class="main-image" />
@@ -158,6 +162,8 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Categories from "@/components/Category/Categories.vue";
 import CardComponent from "@/components/Card/BroadcastCard.vue";
+import menuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
+import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
@@ -167,6 +173,7 @@ export default {
     SwiperSlide,
     Categories,
     CardComponent,
+    MenuHeaderNav,
   },
   data() {
     return {
@@ -261,42 +268,36 @@ export default {
           title: "Title 2",
           text: "This is the description for card 2.",
           datetime: "2024-04-26T12:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 3",
           text: "This is the description for card 3.",
           datetime: "2024-04-26T17:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 4",
           text: "This is the description for card 4.",
           datetime: "2024-04-27T10:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 4",
           text: "This is the description for card 4.",
           datetime: "2024-04-27T12:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 4",
           text: "This is the description for card 4.",
           datetime: "2024-04-28T11:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 4",
           text: "This is the description for card 4.",
           datetime: "2024-04-28T19:30:00",
-          buttonText: "알림 설정",
         },
       ],
       liveItems: [
@@ -406,19 +407,19 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 3rem 1rem;
+  padding: 4rem 1rem 2rem;
 }
 
 .main-caro h2 {
-  font-size: 2em; /* 제목의 크기를 설정 */
+  font-size: 2em;
   margin-bottom: 0.5em;
+  font-weight: 500!important;
 }
 
 .main-caro p {
   font-size: 1em;
-  color:darkgreen;
-  font-weight: bold;
-
+  color: #ff4343;
+  font-weight: 500;
 }
 
 .main-caro .start-button {
@@ -443,7 +444,12 @@ export default {
   align-items: center;
   width: 120px;
 }
+.main-caro .additional-image-price{
+  padding-left: 4px;
+  font-weight: bold;
+}
 .main-caro .additional-image-title {
+  padding-left: 4px;
   text-align: start;
   font-size: 0.8em;
   margin-top: 5px;
@@ -481,7 +487,9 @@ export default {
   padding: 2rem;
   margin-top: 2rem;
 }
-
+.additional-text-container {
+  margin-left: 140px;
+}
 .hot-live-caro .additional-text-container h2,
 .hot-live-caro .additional-text-container p {
   font-size: 1.2em;
@@ -508,8 +516,13 @@ export default {
   display: none;
 }
 .more-link-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  color: #134010;
   margin: 0 24px 24px 0;
-  text-align: right;
+}
+.more-link {
   text-decoration: underline;
 }
 .live-caro .swiper-slide {
@@ -548,12 +561,13 @@ export default {
 }
 
 .live-section .main-image {
-  width: 180px;
+  width: 200px;
   height: auto;
+  aspect-ratio: 3/4;
 }
 
-.live-caro .live-main-title{
+.live-caro .live-main-title {
   font-weight: bold;
-  font-size:16px;
+  font-size: 16px;
 }
 </style>
