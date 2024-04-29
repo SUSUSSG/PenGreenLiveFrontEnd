@@ -10,11 +10,11 @@ export default {
   props: {
     imgSrc: String,
     name: String,
-    isSelected: Boolean // 선택 상태를 나타내는 prop
+    isSelected: Boolean
   },
   methods: {
     handleClick() {
-      this.$emit('select', this.name); // 선택 이벤트 발생
+      this.$emit('select', this.name);
     }
   }
 }

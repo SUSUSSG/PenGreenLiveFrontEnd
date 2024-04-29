@@ -1,6 +1,7 @@
 <template>
   <div class="modal-overlay" v-if="showModal">
     <div class="modal-content">
+      <Button @click="closeModal">닫기</Button>
       <div class="camera-feed">
         <video ref="cameraFeed" autoplay></video>
       </div>
@@ -23,7 +24,11 @@
 </template>
 
 <script>
+import Button from "@/components/Button/index.vue";
 export default {
+  components:{
+    Button
+  },
   data() {
     return {
       showModal: true,
@@ -38,6 +43,10 @@ export default {
       microphoneStream: null
     };
   },
+  beforeDestroy() {
+    this.closeModal();  // 이미 구현된 모달 닫기 함수 호출
+  },
+
   created() {
     this.getMediaDevices().then(() => {
       // Set default devices
@@ -178,6 +187,30 @@ export default {
       };
 
       this.volumeAnimationRequest = requestAnimationFrame(getVolume); // Start the volume monitoring loop
+    },
+    closeModal() {
+      // 카메라 스트림 해제
+      if (this.$refs.cameraFeed && this.$refs.cameraFeed.srcObject) {
+        const tracks = this.$refs.cameraFeed.srcObject.getTracks();
+        tracks.forEach(track => track.stop());
+        this.$refs.cameraFeed.srcObject = null;
+      }
+
+      // 마이크 스트림 해제
+      if (this.microphoneStream) {
+        this.microphoneStream.getTracks().forEach(track => track.stop());
+        this.microphoneStream = null;
+      }
+
+      // 오디오 컨텍스트 닫기
+      if (this.audioContext) {
+        this.audioContext.close();
+        this.audioContext = null;
+      }
+
+      // 모달 상태 업데이트
+      this.showModal = false;
+      this.destroy()
     }
   }
 };
