@@ -14,6 +14,11 @@ const routes = [
         name: "schedule",
         component: () => import("@/views/main/schedule.vue"),
       },
+      {
+        path: "environment",
+        name: "environment",
+        component: () => import("@/views/main/environment.vue"),
+      },
     ],
   },
   {
