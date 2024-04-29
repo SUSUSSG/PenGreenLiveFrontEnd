@@ -9,7 +9,7 @@
                         <h2 class="stit">일반회원 가입</h2>
                         <p class="guide-txt">PengreenLive에 오신 것을 환영합니다. 회원가입 하시면 다양한 구매 혜택을 드립니다.</p>
                         <p class="buttons-dv">
-                            <Button class="link-join" text="PengreenLive 회원가입"/>
+                            <a class="link-join" href="/join" text="PengreenLive 회원가입"></a>
                         </p>
                     </div>
                     <div class="join-first-dv2 text-center 2xl:mb-10 mb-5">
@@ -43,6 +43,10 @@
 <script setup>
 import Card from "@/components/Card";
 import Button from "@/components/Button";
+
+
+
+
 </script>
 
 <style scoped>
