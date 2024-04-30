@@ -277,7 +277,7 @@ export default {
 #sidebar {
     width: 70px;
     height: 550px;
-    margin-top: 100px;
+    margin-top: 130px;
     max-width: 100%;
     display: flex;
     flex-direction: column;
