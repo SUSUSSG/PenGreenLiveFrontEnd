@@ -110,14 +110,17 @@
                                                 <span>주소</span>
                                             </td>
                                             <td class="vgt-left-align">
-                                                <div class="lg:grid-cols-3 md:grid-cols-2 grid-cols-1 grid gap-5 mb-5 last:mb-0">
-                                                    <input type="password" name="pn" placeholder="주소 입력" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
-                                                    <div class="flex text-xl absolute ltr:right-[14px] rtl:left-[14px] top-1/2 -translate-y-1/2"></div>
-                                                    <div class="relative">
-                                                        <Button text="우편번호 찾기" btnClass="btn-primary"/>
+                                                <div class="grid-cols-1 grid mb-5 last:mb-0">
+                                                    <div class="flex items-center space-x-4"> <!-- space-x-4는 가로 간격을 늘립니다 -->
+                                                        <input type="password" name="pn" placeholder="주소 입력" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
+                                                        <div class="flex text-xl absolute ltr:right-[14px] rtl:left-[14px] top-1/2 -translate-y-1/2"></div>
+                                                        <div class="relative">
+                                                            <Button text="우편번호 찾기" btnClass="btn-primary"/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
+                                            
                                         </tr>
                                     </tbody>
                                 </table>
