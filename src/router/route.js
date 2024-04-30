@@ -29,6 +29,7 @@ const routes = [
     component: () => import('@/Layout/user-index.vue'),
     children: [
       { path: 'order-list', name: '주문내역', component: () => import('@/views/mypage/order-list.vue') },
+      { path: 'broadcast-history', name: '방송시청기록', component: () => import('@/views/mypage/broadcast-history.vue') },
     ],
   },
   { path: '/liveboard', name: '라이브보드', component: () => import('@/views/broadcast/liveboard.vue') },
