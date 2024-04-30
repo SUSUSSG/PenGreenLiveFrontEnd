@@ -48,7 +48,12 @@ export default {
           icon: "heroicons:hand-thumb-up",
           analyticsTitle: "평균 좋아요 수",
           analyticsResult: "5603명",
-        }
+        },
+        {
+          icon: "heroicons:circle-stack",
+          analyticsTitle: "평균 구매 금액",
+          analyticsResult: "13,200개",
+        },
       ]
     }
   }
@@ -60,5 +65,11 @@ export default {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px; 
+}
+#result {
+  padding: 10px;
+  border-radius: 0.5rem;
+  background: white;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 </style>
