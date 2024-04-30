@@ -1,10 +1,14 @@
 <template>
   <MenuHeaderNav />
+  <DataTab/>
   <hr/>
-  <div class="content-wrapper">
-    <Categories />
-    <hr class="mt-6" />
+  <div style="position: sticky; top: 5rem; z-index: 10; background-color: white; padding-top:1rem;">
+      <Categories/>
+      <hr class="mt-6" />
+    </div>
 
+  <div class="content-wrapper">
+   
     <CardSchedule
       v-for="(item, index) in liveData"
       :key="index"
@@ -29,11 +33,13 @@
 import Categories from "@/components/Category/Categories.vue";
 import CardSchedule from "@/components/Card/schedule-card.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
+import DataTab from "@/components/HeaderMain/date-tab.vue";
 export default {
   components: {
     Categories,
     CardSchedule,
     MenuHeaderNav,
+    DataTab,
   },
   data() {
     return {

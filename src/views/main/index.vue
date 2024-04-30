@@ -48,8 +48,10 @@
     </swiper>
   </div>
   <hr />
-  <Categories />
-  <hr class="mt-6" />
+  <div style="position: sticky; top: 5rem; z-index: 10; background-color: white; padding-top:1rem;">
+      <Categories/>
+      <hr class="mt-6" />
+  </div>
   <section class="under-category-section" style="width: 77%; margin: auto">
     <h4 class="pt-12" style="padding-left : 32px;">인기 라이브</h4>
     <swiper
@@ -382,7 +384,7 @@ export default {
 }
 
 .main-caro .swiper-slide-active {
-  opacity: 1; /* 현재 활성화된 슬라이드는 불투명 */
+  opacity: 1;
 }
 .slide-background {
   display: flex;

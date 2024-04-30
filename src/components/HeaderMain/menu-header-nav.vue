@@ -2,21 +2,21 @@
   <div class="menu-wrapper">
     <div class="menu-item">
       <router-link to="/" :class="{ 'active': $route.path === '/' }">
-        <Icon icon="ic:baseline-home" class="text-2xl" />
+        <Icon icon="ic:baseline-home" class="text-xl" />
         <span>홈</span>
       </router-link>
     </div>
 
     <div class="menu-item">
       <router-link to="/schedule" :class="{ 'active': $route.path === '/schedule' }">
-        <Icon icon="ic:baseline-calendar-today" class="text-2xl" />
+        <Icon icon="ic:baseline-calendar-today" class="text-xl" />
         <span>일정표</span>
       </router-link>
     </div>
 
     <div class="menu-item">
       <router-link to="/environment" :class="{ 'active': $route.path === '/environment' }">
-        <Icon icon="ic:baseline-eco" class="text-2xl" />
+        <Icon icon="ic:baseline-eco" class="text-xl" />
         <span>환경 이야기</span>
       </router-link>
     </div>
@@ -50,7 +50,7 @@ export default {
   justify-content: center;
   gap: 0.5rem;
   align-items: center;
-  font-size: 1.2rem;
+  font-size: 1rem;
   width: 25.6%;
   height: 100%;
   position: relative;
