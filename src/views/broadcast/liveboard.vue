@@ -46,7 +46,7 @@
   </script>
   <style>
   #body {
-    width: 1920px;
+    width: 1750px;
   }
   #main {
     width: 1657px;
