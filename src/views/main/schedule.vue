@@ -1,10 +1,13 @@
 <template>
-  <MenuHeaderNav />
-  <hr/>
-  <div class="content-wrapper">
-    <Categories />
-    <hr class="mt-6" />
+  <ScrollTopButton/>
+  <MenuHeaderNav class="under-category-section" style="width: 77%; margin: auto"/>
+  <DataTab class="under-category-section" style="width: 77%; margin: auto; border:1px solid #e6e7eb"/>
+  <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
+    <Categories class="under-category-section" style="width: 77%; margin: auto; padding-bottom: 1rem; border-bottom: 1px solid #e6e7eb;"/>
+  </div>
 
+  <div class="content-wrapper">
+   
     <CardSchedule
       v-for="(item, index) in liveData"
       :key="index"
@@ -29,11 +32,16 @@
 import Categories from "@/components/Category/Categories.vue";
 import CardSchedule from "@/components/Card/schedule-card.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
+import DataTab from "@/components/HeaderMain/date-tab.vue";
+import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
+
 export default {
   components: {
     Categories,
     CardSchedule,
     MenuHeaderNav,
+    DataTab,
+    ScrollTopButton,
   },
   data() {
     return {

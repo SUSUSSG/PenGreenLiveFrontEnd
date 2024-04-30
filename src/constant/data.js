@@ -75,7 +75,7 @@ export const userMenuItems = [
   {
     title: "주문 내역",
     icon: "heroicons-outline:clipboard-list", // 주문 내역 관련 아이콘
-    link: "order-history",
+    link: "order-list",
   },
   {
     title: "구독 설정",

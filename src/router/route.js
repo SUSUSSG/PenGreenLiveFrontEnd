@@ -78,6 +78,17 @@ const routes = [
     component: () => import("@/views/broadcast/liveboard.vue")
   },
   {
+    path: "/",
+    component: () => import("@/Layout/user-index.vue"),
+    children: [
+      {
+        path: "order-list",
+        name: "주문내역",
+        component: () => import("@/views/mypage/order-list.vue")
+      }
+    ],
+  },
+  {
     path: "/live-viewing",
     name: "live-viewing",
     component: () => import("../views/broadcast/live-viewing.vue"),

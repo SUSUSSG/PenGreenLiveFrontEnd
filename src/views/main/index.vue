@@ -1,6 +1,6 @@
 <template>
-  <MenuHeaderNav />
-  <hr />
+  <ScrollTopButton/>
+  <MenuHeaderNav style="width: 77%; margin: auto;" />
   <div>
     <swiper
       :slidesPerView="'auto'"
@@ -48,9 +48,12 @@
     </swiper>
   </div>
   <hr />
-  <Categories />
-  <hr class="mt-6" />
+  
   <section class="under-category-section" style="width: 77%; margin: auto">
+    <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
+      <Categories/>
+      <hr class="mt-4" />
+  </div>
     <h4 class="pt-12" style="padding-left : 32px;">인기 라이브</h4>
     <swiper
       :slidesPerView="1"
@@ -164,7 +167,7 @@ import Categories from "@/components/Category/Categories.vue";
 import CardComponent from "@/components/Card/BroadcastCard.vue";
 import menuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
-
+import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 export default {
@@ -174,6 +177,7 @@ export default {
     Categories,
     CardComponent,
     MenuHeaderNav,
+    ScrollTopButton,
   },
   data() {
     return {
@@ -382,7 +386,7 @@ export default {
 }
 
 .main-caro .swiper-slide-active {
-  opacity: 1; /* 현재 활성화된 슬라이드는 불투명 */
+  opacity: 1;
 }
 .slide-background {
   display: flex;
