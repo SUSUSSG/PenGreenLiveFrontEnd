@@ -1,9 +1,9 @@
 <template>
-    <div class="bg-white rounded pt-3 px-4 mt-4 ml-5" id="statisticsCard">
+    <div class="bg-white rounded px-4 pt-4 pb-4" id="statisticsCard">
         <div class="text-base">
             정보
         </div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px;">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px; padding: 0 10px;">
             <div v-for="(item, i) in statistics" :key="i" class="inline-flex">
                 <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
                     <div>
@@ -103,5 +103,6 @@ export default {
 #basicCard {
     width: 200px;
     border: 1px solid #134010;
+    margin: 10px auto;
 }
 </style>

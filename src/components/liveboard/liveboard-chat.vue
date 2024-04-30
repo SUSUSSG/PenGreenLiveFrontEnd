@@ -1,6 +1,6 @@
 <template>
-  <div class="chat-card bg-white rounded pt-3 px-4 mt-4 pb-2" :style="{ height: cardHeight, width: cardWidth }">
-    <div class="inline-flex justify-between items-center">
+  <div class="chat-card bg-white rounded p-4">
+    <div class="inline-flex justify-between items-center" :style="{ height: cardHeight, width: cardWidth }">
       <div class="text-base flex-grow">채팅</div>
       <div>
         <Button v-if="showEditButton" icon="fluent:add-48-filled" @click="editChatting"
@@ -102,11 +102,9 @@ export default {
     },
     cardHeight: {
       type: String,
-      default: '500px', // Default height if not provided
     },
     cardWidth: {
       type: String,
-      default: '400px', // Default width if not provided
     },
     showDeleteIcon: {
       type: Boolean,
@@ -132,6 +130,10 @@ export default {
         { seq: 8, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
         { seq: 9, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
         { seq: 10, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
+        { seq: 11, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
+        { seq: 12, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
+        { seq: 13, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
+        { seq: 14, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
       ],
       maxChatMessages: 50
     }
@@ -163,8 +165,8 @@ export default {
 
 <style>
 .chat-card {
-  max-width: 100%;
-  max-height: 100%;
+  width: 100%;
+  height: 850px;
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
@@ -178,6 +180,7 @@ export default {
 .scroll-wrapper {
   flex-grow: 1;
   overflow-y: auto;
+  height: 100%;
   /* Apply scroll to the wrapper */
 }
 
@@ -186,11 +189,7 @@ export default {
   justify-content: flex-end;
 }
 
-.chat-messages {}
-
 .chat-message {
-  background: #f9f9f9;
-  margin-bottom: 0.5rem;
   padding: 0.5rem;
   border-radius: 0.25rem;
 }

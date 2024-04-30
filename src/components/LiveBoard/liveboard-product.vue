@@ -1,9 +1,9 @@
 <template>
-    <div class="bg-white rounded pt-3 px-4 mt-4 ml-5" id="productCard">
+    <div class="bg-white rounded pt-3 px-4 mt-4" id="productCard">
         <div class="text-base">
             상품 목록
         </div>
-        <div class="-mx-6 ml-1 mt-3" id="tableCard">
+        <div id="tableCard">
             <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
                 :rows="liveProductTable" :pagination-options="{ enabled: false }" :sort-options="{ enabled: false }">
                 <template v-slot:table-row="props">
@@ -178,22 +178,16 @@ export default {
 
 <style>
 #productCard {
-    width: 800px;
-    max-width: 100%;
-    max-height: 500px;
+    width: 100%;
+    max-height: 100%;
     display: flex;
     flex-direction: column;
     border-radius: 0.5rem;
     background: white;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
-
-#tableCard {
-    width: 760px;
-}
-
 #nowImg {
-    widows: 70px;
+    width: auto;
     height: 20px;
 }
 
