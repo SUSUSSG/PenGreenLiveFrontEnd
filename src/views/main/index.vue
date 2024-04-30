@@ -1,7 +1,6 @@
 <template>
   <ScrollTopButton/>
-  <MenuHeaderNav />
-  <hr />
+  <MenuHeaderNav style="width: 77%; margin: auto;" />
   <div>
     <swiper
       :slidesPerView="'auto'"
@@ -49,11 +48,12 @@
     </swiper>
   </div>
   <hr />
-  <div style="position: sticky; top: 4rem; z-index: 10; background-color: white; padding-top:0.5rem;">
-      <Categories/>
-      <hr class="mt-6" />
-  </div>
+  
   <section class="under-category-section" style="width: 77%; margin: auto">
+    <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
+      <Categories/>
+      <hr class="mt-4" />
+  </div>
     <h4 class="pt-12" style="padding-left : 32px;">인기 라이브</h4>
     <swiper
       :slidesPerView="1"

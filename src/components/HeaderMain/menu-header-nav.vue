@@ -9,7 +9,7 @@
 
     <div class="menu-item">
       <router-link to="/schedule" :class="{ 'active': $route.path === '/schedule' }">
-        <Icon icon="ic:baseline-calendar-today" class="text-xl" />
+        <Icon icon="ic:baseline-calendar-today" class="text-l" />
         <span>일정표</span>
       </router-link>
     </div>
@@ -39,7 +39,7 @@ export default {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height: 4rem;
+  height: 3rem;
   justify-content: center;
   align-items: center;
 }
@@ -50,7 +50,7 @@ export default {
   justify-content: center;
   gap: 0.5rem;
   align-items: center;
-  font-size: 1rem;
+  font-size: 0.9rem;
   width: 25.6%;
   height: 100%;
   position: relative;

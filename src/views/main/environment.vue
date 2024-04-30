@@ -1,7 +1,6 @@
 <template>
   <ScrollTopButton/>
-  <MenuHeaderNav />
-  <hr/>
+  <MenuHeaderNav  style="width: 77%; margin: auto; border: 1px solid #e6e7eb" />
   <div class="content-wrapper">
     대충 환경이야기
     우리 펭귄 집 없어요...

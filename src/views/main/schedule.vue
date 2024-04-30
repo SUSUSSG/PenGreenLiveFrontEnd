@@ -1,12 +1,10 @@
 <template>
   <ScrollTopButton/>
-  <MenuHeaderNav />
-  <DataTab/>
-  <hr/>
-  <div style="position: sticky; top: 4rem; z-index: 10; background-color: white; padding-top:0.5rem;">
-      <Categories/>
-      <hr class="mt-6" />
-    </div>
+  <MenuHeaderNav class="under-category-section" style="width: 77%; margin: auto"/>
+  <DataTab class="under-category-section" style="width: 77%; margin: auto; border:1px solid #e6e7eb"/>
+  <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
+    <Categories class="under-category-section" style="width: 77%; margin: auto; padding-bottom: 1rem; border-bottom: 1px solid #e6e7eb;"/>
+  </div>
 
   <div class="content-wrapper">
    

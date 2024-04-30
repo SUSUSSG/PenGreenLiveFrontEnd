@@ -58,7 +58,7 @@ export default {
   display: flex;
   flex-direction: row;
   width: 77%;
-  height: 4rem;
+  height: 3rem;
   justify-content: center;
   align-items: center;
   margin : 0 auto;
@@ -90,7 +90,7 @@ export default {
   a.active {
     color: #1f1606;
     font-weight: 500;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
 
     &::after {
       content: "";
