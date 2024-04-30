@@ -3,80 +3,84 @@
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
     <Live class="live-section" show-icon-side-bar="true" show-title-bar="true"></Live>
     <div class="live-section">
-      <div v-if="selectedProduct" class="z-index-[100]" >
-        <header class="flex justify-between items-center p-4 border-b">
-        <div></div> <!-- 좌측 공백 -->
-        <Button class="flex justify-between items-right" text="돌아가기" @click="closePurchaseModal"/>
-      </header>
-        <LiveBoardPurchase class="purchase-section h-full"/>
+      <div v-if="selectedProduct" class="z-index-[100] inline" >
+        <header class="sticky top-0 z-20 flex justify-between items-center p-4 bg-white">
+          <div></div> <!-- 좌측 공백 -->
+          <Button class="flex justify-end items-center" text="돌아가기" @click="closePurchaseModal"/>
+        </header>
+        <div class="scroll-wrapper overflow-auto">
+          <div class="purchase-container flex flex-col justify-end">
+            <LiveBoardPurchase class="purchase-section inline"/>
+          </div>
+        </div>
       </div>
     
       <div v-if="!selectedProduct">
-      <header class="flex justify-between items-center p-4 border-b">
-        <div></div> <!-- 좌측 공백 -->
-        <button class="exit-button">나가기</button>
-      </header>
-      <main class="main-content">
-        <!-- 첫 번째 탭 그룹 -->
-        <div class="flex-1 overflow-auto">
-          <TabGroup as="div" class="tab-group mt-4">
-            <TabList as="div" class="flex space-x-1">
-              <Tab v-for="tab in firstTabGroup" :key="tab" :class="{ 'tab-active': tab === activeFirstTab }"
-                   @click="activeFirstTab = tab" class="tab">
-                {{ tab }}
-              </Tab>
-            </TabList>
-            <TabPanels class="tab-panels">
-              <TabPanel v-for="tab in firstTabGroup" :key="tab" v-show="tab === activeFirstTab" class="tab-panel">
-                <!-- 상품 정보 탭 -->
-                <div v-if="tab === '상품 정보'" class="product-list">
-                  <ProductCard
-                      v-for="product in productList"
-                      :key="product.productName"
-                      :product-name="product.productName"
-                      :original-price="product.price"
-                      :discount-rate="product.discountRate"
-                      @click="showProductDetails(product)"                  />
-                </div>
-                <!-- 라이브 소개 탭 -->
-                <div v-else-if="tab === '라이브 소개'">{{ liveIntroduction }}</div>
-                <!-- 라이브 혜택 탭 -->
-                <ul v-else-if="tab === '라이브 혜택'" class="benefits-list">
-                  <li v-for="benefit in liveBenefits" :key="benefit">{{ benefit }}</li>
-                </ul>
-              </TabPanel>
-            </TabPanels>
-          </TabGroup>
-        </div>
-        <div class="flex-1 overflow-auto mt-4">
-          <!-- 두 번째 탭 그룹 -->
-          <TabGroup as="div" class="tab-group mt-4">
-            <TabList as="div" class="tab-list">
-              <Tab v-for="tab in secondTabGroup" :key="tab" :class="{ 'tab-active': tab === activeSecondTab }"
-                   @click="activeSecondTab = tab" class="tab">
-                {{ tab }}
-              </Tab>
-            </TabList>
-            <TabPanels class="tab-panels">
-              <TabPanel v-for="tab in secondTabGroup" :key="tab" v-show="tab === activeSecondTab" class="tab-panel">
-                <!-- 공지사항 탭 -->
-                <ul v-if="tab === '공지사항'" class="notice-list">
-                  <li v-for="notice in notices" :key="notice">{{ notice }}</li>
-                </ul>
-                <!-- 자주 묻는 질문 탭 -->
-                <dl v-else-if="tab === '자주 묻는 질문'">
-                  <template v-for="(faq, index) in faqs" :key="`faq-${index}`">
-                    <dt :data-question="`Q: ${faq.question}`">{{ faq.question }}</dt>
-                    <dd>{{ faq.answer }}</dd>
-                  </template>
-                </dl>
-              </TabPanel>
-            </TabPanels>
-          </TabGroup>
-        </div>
-      </main>
+        <header class="flex justify-between items-center p-4 border-b">
+          <div></div> <!-- 좌측 공백 -->
+          <button class="exit-button">나가기</button>
+        </header>
+        <main class="main-content">
+          <!-- 첫 번째 탭 그룹 -->
+          <div class="flex-1 overflow-auto">
+            <TabGroup as="div" class="tab-group mt-4">
+              <TabList as="div" class="flex space-x-1">
+                <Tab v-for="tab in firstTabGroup" :key="tab" :class="{ 'tab-active': tab === activeFirstTab }"
+                    @click="activeFirstTab = tab" class="tab">
+                  {{ tab }}
+                </Tab>
+              </TabList>
+              <TabPanels class="tab-panels">
+                <TabPanel v-for="tab in firstTabGroup" :key="tab" v-show="tab === activeFirstTab" class="tab-panel">
+                  <!-- 상품 정보 탭 -->
+                  <div v-if="tab === '상품 정보'" class="product-list">
+                    <ProductCard
+                        v-for="product in productList"
+                        :key="product.productName"
+                        :product-name="product.productName"
+                        :original-price="product.price"
+                        :discount-rate="product.discountRate"
+                        @click="showProductDetails(product)"                  />
+                  </div>
+                  <!-- 라이브 소개 탭 -->
+                  <div v-else-if="tab === '라이브 소개'">{{ liveIntroduction }}</div>
+                  <!-- 라이브 혜택 탭 -->
+                  <ul v-else-if="tab === '라이브 혜택'" class="benefits-list">
+                    <li v-for="benefit in liveBenefits" :key="benefit">{{ benefit }}</li>
+                  </ul>
+                </TabPanel>
+              </TabPanels>
+            </TabGroup>
+          </div>
+          <div class="flex-1 overflow-auto mt-4">
+            <!-- 두 번째 탭 그룹 -->
+            <TabGroup as="div" class="tab-group mt-4">
+              <TabList as="div" class="tab-list">
+                <Tab v-for="tab in secondTabGroup" :key="tab" :class="{ 'tab-active': tab === activeSecondTab }"
+                    @click="activeSecondTab = tab" class="tab">
+                  {{ tab }}
+                </Tab>
+              </TabList>
+              <TabPanels class="tab-panels">
+                <TabPanel v-for="tab in secondTabGroup" :key="tab" v-show="tab === activeSecondTab" class="tab-panel">
+                  <!-- 공지사항 탭 -->
+                  <ul v-if="tab === '공지사항'" class="notice-list">
+                    <li v-for="notice in notices" :key="notice">{{ notice }}</li>
+                  </ul>
+                  <!-- 자주 묻는 질문 탭 -->
+                  <dl v-else-if="tab === '자주 묻는 질문'">
+                    <template v-for="(faq, index) in faqs" :key="`faq-${index}`">
+                      <dt :data-question="`Q: ${faq.question}`">{{ faq.question }}</dt>
+                      <dd>{{ faq.answer }}</dd>
+                    </template>
+                  </dl>
+                </TabPanel>
+              </TabPanels>
+            </TabGroup>
+          </div>
+        </main>
       </div>
-  </div>
+    </div>
   </div>
 </template>
 
@@ -167,7 +171,29 @@ export default {
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
   border-radius: 15px; /* 모든 섹션에 둥근 테두리 추가 */
+  overflow : hidden;
 }
+
+.scroll-wrapper {
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto; 
+  padding-bottom: 20px; 
+}
+
+.purchase-section {
+  margin-bottom: 20px; 
+}
+
+.scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
+
+.purchase-section {
+  flex: 1;
+  min-width: 0;
+}
+
+
 
 /* 오른쪽 라이브 섹션에 대한 너비 조정 */
 .live-section:last-child {

@@ -1,9 +1,7 @@
 <template>
-    <div class="h-full">
-      <Card
-        img="src/assets/images/all-img/product-sample.jpg"
-        noborder
-      >
+  <div>
+        <img src="src/assets/images/all-img/product-sample.jpg"/>
+   
         <div>동구밭</div>
         <div>동구밭 중건성 헤어케어 5종 기획세트</div>
         <p class="pb-4">
@@ -33,15 +31,13 @@
                 </TabList>
                 <TabPanels>
                     <TabPanel>
-                        <div class="text-slate-600 dark:text-slate-400 text-sm font-normal">
+                        <div class="text-slate-600 dark:text-slate-400 text-sm font-normal mb-[2rem]">
                             <img src="src/assets/images/all-img/product-explain-sample.jpg">
                         </div>
                     </TabPanel>
                     <TabPanel>
                         <div class="text-slate-600 dark:text-slate-400 text-sm font-normal">
                             <div class="my-[1rem]">
-                                <div data-v-dc744160="" class="card rounded-md bg-white dark:bg-slate-800 shadow-base">
-                                    <div data-v-dc744160="" class="card-body flex flex-col pt-4 pb-3 px-4">
                                         <div data-v-dc744160="" class="card-text h-full">
                                             <div class="flex space-x-3 rtl:space-x-reverse">
                                                 <div class="flex-none">
@@ -55,8 +51,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
                             </div>
                             <div class="flex flex-col ">
                                 <div v-for="review in reviews" :key="review.id" class="rounded-md bg-white dark:bg-slate-800 shadow-base mb-[0.5rem]">
@@ -85,7 +79,6 @@
                 </TabPanels>
             </TabGroup>
         </div>
-      </Card>
     </div>
 </template>
 
