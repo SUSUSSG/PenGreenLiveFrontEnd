@@ -89,8 +89,8 @@ export default {
 
   a.active {
     color: #1f1606;
-    font-weight: 400;
-    font-size: 1.7rem;
+    font-weight: 500;
+    font-size: 1.3rem;
 
     &::after {
       content: "";

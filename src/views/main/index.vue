@@ -1,4 +1,5 @@
 <template>
+  <ScrollTopButton/>
   <MenuHeaderNav />
   <hr />
   <div>
@@ -48,7 +49,7 @@
     </swiper>
   </div>
   <hr />
-  <div style="position: sticky; top: 5rem; z-index: 10; background-color: white; padding-top:1rem;">
+  <div style="position: sticky; top: 4rem; z-index: 10; background-color: white; padding-top:0.5rem;">
       <Categories/>
       <hr class="mt-6" />
   </div>
@@ -166,7 +167,7 @@ import Categories from "@/components/Category/Categories.vue";
 import CardComponent from "@/components/Card/BroadcastCard.vue";
 import menuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
-
+import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 export default {
@@ -176,6 +177,7 @@ export default {
     Categories,
     CardComponent,
     MenuHeaderNav,
+    ScrollTopButton,
   },
   data() {
     return {

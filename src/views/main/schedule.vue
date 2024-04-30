@@ -1,8 +1,9 @@
 <template>
+  <ScrollTopButton/>
   <MenuHeaderNav />
   <DataTab/>
   <hr/>
-  <div style="position: sticky; top: 5rem; z-index: 10; background-color: white; padding-top:1rem;">
+  <div style="position: sticky; top: 4rem; z-index: 10; background-color: white; padding-top:0.5rem;">
       <Categories/>
       <hr class="mt-6" />
     </div>
@@ -34,12 +35,15 @@ import Categories from "@/components/Category/Categories.vue";
 import CardSchedule from "@/components/Card/schedule-card.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import DataTab from "@/components/HeaderMain/date-tab.vue";
+import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
+
 export default {
   components: {
     Categories,
     CardSchedule,
     MenuHeaderNav,
     DataTab,
+    ScrollTopButton,
   },
   data() {
     return {
