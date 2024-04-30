@@ -8,7 +8,7 @@
             <img :src="productimageSrc" alt="Product Image" class="product-image">
             <div class="product-details">
               <div class="product-name">{{ productName }}</div>
-              <div class="product-price">{{ productPrice }}</div>
+              <div class="product-price">{{ formatNumber(productPrice) }}</div>
             </div>
           </div>
         </div>
@@ -35,6 +35,11 @@ const props = withDefaults(defineProps < {
     productName: 'default-product',
     productPrice: 0,
 });
+
+const formatNumber = (value: number): string => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 </script>
 
 <style scoped>
@@ -79,20 +84,20 @@ const props = withDefaults(defineProps < {
 }
 
 .product-image {
-  width: 50px; /* 상품 이미지 크기 조정 */
+  width: 50px; 
   height: auto;
-  margin-right: 10px; /* 이미지와 상세 정보 간 간격 */
+  margin-right: 10px; 
 }
 
 .product-details {
   display: flex;
   flex-direction: column;
-  align-items: start; /* 왼쪽 정렬 */
+  align-items: start; 
 }
 
 .product-name {
   font-size: 14px;
-  margin-bottom: 4px; /* 이름과 가격 사이 간격 */
+  margin-bottom: 4px; 
 }
 
 .product-price {

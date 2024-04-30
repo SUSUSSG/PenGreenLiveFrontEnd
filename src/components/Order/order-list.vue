@@ -9,7 +9,7 @@
                                 <div class="ml-4 product-wrapper flex-shrink">
                                     <div class="orderdate">{{ orderDate }}</div>
                                     <div class="productname mb-2">{{ productName }}</div>
-                                    <div class="price">{{ price }}</div>
+                                    <div class="price">{{ formatNumber(price) }}</div>
                                 </div>
                                 <div class="ml-auto">
 
@@ -22,7 +22,7 @@
                                                 <div class="ml-4 product-wrapper flex-shrink">
                                                     <div class="orderdate">{{ orderDate }}</div>
                                                     <div class="productname mb-2">{{ productName }}</div>
-                                                    <div class="price">{{ price }}</div>
+                                                    <div class="price">{{ formatNumber(price) }}</div>
                                                 </div>
                                             </div>
                                             <div data-v-e1812f16="" class="card-text h-full">
@@ -78,6 +78,11 @@ const props = withDefaults(defineProps < {
     productName: 'default-product',
     price: 0,
 });
+
+const formatNumber = (value: number): string => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
 </script>
 
 <style scoped>
