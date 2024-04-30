@@ -14,7 +14,7 @@
                             <div class="relative flex-1">
                                 <Checkbox
                                     label="개인정보의 수집 및 이용 동의 (필수)"
-                                    name="tc" value="1" :checked="true" />
+                                    name="tc" value="1" :checked="false" />
                                 <textarea class="form-control py-2 h-[100px] my-3" name="pd" readonly>당사는 다음과 같이 개인 정보를 수집하고 있습니다.
 수집항목 : (필수) [기본 정보] 사업자번호(ID), 비밀번호, 담당자 연락처, 담당자 성명, 담당자 이메일 [협력사 정보] 대표자명, 법인번호(생년월일), 주소, 전화번호
 이용목적 : 상품 입점 제안 관련 제안 채택 여부 통지 및 채택 후 협의, 협력사 만족도 조사
@@ -27,7 +27,7 @@
                                 label="개인정보의 수집 및 이용 동의 (선택)"
                                 name="tc"
                                 value="1"
-                                :checked="true"
+                                :checked="false"
                             />
                                 <textarea class="form-control py-2 h-[100px] my-3" name="pd" readonly>당사는 다음과 같이 개인 정보를 수집하고 있습니다.
 수집항목 : (선택) [협력사 정보] 신용평가결과, FAX번호
