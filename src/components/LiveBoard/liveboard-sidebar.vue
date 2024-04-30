@@ -1,16 +1,20 @@
 <template>
     <div class="bg-white rounded pt-3 px-4 mt-4 ml-5" id="sidebar">
         <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(6, 1fr);">
-            <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(6, 1fr);">
+            <div class="grid gap-8" style="grid-template-rows: repeat(6, 1fr);">
 
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
                     @click="toggleIcon(statistics[0])">
-                    <Icon :icon="statistics[0].isActive ? statistics[0].activeIcon : statistics[0].icon"></Icon>
+                    <Icon :icon="statistics[0].isActive ? statistics[0].activeIcon : statistics[0].icon">
+                        <!-- 카메라 조정 -->
+                    </Icon>
                 </div>
 
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
                     @click="toggleIcon(statistics[1])">
-                    <Icon :icon="statistics[1].isActive ? statistics[1].activeIcon : statistics[1].icon"></Icon>
+                    <Icon :icon="statistics[1].isActive ? statistics[1].activeIcon : statistics[1].icon">
+                    <!-- 마이크 조정 -->
+                    </Icon>
                 </div>
 
                 <div>
