@@ -13,7 +13,7 @@
             <LiveBoardPurchase class="purchase-section inline"/>
           </div>
         </div>
-        <div class="sticky bottom-0 z-20 flex justify-between items-center pt-4 bg-white">
+        <div class="sticky bottom-0 z-20 flex justify-between items-center pt-4">
           <Button class="w-full" text="구매하기"/>
         </div>
       </div>
@@ -207,7 +207,6 @@ export default {
   flex: 1;
   min-width: 0;
 }
-
 
 
 /* 오른쪽 라이브 섹션에 대한 너비 조정 */
