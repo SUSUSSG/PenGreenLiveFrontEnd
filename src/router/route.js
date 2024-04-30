@@ -14,32 +14,37 @@ const routes = [
         name: "schedule",
         component: () => import("@/views/main/schedule.vue"),
       },
+      {
+        path: "environment",
+        name: "environment",
+        component: () => import("@/views/main/environment.vue"),
+      },
+      {
+        path: "/join-first",
+        name: "join-first",
+        component: () => import("@/views/user/join-first.vue"),
+      },
+      {
+        path: "/join",
+        name: "join",
+        component: () => import("@/views/user/join.vue"),
+      },
+      {
+        path: "/member/login",
+        name: "member-login",
+        component: () => import("@/views/user/login.vue"),
+      },
+      {
+        path: "/enterprise/join",
+        name: "enterprise-join",
+        component: () => import("@/views/enterprise/join.vue"),
+      },
+      {
+        path: "/login",
+        name: "login",
+        component: () => import("@/views/enterprise/login.vue"),
+      }
     ],
-  },
-  {
-    path: "/join-first",
-    name: "join-first",
-    component: () => import("@/views/user/join-first.vue"),
-  },
-  {
-    path: "/join",
-    name: "join",
-    component: () => import("@/views/user/join.vue"),
-  },
-  {
-    path: "/member/login",
-    name: "member-login",
-    component: () => import("@/views/user/login.vue"),
-  },
-  {
-    path: "/enterprise/join",
-    name: "enterprise-join",
-    component: () => import("@/views/enterprise/join.vue"),
-  },
-  {
-    path: "/login",
-    name: "login",
-    component: () => import("@/views/enterprise/login.vue"),
   },
   {
     path: "/",
@@ -76,7 +81,7 @@ const routes = [
     path: "/live-viewing",
     name: "live-viewing",
     component: () => import("../views/broadcast/live-viewing.vue"),
-  },
+  }
 ];
 
 export default routes;

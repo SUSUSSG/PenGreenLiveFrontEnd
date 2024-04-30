@@ -24,7 +24,6 @@
       ></div>
     </Transition>
     <!-- mobile sidebar -->
-    <Settings />
 
     <div
       class="content-wrapper transition-all duration-150"
@@ -64,9 +63,7 @@
 import Breadcrumbs from "@/components/Breadcrumbs";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
-import Settings from "../components/Settings";
 import Sidebar from "../components/Sidebar/";
-// import Sidebar from "../components/UserSidebar/";
 import window from "@/mixins/window";
 import MobileSidebar from "@/components/Sidebar/MobileSidebar.vue";
 import FooterMenu from "@/components/Footer/FooterMenu.vue";
@@ -77,7 +74,6 @@ export default {
     Header,
     Footer,
     Sidebar,
-    Settings,
     Breadcrumbs,
     FooterMenu,
     MobileSidebar,

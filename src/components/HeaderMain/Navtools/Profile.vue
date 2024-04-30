@@ -62,37 +62,37 @@ export default {
     ProfileMenu: [
       {
         label: "프로필",
-        icon: "heroicons-outline:user", // 프로필을 나타내는 아이콘
+        icon: "heroicons-outline:user",
         link: () => {
-          this.$router.push("profile");
+          this.$router.push("order-list");
         },
       },
       {
         label: "주문 내역",
-        icon: "heroicons-outline:clipboard-list", // 주문 내역을 나타내는 아이콘
+        icon: "heroicons-outline:clipboard-list",
         link: () => {
-          this.$router.push("chat");
+          this.$router.push("order-list");
         },
       },
       {
         label: "설정",
-        icon: "heroicons-outline:cog", // 설정을 나타내는 아이콘
+        icon: "heroicons-outline:cog",
         link: () => {
           this.$router.push("email");
         },
       },
       {
         label: "대시보드",
-        icon: "heroicons-outline:home", // 대시보드를 나타내는 아이콘
+        icon: "heroicons-outline:home",
         link: () => {
-          this.$router.push("dashboard");
+          this.$router.push("product-list");
         },
       },
       {
         label: "Logout",
-        icon: "heroicons-outline:logout", // 로그아웃을 나타내는 아이콘
+        icon: "heroicons-outline:logout",
         link: () => {
-          this.$router.push("/");
+          this.$router.push("login");
           localStorage.removeItem("activeUser");
         },
       },
