@@ -7,10 +7,51 @@
             <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
                 :rows="liveProductTable" :pagination-options="{ enabled: false }" :sort-options="{ enabled: false }">
                 <template v-slot:table-row="props">
-                    <span v-if="props.column.field == 'productImg'" class="cursor-pointer relative">
+                    <span v-if="props.column.field == 'productImg'" class="cursor-pointer relative"
+                        @click="openDetailProductModal(props.row)">
                         <img :src="props.row.productImg" alt="Product Image" class="w-20 h-20 object-cover" />
                         <img v-if="props.row.showNowImg" :src="nowImg" alt="Now Image"
                             class="w-10 h-10 absolute top-0 left-0 z-10" id="nowImg" />
+                        <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
+                            <div class="row items-center justify-center ml-7">
+                                <div class="max-w-md">
+                                    <div class="flex items-center mb-4">
+                                        <div class="text-sm text-slate-600 dark:text-slate-300 mr-4">이미지</div>
+                                        <img :src="selectedProduct.productImg" alt="Product Image"
+                                            class="w-20 h-20 object-cover" />
+                                        <div class="text-sm text-slate-600 dark:text-slate-300 mx-4 ml-5">상품명</div>
+                                        <div class="text-lg text-slate-900 dark:text-white font-medium">{{
+                                            selectedProduct.productName }}</div>
+                                        <div class="text-sm text-slate-600 dark:text-slate-300 mx-4 ml-10">상품코드</div>
+                                        <div class="text-lg text-slate-900 dark:text-white font-medium">{{
+                                            selectedProduct.productCode }}</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px;">
+                                        <div v-for="(product, i) in productStatistics" :key="i" class="inline-flex">
+                                            <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
+                                                <div>
+                                                    <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
+                                                        {{ product.title }}
+                                                    </div>
+                                                    <div
+                                                        class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
+                                                        {{ product.count }}
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <div
+                                                        class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-3xl pl-7">
+                                                        <Icon :icon="product.icon" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Modal>
                     </span>
                     <span v-if="props.column.field == 'auth'" class="flex">
                         <img v-for="entry in props.row.auth" :key="entry.name" :src="entry.image" :alt="entry.name"
@@ -42,11 +83,15 @@
 <script>
 import { liveProductTable } from "@/constant/live-product-data";
 import Switch from '@/components/Switch';
-import nowImg from '@/assets/images/all-img/now.png'
+import nowImg from '@/assets/images/all-img/now.png';
+import Modal from "../Modal/Modal.vue";
+import Icon from "@/components/Icon";
 
 export default {
     components: {
         Switch,
+        Modal,
+        Icon
     },
     data() {
         return {
@@ -83,11 +128,49 @@ export default {
                     width: "15px"
                 }
             ],
+            productStatistics: [
+                {
+                    // name: "statistics1",
+                    title: "기존 수량",
+                    count: "250",
+                    icon: "material-symbols:fact-check-rounded"
+                },
+                {
+                    // name: "statistics2",
+                    title: "남은 수량",
+                    count: "25",
+                    icon: "material-symbols:fact-check-outline-rounded"
+                },
+                {
+                    // name: "statistics3",
+                    title: "주문건수",
+                    count: "460",
+                    icon: "heroicons:chart-bar-square-16-solid"
+                },
+                {
+                    // name: "statistics4",
+                    title: "누적 주문 금액",
+                    count: "12,300,303",
+                    icon: "heroicons:currency-dollar-20-solid"
+                },
+            ]
         }
     },
     methods: {
         toggleNowImage(row) {
             row.showNowImg = !row.showNowImg;
+        },
+        showProductInfo() {
+            this.isOpen = true;
+        },
+        openDetailProductModal(row) {
+            this.$refs.showProductInfo.openModal();
+            this.selectedProduct = {
+                productImg: row.productImg,
+                productName: row.productName,
+                productCode: row.productCode
+            };
+            this.$refs.showProductInfo.open();
         }
     }
 }
@@ -104,13 +187,16 @@ export default {
     background: white;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
+
 #tableCard {
     width: 760px;
 }
+
 #nowImg {
     widows: 70px;
     height: 20px;
 }
+
 .relative {
     position: relative;
 }
@@ -130,8 +216,9 @@ export default {
 .z-10 {
     z-index: 10;
 }
+
 .vgt-table {
-  width: 750px;
-  max-width: 100%;
+    width: 750px;
+    max-width: 100%;
 }
 </style>

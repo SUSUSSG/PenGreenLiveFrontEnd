@@ -1,7 +1,7 @@
 <template>
   <div class="modal-overlay" v-if="showModal">
     <div class="modal-content">
-      <Button @click="closeModal">닫기</Button>
+      <!-- <Button @click="closeModal">닫기</Button> -->
       <div class="camera-feed">
         <video ref="cameraFeed" autoplay></video>
       </div>
@@ -17,7 +17,7 @@
           <input type="range" id="microphoneVolume" v-model="microphoneVolume" min="0" max="100" disabled>
         </div>
         <button @click="toggleMonitor">{{ monitorActive ? '마이크 테스트 중지' : '마이크 테스트' }}</button>
-        <button class="start-broadcasting" @click="startBroadcasting">방송 시작하기</button>
+        <button class="test-broadcasting" @click="testBroadcasting">테스트 완료</button>
       </div>
     </div>
   </div>
@@ -85,15 +85,16 @@ export default {
         }
       }
     },
-    startBroadcasting() {
+    testBroadcasting() {
       // Emit an event with the selected settings
-      this.$emit('start-broadcast', {
+      this.$emit('test-broadcast', {
         camera: this.selectedCamera,
         microphone: this.selectedMicrophone,
         micVolume: this.microphoneVolume,
         outVolume: this.outputVolume
       });
       this.showModal = false;
+      closeModal();
     },
     async getMediaDevices() {
       try {
@@ -274,7 +275,7 @@ export default {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.start-broadcasting {
+.test-broadcasting {
   background-color: #3071a9;
   color: white;
   font-weight: bold;
@@ -285,7 +286,7 @@ export default {
   font-size: 1.1em;
 }
 
-.start-broadcasting:hover {
+.test-broadcasting:hover {
   background-color: #265d8a;
 }
 
