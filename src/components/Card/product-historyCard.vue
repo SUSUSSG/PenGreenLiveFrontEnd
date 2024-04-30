@@ -67,12 +67,6 @@ export default {
     margin-right: 10px;
 }
 
-.product-price {
-    /* text-align: right !important;
-    padding-right : 20px; */
-
-}
-
 .product-name, .product-brand {
     flex: 1; /* 이름과 브랜드에 비례적 공간 할당 */
     text-align: left;
