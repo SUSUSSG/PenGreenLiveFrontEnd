@@ -2,8 +2,16 @@
   <div class="live-container">
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
     <Live class="live-section" show-icon-side-bar="true" show-title-bar="true"></Live>
-    <LiveBoardPurchase class="purchase-section h-full"/>
     <div class="live-section">
+      <div v-if="selectedProduct" class="z-index-[100]" >
+        <header class="flex justify-between items-center p-4 border-b">
+        <div></div> <!-- 좌측 공백 -->
+        <Button class="flex justify-between items-right" text="돌아가기" @click="closePurchaseModal"/>
+      </header>
+        <LiveBoardPurchase class="purchase-section h-full"/>
+      </div>
+    
+      <div v-if="!selectedProduct">
       <header class="flex justify-between items-center p-4 border-b">
         <div></div> <!-- 좌측 공백 -->
         <button class="exit-button">나가기</button>
@@ -28,7 +36,7 @@
                       :product-name="product.productName"
                       :original-price="product.price"
                       :discount-rate="product.discountRate"
-                  />
+                      @click="showProductDetails(product)"                  />
                 </div>
                 <!-- 라이브 소개 탭 -->
                 <div v-else-if="tab === '라이브 소개'">{{ liveIntroduction }}</div>
@@ -67,6 +75,7 @@
           </TabGroup>
         </div>
       </main>
+      </div>
   </div>
   </div>
 </template>
@@ -78,6 +87,7 @@ import Live from "@/components/Video/live.vue";
 import ProductCard from "@/components/Card/product-card.vue";
 import {ref} from 'vue';
 import {TabGroup, TabList, Tab, TabPanels, TabPanel} from '@headlessui/vue';
+import Button from "@/components/Button";
 
 const firstTabGroup = ['상품 정보', '라이브 소개', '라이브 혜택'];
 const secondTabGroup = ['공지사항', '자주 묻는 질문'];
@@ -109,6 +119,7 @@ export default {
   },
   data() {
     return {
+      selectedProduct: null,
       liveIntroduction : "라이브 소개 입니다.",
       liveBenefits : ["혜택1", "혜택2"],
       notices : ["안녕하세요 상품 구매 이후 채팅창에 구매 인증해주시면 사은품이 나갑니다 ^^", "현금으로 결제할시 추가 서비스 들어갑니다 ^^"],
@@ -117,10 +128,19 @@ export default {
           {question: "질문 2", answer: "답변 2"}
       ],
       productList : [
-        {productName: "가지가지 나뭇가지", price : 10000, discountRate : 30},
+        {productName: "동구밭 중건성 헤어케어 5종 기획세트", price : 47500, discountRate : 30},
         {productName: "가지가지 나뭇가지", price : 10000, discountRate : 30},
         {productName: "가지가지 나뭇가지", price : 10000, discountRate : 30}
       ]
+    }
+  },
+  methods: {
+    showProductDetails(product) {
+      this.selectedProduct = product;
+      console.log(product);
+    },
+    closePurchaseModal() {
+      this.selectedProduct = null;
     }
   }
 };
