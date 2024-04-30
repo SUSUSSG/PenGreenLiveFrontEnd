@@ -2,7 +2,7 @@
     <div style="background-color: white;">
     <div class="text-slate-600 dark:text-slate-400 text-sm font-normal">
         <div class="group flex items-center" style="display: flex !important">
-            <div class="flex-row-wrapper w-full p-10">
+            <div class="flex-row-wrapper w-full pl-6 pr-6 pt-3 pb-3">
                 <h6 class="deliveryStatus mb-2">{{ deliveryStatus }}</h6>
                 <div class="content-wrapper flex w-full justify-end">
                     <img class="productImgUrl" :src="productImgUrl" alt="Image" />

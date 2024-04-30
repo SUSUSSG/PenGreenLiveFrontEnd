@@ -1,4 +1,5 @@
 <template>
+    <div style="background-color: white;">
     <TabGroup>
         <TabList class="tab-list">
             <Tab v-for="(item, i) in buttons" :key="i" v-slot="{ selected }">
@@ -14,16 +15,16 @@
         <TabPanel>
             <orderlist v-for="(item, index) in orderData" :key="index" :deliveryStatus="item.deliveryStatus"
                 :productImgUrl="item.productImgUrl" :orderDate="item.orderDate" :productName="item.productName"
-                :price="item.price" class="mt-3" />
+                :price="item.price" />
         </TabPanel>
 
         <TabPanel>
             <reviewlist v-for="(item, index) in orderData" :key="index" :deliveryStatus="item.deliveryStatus"
                 :productImgUrl="item.productImgUrl" :orderDate="item.orderDate" :productName="item.productName"
-                :price="item.price" :reviewContent="item.reviewContent" class="mt-3" />
+                :price="item.price" :reviewContent="item.reviewContent"/>
         </TabPanel>
     </TabGroup>
-
+</div>
 </template>
 
 <script setup>
@@ -73,7 +74,6 @@ const orderData = ref([
   height: 100%; 
   list-style: none; 
   padding: 0; 
-  margin-bottom: -15px; 
   background-color: white; 
 }
 
