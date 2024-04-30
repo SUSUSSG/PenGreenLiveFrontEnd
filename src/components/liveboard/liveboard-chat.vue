@@ -199,7 +199,6 @@ export default {
 }
 
 .chat-message {
-  background: #f9f9f9;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   border-radius: 0.25rem;
