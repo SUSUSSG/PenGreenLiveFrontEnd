@@ -1,19 +1,27 @@
 <template>
   <div class="card">
     <div class="icon-bg">
-      <img src="icon.png" alt="상품 이미지" />
+      <img :src="noImageSrc" alt="상품 이미지" class="product-image"/>
     </div>
     <div class="info">
-      <h1>{{ productName }}</h1>
-      <p class="original-price">{{ originalPrice | currency }}</p>
-      <p class="discounted-price">{{ discountedPrice | currency }}</p>
+      <h6>{{ productName }}</h6>
+      <p class="original-price">{{ formattedOriginalPrice }}</p>
+      <p class="discounted-price">{{ formattedDiscountedPrice }}</p>
     </div>
   </div>
 </template>
 
+
 <script>
+import noImage from "@/assets/images/all-img/no-image.png";
+
 export default {
   name: 'ProductCard',
+  data() {
+    return {
+      noImageSrc: noImage
+    }
+  },
   props: {
     productName: String,
     originalPrice: Number,
@@ -21,14 +29,13 @@ export default {
   },
   computed: {
     discountedPrice() {
-      // 할인가를 계산합니다.
       return this.originalPrice - (this.originalPrice * this.discountRate / 100);
-    }
-  },
-  filters: {
-    currency(value) {
-      // 원화 표시로 포맷합니다.
-      return `${value.toLocaleString()}원`;
+    },
+    formattedOriginalPrice() {
+      return `${this.originalPrice.toLocaleString()}원`;
+    },
+    formattedDiscountedPrice() {
+      return `${this.discountedPrice.toLocaleString()}원`;
     }
   }
 }
@@ -42,12 +49,21 @@ export default {
   display: flex;
   align-items: center;
   padding: 10px;
+  width: 100%;
 }
 .icon-bg {
   background-color: grey;
   padding: 1px;
   margin-right: 10px;
-  border : 1px solid
+  border: 1px solid #ddd;
+  flex: 0 0 25%; /* 이미지 컨테이너의 크기를 카드 너비의 1/4로 고정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.product-image {
+  max-width: 100%;
+  height: auto; /* 비율 유지 */
 }
 .info h1 {
   font-size: 1.5em;
