@@ -22,6 +22,9 @@ const routes = [
       { path: 'live-register', name: '라이브등록', component: () => import('@/views/broadcast/live-register.vue') },
       { path: 'shop-modify', name: '상점정보관리', component: () => import('@/views/dashboard/shop-modify.vue') },
       { path: 'product-category', name: '상품카테고리', component: () => import('@/views/dashboard/product-category.vue') },
+      { path: 'product-statistics', name: '상품통계', component: () => import('@/views/dashboard/product-statistics.vue') },
+      { path: 'broadcast-statistics', name: '방송통계', component: () => import('@/views/dashboard/broadcast-statistics.vue') },
+      { path: 'review-statistics', name: '리뷰통계', component: () => import('@/views/dashboard/review-statistics.vue') },
     ],
   },
   {
