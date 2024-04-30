@@ -1,9 +1,9 @@
 <template>
   <ScrollTopButton/>
   <MenuHeaderNav class="under-category-section" style="width: 77%; margin: auto"/>
-  <DataTab class="under-category-section" style="width: 77%; margin: auto; border:1px solid #e6e7eb"/>
-  <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
-    <Categories class="under-category-section" style="width: 77%; margin: auto; padding-bottom: 1rem; border-bottom: 1px solid #e6e7eb;"/>
+  <DataTab class="under-category-section" style="width: 77%; margin: auto; border:1px 1px 0 1px solid #e6e7eb"/>
+  <div class="under-category-section" style="width: 77%; margin: auto; border:1px solid #e6e7eb; position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
+    <Categories style="padding-bottom: 1rem;"/>
   </div>
 
   <div class="content-wrapper">
