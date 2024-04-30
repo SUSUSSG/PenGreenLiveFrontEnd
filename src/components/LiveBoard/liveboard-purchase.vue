@@ -11,7 +11,7 @@
         <div>33,000원</div>
         <div>
             <TabGroup>
-                <TabList class="lg:space-x-8 md:space-x-4 space-x-0">
+                <TabList class="flex lg:space-x-8 md:space-x-4 space-x-0">
                     <Tab
                         v-slot="{ selected }"
                         as="template"
@@ -19,41 +19,40 @@
                         :key="i">
                         <button
                         :class="[
-                            selected
-                            ? 'text-primary-500 before:w-full'
-                            : 'text-slate-500 before:w-0 dark:text-slate-300',
+                            selected ? 'text-primary-500 before:w-full' : 'text-slate-500 before:w-0 dark:text-slate-300',
                         ]"
-                        class="text-sm w-[50%] font-medium mb-7 capitalize bg-white dark:bg-slate-800 ring-0 foucs:ring-0 focus:outline-none px-2 transition duration-150 before:transition-all before:duration-150 relative before:absolute before:left-1/2 before:bottom-[-6px] before:h-[1.5px] before:bg-primary-500 before:-translate-x-1/2"
+                        class="flex-1 text-sm font-medium mb-7 capitalize dark:bg-slate-800 ring-0 focus:ring-0 focus:outline-none px-2 transition duration-150 before:transition-all before:duration-150 relative before:absolute before:left-1/2 before:bottom-[-6px] before:h-[1.5px] before:bg-primary-500 before:-translate-x-1/2"
                         >
                         {{ item.title }}
                         </button>
                     </Tab>
                 </TabList>
+
                 <TabPanels>
                     <TabPanel>
-                        <div class="text-slate-600 dark:text-slate-400 text-sm font-normal mb-[2rem]">
+                        <div class="text-slate-600 dark:text-slate-400 text-sm font-normal">
                             <img src="src/assets/images/all-img/product-explain-sample.jpg">
                         </div>
                     </TabPanel>
                     <TabPanel>
                         <div class="text-slate-600 dark:text-slate-400 text-sm font-normal">
                             <div class="my-[1rem]">
-                                        <div data-v-dc744160="" class="card-text h-full">
-                                            <div class="flex space-x-3 rtl:space-x-reverse">
-                                                <div class="flex-none">
-                                                    <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl bg-[#E5F9FF] dark:bg-slate-900 text-info-500">
-                                                        <img src="/src/assets/images/logo/logo-gpt.png">
-                                                    </div>
-                                                </div>
-                                                <div class="flex-1">
-                                                    <div class="text-slate-600 dark:text-slate-400 text-sm mb-1 font-medium">AI에 의해 요약된 리뷰입니다!</div>
-                                                    <div class="text-slate-900 dark:text-slate-300 text-lg font-medium">가성비가 뛰어나고 생각보다 배송이 빠르게 옵니다.</div>
-                                                </div>
+                                <div data-v-dc744160="" class="card-text h-full">
+                                    <div class="flex space-x-3 rtl:space-x-reverse">
+                                        <div class="flex-none">
+                                            <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl bg-[#E5F9FF] dark:bg-slate-900 text-info-500">
+                                                <img src="/src/assets/images/logo/logo-gpt.png">
                                             </div>
                                         </div>
+                                        <div class="flex-1">
+                                            <div class="text-slate-600 dark:text-slate-400 text-sm mb-1 font-medium">AI에 의해 요약된 리뷰입니다!</div>
+                                            <div class="text-slate-900 dark:text-slate-300 text-lg font-medium">가성비가 뛰어나고 생각보다 배송이 빠르게 옵니다.</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="flex flex-col ">
-                                <div v-for="review in reviews" :key="review.id" class="rounded-md bg-white dark:bg-slate-800 shadow-base mb-[0.5rem]">
+                                <div v-for="review in reviews" :key="review.id" class="rounded-md dark:bg-slate-800 shadow-base mb-[0.5rem]">
                                     <div class="h-full ">
                                         <div class="w-full p-8 dark:bg-slate-700 rounded-lg">
                                             <div class="flex items-start justify-between">
