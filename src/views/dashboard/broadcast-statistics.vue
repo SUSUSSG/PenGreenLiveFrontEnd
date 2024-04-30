@@ -2,8 +2,12 @@
   <div id="content">
     <div id="search"></div>
     <div id="result" class="grid">
-      <card v-for="(cardData, index) in cardDataList" :key="index" :icon="cardData.icon"
-        :analyticsTitle="cardData.analyticsTitle" :analyticsResult="cardData.analyticsResult" :fontSize="cardData.fontSize"/>
+      <div v-for="(cardData, index) in cardDataList" :key="'title_' + index">
+        <div v-if="index < 4">
+          <div class="card-title">{{ cardData.cardTitle }}</div>
+        </div>
+        <card :icon="cardData.icon" :analyticsTitle="cardData.analyticsTitle" :analyticsResult="cardData.analyticsResult" :fontSize="cardData.fontSize"/>
+      </div>
     </div>
   </div>
 </template>
@@ -21,22 +25,26 @@ export default {
           icon: "heroicons:clock",
           analyticsTitle: "평균 방송 진행 시간",
           analyticsResult: "01시간 42분 36초",
-          fontSize: "27px"
+          fontSize: "27px",
+          cardTitle: "시간"
         },
         {
           icon: "heroicons:user-group",
           analyticsTitle: "평균 시청자 수",
           analyticsResult: "233명",
+          cardTitle: "고객"
         },
         {
           icon: "heroicons:archive-box",
           analyticsTitle: "평균 구매 개수",
           analyticsResult: "1.3개",
+          cardTitle: "구매"
         },
         {
           icon: "heroicons:cursor-arrow-rays",
           analyticsTitle: "평균 상품 클릭수",
           analyticsResult: "2.7번",
+          cardTitle: "상품"
         },
         {
           icon: "heroicons:clock",
@@ -67,9 +75,18 @@ export default {
   grid-gap: 10px; 
 }
 #result {
-  padding: 10px;
+  padding: 20px;
   border-radius: 0.5rem;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+.card-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 20px;
+}
+.card-title {
+  display: flex;
+  justify-content: center;
 }
 </style>
