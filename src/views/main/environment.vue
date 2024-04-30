@@ -1,4 +1,5 @@
 <template>
+  <ScrollTopButton/>
   <MenuHeaderNav />
   <hr/>
   <div class="content-wrapper">
@@ -9,9 +10,12 @@
 
 <script>
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
+import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
+
 export default {
   components: {
     MenuHeaderNav,
+    ScrollTopButton,
   },
 };
 </script>

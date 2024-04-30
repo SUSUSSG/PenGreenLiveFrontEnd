@@ -16,6 +16,10 @@ body {
     transform: translateX(-50%);
     top: 40%;
 }
+.loading-logo img{
+    width: 160px;
+    height:auto;
+}
 
 .loading {
     position: absolute;
