@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-8">
+  <div class="container pt-4">
     <div
       class="d-flex justify-content-center my-2"
       style="
@@ -23,29 +23,30 @@
 
 <script>
 import CategoryItem from "./CategoryItem.vue";
+import Icon from "../Icon";
 
 export default {
   components: {
     CategoryItem,
+    Icon,
   },
   data() {
     return {
       categories: [
-        { imgSrc: "http://via.placeholder.com/80x80", name: "전체" },
-        { imgSrc: "http://via.placeholder.com/80x80", name: "뷰티" },
-        { imgSrc: "http://via.placeholder.com/80x80", name: "식품" },
-        { imgSrc: "http://via.placeholder.com/80x80", name: "패션" },
-        { imgSrc: "http://via.placeholder.com/80x80", name: "라이프" },
-        { imgSrc: "http://via.placeholder.com/80x80", name: "유아동" },
-        { imgSrc: "http://via.placeholder.com/80x80", name: "테크" },
-        // 다른 카테고리들...
+        { imgSrc: "src/assets/images/all-img/category-icon/icon-all.png", name: "전체" },
+        { imgSrc: "src/assets/images/all-img/category-icon/icon-cosmetic.png", name: "뷰티" },
+        { imgSrc: "src/assets/images/all-img/category-icon/icon-organic-food.png", name: "식품" },
+        { imgSrc: "src/assets/images/all-img/category-icon/icon-furniture.png", name: "생활용품" },
+        { imgSrc: "src/assets/images/all-img/category-icon/icon-kids.png", name: "유아동" },
+        { imgSrc: "src/assets/images/all-img/category-icon/icon-tech.png", name: "테크" },
+        { imgSrc: "src/assets/images/all-img/category-icon/icon-hoodie.png", name: "패션" },
       ],
-      selectedCategory: "전체", // 선택된 카테고리의 이름을 저장
+      selectedCategory: "전체",
     };
   },
   methods: {
     handleSelect(name) {
-      this.selectedCategory = name; // 선택된 카테고리 업데이트
+      this.selectedCategory = name;
     },
   },
 };

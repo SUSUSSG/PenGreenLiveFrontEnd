@@ -1,4 +1,6 @@
 <template>
+  <ScrollTopButton/>
+  <MenuHeaderNav style="width: 77%; margin: auto;" />
   <div>
     <swiper
       :slidesPerView="'auto'"
@@ -7,8 +9,8 @@
       :pagination="{ clickable: true }"
       class="main-caro"
       :loop="false"
-      :navigation="true"
-      :autoplay="{ delay: 3000, disableOnInteraction: false }"
+      :navigation="false"
+      :autoplay="{ delay: 5000, disableOnInteraction: false }"
     >
       <swiper-slide
         v-for="(item, index) in carousels"
@@ -46,10 +48,13 @@
     </swiper>
   </div>
   <hr />
-  <Categories />
-  <hr class="mt-6" />
+  
   <section class="under-category-section" style="width: 77%; margin: auto">
-    <h6 class="mb-6 pt-12 pl-6 pr-6">인기 라이브</h6>
+    <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
+      <Categories/>
+      <hr class="mt-4" />
+  </div>
+    <h4 class="pt-12" style="padding-left : 32px;">인기 라이브</h4>
     <swiper
       :slidesPerView="1"
       :centeredSlides="false"
@@ -58,7 +63,7 @@
       class="hot-live-caro"
       :loop="false"
       :navigation="false"
-      :autoplay="{ delay: 50000000, disableOnInteraction: false }"
+      :autoplay="{ delay: 6000, disableOnInteraction: false }"
       style="width: 100%; margin: auto"
     >
       <swiper-slide
@@ -74,9 +79,9 @@
           />
           <div class="slide-content">
             <div class="additional-text-container">
-              <h5 v-if="item.viewersCount" class="mb-4">
+              <h6 v-if="item.viewersCount" class="mb-4">
                 {{ item.viewersCount }}명이 보는 중!
-              </h5>
+              </h6>
               <h3 v-if="item.title" class="mb-2">{{ item.title }}</h3>
               <p v-if="item.description">{{ item.description }}</p>
             </div>
@@ -93,17 +98,19 @@
       </swiper-slide>
     </swiper>
     <hr />
-    <h6 class="mb-6 pt-12 pl-6 pr-6">예정된 라이브</h6>
     <div class="more-link-wrapper">
-      <router-link to="/more" class="more-link">더 보기</router-link>
+      <h4 class="mb-6 pt-12 live-title" style="padding-left : 32px;">예정된 라이브</h4>
+      <router-link to="/schedule" class="more-link">더 보기</router-link>
     </div>
     <swiper
-      :slidesPerView="5.5"
-      :spaceBetween="20"
+      :slidesPerView="'auto'"
+      :spaceBetween="30"
       :pagination="false"
+      class="live-caro"
+      :loop="false"
       :navigation="true"
-      :grabCursor="true"
-      style="width: 100%; margin: auto"
+      :autoplay="{ delay: 4000, disableOnInteraction: false }"
+      style="padding-left: 32px"
     >
       <swiper-slide v-for="(card, index) in cardsData" :key="'card-' + index">
         <CardComponent
@@ -115,8 +122,37 @@
         />
       </swiper-slide>
     </swiper>
-    <div class="pb-20"/>
+    <h4 class="mb-6 pt-12 live-title" style="padding-left : 32px;">바로 지금! 라이브 찬스</h4>
 
+    <div class="live-section">
+      <swiper
+        :slidesPerView="'auto'"
+        :spaceBetween="30"
+        :pagination="false"
+        class="live-caro"
+        :loop="false"
+        :navigation="true"
+        :autoplay="{ delay: 5000, disableOnInteraction: false }"
+        style="padding-left: 32px"
+      >
+        <swiper-slide v-for="(item, index) in liveItems" :key="index">
+          <img :src="item.mainImage" alt="Main Image" class="main-image" />
+          <p class="live-main-title">{{ item.mainTitle }}</p>
+          <div class="live-item">
+            <img
+              :src="item.thumbnail"
+              alt="Live Thumbnail"
+              class="live-thumbnail"
+            />
+            <div class="live-info">
+              <div class="live-title">{{ item.title }}</div>
+              <div class="live-discount">{{ item.discount }}</div>
+            </div>
+          </div>
+        </swiper-slide>
+      </swiper>
+    </div>
+    <div class="pb-20" />
   </section>
   <hr />
 </template>
@@ -129,7 +165,9 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Categories from "@/components/Category/Categories.vue";
 import CardComponent from "@/components/Card/BroadcastCard.vue";
-
+import menuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
+import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
+import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 export default {
@@ -138,6 +176,8 @@ export default {
     SwiperSlide,
     Categories,
     CardComponent,
+    MenuHeaderNav,
+    ScrollTopButton,
   },
   data() {
     return {
@@ -232,42 +272,101 @@ export default {
           title: "Title 2",
           text: "This is the description for card 2.",
           datetime: "2024-04-26T12:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 3",
           text: "This is the description for card 3.",
           datetime: "2024-04-26T17:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 4",
           text: "This is the description for card 4.",
           datetime: "2024-04-27T10:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 4",
           text: "This is the description for card 4.",
           datetime: "2024-04-27T12:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 4",
           text: "This is the description for card 4.",
           datetime: "2024-04-28T11:30:00",
-          buttonText: "알림 설정",
         },
         {
           imageSrc: "http://via.placeholder.com/150x150",
           title: "Title 4",
           text: "This is the description for card 4.",
           datetime: "2024-04-28T19:30:00",
-          buttonText: "알림 설정",
+        },
+      ],
+      liveItems: [
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀1",
+          title: "제로스토킹 네이버 가젯의 단 상품대",
+          discount: "64% 49,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
+        },
+        {
+          mainImage: "http://via.placeholder.com/90x160",
+          thumbnail: "https://via.placeholder.com/90x90",
+          mainTitle: "라이브 메인 타이틀2",
+          title: "두 번째 라이브 아이템",
+          discount: "50% 20,000원",
         },
       ],
     };
@@ -287,7 +386,7 @@ export default {
 }
 
 .main-caro .swiper-slide-active {
-  opacity: 1; /* 현재 활성화된 슬라이드는 불투명 */
+  opacity: 1;
 }
 .slide-background {
   display: flex;
@@ -312,16 +411,19 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 3rem 1rem;
+  padding: 4rem 1rem 2rem;
 }
 
 .main-caro h2 {
-  font-size: 2em; /* 제목의 크기를 설정 */
+  font-size: 2em;
   margin-bottom: 0.5em;
+  font-weight: 500!important;
 }
 
 .main-caro p {
   font-size: 1em;
+  color: #ff4343;
+  font-weight: 500;
 }
 
 .main-caro .start-button {
@@ -346,7 +448,12 @@ export default {
   align-items: center;
   width: 120px;
 }
+.main-caro .additional-image-price{
+  padding-left: 4px;
+  font-weight: bold;
+}
 .main-caro .additional-image-title {
+  padding-left: 4px;
   text-align: start;
   font-size: 0.8em;
   margin-top: 5px;
@@ -379,12 +486,14 @@ export default {
   text-align: left;
   color: rgb(60, 60, 60);
   z-index: 2;
-  align-items: start;
+  align-items: flex-start;
   justify-content: space-between;
   padding: 2rem;
   margin-top: 2rem;
 }
-
+.additional-text-container {
+  margin-left: 140px;
+}
 .hot-live-caro .additional-text-container h2,
 .hot-live-caro .additional-text-container p {
   font-size: 1.2em;
@@ -399,8 +508,8 @@ export default {
 }
 
 .hot-live-caro .additional-image {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   object-fit: cover;
 }
 .under-category-section {
@@ -411,9 +520,58 @@ export default {
   display: none;
 }
 .more-link-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  color: #134010;
   margin: 0 24px 24px 0;
-  text-align: right;
+}
+.more-link {
   text-decoration: underline;
 }
+.live-caro .swiper-slide {
+  width: auto;
+}
 
+.live-caro .live-item {
+  display: flex;
+  align-items: center;
+}
+
+.live-caro .live-thumbnail {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  margin-right: 10px;
+}
+
+.live-caro .live-info {
+  display: flex;
+  flex-direction: column;
+  width: 130px;
+}
+
+.live-caro .live-title {
+  font-weight: bold;
+  font-size: 12px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.live-caro .live-discount {
+  color: darkgreen;
+  font-weight: bold;
+}
+
+.live-section .main-image {
+  width: 200px;
+  height: auto;
+  aspect-ratio: 3/4;
+}
+
+.live-caro .live-main-title {
+  font-weight: bold;
+  font-size: 16px;
+}
 </style>

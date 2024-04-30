@@ -2,9 +2,6 @@
   <main class="app-wrapper">
     <Header :class="window.width > 1280 ? switchHeaderClass() : ''" />
     <!-- end header -->
-
-    <Settings />
-
     <div
       class="content-wrapper transition-all duration-150"
       :class="window.width > 1280 ? switchHeaderClass() : ''"
@@ -20,12 +17,13 @@
               : 'container-fluid'
           }`"
         >
-          <Breadcrumbs v-if="!this.$route.meta.hide" />
-          <router-view v-slot="{ Component }">
+          <!-- <router-view v-slot="{ Component }">
             <transition name="router-animation" mode="out-in" appear>
               <component :is="Component"></component>
             </transition>
-          </router-view>
+          </router-view> -->
+          <router-view />
+
         </div>
       </div>
     </div>
@@ -40,7 +38,6 @@
 <script>
 import Footer from "../components/Footer";
 import Header from "../components/HeaderMain";
-import Settings from "../components/Settings";
 import Sidebar from "../components/Sidebar/";
 import window from "@/mixins/window";
 import MobileSidebar from "@/components/Sidebar/MobileSidebar.vue";
@@ -52,7 +49,6 @@ export default {
     Header,
     Footer,
     Sidebar,
-    Settings,
     FooterMenu,
     MobileSidebar,
   },

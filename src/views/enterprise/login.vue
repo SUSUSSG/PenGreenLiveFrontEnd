@@ -16,12 +16,12 @@
                                         </div>
                                         <div class="text-left 2xl:mb-10 mb-4">
                                             <h4 class="font-medium">PenGreenLive 판매자 로그인</h4>
-                                            <div class="text-slate-500 dark:text-slate-400 text-base">Sign in to your account to start using Dashcode</div>
+                                            <div class="text-slate-500 dark:text-slate-400 text-base">로그인 후 대시보드를 이용할 수 있습니다.</div>
                                         </div>
                                         <form class="space-y-4 ">
                                             <div class="fromGroup       ">
                                                 <div class="relative  ">
-                                                    <creditCard type="text" placeholder="000 00 00000"/>
+                                                    <creditCard type="text" placeholder="사업자번호"/>
                                                 </div>
                                                 <label class="block capitalize form-label  ">사업자번호를 입력하세요</label>
                                             </div>
@@ -46,7 +46,7 @@
                                             </button>
                                         </form>
                                         <div class="md:max-w-[345px] mt-6 mx-auto font-normal text-slate-500 dark:text-slate-400mt-12 uppercase text-sm">아직 회원이 아니신가요?
-                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/join-first">회원가입하기</a>
+                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/enterprise/join">회원가입하기</a>
                                         </div>
 
                                         <div class="font-normal text-slate-500 dark:text-slate-400 mt-12 text-sm text-right">
