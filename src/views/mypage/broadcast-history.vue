@@ -24,12 +24,11 @@
                     <div class="header-item">상품이미지</div>
                     <div class="header-item">상품명</div>
                     <div class="header-item">브랜드</div>
-                    <div class="header-item" style="padding-right: 2.2rem;">가격 정보</div>
+                    <div class="header-item">가격 정보</div>
                 </div>
                 <producthistory v-for="(item, index) in producthistoryData" :key="index"
                     :productimageSrc="item.productimageSrc" :productname="item.productname"
-                    :productbrand="item.productbrand" :productprice="item.productprice"
-                    :productdiscountprice="item.productdiscountprice" />
+                    :productbrand="item.productbrand" :productprice="item.productprice"/>
             </TabPanel>
         </TabGroup>
     </div>
@@ -98,7 +97,12 @@ const producthistoryData = ref([
         productname: "테스트상품 1",
         productbrand: "테크브루",
         productprice: 40000,
-        productdiscountprice: 20000,
+    },
+    {
+        productimageSrc: "http://via.placeholder.com/100x100",
+        productname: "테스트상품 1",
+        productbrand: "테크브루",
+        productprice: 40000,
     },
     {
         productimageSrc: "http://via.placeholder.com/100x100",
@@ -112,28 +116,19 @@ const producthistoryData = ref([
         productname: "테스트상품 1",
         productbrand: "테크브루",
         productprice: 40000,
-        productdiscountprice: 20000,
+
     },
     {
         productimageSrc: "http://via.placeholder.com/100x100",
         productname: "테스트상품 1",
         productbrand: "테크브루",
         productprice: 40000,
-        productdiscountprice: 20000,
     },
     {
         productimageSrc: "http://via.placeholder.com/100x100",
         productname: "테스트상품 1",
         productbrand: "테크브루",
         productprice: 40000,
-        productdiscountprice: 20000,
-    },
-    {
-        productimageSrc: "http://via.placeholder.com/100x100",
-        productname: "테스트상품 1",
-        productbrand: "테크브루",
-        productprice: 40000,
-        productdiscountprice: 20000,
     },
 ])
 
@@ -168,18 +163,14 @@ const producthistoryData = ref([
 .header, .product-row {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
+    padding-top:2.5rem;
+    padding-left: 2.5rem;
+    padding-bottom: 1.5rem;;
     border-bottom: 1px solid #ddd;
 }
 
 .header, .header-item {
     font-weight: bold;
-}
-
-.header-item:last-child, .price-container {
-    text-align: right; 
-    flex: none; 
-    width: 200px; 
 }
 
 .header-item, .product-row div {

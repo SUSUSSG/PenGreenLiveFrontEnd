@@ -7,10 +7,7 @@
             </div>
             <div class="product-name">{{ productname }}</div>
             <div class="product-brand">{{ productbrand }}</div>
-            <div class="price-container">
-                <div class="product-price">{{ productprice }}</div>
-                <div class="product-discount-price">{{ productdiscountprice }}</div>
-            </div>
+                <div class="product-price">{{ formatNumber(productprice) }}</div>
         </div>
     </div>
 </template>
@@ -27,7 +24,11 @@ export default {
         productname: String,
         productbrand: String,
         productprice: Number,
-        productdiscountprice: Number,
+    },
+    methods: {
+      formatNumber(value) {
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+      },
     },
 };
 </script>
@@ -42,45 +43,43 @@ export default {
 .header, .product-row {
     display: flex;
     align-items: center;
-    padding: 10px 15px;
+    /* padding: 10px 15px; */
     border-bottom: 1px solid #ddd;
+    padding-left: 2.5rem;
+    padding-bottom: 1rem;
+    padding-top:1rem
 }
 
-.header, .header-item {
+.header {
     font-weight: bold;
-}
-
-.header-item:last-child, .price-container {
-    text-align: right; 
-    flex: none; 
-    width: 200px; 
+    display: flex;
+    justify-content: space-between; /* 헤더 아이템들을 고르게 분배 */
 }
 
 .header-item, .product-row div {
-    flex: 1;
+    flex: 1; /* 모든 열에 동일한 비율의 공간을 할당 */
     text-align: left; 
 }
 
-.product-price{
-    text-decoration: line-through;
-    text-align: right !important;
-    padding-right: 50px;
+.product-image {
+    flex: 0 0 80px; /* 이미지는 고정 너비를 가짐 */
+    height: 80px;
+    margin-right: 10px;
 }
 
-.product-discount-price{
-    text-align: right !important;
-    padding-right: 50px;
-    font-weight: bold;
-    color: red;
+.product-price {
+    /* text-align: right !important;
+    padding-right : 20px; */
+
 }
 
-.price-container {
-    align-items: center;
-    justify-content: flex-end; 
-    flex: 1.5; 
+.product-name, .product-brand {
+    flex: 1; /* 이름과 브랜드에 비례적 공간 할당 */
+    text-align: left;
 }
 
 </style>
+
 
 
 
