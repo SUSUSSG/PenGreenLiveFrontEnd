@@ -59,7 +59,7 @@
                                         </div>
                                         <div class="ml-4">
                                             <p>최대 용량 : 1mb</p>
-                                            <p>권장 사이즈 : 400 x 400</p>
+                                            <p>권장 사이즈 : 720 x 1280</p>
                                             <input type="file" id="imageUpload" @change="handleImageUpload"
                                                 accept="image/jpeg, image/png, image/gif" class="mb-2" />
                                         </div>
