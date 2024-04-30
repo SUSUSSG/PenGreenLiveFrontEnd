@@ -13,8 +13,8 @@
       :class="{ 'rounded-img': isSelected }"
       alt="Description"
       style="
-        width: 80px;
-        height: 80px;
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         padding: 0.5rem;
         background-color: #f0f0f0;
@@ -22,7 +22,7 @@
       @mouseover="scaleUp"
       @mouseout="scaleDown"
     />
-    <span>{{ name }}</span>
+    <span class="category-name">{{ name }}</span>
   </div>
 </template>
 
@@ -48,6 +48,11 @@ export default {
 </script>
 
 <style scoped>
+
+.category-name {
+  font-size: 12px;
+  margin-top : 8px;
+}
 .rounded-img {
   border: 2px solid #1c6d16;
   transition: transform 0.2s ease;
