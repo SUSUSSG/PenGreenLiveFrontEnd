@@ -85,6 +85,11 @@ const routes = [
         path: "order-list",
         name: "주문내역",
         component: () => import("@/views/mypage/order-list.vue")
+      },
+      {
+        path: "broadcast-history",
+        name: "방송시청기록",
+        component: () => import("@/views/mypage/broadcast-history.vue")
       }
     ],
   },
