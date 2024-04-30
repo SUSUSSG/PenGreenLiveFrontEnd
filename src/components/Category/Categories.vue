@@ -1,5 +1,5 @@
 <template>
-  <div class="container mt-8">
+  <div class="container pt-4">
     <div
       class="d-flex justify-content-center my-2"
       style="

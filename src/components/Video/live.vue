@@ -2,12 +2,12 @@
   <div class="video-component" :style="{ width: width, height: height }">
     <div class="title-bar w-full flex items-center justify-between p-4" v-if="showTitleBar">
       <div class="flex items-center">
-        <img :src="announceIconSrc" class="logo">
+        <img :src="announceIconSrc" class="logo" style="width: 50%;">
         방송 제목
       </div>
     </div>
 
-    <div class="video-and-sidebar-wrapper" :style="{ top: showTitleBar ? '10vh' : '0' }">
+    <div class="video-and-sidebar-wrapper" :style="{ top: showTitleBar ? '5vh' : '0' }">
       <VideoPlayer :videoSource="videoSourceSrc"></VideoPlayer>
       <div class="icons-sidebar" v-if="showIconSideBar">
         <div class="icon-wrapper" @click="toggleLike">
@@ -71,7 +71,7 @@ export default {
       muteIconSrc: muteIcon,
       soundIconSrc: soundIcon,
       shareIconSrc: shareIcon,
-      videoSourceSrc: videoSource
+      videoSourceSrc: videoSource,
     };
   },
   methods: {
@@ -100,9 +100,15 @@ export default {
   position: relative;
 }
 
+.logo {
+  max-width: 25%;  /* 최대 너비를 50%로 제한 */
+  height: auto;     /* 높이는 자동으로 설정하여 비율 유지 */
+}
+
+
 .title-bar {
   width: 100%;
-  height: 10vh; /* Explicit height of the title bar */
+  height: 5vh; /* Explicit height of the title bar */
   display: flex;
   justify-content: space-between;
   align-items: center;

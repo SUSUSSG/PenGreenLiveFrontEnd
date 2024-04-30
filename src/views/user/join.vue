@@ -110,11 +110,13 @@
                                                 <span>주소</span>
                                             </td>
                                             <td class="vgt-left-align">
-                                                <div class="lg:grid-cols-3 md:grid-cols-2 grid-cols-1 grid gap-5 mb-5 last:mb-0">
-                                                    <input type="password" name="pn" placeholder="주소 입력" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
-                                                    <div class="flex text-xl absolute ltr:right-[14px] rtl:left-[14px] top-1/2 -translate-y-1/2"></div>
-                                                    <div class="relative">
-                                                        <Button text="우편번호 찾기" btnClass="btn-primary"/>
+                                                <div class="grid-cols-1 grid mb-5 last:mb-0">
+                                                    <div class="flex items-center space-x-4"> <!-- space-x-4는 가로 간격을 늘립니다 -->
+                                                        <input type="password" name="pn" placeholder="주소 입력" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
+                                                        <div class="flex text-xl absolute ltr:right-[14px] rtl:left-[14px] top-1/2 -translate-y-1/2"></div>
+                                                        <div class="relative">
+                                                            <Button text="우편번호 찾기" btnClass="btn-primary"/>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </td>
@@ -125,12 +127,12 @@
                                     <div class="py-3">
                                         <Checkbox
                                             label="필수약관에 모두 동의합니다."
-                                            name="tc" value="1" :checked="true" />
+                                            name="tc" value="1" :checked="false" />
                                     </div>
                                     <div class="relative flex-1">
                                         <Checkbox
                                             label="이용약관 (필수)"
-                                            name="tc" value="1" :checked="true" />
+                                            name="tc" value="1" :checked="false" />
                                         <textarea class="form-control py-2 h-[100px] my-3" name="pd" readonly>제1조(목적)
  본 약관은 주식회사 SUSUSSG(이하 "회사"라 합니다)가 운영하는 "PenGreenLive"의 커머스 서비스 및 이와 유사한 서비스의 이용에 있어 회사와 고객의 권리, 의무 및 책임사항을 규정함에 그 목적이 있습니다. ※ 모바일, VoIP, IPTV, 데이터방송 등을 이용하는 전자거래에 대해서도 그 성질에 반하지 않는 한 이 약관을 준용합니다.</textarea>
                                     </div>
@@ -139,7 +141,7 @@
                                         label="개인정보 수집 및 이용 동의 (필수)"
                                         name="tc"
                                         value="1"
-                                        :checked="true"
+                                        :checked="false"
                                     />
                                         <textarea class="form-control py-2 h-[100px] my-3" name="pd" readonly>당사는 다음과 같이 개인정보를 수집하고 있습니다.
     · 수집항목 : (필수) 이름, 휴대폰번호, 아이디, 비밀번호, 이메일
@@ -152,7 +154,7 @@
                                     <div class="relative flex-1" >
                                         <Checkbox
                                             label="마케팅 목적의 개인정보 수집 및 이용 동의 (선택)"
-                                            name="tc" value="1" :checked="true" />
+                                            name="tc" value="1" :checked="false" />
                                         <textarea class="form-control py-2 my-3 h-[100px]" name="pd" readonly>당사는 고객의 동의 하에 다음과 같이 개인정보를 수집, 이용할 수 있습니다.
         · 수집항목 : 성별, 생년월일, 관심분야, 구매내역
         · 수집 및 이용목적 : 신제품 및 이벤트 정보 제공, 맞춤형 광고 전송, 설문조사 등 마케팅 활용 
