@@ -4,7 +4,7 @@
     <Live class="live-section" show-icon-side-bar="true" show-title-bar="true"></Live>
     <div class="live-section">
       <div v-if="selectedProduct" class="z-index-[100] inline" >
-        <header class="sticky top-0 z-20 flex justify-between items-center p-4 bg-white">
+        <header class="sticky top-0 z-20 flex justify-between items-center py-4 bg-white">
           <div></div> <!-- 좌측 공백 -->
           <Button class="flex justify-end items-center" text="돌아가기" @click="closePurchaseModal"/>
         </header>
@@ -12,6 +12,9 @@
           <div class="purchase-container flex flex-col justify-end">
             <LiveBoardPurchase class="purchase-section inline"/>
           </div>
+        </div>
+        <div class="sticky bottom-0 z-20 flex justify-between items-center pt-4 bg-white">
+          <Button class="w-full" text="구매하기"/>
         </div>
       </div>
     
@@ -174,14 +177,26 @@ export default {
   overflow : hidden;
 }
 
-.scroll-wrapper {
-  max-height: calc(100vh - 4rem);
-  overflow-y: auto; 
-  padding-bottom: 20px; 
+.sticky-bottom-white {
+  position: sticky;
+  bottom: 0;
+  z-index: 25; /* z-index를 높여 다른 내용이 덮지 않도록 합니다. */
 }
 
-.purchase-section {
-  margin-bottom: 20px; 
+.scroll-wrapper {
+  max-height: calc(90vh - 100px); /* 여기서 120px는 헤더와 여백을 포함한 예상 높이입니다 */
+  overflow-y: auto; /* 내용이 넘칠 때 스크롤바가 생깁니다 */
+}
+
+.purchase-container {
+  padding-bottom: 20px; /* 컨테이너 하단에 공간 추가 */
+}
+
+.purchase-section img {
+  max-height: 70vh; /* 이미지가 전체 화면 높이의 70%를 넘지 않도록 설정 */
+  width: auto; /* 너비는 자동으로 조정되도록 설정 */
+  display: block; /* 이미지를 블록 레벨 요소로 만들어 마진을 적용할 수 있게 함 */
+  margin: 0 auto; /* 가운데 정렬 */
 }
 
 .scroll-wrapper::-webkit-scrollbar {
