@@ -47,9 +47,9 @@
       </swiper-slide>
     </swiper>
   </div>
-  <hr />
   
   <section class="under-category-section" style="width: 77%; margin: auto">
+    <hr />
     <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
       <Categories/>
       <hr class="mt-4" />
