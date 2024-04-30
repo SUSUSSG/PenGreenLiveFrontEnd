@@ -2,6 +2,7 @@
   <div class="live-container">
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
     <Live class="live-section" show-icon-side-bar="true" show-title-bar="true"></Live>
+    <LiveBoardPurchase class="purchase-section h-full"/>
     <div class="live-section">
       <header class="flex justify-between items-center p-4 border-b">
         <div></div> <!-- 좌측 공백 -->
@@ -72,6 +73,7 @@
 
 <script setup>
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
+import LiveBoardPurchase from "@/components/liveboard/liveboard-purchase.vue"
 import Live from "@/components/Video/live.vue";
 import ProductCard from "@/components/Card/product-card.vue";
 import {ref} from 'vue';
@@ -102,7 +104,8 @@ export default {
   components: {
     LiveboardChat,
     Live,
-    ProductCard
+    LiveBoardPurchase,
+    ProductCard,
   },
   data() {
     return {
@@ -237,8 +240,14 @@ ul.notice-list, ul.benefits-list {
   margin: 0 10px;
 }
 
+.purchase-section {
+  flex: 1;
+  min-width: 0; 
+}
+
 ul.notice-list li, ul.benefits-list li {
   padding: 10px;
   border-bottom: 1px solid #eee; /* 구분선 추가 */
 }
+
 </style>
