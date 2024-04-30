@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white rounded pt-3 px-4 mt-4 ml-5" id="promptCard">
+    <div class="bg-white rounded p-4" id="promptCard">
         <div class="text-base mb-3">
             프롬프터
         </div>
@@ -34,13 +34,13 @@ export default {
   
 <style>
 #promptCard {
-    width: 800px;
-    max-width: 100%;
+    width: 100%;
     max-height: 500px;
     display: flex;
     flex-direction: column;
     border-radius: 0.5rem;
     background: white;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    margin-top: 14px;
 }
 </style>

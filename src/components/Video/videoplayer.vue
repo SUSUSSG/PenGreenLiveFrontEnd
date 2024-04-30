@@ -36,15 +36,8 @@ export default {
 
 <style scoped>
 .video-wrapper {
-  max-width: calc(90vh * 9 / 16); /* 16:9 aspect ratio */
-  height: auto;
+  height: 100%;
   border-radius: 10px;
   overflow: hidden;
-}
-
-.video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover; /* Video fits the wrapper size */
 }
 </style>
