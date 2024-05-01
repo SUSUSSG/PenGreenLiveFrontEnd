@@ -6,12 +6,10 @@
         class="inline-flex items-center gap-4 max-w-[900px] w-full"
       >
         <div class="card-title mr-7" id="searchTitle">선택</div>
-        <SplitDropdown
-          classMenuItems="left-0 w-[220px] top-[110%]"
-          label="방송 제목"
-          labelClass="btn-outline-primary"
-          :items="broadcastOptions"
-        />
+        <select v-model="selectedBroadcastTitleOption">
+          <option :value="null">방송 제목</option>
+          <option v-for="option in broadcastOptions" :key="option.value" :value="option.value">{{ option.label }}</option>
+        </select>
         <div class="flex gap-4 ml-5 w-full">
           <div class="input-wrapper">
             <label for="startDate">시작일:</label>
@@ -86,13 +84,13 @@
 <script>
 import Card from "@/components/Card/analytics-card.vue";
 import Button from "@/components/Button";
-import SplitDropdown from "@/components/Dropdown/SplitDropdown";
+// import SplitDropdown from "@/components/Dropdown/SplitDropdown";
 
 export default {
   components: {
     Card,
     Button,
-    SplitDropdown,
+    // SplitDropdown,
   },
   data() {
     return {
@@ -100,6 +98,7 @@ export default {
         { value: "1번", label: "number1" },
         { value: "2번", label: "number2" },
       ],
+      selectedBroadcastTitleOption: null,
       startDate: "",
       endDate: "",
       cardDataList: [
@@ -147,6 +146,7 @@ export default {
       totalStats: true,
       resultId: "resultName",
       resultTitle: "전체 통계",
+      selectedBroadcastOption: null,
       searchResultCardDataList: [
         {
           icon: "heroicons:clock",
@@ -227,6 +227,9 @@ export default {
       this.totalStats = !this.totalStats;
       this.resultId = this.totalStats ? "resultName" : "detailResultName";
       this.resultTitle = this.totalStats ? "전체 통계" : "상세 통계";
+    },
+    onBroadcastOptionSelect(option) {
+      this.selectedBroadcastOption = option;
     },
   },
 };
