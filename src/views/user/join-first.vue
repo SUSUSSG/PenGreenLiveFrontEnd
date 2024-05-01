@@ -5,14 +5,12 @@
                 <h1 class="text-center doc-title" data-type="A">회원가입</h1>
                 
                 <div class="member-join-type">
-                    <div class="join-first-dv1 text-center 2xl:mb-10 mb-5">
+                    <div class="join-first-dv1 text-center">
                         <h2 class="stit">일반회원 가입</h2>
                         <p class="guide-txt">PengreenLive에 오신 것을 환영합니다. 회원가입 하시면 다양한 구매 혜택을 드립니다.</p>
-                        <p class="buttons-dv">
-                            <a class="link-join" href="/join" text="PengreenLive 회원가입"></a>
-                        </p>
+                        <Button class="link-join mt-[0.7rem] w-[300px]" text="PengreenLive 회원가입" onclick="location.href='/join'"/>
                     </div>
-                    <div class="join-first-dv2 text-center 2xl:mb-10 mb-5">
+                    <div class="join-first-dv2 text-center">
                         <h2 class="stit">SNS 간편 회원가입</h2>
                         <p class="guide-txt">본인인증 없이 SNS 인증만으로 간편하게 회원가입 하실 수 있습니다.</p>
                         <div class="mx-auto w-[300px]">
@@ -45,12 +43,9 @@ import Card from "@/components/Card";
 import Button from "@/components/Button";
 
 
-
-
 </script>
 
 <style scoped>
-
 
 .document .fence {
     width: 610px;
@@ -80,25 +75,17 @@ import Button from "@/components/Button";
     border-bottom: solid 1px #222222;
 }
 
-.join-first-dv1 .stit {
+
+.join-first-dv1 .stit, .join-first-dv2 .stit {
     font-size: 20px;
     font-weight: 400;
 }
 
-.join-first-dv2 .stit {
-    font-size: 20px;
-    font-weight: 400;
-}
-
-.join-first-dv1 .guide-txt {
+.join-first-dv1 .guide-txt, .join-first-dv2 .guide-txt {
     padding-bottom: 15px;
     color: #666;
 }
 
-.join-first-dv2 .guide-txt {
-    padding-bottom: 15px;
-    color: #666;
-}
 
 .join-first-dv1 .link-join {
     display: inline-block;
@@ -124,11 +111,7 @@ import Button from "@/components/Button";
     user-select: none;
 }
 
-.join-first-dv1 .stit {
-    padding-bottom: 15px;
-}
-
-.join-first-dv2 .stit {
+.join-first-dv1 .stit, .join-first-dv2 .stit {
     padding-bottom: 15px;
 }
 
@@ -154,17 +137,6 @@ import Button from "@/components/Button";
     color: black;
 }
 
-.kakao img{
-    height:0.9rem;
-    margin-right: 0.7em;
-    margin-left: 0.2em;
-}
-
-.kakao span {
-    flex-grow: 1; 
-    text-align: center;
-}
-
 .naver {
     padding: 0.6em 1em;
     border-radius: 0.25rem;
@@ -178,16 +150,17 @@ import Button from "@/components/Button";
     color: white;
 }
 
-.naver img{
+.kakao img, .naver img {
     height:0.9rem;
     margin-right: 0.7em;
     margin-left: 0.2em;
 }
 
-.naver span {
+.kakao span, .naver span {
     flex-grow: 1; 
     text-align: center;
 }
+
 
 </style>
   
