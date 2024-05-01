@@ -1,6 +1,6 @@
 <template>
-    <div class="page-content   page-min-height  ">
-        <div class="container-fluid">
+    <div class="page-content page-min-height  ">
+        <div class="container-fluid w-[1200px] m-auto">
             <div style="opacity: 1; transform: none;">
                 <div class="card rounded-md bg-white dark:bg-slate-800   shadow-base custom-class">
                     <header class="px-4 pt-4 pb-3 mb-3">
