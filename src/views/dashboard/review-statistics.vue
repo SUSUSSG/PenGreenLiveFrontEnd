@@ -34,6 +34,12 @@
         <span class="card-title">상품 상세 정보</span>
         <productdetail v-bind="productdetailData" />
       </div>
+
+      <div class="card-content">
+        <span class="card-title">리뷰 내용 요약</span>
+        
+      </div>
+
     </div>
     
     <!-- 바 차트 컴포넌트 -->
@@ -76,9 +82,9 @@ export default {
 .flex-row {
   display: flex;
   flex-direction: row;
-  width:100%;
+  width: 100%;
   justify-content: space-between;
-  gap:1.5rem;
+  gap: 1.5rem;
 }
 
 .content-wrapper {
@@ -88,12 +94,13 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.card-title{
+
+.card-title {
   font-size: 24px;
   font-weight: bold;
 }
 
-.card-content{
+.card-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -101,18 +108,24 @@ export default {
   border: 1px solid #E5E7EB;
   border-radius: 10px;
   padding: 1.5rem;
-  width:100%;
+  width: 100%;
 }
 
 .card-content:first-child {
-  flex: 0 0 40%;  /* 채널 전체 상품 카드 */
+  flex: 1;  /* 채널 전체 상품 카드 */
+}
+
+.card-content:nth-child(2), 
+.card-content:nth-child(3) {
+  flex: 1;  /* 상품 상세 정보와 리뷰 내용 요약 카드 */
 }
 
 .table-container td {
   padding: 4px 8px; /* 상하 4px, 좌우 8px로 조정 */
 }
 
-th, td{
+th, td {
   text-align: center;
 }
 </style>
+
