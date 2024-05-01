@@ -19,7 +19,7 @@
                                         <td class="vgt-left-align">
                                             <span>이름</span>
                                         </td>
-                                        <td class="vgt-left-align">
+                                        <td class="vgt-right-align">
                                             <div class="flex">
                                                 <input type="text" name="pn" placeholder="이름" class="flex-grow-7 classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
                                                 <div class="flex-grow-3"></div>
@@ -30,7 +30,7 @@
                                         <td class="vgt-left-align">
                                             <span>휴대폰 번호</span>
                                         </td>
-                                        <td class="vgt-left-align">
+                                        <td class="vgt-right-align">
                                             <div class="mb-5">
                                                 <div class="flex items-center">                                                        
                                                     <div class="flex items-center flex-grow-7">
@@ -56,7 +56,7 @@
                                         <td class="vgt-left-align">
                                             <span>아이디</span>
                                         </td>
-                                        <td class="vgt-left-align">
+                                        <td class="vgt-right-align">
                                             <div class="grid-cols-1 grid mb-5 last:mb-0">
                                                 <div class="flex items-center">
                                                     <input type="text" name="pn" placeholder="아이디 (5~12자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]" id="pn">
@@ -71,7 +71,7 @@
                                         <td class="vgt-left-align">
                                             <span>비밀번호</span>
                                         </td>
-                                        <td class="vgt-left-align">
+                                        <td class="vgt-right-align">
                                             <div class="flex">
                                                 <input type="password" name="pn" placeholder="비밀번호 (8~20자 영문+숫자)" class="flex-grow-7 classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
                                                 <div class="flex-grow-3"></div>
@@ -82,7 +82,7 @@
                                         <td class="vgt-left-align">
                                             <span>비밀번호 확인</span>
                                         </td>
-                                        <td class="vgt-left-align">
+                                        <td class="vgt-right-align">
                                             <div class="flex">
                                                 <input type="password" name="pn" placeholder="비밀번호 확인 (8~20자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]" id="pn">
                                                 <div class="flex-grow-3"></div>
@@ -93,7 +93,7 @@
                                         <td class="vgt-left-align">
                                             <span>성별</span>
                                         </td>
-                                        <td class="vgt-left-align">
+                                        <td class="vgt-right-align">
                                             <div data-v-33d05f57="" class="flex">
                                                 <select data-v-33d05f57="" class="flex-grow-7 classinput input-control block focus:outline-none min-h-[40px]" formatter="a=>a">
                                                     <option data-v-33d05f57="" value="">응답 안함</option>
@@ -108,7 +108,7 @@
                                         <td class="vgt-left-align">
                                             <span>이메일</span>
                                         </td>
-                                        <td class="vgt-left-align">
+                                        <td class="vgt-right-align">
                                             <div class="flex">
                                                 <input type="email" name="pn" placeholder="이메일 입력" class="flex-grow-7 classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
                                                 <div class="flex-grow-3"></div>
@@ -119,7 +119,7 @@
                                         <td class="vgt-left-align">
                                             <span>주소</span>
                                         </td>
-                                        <td class="vgt-left-align">
+                                        <td class="vgt-right-align">
                                             <div class="grid-cols-1 grid mb-5 last:mb-0">
                                                 <div class="flex items-center">
                                                     <input type="text" name="pn" placeholder="주소 입력" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]" id="pn">
@@ -209,5 +209,14 @@
     margin-right: 0.75rem;
 }
 
+.vgt-left-align, .vgt-right-align {
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.vgt-left-align {
+    /* border-right: 1px solid #ddd; */
+    background : #f5f5f5;
+}
 
 </style>
