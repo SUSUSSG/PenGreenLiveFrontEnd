@@ -1,15 +1,17 @@
 <template>
   <div>
-        <img src="src/assets/images/all-img/product-sample.jpg"/>
-   
-        <div>동구밭</div>
-        <div>동구밭 중건성 헤어케어 5종 기획세트</div>
-        <p class="pb-4">
-            <span class="text-slate-900 dark:text-slate-300 text-base font-medium mt-2 ltr:mr-2 rtl:mr-2 text-red-500">30%</span>
-            <del class="text-slate-500 dark:text-slate-500 font-normal text-base">47,500</del>
-        </p>
-        <div>33,000원</div>
-        <div>
+        <img :src="productImage"/>
+        <div class="product-header">
+            <div class="brand-name">{{ brandName }}</div>
+                <div class="product-name">{{ productName }}</div>  
+                <p class="pt-5 pb-2">
+                    <span class="discount-rate text-slate-900 dark:text-slate-300 text-base font-medium mt-2 ltr:mr-2 rtl:mr-2 text-red-500">{{discountRate}}</span>
+                    <del class="product-price text-slate-500 dark:text-slate-500 font-normal text-base">{{productPrice}}</del>
+                </p>
+            <div class="discounted-price">{{discountedPrice}}</div>
+        </div>
+        
+        <div class="mt-[2rem]">
             <TabGroup>
                 <TabList class="flex lg:space-x-8 md:space-x-4 space-x-0">
                     <Tab
@@ -36,25 +38,25 @@
                     </TabPanel>
                     <TabPanel>
                         <div class="text-slate-600 dark:text-slate-400 text-sm font-normal">
-                            <div class="my-[1rem]">
-                                <div data-v-dc744160="" class="card-text h-full">
-                                    <div class="flex space-x-3 rtl:space-x-reverse">
+                            <div class="mb-[2rem] flex items-center justify-center">
+                                <div data-v-dc744160="" class="w-[99%] card-text h-full">
+                                    <div class="flex space-x-3 rtl:space-x-reverse p-5">
                                         <div class="flex-none">
                                             <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl bg-[#E5F9FF] dark:bg-slate-900 text-info-500">
-                                                <img src="/src/assets/images/logo/logo-gpt.png">
+                                                <!-- <img src="/src/assets/images/logo/logo-gpt.png"> -->
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="text-slate-600 dark:text-slate-400 text-sm mb-1 font-medium">AI에 의해 요약된 리뷰입니다!</div>
-                                            <div class="text-slate-900 dark:text-slate-300 text-lg font-medium">가성비가 뛰어나고 생각보다 배송이 빠르게 옵니다.</div>
+                                            <div class="text-slate-800 dark:text-slate-300 text-lg">가성비가 뛰어나고 생각보다 배송이 빠르게 옵니다.</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="flex flex-col ">
-                                <div v-for="review in reviews" :key="review.id" class="rounded-md dark:bg-slate-800 shadow-base mb-[0.5rem]">
-                                    <div class="h-full ">
-                                        <div class="w-full p-8 dark:bg-slate-700 rounded-lg">
+                            <div class="flex flex-col items-center justify-center">
+                                <div v-for="review in reviews" :key="review.id" class="w-[99%] rounded-md dark:bg-slate-800 shadow-base mb-[0.5rem]">
+                                    <div class="h-full">
+                                        <div class="p-5 dark:bg-slate-700 rounded-lg">
                                             <div class="flex items-start justify-between">
                                                 <div class="flex flex-row">
                                                     <div class="w-12 h-12">
@@ -98,6 +100,12 @@
         data() {
             return {
                 activeTab: 'description',
+                brandName: '동구밭',
+                productName: '동구밭 중건성 헤어케어 5종 기획세트',
+                productImage: 'src/assets/images/all-img/product-sample.jpg',
+                productPrice: '47,500원',
+                discountRate: '30%',
+                discountedPrice: '33,000원',
                 buttons: [
                     {
                         title: '상품정보',
@@ -128,5 +136,34 @@
 </script>
 
 <style>
+
+.brand-name {
+    /* color: #828c94; */
+    font-weight: 500;
+    display: block;
+    margin: 19px 0 4px;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #757575;
+}
+
+.product-name {
+    display: block;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 20px;
+    color: #000;
+    overflow-wrap: break-all;
+}
+
+.discounted-price {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    line-height: 1;
+    font-size: 20px;
+    font-weight: 700;
+}
 
 </style>
