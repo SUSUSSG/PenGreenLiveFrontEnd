@@ -1,50 +1,104 @@
 <template>
   <div id="content" class="flex flex-col items-center">
     <div id="search-container" class="w-full flex justify-center">
-      <div id="search" class="inline-flex items-center gap-4 max-w-[900px] w-full">
+      <div
+        id="search"
+        class="inline-flex items-center gap-4 max-w-[900px] w-full"
+      >
         <div class="card-title mr-7" id="searchTitle">선택</div>
-        <SplitDropdown classMenuItems="left-0 w-[220px] top-[110%]" label="방송 제목" labelClass="btn-outline-primary"
-          :items="broadcastOptions" />
+        <SplitDropdown
+          classMenuItems="left-0 w-[220px] top-[110%]"
+          label="방송 제목"
+          labelClass="btn-outline-primary"
+          :items="broadcastOptions"
+        />
         <div class="flex gap-4 ml-5 w-full">
           <div class="input-wrapper">
             <label for="startDate">시작일:</label>
-            <input type="date" id="startDate" v-model="startDate">
+            <input type="date" id="startDate" v-model="startDate" />
           </div>
           <div class="input-wrapper">
             <label for="endDate">종료일:</label>
-            <input type="date" id="endDate" v-model="endDate">
+            <input type="date" id="endDate" v-model="endDate" />
           </div>
-          <Button type="submit"
-            class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150">검색</button>
+          <Button
+            type="submit"
+            class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
+            @click="toggleResult"
+          >
+            검색
+          </Button>
         </div>
       </div>
     </div>
-    <div id="result-container" class="w-full flex justify-center">
-      <div id="result" class="grid max-w-[1550px] w-full">
-        <div v-for="(cardData, index) in cardDataList" :key="'title_' + index">
-          <div v-if="index < 4">
-            <div class="card-title mb-5">{{ cardData.cardTitle }}</div>
+    <div id="result-container" class="w-full flex flex-col items-center">
+      <div>
+        <div :id="resultId">{{ resultTitle }}</div>
+        <div id="result" class="grid">
+          <div
+            v-for="(cardData, index) in displayedCardData"
+            :key="'title_' + index"
+          >
+            <div v-if="index < 4">
+              <div class="card-title mb-5">{{ cardData.cardTitle }}</div>
+            </div>
+            <Card
+              :icon="cardData.icon"
+              :analyticsTitle="cardData.analyticsTitle"
+              :analyticsResult="cardData.analyticsResult"
+            />
           </div>
-          <Card :icon="cardData.icon" :analyticsTitle="cardData.analyticsTitle" :analyticsResult="cardData.analyticsResult"
-            :fontSize="cardData.fontSize" />
+          <div v-if="!totalStats">
+            <div id="detailResultName">Top3 상품</div>
+            <div class="row ml-10" id="product">
+              <div
+                v-for="(product, i) in products"
+                :key="i"
+                class="inline-flex ml-3"
+              >
+                <div
+                  class="inline-flex bg-white rounded pt-3 px-4 pl-0"
+                  id="timeCard"
+                >
+                  <div>
+                    <div
+                      class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl"
+                    >
+                    {{ product.img }}
+                    </div>
+                  </div>
+                  <div>
+                    <div
+                      class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]"
+                    >
+                      {{ product.name }}
+                    </div>
+                    <div
+                      class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"
+                    >
+                    {{ product.price + "(" + product.discountRate + ")" }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
 
-
-
 <script>
 import Card from "@/components/Card/analytics-card.vue";
 import Button from "@/components/Button";
-import SplitDropdown from '@/components/Dropdown/SplitDropdown';
+import SplitDropdown from "@/components/Dropdown/SplitDropdown";
 
 export default {
   components: {
     Card,
     Button,
-    SplitDropdown
+    SplitDropdown,
   },
   data() {
     return {
@@ -52,19 +106,135 @@ export default {
         { value: "1번", label: "number1" },
         { value: "2번", label: "number2" },
       ],
-      startDate: '',
-      endDate: '',
+      startDate: "",
+      endDate: "",
       cardDataList: [
-        { icon: "heroicons:clock", analyticsTitle: "평균 방송 진행 시간", analyticsResult: "01시간 42분 36초", fontSize: "27px", cardTitle: "시간" },
-        { icon: "heroicons:user-group", analyticsTitle: "평균 시청자 수", analyticsResult: "233명", cardTitle: "고객" },
-        { icon: "heroicons:archive-box", analyticsTitle: "평균 구매 개수", analyticsResult: "1.3개", cardTitle: "구매" },
-        { icon: "heroicons:cursor-arrow-rays", analyticsTitle: "평균 상품 클릭수", analyticsResult: "2.7번", cardTitle: "상품" },
-        { icon: "heroicons:clock", analyticsTitle: "평균 방송 시청 시간", analyticsResult: "00시간 28분 12초", fontSize: "27px" },
-        { icon: "heroicons:hand-thumb-up", analyticsTitle: "평균 좋아요 수", analyticsResult: "5603명" },
-        { icon: "heroicons:circle-stack", analyticsTitle: "평균 구매 금액", analyticsResult: "13,200개" },
+        {
+          icon: "heroicons:clock",
+          analyticsTitle: "평균 방송 진행 시간",
+          analyticsResult: "01시간 42분 36초",
+          cardTitle: "시간",
+        },
+        {
+          icon: "heroicons:user-group",
+          analyticsTitle: "평균 시청자 수",
+          analyticsResult: "233명",
+          cardTitle: "고객",
+        },
+        {
+          icon: "heroicons:archive-box",
+          analyticsTitle: "평균 구매 개수",
+          analyticsResult: "1.3개",
+          cardTitle: "구매",
+        },
+        {
+          icon: "heroicons:cursor-arrow-rays",
+          analyticsTitle: "평균 상품 클릭수",
+          analyticsResult: "2.7번",
+          cardTitle: "상품",
+        },
+        {
+          icon: "heroicons:clock",
+          analyticsTitle: "평균 방송 시청 시간",
+          analyticsResult: "00시간 28분 12초",
+          fontSize: "27px",
+        },
+        {
+          icon: "heroicons:hand-thumb-up",
+          analyticsTitle: "평균 좋아요 수",
+          analyticsResult: "5603명",
+        },
+        {
+          icon: "heroicons:circle-stack",
+          analyticsTitle: "평균 구매 금액",
+          analyticsResult: "13,200개",
+        },
+      ],
+      totalStats: true,
+      resultId: "resultName",
+      resultTitle: "전체 통계",
+      searchResultCardDataList: [
+        {
+          icon: "heroicons:clock",
+          analyticsTitle: "평균 시청자 수",
+          analyticsResult: "355명",
+          cardTitle: "시청자",
+        },
+        {
+          icon: "heroicons:user-group",
+          analyticsTitle: "평균 시청 시간",
+          analyticsResult: "0.5시간",
+          cardTitle: "시간",
+        },
+        {
+          icon: "heroicons:archive-box",
+          analyticsTitle: "평균 구매 금액",
+          analyticsResult: "1.3만원",
+          cardTitle: "금액",
+        },
+        {
+          icon: "heroicons:cursor-arrow-rays",
+          analyticsTitle: "평균 상품 클릭수",
+          analyticsResult: "2.7번",
+          cardTitle: "기타",
+        },
+        {
+          icon: "heroicons:cursor-arrow-rays",
+          analyticsTitle: "최고 시청자 수",
+          analyticsResult: "500명",
+        },
+        {
+          icon: "heroicons:cursor-arrow-rays",
+          analyticsTitle: "방송 진행 시간",
+          analyticsResult: "2시간",
+        },
+        {
+          icon: "heroicons:cursor-arrow-rays",
+          analyticsTitle: "총 판매 금액/수량",
+          analyticsResult: "3,333,000/15",
+        },
+        {
+          icon: "heroicons:cursor-arrow-rays",
+          analyticsTitle: "좋아요 수",
+          analyticsResult: "90 개",
+        },
+      ],
+      products: [
+        {
+          img: "",
+          name: "상품이름1",
+          price: "13,000",
+          discountRate: "50%"
+        },
+        {
+          img: "",
+          name: "상품이름2",
+          price: "14,000",
+          discountRate: "70%"
+        },
+        {
+          img: "",
+          name: "상품이름3",
+          price: "15,000",
+          discountRate: "20%"
+        }
       ]
-    }
-  }
+    };
+  },
+  computed: {
+    displayedCardData() {
+      return this.totalStats
+        ? this.cardDataList
+        : this.searchResultCardDataList;
+    },
+  },
+  methods: {
+    toggleResult() {
+      this.totalStats = !this.totalStats;
+      this.resultId = this.totalStats ? "resultName" : "detailResultName";
+      this.resultTitle = this.totalStats ? "전체 통계" : "상세 통계";
+    },
+  },
 };
 </script>
 
@@ -73,7 +243,8 @@ export default {
   width: 100%;
 }
 
-#search-container, #result-container {
+#search-container,
+#result-container {
   padding: 20px;
   border-radius: 0.5rem;
   background: white;
@@ -88,7 +259,15 @@ export default {
 }
 
 #result {
-  margin-bottom: 300px;
+  margin-bottom: 250px;
+  width: 1500px;
+}
+
+#resultName,
+#detailResultName {
+  font-size: 30px;
+  margin-bottom: 30px;
+  color: black;
 }
 
 #searchTitle {
