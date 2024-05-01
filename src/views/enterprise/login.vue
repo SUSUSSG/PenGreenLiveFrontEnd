@@ -20,14 +20,37 @@
                                         </div>
                                         <form class="space-y-4 ">
                                             <div class="fromGroup       ">
-                                                <div class="relative  ">
-                                                    <creditCard type="text" placeholder="사업자번호"/>
+                                                <div class="relative">
+                                                    <div class="flex items-center space-x-2">
+                                                        <input 
+                                                            class="form-control py-2 h-[48px]"
+                                                            placeholder="사업자번호1"
+                                                            type="text"
+                                                            v-model="partOne"
+                                                            @input="moveFocus($event, 3, 'inputTwo')"
+                                                            maxlength="3">
+                                                        <input 
+                                                            class="form-control py-2 h-[48px]"
+                                                            placeholder="사업자번호2"
+                                                            type="text"
+                                                            v-model="partTwo"
+                                                            @input="moveFocus($event, 2, 'inputThree')"
+                                                            maxlength="2"
+                                                            ref="inputTwo">
+                                                        <input 
+                                                            class="form-control py-2 h-[48px]"
+                                                            placeholder="사업자번호3"
+                                                            type="text"
+                                                            v-model="partThree"
+                                                            maxlength="5"
+                                                        ref="inputThree">
+                                                    </div>
                                                 </div>
                                                 <label class="block capitalize form-label  ">사업자번호를 입력하세요</label>
                                             </div>
                                             <div class="fromGroup       ">
                                                 <div class="relative ">
-                                                    <input type="password" name="password" class="  form-control py-2 h-[48px]  " placeholder="비밀번호">
+                                                    <input type="password" name="password" class="form-control py-2 h-[48px]  " placeholder="비밀번호">
                                                     <div class="flex text-xl absolute ltr:right-[14px] rtl:left-[14px] top-1/2 -translate-y-1/2  space-x-1 rtl:space-x-reverse"></div>
                                                 </div>
                                                 <label class="block capitalize form-label  ">비밀번호를 입력하세요</label>
@@ -50,29 +73,46 @@
                                         </div>
 
                                         <div class="font-normal text-slate-500 dark:text-slate-400 mt-12 text-sm text-right">
-                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/login">일반 회원 로그인</a>
+                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/member/login">일반 회원 로그인</a>
                                         </div>
                                     </div>
                         
                                     <div class="auth-footer text-center">©  susussg, Co., Ltd.. All Rights Reserved</div>
                                 </div>
                             </div>
-                            <div class="left-column bg-cover bg-no-repeat bg-center " style="background-image: url(&quot;/assets/login-bg.4b614fc6.png&quot;);"><div class="flex flex-col h-full justify-center"><div class="flex-1 flex flex-col justify-center items-center"><a href="/"><img src="/assets/logo-white.5e389a51.svg" alt="" class="mb-10"></a></div><div><div class="black-500-title max-w-[525px] mx-auto pb-20 text-center">Unlock your Project<span class="text-white font-bold">performance</span></div></div></div></div>
-                            
+                            <div class="left-column bg-cover bg-no-repeat bg-center " style="background-image: url();"><div class="flex flex-col h-full justify-center"><div class="flex-1 flex flex-col justify-center items-center"><a href="/"><img src="/assets/logo-white.5e389a51.svg" alt="" class="mb-10"></a></div><div></div></div></div>
                         </div>
                     </div>
                 </main>
             </div>
         </div>
-        <svg id="SvgjsSvg1335" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;"><defs id="SvgjsDefs1336"></defs><polyline id="SvgjsPolyline1337" points="0,0"></polyline><path id="SvgjsPath1338" d="M-1 88L-1 88C-1 88 6.857142857142857 88 6.857142857142857 88C6.857142857142857 88 13.714285714285714 88 13.714285714285714 88C13.714285714285714 88 20.57142857142857 88 20.57142857142857 88C20.57142857142857 88 27.428571428571427 88 27.428571428571427 88C27.428571428571427 88 34.285714285714285 88 34.285714285714285 88C34.285714285714285 88 41.14285714285714 88 41.14285714285714 88C41.14285714285714 88 48 88 48 88C48 88 48 88 48 88 "></path></svg>
     </div>
 </template>
 
-<script setup>    
+<script setup> 
+    import { ref, reactive } from 'vue';
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
     import creditCard from "@/components/InputGroup";
 
+    const businessNumber = reactive({
+        partOne: '',
+        partTwo: '',
+        partThree: ''
+    });
+
+    const inputTwo = ref(null);
+    const inputThree = ref(null);
+
+    function moveFocus(event, maxLength, nextInputRef) {
+        if (event.target.value.length >= maxLength) {
+            if (nextInputRef === 'inputTwo') {
+                inputTwo.value.focus();
+            } else if (nextInputRef === 'inputThree') {
+                inputThree.value.focus();
+            }
+        }
+    }
 </script>
 
 <style scoped>
