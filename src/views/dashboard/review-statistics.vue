@@ -4,31 +4,21 @@
     <div class="flex-row">
       <div class="card-content">
         <span class="card-title">채널 전체 상품</span>
-        <productlist
-          :headers="['상품 코드', '상품 이름']"
-          :data="[
-            ['P001', '제품1'],
-            ['P002', '제품2'],
-            ['P003', '제품3'],
-            ['P004', '제품4'],
-            ['P005', '제품5'],
-            ['P006', '제품6'],
-            ['P007', '제품7'],
-            ['P008', '제품8'],
-            ['P009', '제품9'],
-            ['P010', '제품10'],
-            ['P011', '제품11'],
-            ['P012', '제품12'],
-            ['P013', '제품13'],
-            ['P014', '제품14'],
-            ['P015', '제품15'],
-            ['P016', '제품16'],
-            ['P017', '제품17'],
-            ['P018', '제품18'],
-            ['P019', '제품19'],
-            ['P020', '제품20'],
-          ]"
-        />
+        <productlist :headers="['상품 코드', '상품 이름']" :data="[
+          ['P001', '제품1'],
+          ['P002', '제품2'],
+          ['P003', '제품3'],
+          ['P004', '제품4'],
+          ['P005', '제품5'],
+          ['P006', '제품6'],
+          ['P007', '제품7'],
+          ['P008', '제품8'],
+          ['P009', '제품9'],
+          ['P010', '제품10'],
+          ['P011', '제품11'],
+          ['P012', '제품12'],
+          ['P013', '제품13'],
+        ]" />
       </div>
       <div class="card-content">
         <span class="card-title">상품 상세 정보</span>
@@ -37,13 +27,13 @@
 
       <div class="card-content">
         <span class="card-title">리뷰 내용 요약</span>
-        
+
       </div>
 
     </div>
-    
-    <!-- 바 차트 컴포넌트 -->
-<reviewchart></reviewchart>
+
+
+    <reviewchart></reviewchart>
   </div>
 </template>
 
@@ -61,7 +51,7 @@ export default {
   data() {
     return {
       productdetailData: {
-        imageUrl: "https://placehold.co/200x200",
+        imageUrl: "https://placehold.co/80x80",
         productCode: "ABC123",
         greenCode: "GR001",
         certificationImages: [
@@ -79,53 +69,59 @@ export default {
 </script>
 
 <style scoped>
+
+.content-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; 
+  align-items: stretch; 
+  width: 100%;
+  gap: 1.5rem;
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 32%; 
+  height: 400px; 
+  margin: 10px; 
+}
+
+
 .flex-row {
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
   gap: 1.5rem;
-}
-
-.content-wrapper {
-  width: 100%;
-  height: 100%;
-  gap: 1.5rem;
-  display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
 }
 
 .card-title {
-  font-size: 24px;
+  font-size: 1.25rem;
   font-weight: bold;
 }
 
-.card-content {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  background: white;
-  border: 1px solid #E5E7EB;
-  border-radius: 10px;
-  padding: 1.5rem;
-  width: 100%;
-}
 
 .card-content:first-child {
-  flex: 1;  /* 채널 전체 상품 카드 */
+  flex: 1;  
 }
 
 .card-content:nth-child(2), 
 .card-content:nth-child(3) {
-  flex: 1;  /* 상품 상세 정보와 리뷰 내용 요약 카드 */
+  flex: 1;  
 }
 
 .table-container td {
-  padding: 4px 8px; /* 상하 4px, 좌우 8px로 조정 */
+  padding: 4px 8px; 
 }
 
 th, td {
   text-align: center;
 }
 </style>
-

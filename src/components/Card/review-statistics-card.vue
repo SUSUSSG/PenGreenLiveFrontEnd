@@ -82,8 +82,8 @@
   
   .card-image {
     flex: 0 0 auto;
-    width: 200px; 
-    height: 200px; 
+    width: 100px; 
+    height: 100px; 
   }
   
   .card-image img {
@@ -96,6 +96,7 @@
     display: flex;
     flex-direction: column;
     padding: 16px;
+    overflow-y: scroll;
   }
   
   .stats-card-content div{
@@ -125,7 +126,6 @@
     margin-top: 16px;
   }
   
-  
-  
+
   </style>
   

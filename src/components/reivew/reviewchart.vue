@@ -58,22 +58,44 @@ export default {
 
 }
 </script>
-
 <style scoped>
 .review-charts-container {
   display: flex;
-  justify-content: space-around;
-  align-items: stretch;
+  justify-content: space-around; 
+  align-items: stretch; 
 }
 
 .review-charts-container > div {
-  flex: 1; /* 모든 카드가 동일한 너비를 갖도록 설정 */
-  margin: 0 10px; /* 카드 사이의 간격을 조정 */
+  flex: 1;  
+  margin: 0 10px; 
 }
 
 .apexchart {
-  width: 100%; /* 차트가 카드 컨테이너 내에서 전체 너비를 차지하도록 설정 */
+  width: 100%; 
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  padding: 1.5rem;
+  width: 32%; 
+  height: 400px;
+  margin: 10px; 
+}
+
+.review-charts-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around; 
+  align-items: stretch; 
+  width: 100%;
+  gap: 1.5rem;
 }
 </style>
+
 
 

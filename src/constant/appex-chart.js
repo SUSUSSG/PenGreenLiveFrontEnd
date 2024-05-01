@@ -1588,11 +1588,11 @@ export const stackChart = {
   series: [
     {
       name: "긍정",
-      data: [44, 55, 41, 67, 22],
+      data: [44, 55, 41],
     },
     {
       name: "부정",
-      data: [13, 23, 20, 8, 13],
+      data: [13, 23, 20],
     },
   ],
   chartOptions: {
@@ -1622,11 +1622,9 @@ export const stackChart = {
     ],
     xaxis: {
       categories: [
-        "2024-04-01",
-        "2024-04-02",
-        "2024-04-03",
-        "2024-04-04",
-        "2024-04-05",
+        "04-01",
+        "04-02",
+        "04-03",
       ],
     },
     fill: {
@@ -1748,13 +1746,13 @@ export const donutChart = {
           labels: {
             show: true,
             name: {
-              show: true,
+              show: false,
               fontSize: "26px",
               fontWeight: "bold",
               fontFamily: "Inter",
             },
             value: {
-              show: true,
+              show: false,
               fontFamily: "Inter",
               formatter(val) {
                 // eslint-disable-next-line radix
