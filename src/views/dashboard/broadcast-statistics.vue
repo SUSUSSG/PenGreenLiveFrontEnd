@@ -48,36 +48,30 @@
               :analyticsResult="cardData.analyticsResult"
             />
           </div>
-          <div v-if="!totalStats">
-            <div id="detailResultName">Top3 상품</div>
-            <div class="row ml-10" id="product">
-              <div
-                v-for="(product, i) in products"
-                :key="i"
-                class="inline-flex ml-3"
-              >
-                <div
-                  class="inline-flex bg-white rounded pt-3 px-4 pl-0"
-                  id="timeCard"
-                >
-                  <div>
-                    <div
-                      class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl"
-                    >
-                    {{ product.img }}
-                    </div>
+        </div>
+        <!-- 상세통계 -->
+        <div v-if="!totalStats">
+          <div id="detailResultName" class="mt-12">Top3 상품</div>
+          <div class="row inline-flex" id="product">
+            <div
+              v-for="(product, i) in products"
+              :key="i"
+              class="inline-flex ml-3"
+            >
+              <div class="inline-flex rounded pt-3 px-4 pl-0" id="productCard">
+                <div class="flex items-center justify-center">
+                  <img :src="product.img" alt="Product Image" />
+                </div>
+                <div class="ml-3 flex flex-col justify-center">
+                  <div
+                    class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"
+                  >
+                    {{ product.name }}
                   </div>
-                  <div>
-                    <div
-                      class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]"
-                    >
-                      {{ product.name }}
-                    </div>
-                    <div
-                      class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"
-                    >
-                    {{ product.price + "(" + product.discountRate + ")" }}
-                    </div>
+                  <div
+                    class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]"
+                  >
+                    {{ product.price }} ({{ product.discountRate }})
                   </div>
                 </div>
               </div>
@@ -201,24 +195,24 @@ export default {
       ],
       products: [
         {
-          img: "",
+          img: "https://via.placeholder.com/50x50",
           name: "상품이름1",
           price: "13,000",
-          discountRate: "50%"
+          discountRate: "50%",
         },
         {
-          img: "",
+          img: "https://via.placeholder.com/50x50",
           name: "상품이름2",
           price: "14,000",
-          discountRate: "70%"
+          discountRate: "70%",
         },
         {
-          img: "",
+          img: "https://via.placeholder.com/50x50",
           name: "상품이름3",
           price: "15,000",
-          discountRate: "20%"
-        }
-      ]
+          discountRate: "20%",
+        },
+      ],
     };
   },
   computed: {
@@ -245,7 +239,7 @@ export default {
 
 #search-container,
 #result-container {
-  padding: 20px;
+  padding: 30px;
   border-radius: 0.5rem;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
@@ -259,7 +253,6 @@ export default {
 }
 
 #result {
-  margin-bottom: 250px;
   width: 1500px;
 }
 
@@ -273,6 +266,14 @@ export default {
 #searchTitle {
   width: 100px;
 }
+
+#productCard {
+  background: #fafafa;
+  width: 250px;
+  height: 100px;
+  padding: 20px;
+}
+
 .card-title {
   font-weight: bold;
   font-size: 20px;
