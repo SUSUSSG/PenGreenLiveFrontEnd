@@ -1,15 +1,12 @@
 <template>
   <div id="content">
-    <div id="search">
-      <div class="text-base">검색 옵션</div>
-        <select v-model="selectedBroadcastTitleOption">
-          <option value="" disabled hidden>방송 제목</option>
-          <option v-for="option in broadcastOptions" :key="option.value" :value="option.value">{{ option.label }}</option>
-        </select>
-        <label for="startDate">시작일:</label>
-        <input type="date" id="startDate" v-model="startDate">
-        <label for="endDate">종료일:</label>
-        <input type="date" id="endDate" v-model="endDate">
+    <div id="search" class="inline-flex">
+      <div class="card-title">검색 옵션</div>
+      <SplitDropdown classMenuItems="left-0 w-[220px] top-[110%]" label="방송 제목" labelClass="btn-outline-primary" :items="broadcastOptions" />
+      <label for="startDate">시작일:</label>
+      <input type="date" id="startDate" v-model="startDate">
+      <label for="endDate">종료일:</label>
+      <input type="date" id="endDate" v-model="endDate">
       <button type="submit"
         class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150">검색</button>
     </div>
@@ -27,16 +24,18 @@
 
 <script>
 import card from "@/components/Card/analytics-card.vue";
-import Button from "@/components/Button"
+import Button from "@/components/Button";
+import SplitDropdown from '@/components/Dropdown/SplitDropdown';
 
 export default {
   components: {
     card,
-    Button
+    Button,
+    SplitDropdown
   },
   data() {
     return {
-      selectedBroadcastTitleOption: '',
+      broadcastOptions: '',
       startDate: '',
       endDate: '',
       cardDataList: [
@@ -104,12 +103,7 @@ export default {
   border-radius: 0.5rem;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-}
-
-#result.grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 10px;
+  width: 1625px;
 }
 
 #result {
@@ -120,6 +114,13 @@ export default {
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 
+#result.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 30px;
+}
+
+
 .card-title {
   font-weight: bold;
   margin-bottom: 10px;
@@ -129,5 +130,9 @@ export default {
 .card-title {
   display: flex;
   justify-content: center;
+}
+
+.text-base {
+  color: black;
 }
 </style>
