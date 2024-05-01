@@ -370,7 +370,7 @@
                     </table>
                 </main>
                 
-                <main class=" my-20">
+                <main class="py-10">
                     <div class="text-center space-x-2">
                         <Button class="px-20" text="회원가입" btnClass="btn-primary"/>
                         <Button class="px-20" text="취소" btnClass="btn-primary"/>
