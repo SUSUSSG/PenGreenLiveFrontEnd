@@ -31,7 +31,7 @@
       </div>
       <div class="inline-flex flex-grow items-center justify-end mr-8">
         <Button v-on:click="toggleBroadcast()" :text="isBroadcasting ? '라이브 종료' : '라이브 시작'"
-          :btnClass="isBroadcasting ? 'btn-primary h-12' : 'btn-dark h-12'" id="broadcastControllButton" />
+          :btnClass="isBroadcasting ? 'btn-light h-12' : 'btn-dark h-12'" id="broadcastControllButton" />
       </div>
     </div>
   </div>
@@ -149,5 +149,9 @@ export default {
   width: 150px;
   height: 50px;
   margin-right: 20px;
+}
+
+.btn-light {
+  background-color: #ECE6CC;
 }
 </style>
