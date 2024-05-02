@@ -87,7 +87,7 @@ export default {
   padding: 5px;
 }
 .broadcast-card {
-  border: 2px solid blue;
+  border: 2px solid black;
   width: 300px;
   padding: 10px;
   box-sizing: border-box;
