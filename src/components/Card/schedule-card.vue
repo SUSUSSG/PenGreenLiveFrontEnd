@@ -1,5 +1,5 @@
 <template>
-  <div class="group" style="display: flex !important">
+  <div class="group" style="display: flex !important; ">
     <div class="flex-row-wrapper">
       <h6 class="live-time">{{ liveTime }}</h6>
       <img class="live-thumbnail-image" :src="thumbnailUrl" alt="Image" />
@@ -18,10 +18,15 @@
         </div>
       </div>
     </div>
-    <div class="image-wrapper">
+    <div v-if="!showSubscribeButton" class="image-wrapper" @click="showSubscribeButton = true">
       <img class="live-thumbnail-image" :src="shopThumbnailUrl" alt="Image" />
       <div class="list-one-line">{{ shopName }}</div>
     </div>
+    <div v-show="showSubscribeButton" class="subscribe-button-wrapper">
+      <button class="btn subscribe-button">구독하기</button>
+      <span class="close" @click="showSubscribeButton = false">&times;</span>
+    </div>
+    
   </div>
 </template>
 
@@ -69,6 +74,11 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      showSubscribeButton: false,
+    };
+  },
 };
 </script>
 <style scoped>
@@ -103,6 +113,7 @@ export default {
   height: 100%;
   gap: 1rem;
   padding-right: 5rem;
+  transition: 1s ease-in-out;
 }
 .live-thumbnail-image {
   max-height: 240px;
@@ -133,5 +144,44 @@ export default {
 .product-price {
   font-weight: bold;
   color: darkgreen;
+}
+.subscribe-button-wrapper {
+  padding: 0 40px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.subscribe-button {
+  font-size: 16px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width:100%;
+}
+
+.close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 5px 10px;
+  margin-top: 2rem;;
+  font-size: 20px;
+  font-weight: bold;
+  color: #aaa;
+  background-color: lightgray;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: black;
+}
+
+.subscribe-button-wrapper{
+  width: 219px;
 }
 </style>
