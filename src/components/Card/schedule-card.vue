@@ -1,5 +1,5 @@
 <template>
-  <div class="group" style="display: flex !important; ">
+  <div class="group" style="display: flex !important">
     <div class="flex-row-wrapper">
       <h6 class="live-time">{{ liveTime }}</h6>
       <img class="live-thumbnail-image" :src="thumbnailUrl" alt="Image" />
@@ -18,15 +18,24 @@
         </div>
       </div>
     </div>
-    <div v-if="!showSubscribeButton" class="image-wrapper" @click="showSubscribeButton = true">
+    <div
+      v-if="!showSubscribeButton"
+      class="image-wrapper"
+      @click="showSubscribeButton = true"
+    >
       <img class="live-thumbnail-image" :src="shopThumbnailUrl" alt="Image" />
       <div class="list-one-line">{{ shopName }}</div>
     </div>
     <div v-show="showSubscribeButton" class="subscribe-button-wrapper">
-      <button class="subscribe-button">구독하기</button>
+      <button
+        class="subscribe-button"
+        :class="{ subscribed: isSubscribed }"
+        @click="handleSubscribe"
+      >
+        {{ isSubscribed ? "구독 중" : "구독하기" }}
+      </button>
       <span class="close" @click="showSubscribeButton = false">&times;</span>
     </div>
-    
   </div>
 </template>
 
@@ -77,7 +86,19 @@ export default {
   data() {
     return {
       showSubscribeButton: false,
+      isSubscribed: false,
     };
+  },
+  methods: {
+    handleSubscribe() {
+      if (this.isSubscribed) {
+        // 구독 해제
+        this.isSubscribed = false;
+      } else {
+        // 구독
+        this.isSubscribed = true;
+      }
+    },
   },
 };
 </script>
@@ -155,12 +176,12 @@ export default {
 
 .subscribe-button {
   font-size: 16px;
-  background-color: #1C6D16;
+  background-color: #1c6d16;
   color: white;
   border: none;
   border-radius: 50px;
   cursor: pointer;
-  width:100%;
+  width: 100%;
   height: 36px;
   margin: 0 20px;
 }
@@ -183,7 +204,13 @@ export default {
   color: black;
 }
 
-.subscribe-button-wrapper{
+.subscribe-button-wrapper {
   width: 219px;
+}
+
+.subscribe-button.subscribed {
+  background-color: #ECE6CC;
+  color: gray;
+  cursor: default;
 }
 </style>
