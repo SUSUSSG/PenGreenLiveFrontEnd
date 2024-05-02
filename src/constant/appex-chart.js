@@ -1587,16 +1587,12 @@ export const stepLineDark = {
 export const stackChart = {
   series: [
     {
-      name: "PRODUCT A",
-      data: [44, 55, 41, 67, 22, 43, 21, 49],
+      name: "긍정",
+      data: [44, 55, 41],
     },
     {
-      name: "PRODUCT B",
-      data: [13, 23, 20, 8, 13, 27, 33, 12],
-    },
-    {
-      name: "PRODUCT C",
-      data: [11, 17, 15, 15, 21, 14, 15, 13],
+      name: "부정",
+      data: [13, 23, 20],
     },
   ],
   chartOptions: {
@@ -1626,14 +1622,9 @@ export const stackChart = {
     ],
     xaxis: {
       categories: [
-        "2011 Q1",
-        "2011 Q2",
-        "2011 Q3",
-        "2011 Q4",
-        "2012 Q1",
-        "2012 Q2",
-        "2012 Q3",
-        "2012 Q4",
+        "04-01",
+        "04-02",
+        "04-03",
       ],
     },
     fill: {
@@ -1733,10 +1724,10 @@ export const stackChartDark = {
 };
 
 export const donutChart = {
-  series: [44, 55, 41],
+  series: [60, 25, 15],
 
   chartOptions: {
-    labels: ["success", "Return", "Cancel"],
+    labels: ["긍정", "부정", "중립"],
     dataLabels: {
       enabled: true,
     },
@@ -1755,13 +1746,13 @@ export const donutChart = {
           labels: {
             show: true,
             name: {
-              show: true,
+              show: false,
               fontSize: "26px",
               fontWeight: "bold",
               fontFamily: "Inter",
             },
             value: {
-              show: true,
+              show: false,
               fontFamily: "Inter",
               formatter(val) {
                 // eslint-disable-next-line radix

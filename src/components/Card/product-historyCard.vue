@@ -43,7 +43,6 @@ export default {
 .header, .product-row {
     display: flex;
     align-items: center;
-    /* padding: 10px 15px; */
     border-bottom: 1px solid #ddd;
     padding-left: 2.5rem;
     padding-bottom: 1rem;
@@ -53,22 +52,22 @@ export default {
 .header {
     font-weight: bold;
     display: flex;
-    justify-content: space-between; /* 헤더 아이템들을 고르게 분배 */
+    justify-content: space-between; 
 }
 
 .header-item, .product-row div {
-    flex: 1; /* 모든 열에 동일한 비율의 공간을 할당 */
+    flex: 1; 
     text-align: left; 
 }
 
 .product-image {
-    flex: 0 0 80px; /* 이미지는 고정 너비를 가짐 */
+    flex: 0 0 80px; 
     height: 80px;
     margin-right: 10px;
 }
 
 .product-name, .product-brand {
-    flex: 1; /* 이름과 브랜드에 비례적 공간 할당 */
+    flex: 1; 
     text-align: left;
 }
 
