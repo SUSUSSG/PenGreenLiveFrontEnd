@@ -1,14 +1,16 @@
 <template>
   <div class="modal-content w-[100%] h-[100%] bg-white">
-    <div class="purchase-wrap">
-      <div class="modal-handle-area w-full h-[1rem] flex justify-center items-center" @click="close">
-        <span class="modal-handle"></span>
+    <div class="purchase-wrap px-[20px]">
+      <div class="modal-handle-area w-full h-[2rem] flex justify-center items-center" @click="close">
+        <span class="modal-handle">
+          <img src="/src/assets/images/svg/down.svg"/>
+        </span>
       </div>
-      <div class="purchase-info">
-        <div>
+      <div class="buy-info">
+        <div class="product-title">
         동구밭 중건성 헤어케어 5종 기획세트
         </div>
-        <div class="w-full flex justify-between items-center">
+        <div class="product-contents">
           <div class="quantity-controls h-[30px]">
             <button @click="decreaseQuantity" class="btn-control h-full">-</button>
             <input type="text" v-model="quantity" class="input-number h-full" readonly/>
@@ -16,10 +18,10 @@
           </div>
           <div class="items-right">33,000원</div>
         </div>
-        <div class="address-input w-full flex justify-between items-center">
+      </div>
+      <div class="address-input w-full flex justify-between items-center">
           <label for="address">서울특별시 관악구 관악로12길 16-37</label>
           <button>변경</button>
-        </div>
       </div>
     </div>
     <div class="w-full p-[20px]">
@@ -66,10 +68,36 @@ const decreaseQuantity = () => {
   height: 6px;
   background-color: #999;
   border-radius: 3px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  width: 100%;
+  height: 30px;
+  background-color: #fff;
+  border-radius: 18px 18px 0 0;
 }
 
-.purchase-info {
-  padding: 20px 15px;
+.product-title {
+  color: #131518;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.buy-info {
+  position: relative;
+  margin-bottom: 8px;
+  padding: 12px;
+  background-color: rgb(247, 249, 250);
+  border-radius: 4px;
+  color: rgb(47, 52, 56);
+}
+
+.product-contents {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .number-input {
