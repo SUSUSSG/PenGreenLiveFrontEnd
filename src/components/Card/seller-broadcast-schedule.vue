@@ -13,7 +13,7 @@
     </div>
     <!-- 조건부 렌더링 -->
     <div v-if="isPrepareTime">
-      <button class="action-button">방송 준비</button>
+      <button class="action-button" @click="onClickRedirect()">방송 준비</button>
     </div>
     <div v-else>
       <p>방송 준비는 라이브 시작 15분전부터만 가능합니다.</p>
@@ -50,7 +50,13 @@ export default {
   computed: {
     formattedLiveDateTime() {
       const liveTime = new Date(this.liveDateTime);
-      return liveTime.toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' });
+      return liveTime.toLocaleString('ko-KR', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      });
     },
     isPrepareTime() {
       const now = new Date();
@@ -63,10 +69,15 @@ export default {
       return this.productPrice - (this.productPrice * (this.discountRate / 100));
     },
     formattedOriginalPrice() {
-      return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(this.productPrice);
+      return new Intl.NumberFormat('ko-KR', {style: 'currency', currency: 'KRW'}).format(this.productPrice);
     },
     formattedDiscountedPrice() {
-      return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(this.discountedPrice);
+      return new Intl.NumberFormat('ko-KR', {style: 'currency', currency: 'KRW'}).format(this.discountedPrice);
+    },
+  },
+  methods: {
+    onClickRedirect() {
+      this.$router.push({name: '라이브보드'}) // About 페이지로 이동}
     }
   }
 }
