@@ -18,9 +18,23 @@
         </div>
       </div>
     </div>
-    <div class="image-wrapper">
+    <div
+      v-if="!showSubscribeButton"
+      class="image-wrapper"
+      @click="showSubscribeButton = true"
+    >
       <img class="live-thumbnail-image" :src="shopThumbnailUrl" alt="Image" />
       <div class="list-one-line">{{ shopName }}</div>
+    </div>
+    <div v-show="showSubscribeButton" class="subscribe-button-wrapper">
+      <button
+        class="subscribe-button"
+        :class="{ subscribed: isSubscribed }"
+        @click="handleSubscribe"
+      >
+        {{ isSubscribed ? "구독 중" : "구독하기" }}
+      </button>
+      <span class="close" @click="showSubscribeButton = false">&times;</span>
     </div>
   </div>
 </template>
@@ -69,6 +83,23 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      showSubscribeButton: false,
+      isSubscribed: false,
+    };
+  },
+  methods: {
+    handleSubscribe() {
+      if (this.isSubscribed) {
+        // 구독 해제
+        this.isSubscribed = false;
+      } else {
+        // 구독
+        this.isSubscribed = true;
+      }
+    },
+  },
 };
 </script>
 <style scoped>
@@ -103,6 +134,7 @@ export default {
   height: 100%;
   gap: 1rem;
   padding-right: 5rem;
+  transition: 1s ease-in-out;
 }
 .live-thumbnail-image {
   max-height: 240px;
@@ -133,5 +165,52 @@ export default {
 .product-price {
   font-weight: bold;
   color: darkgreen;
+}
+.subscribe-button-wrapper {
+  padding: 0 40px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.subscribe-button {
+  font-size: 16px;
+  background-color: #1c6d16;
+  color: white;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  width: 100%;
+  height: 36px;
+  margin: 0 20px;
+}
+
+.close {
+  position: absolute;
+  top: 1;
+  right: 0;
+  margin-right: 10px;
+  padding: 5px 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #aaa;
+  background-color: lightgray;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: black;
+}
+
+.subscribe-button-wrapper {
+  width: 219px;
+}
+
+.subscribe-button.subscribed {
+  background-color: #ECE6CC;
+  color: gray;
+  cursor: default;
 }
 </style>
