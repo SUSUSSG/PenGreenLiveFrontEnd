@@ -181,19 +181,19 @@ export default {
       selectedBroadcastOption: null,
       searchResultCardDataList: [
         {
-          icon: "heroicons:clock",
+          icon: "heroicons:user-group",
           analyticsTitle: "평균 시청자 수",
           analyticsResult: "355명",
           cardTitle: "시청자",
         },
         {
-          icon: "heroicons:user-group",
+          icon: "heroicons:clock",
           analyticsTitle: "평균 시청 시간",
           analyticsResult: "0.5시간",
           cardTitle: "시간",
         },
         {
-          icon: "heroicons:archive-box",
+          icon: "heroicons:circle-stack",
           analyticsTitle: "평균 구매 금액",
           analyticsResult: "1.3만원",
           cardTitle: "금액",
@@ -205,22 +205,22 @@ export default {
           cardTitle: "기타",
         },
         {
-          icon: "heroicons:cursor-arrow-rays",
+          icon: "heroicons:user-group",
           analyticsTitle: "최고 시청자 수",
           analyticsResult: "500명",
         },
         {
-          icon: "heroicons:cursor-arrow-rays",
+          icon: "heroicons:clock",
           analyticsTitle: "방송 진행 시간",
           analyticsResult: "2시간",
         },
         {
-          icon: "heroicons:cursor-arrow-rays",
+          icon: "heroicons:circle-stack",
           analyticsTitle: "총 판매 금액/수량",
           analyticsResult: "3,333,000/15",
         },
         {
-          icon: "heroicons:cursor-arrow-rays",
+          icon: "heroicons:hand-thumb-up",
           analyticsTitle: "좋아요 수",
           analyticsResult: "90 개",
         },
