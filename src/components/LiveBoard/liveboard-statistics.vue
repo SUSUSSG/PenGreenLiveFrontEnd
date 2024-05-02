@@ -9,7 +9,7 @@
                 <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
                     <div>
                         <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-3xl pr-3">
-                            <Icon :icon="item.icon" />
+                            <Icon :icon="item.icon" class="text-primary"/>
                         </div>
                     </div>
                     <div>
@@ -103,7 +103,11 @@ export default {
 
 #basicCard {
     width: 200px;
-    border: 1px solid #134010;
+    border: 0.5px solid #134010;
     margin: 10px auto;
 }
+
+.text-primary {
+    color: darkgreen;
+  }
 </style>
