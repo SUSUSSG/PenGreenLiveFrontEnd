@@ -19,7 +19,7 @@
         </TabPanel>
 
         <TabPanel>
-            <reviewlist v-for="(item, index) in orderData" :key="index" :deliveryStatus="item.deliveryStatus"
+            <reviewlist v-for="(item, index) in reviewOrderData" :key="index" :deliveryStatus="item.deliveryStatus"
                 :productImgUrl="item.productImgUrl" :orderDate="item.orderDate" :productName="item.productName"
                 :price="item.price" :reviewContent="item.reviewContent"/>
         </TabPanel>
@@ -40,6 +40,30 @@ const buttons = ref([
 ]);
 
 const orderData = ref([
+    {
+        deliveryStatus: "배송완료",
+        productImgUrl: "http://via.placeholder.com/100x100",
+        orderDate: "2022-03-22",
+        productName: "식품1",
+        price: 25000,
+    },
+    {
+        deliveryStatus: "배송완료",
+        productImgUrl: "http://via.placeholder.com/100x100",
+        orderDate: "2022-04-01",
+        productName: "유아동1",
+        price: 50000,
+    },
+    {
+        deliveryStatus: "배송중",
+        productImgUrl: "http://via.placeholder.com/100x100",
+        orderDate: "2022-04-22",
+        productName: "패션1",
+        price: 41000
+    }
+]);
+
+const reviewOrderData = ref([
     {
         deliveryStatus: "배송완료",
         productImgUrl: "http://via.placeholder.com/100x100",
