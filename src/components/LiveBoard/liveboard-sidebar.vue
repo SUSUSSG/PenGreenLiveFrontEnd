@@ -23,7 +23,7 @@
                         <Icon :icon="statistics[2].icon"></Icon>
                     </div>
                     <LivePrepareModal v-if="showLivePrepareModal" title="방송 기기 설정" ref="broadcastDeviceControl"
-                        :showButtons="false"></LivePrepareModal>
+                        :showButtons="false" class="z-20" />
                 </div>
 
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"

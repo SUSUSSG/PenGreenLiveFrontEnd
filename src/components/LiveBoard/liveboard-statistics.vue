@@ -1,22 +1,23 @@
 <template>
     <div class="bg-white rounded px-4 pt-4 pb-4" id="statisticsCard">
         <div class="text-base">
-            정보
+            실시간 통계
         </div>
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px; padding: 0 10px;">
+        <div
+            style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px; padding: 0 10px;">
             <div v-for="(item, i) in statistics" :key="i" class="inline-flex">
                 <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
                     <div>
-                        <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
-                            {{ item.title }}
-                        </div>
-                        <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
-                            {{ item.time }}
+                        <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-3xl pr-3">
+                            <Icon :icon="item.icon" />
                         </div>
                     </div>
                     <div>
-                        <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-3xl pl-7">
-                            <Icon :icon="item.icon" />
+                        <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
+                            {{ item.title }}
+                    </div>
+                        <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
+                            {{ item.time }}
                         </div>
                     </div>
                 </div>
@@ -24,7 +25,7 @@
         </div>
     </div>
 </template>
-  
+
 <script>
 import Card from "@/components/Card";
 import Icon from "@/components/Icon";
@@ -86,7 +87,7 @@ export default {
     }
 };
 </script>
-  
+
 <style>
 #statisticsCard {
     width: 820px;
