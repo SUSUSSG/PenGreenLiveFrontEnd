@@ -18,12 +18,7 @@
               <label for="endDate">종료일:</label>
               <input type="date" id="endDate" v-model="endDate" />
             </div>
-            <Button
-              type="submit"
-              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-            >
-              검색
-            </Button>
+            <Button btnClass="btn-primary btn-sm">검색</Button>
           </div>
         </div>
       </div>
@@ -60,13 +55,7 @@
                 {{ option.label }}
               </option>
             </select>
-            <Button
-              type="submit"
-              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-              @click="toggleResult"
-            >
-              상세조회
-            </Button>
+            <Button btnClass="btn-primary btn-sm" @click="toggleResult">상세조회</Button>
           </div>
         </div>
         <!-- 상세통계 -->
@@ -98,13 +87,7 @@
             </div>
           </div>
           <div class="mt-7 text-center">
-            <Button
-              type="submit"
-              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-              @click="toggleResult"
-            >
-              확인
-            </Button>
+            <Button btnClass="btn-primary btn-sm" @click="toggleResult">확인</Button>
           </div>
         </div>
       </div>

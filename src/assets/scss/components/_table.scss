@@ -116,6 +116,7 @@ table.vgt-table td {
 }
 .vgt-table input[type="checkbox"]:checked {
   @apply before:bg-slate-900;
+  
 }
 
 .vgt-table input[type="checkbox"]:checked:before {
