@@ -53,7 +53,7 @@ export const menuItems = [
     child: [
         {
         childtitle: "계정 정보 관리",
-        childlink: "user-info",
+        childlink: "/user-info",
         },
         {
         childtitle: "상점 정보 관리",
