@@ -53,7 +53,7 @@
           class="nav-tools flex items-center lg:space-x-6 space-x-3 rtl:space-x-reverse"
         >
           <!-- <LanguageVue /> -->
-          <SwitchDark />
+          <!-- <SwitchDark /> -->
           <!-- <MonochromeMode /> -->
           <!-- <Message v-if="window.width > 768" /> -->
           <!-- <Notification v-if="window.width > 768" /> -->
