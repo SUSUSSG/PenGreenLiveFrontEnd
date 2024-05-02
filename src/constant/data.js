@@ -70,12 +70,12 @@ export const userMenuItems = [
   {
     title: "정보 수정",
     icon: "heroicons-outline:user-circle", // 사용자 정보 수정 관련 아이콘
-    link: "edit-profile",
+    link: "/member/edit-profile",
   },
   {
     title: "주문 내역",
     icon: "heroicons-outline:clipboard-list", // 주문 내역 관련 아이콘
-    link: "order-list",
+    link: "/order-list",
   },
   {
     title: "구독 설정",
@@ -85,7 +85,7 @@ export const userMenuItems = [
   {
     title: "시청 기록",
     icon: "heroicons-outline:eye", // 시청 기록 관련 아이콘
-    link: "view-history",
+    link: "/broadcast-history",
   },
   {
     title: "결제수단 등록",
