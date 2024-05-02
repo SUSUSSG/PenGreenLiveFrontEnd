@@ -4,11 +4,11 @@
       <div class="text-base flex-grow">채팅</div>
       <div>
         <Button v-if="showEditButton" icon="fluent:add-48-filled" @click="editChatting"
-          btnClass="btn-dark rounded-full p-0 h-8 w-8 flex items-center justify-center" />
+          btnClass="btn-green rounded-full p-0 h-8 w-8 flex items-center justify-center" />
       </div>
     </div>
     <div class="mt-3 mb-3">
-      <Alert type="primary-light" dismissible>{{ notice }}</Alert>
+      <Alert class="green-alert" dismissible>{{ notice }}</Alert>
     </div>
     <div class="scroll-wrapper">
       <div class="chat-container flex flex-col justify-end">
@@ -253,5 +253,28 @@ export default {
 
 .chat-container::-webkit-scrollbar-track {
   background: transparent;
+}
+
+.btn-green {
+  background-color: #134010;
+  color: white;
+}
+
+/* 채팅 color 추가 */
+.green-alert {
+  color: #134010;
+  background-color: rgba(19, 64, 16, 0.2);
+}
+.chat-input-container {
+  background-color: rgba(19, 64, 16, 0.2);
+  border-radius: 5px;
+  border-top: 0px;
+  margin-top: 3px;
+}
+.chat-send-button {
+  background-color: #134010;
+}
+.py-\[18px\] {
+  padding: 13px;
 }
 </style>
