@@ -2,9 +2,8 @@
   <div id="content" class="flex flex-col items-center">
     <div id="search-container" class="w-full flex justify-center">
       <div id="search" class="inline-flex items-center gap-4">
-        <div v-if="!totalStats" class="card-title mr-7">
-          <div id="searchTitle">방송 제목</div>
-          <div class="flex gap-4 ml-5 w-full">
+        <div v-if="!totalStats" class="card-title mr-7 p-2">
+          <div class="flex gap-4 ml-5 w-full ">
             {{ selectedBoradcastTitle }}
           </div>
         </div>
