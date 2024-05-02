@@ -23,7 +23,7 @@
                         <Icon :icon="statistics[2].icon"></Icon>
                     </div>
                     <LivePrepareModal v-if="showLivePrepareModal" title="방송 기기 설정" ref="broadcastDeviceControl"
-                        :showButtons="false"></LivePrepareModal>
+                        :showButtons="false" class="z-20" />
                 </div>
 
                 <div class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
@@ -41,8 +41,7 @@
                                         class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md mt-3" />
                                 </div>
                                 <div class="flex items-center">
-                                    <Button type="button" id="basicButton"
-                                        class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150">
+                                    <Button btnClass="btn-primary btn-sm">
                                         등록
                                     </Button>
                                 </div>
@@ -55,7 +54,7 @@
                                         class="block text-sm font-medium text-gray-700 mt-10">썸네일</label>
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0">
-                                            <img :src="imageSrc" alt="대표 이미지 미리보기" style="max-width: 400px;" />
+                                            <img src="https://via.placeholder.com/90x160" alt="대표 이미지 미리보기" style="max-width: 400px;" class="mt-2"/>
                                         </div>
                                         <div class="ml-4">
                                             <p>최대 용량 : 1mb</p>
@@ -66,8 +65,7 @@
                                     </div>
                                 </div>
                                 <div class="flex items-center">
-                                    <Button type="button" id="basicButton"
-                                        class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150">
+                                    <Button btnClass="btn-primary btn-sm">
                                         등록
                                     </Button>
                                 </div>
@@ -86,11 +84,9 @@
                             <div class="flex items-center space-x-2">
                                 <input id="addNotice" type="text" name="addNotice" v-model="notice" placeholder="공지사항 입력"
                                     class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
-                                <Button type="button"
-                                    class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-                                    @click="submitNotice()">
-                                    등록
-                                </Button>
+                                    <Button btnClass="btn-primary btn-sm" @click="submitNotice()">
+                                        등록
+                                    </Button>
                             </div>
                         </div>
                         <!-- 공지사항 목록-->
@@ -129,9 +125,7 @@
                                             v-model="answer"
                                             class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-black-500 rounded-l-md"></textarea>
                                     </div>
-                                    <Button type="button"
-                                        class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-                                        @click="submitFaq()" id="basicButton">
+                                    <Button btnClass="btn-primary btn-sm mt-5" @click="submitFaq()">
                                         등록
                                     </Button>
                                 </div>
@@ -284,12 +278,5 @@ export default {
     border-radius: 0.5rem;
     background: white;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
-}
-
-#basicButton {
-    width: 100px;
-    height: 40px;
-    font-size: 16px;
-    margin: 0 auto;
 }
 </style>

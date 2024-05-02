@@ -1,17 +1,18 @@
 <template>
     <div class="bg-white rounded pt-3 px-4 mt-4" id="productCard">
-        <div class="text-base">
+        <div class="text-base mb-3">
             상품 목록
         </div>
         <div id="tableCard">
             <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
                 :rows="liveProductTable" :pagination-options="{ enabled: false }" :sort-options="{ enabled: false }">
                 <template v-slot:table-row="props">
-                    <span v-if="props.column.field == 'productImg'" class="cursor-pointer relative"
-                        @click="openDetailProductModal(props.row)">
-                        <img :src="props.row.productImg" alt="Product Image" class="w-20 h-20 object-cover" />
-                        <img v-if="props.row.showNowImg" :src="nowImg" alt="Now Image"
-                            class="w-10 h-10 absolute top-0 left-0 z-10" id="nowImg" />
+                    <span class="relative">
+                        <span v-if="props.column.field == 'productImg'" class="cursor-pointer" @click="openDetailProductModal(props.row)">
+                            <img :src="props.row.productImg" alt="Product Image" class=" w-18 h-18 object-cover" />
+                            <img v-if="props.row.showNowImg" :src="nowImg" alt="Now Image"
+                                class="w-15 h-10 absolute top-1 left-0 z-10" id="nowImg" />
+                        </span>
                         <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
                             <div class="row items-center justify-center ml-7">
                                 <div class="max-w-md">
@@ -32,18 +33,18 @@
                                         <div v-for="(product, i) in productStatistics" :key="i" class="inline-flex">
                                             <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
                                                 <div>
+                                                    <div
+                                                        class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-3xl pr-7">
+                                                        <Icon :icon="product.icon" />
+                                                    </div>
+                                                </div>
+                                                <div>
                                                     <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
                                                         {{ product.title }}
                                                     </div>
                                                     <div
                                                         class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
                                                         {{ product.count }}
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div
-                                                        class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-3xl pl-7">
-                                                        <Icon :icon="product.icon" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -179,16 +180,18 @@ export default {
 <style>
 #productCard {
     width: 100%;
-    max-height: 100%;
+    max-height: 328px;
     display: flex;
     flex-direction: column;
     border-radius: 0.5rem;
     background: white;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    overflow-y: auto; 
 }
 #nowImg {
     width: auto;
     height: 20px;
+    object-fit: contain;
 }
 
 .relative {
@@ -215,4 +218,9 @@ export default {
     width: 750px;
     max-width: 100%;
 }
+
+.vgt-table thead th {
+    padding: 10px;
+}
+
 </style>

@@ -4,7 +4,7 @@ import logo3 from "@/assets/images/all-img/logo3.png"
 
 export const liveProductTable = [
     {
-      productImg: "www.naver.com",
+      productImg: "https://via.placeholder.com/50x50",
       auth: [
         {
           name: "logo1",
@@ -22,16 +22,53 @@ export const liveProductTable = [
       productCode: "A04B02" //상품번호 추가
     },
     {
-        productImg: "www.daum.com",
-        auth: [
-          {
-            name:"logo3",
-            image: logo3
-          },
-        ],
-        productName: "물티슈",
-        discountRate: "25",
-        discountPrice: "759",
-        originalPrice: "3,000"
+      productImg: "https://via.placeholder.com/50x50",
+      auth: [
+        {
+          name:"logo3",
+          image: logo3
+        },
+      ],
+      productName: "물티슈",
+      discountRate: "25",
+      discountPrice: "759",
+      originalPrice: "3,000",
+      productCode: "C003B2" //상품번호 추가
+    },
+    {
+      productImg: "https://via.placeholder.com/50x50",
+      auth: [
+        {
+          name:"log2",
+          image: logo2
+        },
+      ],
+      productName: "맛있는 정관장",
+      discountRate: "25",
+      discountPrice: "759",
+      originalPrice: "3,000",
+      productCode: "C003B2" //상품번호 추가
+    },
+    {
+      productImg: "https://via.placeholder.com/50x50",
+      auth: [
+        {
+          name: "logo1",
+          image: logo1,
+        },
+        {
+          name:"logo2",
+          image: logo2
+        },
+        {
+          name:"logo3",
+          image: logo3
+        },
+      ],
+      productName: "몸에 좋은 정관장이 가정의달 맞이",
+      discountRate: "25",
+      discountPrice: "759",
+      originalPrice: "3,000",
+      productCode: "C003B2" //상품번호 추가
     }
 ]

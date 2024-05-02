@@ -4,11 +4,11 @@
       <div class="text-base flex-grow">채팅</div>
       <div>
         <Button v-if="showEditButton" icon="fluent:add-48-filled" @click="editChatting"
-          btnClass="btn-dark rounded-full p-0 h-8 w-8 flex items-center justify-center" />
+          btnClass="btn-green rounded-full p-0 h-8 w-8 flex items-center justify-center" />
       </div>
     </div>
     <div class="mt-3 mb-3">
-      <Alert type="primary-light" dismissible>{{ notice }}</Alert>
+      <Alert class="green-alert" dismissible>{{ notice }}</Alert>
     </div>
     <div class="scroll-wrapper">
       <div class="chat-container flex flex-col justify-end">
@@ -40,11 +40,7 @@
           <div class="flex items-center space-x-2">
             <input id="addChatNotice" type="text" name="addChatNotice" v-model="chatNotice" placeholder="공지사항을 입력하세요."
               class="flex-1 block w-full min-w-0 rounded-l-md border-gray-300 focus:ring-blue-500 focus:border-blue-500" />
-            <Button type="button"
-              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-              @click="submitNotice">
-              등록
-            </Button>
+            <Button btnClass="btn-primary btn-sm" @click="submitNotice">등록</Button>
           </div>
         </div>
         <!-- 금칙어 설정 입력 필드 -->
@@ -53,11 +49,7 @@
           <div class="flex items-center space-x-2">
             <input id="addChatOption" type="text" name="addChatOption" v-model="forbiddenword" placeholder="금칙어 입력"
               class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
-            <Button type="button"
-              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-              @click="submitForbiddenword">
-              등록
-            </Button>
+            <Button btnClass="btn-primary btn-sm" @click="submitForbiddenword">등록</Button>
           </div>
         </div>
 
@@ -253,5 +245,28 @@ export default {
 
 .chat-container::-webkit-scrollbar-track {
   background: transparent;
+}
+
+.btn-green {
+  background-color: #134010;
+  color: white;
+}
+
+/* 채팅 color 추가 */
+.green-alert {
+  color: #134010;
+  background-color: rgba(19, 64, 16, 0.2);
+}
+.chat-input-container {
+  background-color: rgba(19, 64, 16, 0.2);
+  border-radius: 5px;
+  border-top: 0px;
+  margin-top: 3px;
+}
+.chat-send-button {
+  background-color: #134010;
+}
+.py-\[18px\] {
+  padding: 13px;
 }
 </style>
