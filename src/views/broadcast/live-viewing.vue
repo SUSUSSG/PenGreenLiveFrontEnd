@@ -14,10 +14,12 @@
           </div>
         </div>
         <div class="sticky bottom-0 z-20 flex justify-between items-center pt-4">
-          <Button class="w-full" text="구매하기"/>
+          <Button class="w-full order-button" text="구매하기" @click="openModal"/>
+        </div>
+        <div class="modal sticky bottom-0 z-20 flex justify-between items-center" v-show="isOpen">
+          <PurchaseModal @update:isOpen="updateModal"/>
         </div>
       </div>
-    
       <div v-if="!selectedProduct">
         <header class="flex justify-between items-center p-4 border-b">
           <div></div> <!-- 좌측 공백 -->
@@ -95,11 +97,13 @@ import ProductCard from "@/components/Card/product-card.vue";
 import {ref} from 'vue';
 import {TabGroup, TabList, Tab, TabPanels, TabPanel} from '@headlessui/vue';
 import Button from "@/components/Button";
+import PurchaseModal from "@/components/Modal/purchase-modal.vue";
 
 const firstTabGroup = ['상품 정보', '라이브 소개', '라이브 혜택'];
 const secondTabGroup = ['공지사항', '자주 묻는 질문'];
 const activeFirstTab = ref(firstTabGroup[0]);
 const activeSecondTab = ref(secondTabGroup[0]);
+
 const buttons = [
   {
     title: 'Home',
@@ -114,6 +118,15 @@ const buttons = [
     title: 'Settings',
   },
 ];
+
+const isOpen = ref(false);
+const openModal = () => {
+  isOpen.value = true;
+};
+const updateModal = (value) => {
+  isOpen.value = value;
+};
+
 </script>
 <script>
 export default {
@@ -138,7 +151,8 @@ export default {
         {productName: "동구밭 중건성 헤어케어 5종 기획세트", price : 47500, discountRate : 30},
         {productName: "가지가지 나뭇가지", price : 10000, discountRate : 30},
         {productName: "가지가지 나뭇가지", price : 10000, discountRate : 30}
-      ]
+      ],
+      address: '',
     }
   },
   methods: {
@@ -148,7 +162,7 @@ export default {
     },
     closePurchaseModal() {
       this.selectedProduct = null;
-    }
+    },
   }
 };
 </script>
@@ -173,30 +187,31 @@ export default {
   margin: 10px;
   background-color: #fff;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  border-radius: 15px; /* 모든 섹션에 둥근 테두리 추가 */
+  border-radius: 15px; 
   overflow : hidden;
 }
 
+/* 구매 영역 */
 .sticky-bottom-white {
   position: sticky;
   bottom: 0;
-  z-index: 25; /* z-index를 높여 다른 내용이 덮지 않도록 합니다. */
-}
+  z-index: 25; 
+} 
 
 .scroll-wrapper {
-  max-height: calc(90vh - 100px); /* 여기서 120px는 헤더와 여백을 포함한 예상 높이입니다 */
-  overflow-y: auto; /* 내용이 넘칠 때 스크롤바가 생깁니다 */
+  max-height: calc(90vh - 100px);
+  overflow-y: auto;
 }
 
 .purchase-container {
-  padding-bottom: 20px; /* 컨테이너 하단에 공간 추가 */
+  padding-bottom: 20px; 
 }
 
 .purchase-section img {
-  max-height: 70vh; /* 이미지가 전체 화면 높이의 70%를 넘지 않도록 설정 */
-  width: auto; /* 너비는 자동으로 조정되도록 설정 */
-  display: block; /* 이미지를 블록 레벨 요소로 만들어 마진을 적용할 수 있게 함 */
-  margin: 0 auto; /* 가운데 정렬 */
+  max-height: 70vh; 
+  width: auto; 
+  display: block; 
+  margin: 0 auto; 
 }
 
 .scroll-wrapper::-webkit-scrollbar {
@@ -207,6 +222,35 @@ export default {
   flex: 1;
   min-width: 0;
 }
+
+.purchase-wrap {
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin: auto;
+}
+
+.product-discount, .product-price {
+  text-align: center;
+  font-size: 20px;
+  color: red;
+}
+
+/* .modal {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.6);
+  transition: bottom 0.3s;
+  z-index: 100;
+  display: none; 
+}
+
+.modal.is-active {
+  display: flex;
+}
+*/
+
+
+/* 구매 영역 끝 */
 
 
 /* 오른쪽 라이브 섹션에 대한 너비 조정 */
