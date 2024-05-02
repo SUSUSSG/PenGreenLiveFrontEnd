@@ -31,7 +31,7 @@
       </div>
       <div class="inline-flex flex-grow items-center justify-end mr-8">
         <Button v-on:click="toggleBroadcast()" :text="isBroadcasting ? '라이브 종료' : '라이브 시작'"
-          :btnClass="isBroadcasting ? 'btn-light h-12' : 'btn-dark h-12'" id="broadcastControllButton" />
+          :btnClass="isBroadcasting ? 'btn-green h-12' : 'btn-light h-12'" id="broadcastControllButton" />
       </div>
     </div>
   </div>
@@ -124,6 +124,7 @@ export default {
 
 #timeCard {
   width: 150px;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 
 #resultDisplay {
@@ -153,5 +154,9 @@ export default {
 
 .btn-light {
   background-color: #ECE6CC;
+}
+
+.btn-green {
+  background-color: #134010;
 }
 </style>

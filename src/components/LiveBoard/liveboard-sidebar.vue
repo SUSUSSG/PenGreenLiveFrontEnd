@@ -42,7 +42,7 @@
                                 </div>
                                 <div class="flex items-center">
                                     <Button type="button" id="basicButton"
-                                        class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150">
+                                    class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150">
                                         등록
                                     </Button>
                                 </div>

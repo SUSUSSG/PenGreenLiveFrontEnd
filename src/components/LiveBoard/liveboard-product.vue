@@ -222,15 +222,5 @@ export default {
 .vgt-table thead th {
     padding: 10px;
 }
-/* 버튼 색상 및 모달 색상 변경 */
-.bg-primary-500 {
-    background-color: #134010;
-}
-.bg-secondary-500 {
-    background-color: #ECE6CC;
-}
-.bg-slate-900 {
-    background-color: #134010;
-}
 
 </style>
