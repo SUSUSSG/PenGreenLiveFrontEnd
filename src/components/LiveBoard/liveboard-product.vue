@@ -11,7 +11,7 @@
                         <span v-if="props.column.field == 'productImg'" class="cursor-pointer" @click="openDetailProductModal(props.row)">
                             <img :src="props.row.productImg" alt="Product Image" class=" w-18 h-18 object-cover" />
                             <img v-if="props.row.showNowImg" :src="nowImg" alt="Now Image"
-                                class="w-10 h-10 absolute top-1 left-0 z-10" id="nowImg" />
+                                class="w-15 h-10 absolute top-1 left-0 z-10" id="nowImg" />
                         </span>
                         <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
                             <div class="row items-center justify-center ml-7">
@@ -191,6 +191,7 @@ export default {
 #nowImg {
     width: auto;
     height: 20px;
+    object-fit: contain;
 }
 
 .relative {
@@ -222,4 +223,10 @@ export default {
     padding: 10px;
 }
 
+.bg-primary-500 {
+    background-color: #134010;
+}
+.bg-secondary-500 {
+    background-color: #ECE6CC;
+}
 </style>
