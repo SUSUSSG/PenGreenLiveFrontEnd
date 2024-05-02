@@ -2,21 +2,24 @@
   <div class="live-container">
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
     <Live class="live-section" show-icon-side-bar="true" show-title-bar="true"></Live>
-    <div class="live-section relative">
-      <div v-if="selectedProduct" class="z-index-[100] inline" >
-        <header class="sticky top-0 z-20 flex justify-between items-center py-4 bg-white">
+
+    <div class="live-section relative" :class="{'active-overlay': isOpen}">
+      <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
+
+      <div v-if="selectedProduct">
+        <header class="flex justify-between py-4">
           <div></div> <!-- 좌측 공백 -->
-          <Button class="flex justify-end items-center" text="돌아가기" @click="closePurchaseModal"/>
+          <Button text="돌아가기" @click="closePurchaseModal"/>
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-            <LiveBoardPurchase class="purchase-section inline"/>
+            <LiveBoardPurchase class="purchase-section"/>
           </div>
         </div>
-        <div class="sticky bottom-0 z-20 flex justify-between items-center pt-4">
+        <div class="sticky bottom-0 flex justify-between items-center pt-4">
           <Button class="w-full order-button" text="구매하기" @click="openModal"/>
         </div>
-        <div class="modal z-20 flex justify-between items-center modal-adjust" v-show="isOpen">
+        <div class="modal flex justify-between items-center modal-adjust z-30" v-show="isOpen">
           <PurchaseModal @update:isOpen="updateModal"/>
         </div>
       </div>
@@ -235,7 +238,24 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(0, 0, 0, 0.6); /* 배경 투명도 조정 */
+}
+
+.overlay {
+  min-width: 0;
+  border: 1px solid #ccc;
+  border-radius: 15px; 
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* display: none; */
+}
+
+.live-section.active-overlay {
+  position: relative;
+  z-index: 2; /* 오버레이가 필요할 때만 적용 */
 }
 
 /* 구매 영역 끝 */
