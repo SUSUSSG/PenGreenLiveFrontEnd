@@ -124,7 +124,6 @@
             <Icon icon="heroicons-outline:plus-circle" class="me-2 mr-2" />
             라이브 만들기
           </Button>
-          <LivePrepareModal v-if="showModal" @close="showModal = false" />
         </div>
         <div class="px-4 py-2">
           <Button btnClass="btn btn-outline-dark light d-flex align-items-center justify-content-center">
