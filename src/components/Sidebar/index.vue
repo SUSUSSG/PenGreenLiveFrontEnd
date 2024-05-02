@@ -119,15 +119,14 @@
         <div class="px-4 py-2">
           <Button
               btnClass="btn btn-dark d-flex align-items-center justify-content-center"
-              @click="toggleModal"
+              @click="gotoRegisterPage"
           >
             <Icon icon="heroicons-outline:plus-circle" class="me-2 mr-2" />
             라이브 만들기
           </Button>
-          <LivePrepareModal v-if="showModal" @close="showModal = false" />
         </div>
         <div class="px-4 py-2">
-          <Button btnClass="btn btn-outline-dark light d-flex align-items-center justify-content-center">
+          <Button btnClass="btn btn-outline-dark light d-flex align-items-center justify-content-center" @click="gotoPreparePage">
             <Icon icon="heroicons-outline:video-camera" class="me-2 mr-2" />
             실시간 라이브
           </Button>
@@ -190,8 +189,11 @@ export default defineComponent({
     };
   },
   methods:{
-    toggleModal() {
-      this.showModal = !this.showModal; // showModal 값을 토글하는 메소드
+    gotoRegisterPage() {
+      this.$router.push({name: '라이브등록'}) // About 페이지로 이동}
+    },
+    gotoPreparePage(){
+      this.$router.push({name: '실시간 라이브 준비'}) // About 페이지로 이동}
     }
   }
 });
