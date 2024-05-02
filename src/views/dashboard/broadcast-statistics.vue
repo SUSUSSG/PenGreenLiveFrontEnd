@@ -133,7 +133,7 @@ export default {
       selectedBroadcastTitleOption: null,
       startDate: "",
       endDate: "",
-      selectedBoradcastTitle: "방송제목1",
+      selectedBoradcastTitle: "",
       cardDataList: [
         {
           icon: "heroicons:clock",
@@ -263,6 +263,16 @@ export default {
     },
     onBroadcastOptionSelect(option) {
       this.selectedBroadcastOption = option;
+    },
+  },
+  watch: {
+    selectedBroadcastTitleOption(newValue) {
+      const selectedOption = this.broadcastOptions.find(
+        option => option.value === newValue
+      );
+      if (selectedOption) {
+        this.selectedBoradcastTitle = selectedOption.label;
+      }
     },
   },
 };
