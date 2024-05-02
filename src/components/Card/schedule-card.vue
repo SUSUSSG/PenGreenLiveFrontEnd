@@ -23,7 +23,7 @@
       <div class="list-one-line">{{ shopName }}</div>
     </div>
     <div v-show="showSubscribeButton" class="subscribe-button-wrapper">
-      <button class="btn subscribe-button">구독하기</button>
+      <button class="subscribe-button">구독하기</button>
       <span class="close" @click="showSubscribeButton = false">&times;</span>
     </div>
     
@@ -155,21 +155,23 @@ export default {
 
 .subscribe-button {
   font-size: 16px;
-  background-color: #4caf50;
+  background-color: #1C6D16;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 50px;
   cursor: pointer;
   width:100%;
+  height: 36px;
+  margin: 0 20px;
 }
 
 .close {
   position: absolute;
-  top: 0;
+  top: 1;
   right: 0;
+  margin-right: 10px;
   padding: 5px 10px;
-  margin-top: 2rem;;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
   color: #aaa;
   background-color: lightgray;
