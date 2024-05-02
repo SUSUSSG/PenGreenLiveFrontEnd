@@ -1,16 +1,15 @@
 <template>
-  <div class="card">
+  <div class="product-card">
     <div class="icon-bg">
       <img :src="noImageSrc" alt="상품 이미지" class="product-image"/>
     </div>
     <div class="info">
-      <h6>{{ productName }}</h6>
-      <p class="original-price">{{ formattedOriginalPrice }}</p>
-      <p class="discounted-price">{{ formattedDiscountedPrice }}</p>
+      <div class="product-name">{{ productName }}</div>
+      <div class="original-price">{{ formattedOriginalPrice }}</div>
+      <div class="discounted-price">{{ formattedDiscountedPrice }}</div>
     </div>
   </div>
 </template>
-
 
 <script>
 import noImage from "@/assets/images/all-img/no-image.png";
@@ -42,32 +41,34 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  border: 1px solid lightblue;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.product-card {
   display: flex;
   align-items: center;
   padding: 10px;
-  width: 100%;
 }
 .icon-bg {
   background-color: grey;
-  padding: 1px;
-  margin-right: 10px;
-  border: 1px solid #ddd;
-  flex: 0 0 25%; /* 이미지 컨테이너의 크기를 카드 너비의 1/4로 고정 */
+  padding: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 80px; 
+  height: 80px; 
 }
 .product-image {
-  max-width: 100%;
-  height: auto; /* 비율 유지 */
+  width: 100%; /* 부모 요소에 맞게 조정 */
+  height: 100%; /* 부모 요소에 맞게 조정 */
+  object-fit: cover;
 }
-.info h1 {
-  font-size: 1.5em;
-  margin: 0;
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px; /* 이미지와 정보 사이의 간격 */
+}
+.product-name {
+  font-size: 1.2em;
+  margin-bottom: 5px; /* 각 요소 간격 조정 */
 }
 .original-price {
   text-decoration: line-through;
@@ -77,8 +78,5 @@ export default {
   font-size: 1.2em;
   color: red;
 }
-.reviews {
-  font-size: 0.8em;
-  color: grey;
-}
+
 </style>
