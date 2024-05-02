@@ -40,11 +40,7 @@
           <div class="flex items-center space-x-2">
             <input id="addChatNotice" type="text" name="addChatNotice" v-model="chatNotice" placeholder="공지사항을 입력하세요."
               class="flex-1 block w-full min-w-0 rounded-l-md border-gray-300 focus:ring-blue-500 focus:border-blue-500" />
-            <Button type="button"
-              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-              @click="submitNotice">
-              등록
-            </Button>
+            <Button btnClass="btn-primary btn-sm" @click="submitNotice">등록</Button>
           </div>
         </div>
         <!-- 금칙어 설정 입력 필드 -->
@@ -53,11 +49,7 @@
           <div class="flex items-center space-x-2">
             <input id="addChatOption" type="text" name="addChatOption" v-model="forbiddenword" placeholder="금칙어 입력"
               class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
-            <Button type="button"
-              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-              @click="submitForbiddenword">
-              등록
-            </Button>
+            <Button btnClass="btn-primary btn-sm" @click="submitForbiddenword">등록</Button>
           </div>
         </div>
 

@@ -208,3 +208,12 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+.bg-slate-900 {
+  background-color: #ECE6CC;
+}
+.text-white {
+  color: black;
+}
+</style>
