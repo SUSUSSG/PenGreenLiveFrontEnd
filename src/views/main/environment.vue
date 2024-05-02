@@ -1,8 +1,18 @@
 <template>
-  <ScrollTopButton/>
-  <MenuHeaderNav  style="width: 77%; margin: auto; border: 1px solid #e6e7eb" />
+  <ScrollTopButton />
+  <MenuHeaderNav style="width: 77%; margin: auto; border: 1px solid #e6e7eb" />
   <div class="content-wrapper">
-    <environmentVue/>
+    <div style="display:flex; flex-direction:column; align-items: center;">
+      <img
+        src="@/assets/images/all-img/env-title.png"
+        alt="Environment Title"
+      />
+      <img
+        src="@/assets/images/all-img/env-label.png"
+        alt="Environment Title"
+      />
+      <img src="@/assets/images/all-img/env-logo.png" alt="Environment Title" style="width:70%; margin-top: 10rem; margin-bottom:20rem;"/>
+    </div>
   </div>
 </template>
 
@@ -22,7 +32,6 @@ export default {
 <style scoped>
 .content-wrapper {
   width: 77%;
-  height: 100vh;
   margin: auto;
   display: flex !important;
   flex-direction: column;
@@ -34,5 +43,10 @@ export default {
 
 hr {
   width: 100%;
+}
+
+img{
+  width: 100%;
+  height: auto;
 }
 </style>
