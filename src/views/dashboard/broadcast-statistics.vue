@@ -1,38 +1,38 @@
 <template>
   <div id="content" class="flex flex-col items-center">
     <div id="search-container" class="w-full flex justify-center">
-      <div
-        id="search"
-        class="inline-flex items-center gap-4 max-w-[900px] w-full"
-      >
-        <div class="card-title mr-7" id="searchTitle">선택</div>
-        <select v-model="selectedBroadcastTitleOption">
-          <option :value="null">방송 제목</option>
-          <option v-for="option in broadcastOptions" :key="option.value" :value="option.value">{{ option.label }}</option>
-        </select>
-        <div class="flex gap-4 ml-5 w-full">
-          <div class="input-wrapper">
-            <label for="startDate">시작일:</label>
-            <input type="date" id="startDate" v-model="startDate" />
+      <div id="search" class="inline-flex items-center gap-4">
+        <div v-if="!totalStats" class="card-title mr-7">
+          <div id="searchTitle">방송 제목</div>
+          <div class="flex gap-4 ml-5 w-full">
+            {{ selectedBoradcastTitle }}
           </div>
-          <div class="input-wrapper">
-            <label for="endDate">종료일:</label>
-            <input type="date" id="endDate" v-model="endDate" />
+        </div>
+        <div v-else class="card-title mr-7">
+          <div id="searchTitle" class="mt-2">날짜 선택</div>
+          <div class="flex gap-4 ml-5 w-full">
+            <div class="input-wrapper">
+              <label for="startDate">시작일:</label>
+              <input type="date" id="startDate" v-model="startDate" />
+            </div>
+            <div class="input-wrapper">
+              <label for="endDate">종료일:</label>
+              <input type="date" id="endDate" v-model="endDate" />
+            </div>
+            <Button
+              type="submit"
+              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
+            >
+              검색
+            </Button>
           </div>
-          <Button
-            type="submit"
-            class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
-            @click="toggleResult"
-          >
-            검색
-          </Button>
         </div>
       </div>
     </div>
     <div id="result-container" class="w-full flex flex-col items-center">
       <div>
-        <div :id="resultId">{{ resultTitle }}</div>
-        <div id="result" class="grid">
+        <div :id="resultId" class="mt-3">{{ resultTitle }}</div>
+        <div id="result" class="grid mt-7">
           <div
             v-for="(cardData, index) in displayedCardData"
             :key="'title_' + index"
@@ -47,10 +47,33 @@
             />
           </div>
         </div>
+        <div v-if="!totalStats"></div>
+        <div v-else>
+          <div class="inline-flex mt-10 inline-flex items-center gap-4">
+            <div id="resultName" class="mr-5">방송 목록</div>
+            <select v-model="selectedBroadcastTitleOption">
+              <option :value="null">제목</option>
+              <option
+                v-for="option in broadcastOptions"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+            <Button
+              type="submit"
+              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
+              @click="toggleResult"
+            >
+              상세조회
+            </Button>
+          </div>
+        </div>
         <!-- 상세통계 -->
         <div v-if="!totalStats">
-          <div id="detailResultName" class="mt-12">Top3 상품</div>
-          <div class="row inline-flex" id="product">
+          <div id="detailResultName" class="mt-12">판매 상품</div>
+          <div class="row inline-flex mt-5" id="product">
             <div
               v-for="(product, i) in products"
               :key="i"
@@ -75,6 +98,15 @@
               </div>
             </div>
           </div>
+          <div class="mt-7 text-center">
+            <Button
+              type="submit"
+              class="bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 text-white rounded px-4 py-2 transition-colors duration-150"
+              @click="toggleResult"
+            >
+              확인
+            </Button>
+          </div>
         </div>
       </div>
     </div>
@@ -95,12 +127,13 @@ export default {
   data() {
     return {
       broadcastOptions: [
-        { value: "1번", label: "number1" },
-        { value: "2번", label: "number2" },
+        { value: "1번", label: "방송제목1" },
+        { value: "2번", label: "방송제목2" },
       ],
       selectedBroadcastTitleOption: null,
       startDate: "",
       endDate: "",
+      selectedBoradcastTitle: "방송제목1",
       cardDataList: [
         {
           icon: "heroicons:clock",
@@ -269,13 +302,13 @@ export default {
 
 #resultName,
 #detailResultName {
-  font-size: 30px;
-  margin-bottom: 30px;
+  font-size: 20px;
+  /* margin-bottom: 30px;  */
   color: black;
 }
 
 #searchTitle {
-  width: 100px;
+  width: 150px;
 }
 
 #productCard {
@@ -287,7 +320,7 @@ export default {
 
 .card-title {
   font-weight: bold;
-  font-size: 20px;
+  font-size: 15px;
   display: flex;
   justify-content: center;
 }
