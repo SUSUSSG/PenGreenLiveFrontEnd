@@ -240,9 +240,16 @@ export default {
   width: 100%;
 }
 
-#search-container,
+#search-container {
+  padding: 10px;
+  border-radius: 0.5rem;
+  background: white;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
 #result-container {
-  padding: 30px;
+  padding: 10px 10px 30px 10px;
   border-radius: 0.5rem;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
@@ -252,11 +259,12 @@ export default {
 #result.grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 40px;
+  grid-gap: 30px;
 }
 
 #result {
-  width: 1500px;
+  width: 100%;
+  max-width: 1500px;
 }
 
 #resultName,
