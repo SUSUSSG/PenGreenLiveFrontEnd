@@ -276,7 +276,7 @@ export default {
 }
 
 .test-broadcasting {
-  background-color: #3071a9;
+  background-color: #134010;
   color: white;
   font-weight: bold;
   border: none;
@@ -287,7 +287,7 @@ export default {
 }
 
 .test-broadcasting:hover {
-  background-color: #265d8a;
+  background-color: #134010;
 }
 
 .volume-control {
@@ -313,7 +313,7 @@ input[type="range"]::-webkit-slider-runnable-track {
   cursor: pointer;
   animate: 0.2s;
   box-shadow: 1px 1px 1px #000000;
-  background: #3071a9;
+  background: #134010;
   border-radius: 1.3px;
   border: 0.2px solid #010101;
 }
