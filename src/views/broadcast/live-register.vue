@@ -7,6 +7,7 @@
           name="liveTitle"
           v-model="liveTitle"
       />
+      <br>
 
       <!-- 라이브 한줄 요약 입력 -->
       <Textinput
@@ -15,7 +16,7 @@
           name="liveSummary"
           v-model="liveSummary"
       />
-
+      <br>
       <!-- 대표 이미지 등록 및 미리보기 -->
       <div class="flex flex-col md:flex-row items-start md:items-center">
         <label class="label-style">
@@ -38,6 +39,7 @@
           />
         </div>
       </div>
+      <br>
 
       <!-- 라이브 예정일/시간 선택 -->
       <Textinput
@@ -47,6 +49,7 @@
           v-model="liveDateTime"
       />
     </Card>
+  <br>
     <!-- 카테고리 설정 -->
     <Card>
       <div>
@@ -68,7 +71,7 @@
       <Modal
           title="ProductRegister"
           label="상품 등록하기"
-          labelClass="btn-outline-dark"
+          labelClass="btn-outline-dark btn-sm"
           ref="modal1"
       >
         <h4 class="font-medium text-lg mb-3 text-slate-900">
@@ -85,7 +88,7 @@
           />
         </template>
       </Modal>
-      <div class="card rounded-md bg-white dark:bg-slate-800 shadow-lg">
+      <div class="card rounded-md bg-white dark:bg-slate-800">
         <div class="card-body flex flex-col p-6 overflow-auto">
           <p>판매 상품 등록</p>
           <hr class="section-divider"> <!-- 구분선 추가 -->
@@ -110,16 +113,17 @@
               </td>
               <td class="px-6 py-4">{{ formatCurrency(product.discountedPrice) }}</td>
               <td class="px-6 py-4">
-                <button class="btn bg-primary-500 text-white" @click="registerProduct(index)">등록하기</button>
+                <Button class="btn-sm" @click="registerProduct(index)">등록하기</Button>
               </td>
             </tr>
             </tbody>
           </table>
         </div>
       </div>
+      <br>
 
       <!-- 등록된 상품 목록 -->
-      <div class="card rounded-md bg-white dark:bg-slate-800 shadow-lg">
+      <div class="card rounded-md bg-white dark:bg-slate-800">
         <div class="card-body flex flex-col p-6 overflow-auto">
           <p>등록된 상품 목록</p>
           <hr class="section-divider"> <!-- 구분선 추가 -->
@@ -146,28 +150,30 @@
         </div>
       </div>
     </Card>
-
+<br>
     <Card>
-      <!-- Modified Live Benefits Section -->
+      <!-- 공지 사항 섹션 -->
       <div class="section">
-        <Textinput label="라이브 혜택" type="text" v-model="newBenefit" placeholder="라이브 혜택 입력"/>
-        <Button :isDisabled="!canAddBenefit" text="추가하기" @click="addBenefit" :isLoading="isLoading" class="mt-2"/>
+        <div class="flex items-center">
+          <Textinput label="공지 사항" type="text" name="newNotice" v-model="newNotice" placeholder="공지사항 입력" class="mb-2 flex-grow" />
+          <Button :disabled="!canAddNotice" @click="addNotice" :class="{'btn-outline-dark': !isLoading, 'loading': isLoading}" class="btn inline-flex justify-center btn-sm ml-2 mt-5"><span>추가하기</span></Button>
+        </div>
         <ul>
-          <li v-for="(item, index) in benefits" :key="index" class="list-item">
-            {{ item }}
-            <Button text="삭제" @click="deleteBenefit(index)" class="btn-sm btn-delete"/>
+          <li v-for="(notice, index) in notices" :key="index" class="list-item">
+            <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" class="flex-shrink-0"></Icon>{{ notice }}
           </li>
         </ul>
       </div>
 
-      <!-- 공지 사항 섹션 -->
+      <!-- 라이브 혜택 섹션 -->
       <div class="section">
-        <Textinput label="공지 사항" type="text" v-model="newNotice" placeholder="공지사항 입력"/>
-        <Button :isDisabled="!canAddNotice" text="추가하기" @click="addNotice" :isLoading="isLoading" class="mt-2"/>
+        <div class="flex items-center">
+          <Textinput label="라이브 혜택" type="text" name="newBenefit" v-model="newBenefit" placeholder="라이브 혜택 입력" class="mb-2 flex-grow" />
+          <Button :disabled="!canAddBenefit" @click="addBenefit" :class="{'btn-outline-dark': !isLoading, 'loading': isLoading}" class="btn inline-flex justify-center btn-sm ml-2 mt-5"><span>추가하기</span></Button>
+        </div>
         <ul>
-          <li v-for="(notice, index) in notices" :key="index" class="list-item">
-            {{ notice }}
-            <Button text="삭제" @click="deleteNotice(index)" class="btn-sm btn-delete"/>
+          <li v-for="(item, index) in benefits" :key="index" class="list-item">
+            <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" class="flex-shrink-0"></Icon>{{ item }}
           </li>
         </ul>
       </div>
@@ -177,29 +183,33 @@
         <div class="mb-4">
           <Textinput label="질문" type="text" v-model="newQuestion" placeholder="질문을 입력해주세요" class="mb-2"/>
           <Textarea label="답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer"/>
-          <Button :isDisabled="!canAddAnswer" text="추가하기" @click="addAnswer" :isLoading="isLoading" class="mt-2"/>
+          <br>
+          <Button :isDisabled="!canAddAnswer" text="추가하기" @click="addAnswer" :isLoading="isLoading" class="btn-sm"/>
         </div>
         <dl>
           <div v-for="(item, index) in qa" :key="index" class="faq-item">
+            <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" class="delete-icon"></Icon>
             <dt class="question">{{ item.question }}</dt>
-            <dd class="answer">&nbsp&nbsp&nbsp{{ item.answer }}</dd>
-            <Button text="삭제" @click="deleteQA(index)" class="btn-sm btn-delete"/>
+            <dd class="answer">&nbsp;&nbsp;{{ item.answer }}</dd>
           </div>
         </dl>
       </div>
     </Card>
-
+    <br>
     <!-- 저장 버튼 -->
+  <div class="flex justify-end">
     <Button
         :isDisabled="!canSubmit"
         text="저장하기"
         @click="submitForm"
         :isLoading="isLoading"
     />
+  </div>
 </template>
 
 
 <script>
+import Icon from '@/components/Icon/index.vue'
 import Textinput from '@/components/Textinput';
 import Button from '@/components/Button';
 import noImage from '@/assets/images/all-img/no-image.png';
@@ -217,7 +227,8 @@ export default {
     Dropdown,
     Modal,
     Card,
-    SelectComponent
+    SelectComponent,
+    Icon
   },
   data() {
     return {
@@ -371,17 +382,18 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.live-info{
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
 .card-body {
   height: 100%;
   overflow-y: auto; /* Enables scrolling */
 }
 
 .card-container {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  height: 50vh;
-  width: 100%;
+  gap : 20px;
 }
 
 .label-style {
@@ -423,7 +435,6 @@ export default {
 .card {
   background-color: white;
   border-radius: 0.375rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   height: 100%;
   width: 100%;
@@ -451,11 +462,14 @@ export default {
 
 .list-item, .faq-item {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
-  position: relative;
+  gap: 8px; /* 추가: 아이콘과 텍스트 사이 간격 */
+}
+.icon {
+  cursor: pointer;
+  margin-right: 8px; /* 아이콘과 텍스트 사이 간격 */
 }
 
 .btn-delete {
@@ -490,14 +504,30 @@ export default {
   margin-top: 20px;
 }
 
+.faq-item {
+  display: flex;
+  flex-direction: column; /* 요소를 수직으로 배열 */
+  align-items: flex-start; /* 왼쪽 정렬 */
+  padding: 10px 0;
+}
+
 .question {
-  font-weight: bold; /* 질문을 볼드체로 표시 */
-  width: 100%;
+  font-weight: bold;
+  margin-bottom: 4px; /* 질문과 답변 사이의 간격 조정 */
 }
 
 .answer {
-  margin-top: 8px; /* 답변과 질문 사이에 공간 추가 */
-  width: 100%;
+  white-space: pre-line; /* 답변 내 공백 유지 */
+}
+
+.delete-icon {
+  align-self: flex-start; /* 아이콘을 항상 왼쪽에 배치 */
+  margin-bottom: 8px; /* 아이콘과 질문 사이 간격 조정 */
+  cursor: pointer;
+}
+
+.icon {
+  cursor: pointer; /* 삭제 아이콘의 커서 스타일 */
 }
 
 .selected-category-display {

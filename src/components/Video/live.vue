@@ -98,13 +98,9 @@ export default {
   flex-direction: column;
   align-items: center; /* Center alignment horizontally */
   position: relative;
+  border-radius: 10px; /* 상위 요소에 둥근 테두리 추가 */
+  overflow: hidden; /* 자식 요소가 둥근 테두리를 벗어나지 않도록 설정 */
 }
-
-.logo {
-  max-width: 25%;  /* 최대 너비를 50%로 제한 */
-  height: auto;     /* 높이는 자동으로 설정하여 비율 유지 */
-}
-
 
 .title-bar {
   width: 100%;
@@ -115,6 +111,14 @@ export default {
   background-color: #333;
   color: #fff;
   z-index: 10;
+  border-top-left-radius: 10px; /* 왼쪽 상단 모서리 둥글게 */
+  border-top-right-radius: 10px; /* 오른쪽 상단 모서리 둥글게 */
+}
+
+
+.logo {
+  max-width: 25%;  /* 최대 너비를 50%로 제한 */
+  height: auto;     /* 높이는 자동으로 설정하여 비율 유지 */
 }
 
 .video-and-sidebar-wrapper {
