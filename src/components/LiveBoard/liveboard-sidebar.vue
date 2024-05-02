@@ -55,7 +55,7 @@
                                         class="block text-sm font-medium text-gray-700 mt-10">썸네일</label>
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0">
-                                            <img :src="imageSrc" alt="대표 이미지 미리보기" style="max-width: 400px;" />
+                                            <img src="https://via.placeholder.com/90x160" alt="대표 이미지 미리보기" style="max-width: 400px;" class="mt-2"/>
                                         </div>
                                         <div class="ml-4">
                                             <p>최대 용량 : 1mb</p>
