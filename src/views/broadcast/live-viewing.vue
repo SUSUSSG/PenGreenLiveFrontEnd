@@ -2,7 +2,7 @@
   <div class="live-container">
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
     <Live class="live-section" show-icon-side-bar="true" show-title-bar="true"></Live>
-    <div class="live-section">
+    <div class="live-section relative">
       <div v-if="selectedProduct" class="z-index-[100] inline" >
         <header class="sticky top-0 z-20 flex justify-between items-center py-4 bg-white">
           <div></div> <!-- 좌측 공백 -->
@@ -16,7 +16,7 @@
         <div class="sticky bottom-0 z-20 flex justify-between items-center pt-4">
           <Button class="w-full order-button" text="구매하기" @click="openModal"/>
         </div>
-        <div class="modal sticky bottom-0 z-20 flex justify-between items-center" v-show="isOpen">
+        <div class="modal z-20 flex justify-between items-center modal-adjust" v-show="isOpen">
           <PurchaseModal @update:isOpen="updateModal"/>
         </div>
       </div>
@@ -192,12 +192,6 @@ export default {
 }
 
 /* 구매 영역 */
-.sticky-bottom-white {
-  position: sticky;
-  bottom: 0;
-  z-index: 25; 
-} 
-
 .scroll-wrapper {
   max-height: calc(90vh - 100px);
   overflow-y: auto;
@@ -236,19 +230,13 @@ export default {
   color: red;
 }
 
-/* .modal {
-  position: fixed;
-  background: rgba(0, 0, 0, 0.6);
-  transition: bottom 0.3s;
-  z-index: 100;
-  display: none; 
+.modal {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.6); /* 배경 투명도 조정 */
 }
-
-.modal.is-active {
-  display: flex;
-}
-*/
-
 
 /* 구매 영역 끝 */
 

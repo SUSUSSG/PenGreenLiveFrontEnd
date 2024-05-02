@@ -1,26 +1,30 @@
 <template>
-  <div class="modal-content w-[100%] bg-white">
+  <div class="modal-content w-[100%] h-[100%] bg-white">
     <div class="purchase-wrap">
-      <div class="modal-handle-area w-full h-[1rem] flex justify-center" @click="close">
+      <div class="modal-handle-area w-full h-[1rem] flex justify-center items-center" @click="close">
         <span class="modal-handle"></span>
       </div>
-      <div>
+      <div class="purchase-info">
+        <div>
         동구밭 중건성 헤어케어 5종 기획세트
-      </div>
-      <div class="w-full flex justify-between items-center">
-        <div class="quantity-controls h-[30px]">
-          <button @click="decreaseQuantity" class="btn-control h-full">-</button>
-          <input type="text" v-model="quantity" class="input-number h-full" readonly/>
-          <button @click="increaseQuantity" class="btn-control h-full">+</button>
         </div>
-        <div class="items-right">33,000원</div>
-      </div>
-      <div class="address-input w-full flex justify-between items-center">
-        <label for="address">서울특별시 관악구 관악로12길 16-37</label>
-        <button>변경</button>
+        <div class="w-full flex justify-between items-center">
+          <div class="quantity-controls h-[30px]">
+            <button @click="decreaseQuantity" class="btn-control h-full">-</button>
+            <input type="text" v-model="quantity" class="input-number h-full" readonly/>
+            <button @click="increaseQuantity" class="btn-control h-full">+</button>
+          </div>
+          <div class="items-right">33,000원</div>
+        </div>
+        <div class="address-input w-full flex justify-between items-center">
+          <label for="address">서울특별시 관악구 관악로12길 16-37</label>
+          <button>변경</button>
+        </div>
       </div>
     </div>
-    <button class="order-button">눌러서 구매하기</button>
+    <div class="w-full p-[20px]">
+      <button class="order-button w-full">눌러서 구매하기</button>
+    </div>
   </div>
 </template>
 
@@ -51,12 +55,21 @@ const decreaseQuantity = () => {
 </script>
 
 <style scoped>
+
+.modal-content {
+  border-radius: 16px 16px 0 0;
+}
+
 .modal-handle {
   display: block;
   width: 40px;
   height: 6px;
   background-color: #999;
   border-radius: 3px;
+}
+
+.purchase-info {
+  padding: 20px 15px;
 }
 
 .number-input {
@@ -104,12 +117,11 @@ const decreaseQuantity = () => {
 }
 
 .order-button {
-  width: 100%;
   background-color: black;
   color: white;
-  padding: 10px 0;
   border: none;
   cursor: pointer;
+  height: 2.5rem;
 }
 
 </style>
