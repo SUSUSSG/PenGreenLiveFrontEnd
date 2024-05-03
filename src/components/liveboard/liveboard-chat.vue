@@ -1,6 +1,6 @@
 <template>
   <div class="chat-card bg-white rounded p-4">
-    <div class="inline-flex justify-between items-center" :style="{ height: cardHeight, width: cardWidth }">
+    <div class="inline-flex justify-between items-center" :style="{ width: cardWidth }">
       <div class="text-base flex-grow">채팅</div>
       <div>
         <Button v-if="showEditButton" icon="fluent:add-48-filled" @click="editChatting"
