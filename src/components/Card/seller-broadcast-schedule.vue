@@ -130,4 +130,12 @@ export default {
   justify-content: flex-start; 
 }
 
+.product-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; 
+  margin-left: -20px; 
+}
+
+
 </style>
