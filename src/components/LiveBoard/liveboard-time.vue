@@ -85,6 +85,9 @@ export default {
     toggleBroadcast() {
       this.isBroadcasting = !this.isBroadcasting;
       this.updateResultDisplayText();
+      if (!this.isBroadcasting) {
+        this.$router.push('/broadcast-statistics');
+      }
     },
     getCurrentTime() {
       let now = new Date();
