@@ -111,7 +111,7 @@ export default {
 }
 
 .title-bar {
-  width: 95.5%;
+  width: 92.5%;
   padding-left: 1rem;
   height: 5vh; /* Explicit height of the title bar */
   display: flex;
@@ -143,12 +143,10 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-
   z-index: 20;
-  width: 100%;
   position: absolute;
-  left: 220px;
-  bottom: 20px;
+  right: 40px;
+  bottom: 10px;
 }
 
 .icon-wrapper {
@@ -161,9 +159,9 @@ export default {
 .heart-icon,
 .mute-icon,
 .share-icon {
-  width: 70px; /* Increase icon size */
-  height: 70px;
-  margin-bottom: 5px; /* Spacing between icon and text */
+  width: 50px; /* Increase icon size */
+  height: 50px;
+  margin-bottom: 1px; /* Spacing between icon and text */
   border-radius: 50%;
   background-color: white;
   display: flex;

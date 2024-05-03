@@ -378,4 +378,11 @@ ul.notice-list li, ul.benefits-list li {
 .video-component{
   width: 100px!important;
 }
+
+.video-component.live-section {
+    padding-left: 0;
+    padding-right: 0;
+    height: auto;
+    max-width: 552px !important;
+}
 </style>
