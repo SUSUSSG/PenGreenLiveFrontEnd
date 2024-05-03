@@ -40,4 +40,9 @@ export default {
   border-radius: 10px;
   overflow: hidden;
 }
+
+.video{
+  max-height: 1010px;
+  width: auto!important;
+}
 </style>

@@ -280,10 +280,6 @@ export default {
   margin-right : 20px;
 }
 
-/* 가운데 라이브 섹션에 대한 너비 조정 */
-.live-section:nth-child(2) {
-  flex: 1.1; /* 기존보다 큰 flex-factor 적용 */
-}
 
 .tab {
   @apply py-2 px-4 bg-white text-gray-500 hover:bg-gray-100 focus:outline-none;
@@ -375,4 +371,11 @@ ul.notice-list li, ul.benefits-list li {
   border-bottom: 1px solid #eee; /* 구분선 추가 */
 }
 
+.chat-card{
+  height: auto;
+}
+
+.video-component{
+  width: 100px!important;
+}
 </style>
