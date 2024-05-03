@@ -31,7 +31,7 @@ export default {
         {
           "id": 1,
           "broadcastTitle": "맛있는 사과를 팔아요",
-          "thumbimageSrc": "http://via.placeholder.com/100x130",
+          "thumbimageSrc": "http://via.placeholder.com/200x200",
           "productimageSrc": "http://via.placeholder.com/100x130",
           "productName": "충주 사과",
           "productPrice": 42000,
@@ -41,7 +41,7 @@ export default {
         {
           "id": 2,
           "broadcastTitle": "신선한 오렌지 판매중",
-          "thumbimageSrc": "http://via.placeholder.com/100x130",
+          "thumbimageSrc": "http://via.placeholder.com/200x200",
           "productimageSrc": "http://via.placeholder.com/100x130",
           "productName": "제주 오렌지",
           "productPrice": 35000,
@@ -51,7 +51,7 @@ export default {
         {
           "id": 3,
           "broadcastTitle": "고소한 피칸 구매하세요",
-          "thumbimageSrc": "http://via.placeholder.com/100x130",
+          "thumbimageSrc": "http://via.placeholder.com/200x200",
           "productimageSrc": "http://via.placeholder.com/100x130",
           "productName": "미국 피칸",
           "productPrice": 50000,
@@ -61,7 +61,7 @@ export default {
         {
           "id": 4,
           "broadcastTitle": "달콤한 체리, 지금 할인 중",
-          "thumbimageSrc": "http://via.placeholder.com/100x130",
+          "thumbimageSrc": "http://via.placeholder.com/200x200",
           "productimageSrc": "http://via.placeholder.com/100x130",
           "productName": "워싱턴 체리",
           "productPrice": 60000,
@@ -69,25 +69,27 @@ export default {
           "liveDateTime": "2024-03-24-18:00"
         },
         {
-          "id": 5,
-          "broadcastTitle": "신선한 블루베리 세일",
-          "thumbimageSrc": "http://via.placeholder.com/100x130",
+          "id": 4,
+          "broadcastTitle": "달콤한 체리, 지금 할인 중",
+          "thumbimageSrc": "http://via.placeholder.com/200x200",
           "productimageSrc": "http://via.placeholder.com/100x130",
-          "productName": "캐나다 블루베리",
-          "productPrice": 30000,
-          "discountRate": 10,
-          "liveDateTime": "2024-03-25-21:45"
+          "productName": "워싱턴 체리",
+          "productPrice": 60000,
+          "discountRate": 15,
+          "liveDateTime": "2024-03-24-18:00"
         },
         {
-          "id": 6,
-          "broadcastTitle": "최고의 망고를 만나보세요",
-          "thumbimageSrc": "http://via.placeholder.com/100x130",
+          "id": 4,
+          "broadcastTitle": "달콤한 체리, 지금 할인 중",
+          "thumbimageSrc": "http://via.placeholder.com/200x200",
           "productimageSrc": "http://via.placeholder.com/100x130",
-          "productName": "필리핀 망고",
-          "productPrice": 45000,
-          "discountRate": 35,
-          "liveDateTime": "2024-03-26-17:00"
-        }
+          "productName": "워싱턴 체리",
+          "productPrice": 60000,
+          "discountRate": 15,
+          "liveDateTime": "2024-03-24-18:00"
+        },
+
+
       ]
 
     };
@@ -98,7 +100,7 @@ export default {
 <style scoped>
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Creates four columns */
-  grid-gap: 20px; /* Space between the cards */
+  grid-template-columns: repeat(5, 1fr); /* Creates four columns */
+  grid-gap: 20px;
 }
 </style>

@@ -1,15 +1,20 @@
 <template>
   <div class="broadcast-card">
+    <p>라이브 일시: {{ formattedLiveDateTime }}</p>
+    <h1 class="broadcast-title">{{ broadcastTitle }}</h1>
     <div class="broadcast-image" :style="{ backgroundImage: 'url(' + thumbimageSrc + ')' }">
       <!-- Empty div for the background image -->
     </div>
-    <h1 class="broadcast-title">{{ broadcastTitle }}</h1>
-    <ProductCard
-        :product-name="productName"
-        :original-price="productPrice"
-        :discount-rate="discountRate"/>
+  
+    <div class="product-card-container">
+      <ProductCard
+          :product-name="productName"
+          :original-price="productPrice"
+          :discount-rate="discountRate"/>
+    </div>
+
     <div>
-      <p>라이브 일시: {{ formattedLiveDateTime }}</p>
+
     </div>
     <!-- 조건부 렌더링 -->
     <div v-if="isPrepareTime">
@@ -86,25 +91,26 @@ export default {
 <style scoped>
 .broadcast-image {
   width: 100%;
-  height: 200px;
+  height: 300px;
   background-size: cover;
   background-position: center;
 }
 .broadcast-title {
   font-size: 18px;
-  color: white;
-  background-color: rgba(0, 0, 0, 0.5);
-  width: 100%;
-  padding: 5px;
+  color: #111111;
+  padding-top: 10px;
+  padding-bottom: 15px;
 }
 .broadcast-card {
-  border: 2px solid black;
+  border: 2px;
   width: 300px;
   padding: 10px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-radius: 10px;
+  background-color: white;
 }
 .action-button {
   width: 100%;
@@ -114,7 +120,14 @@ export default {
   border: none;
   cursor: pointer;
   margin-top: 10px;
-  align-self: center; /* 중앙 정렬 */
+  align-self: center; 
+  border-radius: 10px;
+}
+
+.product-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; /* ProductCard를 왼쪽으로 정렬 */
 }
 
 </style>
