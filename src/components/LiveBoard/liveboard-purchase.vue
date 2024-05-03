@@ -147,7 +147,7 @@
 
 <style>
 
-.brand-name {
+.purchase-container .brand-name {
     /* color: #828c94; */
     font-weight: 500;
     display: block;
@@ -158,7 +158,7 @@
     color: #757575;
 }
 
-.product-name {
+.purchase-container .product-name {
     display: block;
     font-size: 17px;
     font-weight: 400;
@@ -167,7 +167,7 @@
     overflow-wrap: break-all;
 }
 
-.discounted-price {
+.purchase-container .discounted-price {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
