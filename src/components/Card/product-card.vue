@@ -37,7 +37,10 @@ export default {
     formattedDiscountedPrice() {
       return `${this.discountedPrice.toLocaleString()}원`;
     }
-  }
+  },
+  mounted() {
+    this.$emit('updateDiscountedPrice', this.discountedPrice);
+  },
 }
 </script>
 
