@@ -42,7 +42,7 @@ export default {
 }
 
 .video{
-  max-height: 1010px;
+  max-height: 906px;
   width: auto!important;
 }
 </style>
