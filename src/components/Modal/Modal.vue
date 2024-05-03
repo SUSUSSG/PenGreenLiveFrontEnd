@@ -42,12 +42,12 @@
               :class="sizeClass"
             >
               <div
-                class="relative overflow-hidden py-4 px-5 text-white flex justify-between"
+                class="relative overflow-hidden py-4 px-5 text-black flex justify-between"
                 :class="themeClass"
               >
                 <h2
                   v-if="title"
-                  class="capitalize leading-6 tracking-wider font-medium text-base text-white"
+                  class="capitalize leading-6 tracking-wider font-medium text-base text-black"
                 >
                   {{ title }}
                 </h2>
@@ -213,7 +213,7 @@ export default defineComponent({
 .bg-slate-900 {
   background-color: #ECE6CC;
 }
-.text-white {
+.text-black {
   color: black;
 }
 </style>

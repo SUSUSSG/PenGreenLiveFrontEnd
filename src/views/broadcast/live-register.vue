@@ -69,7 +69,7 @@
         <br>상품 등록<br>
       </label>
       <Modal
-          title="ProductRegister"
+          title="상품등록"
           label="상품 등록하기"
           labelClass="btn-outline-dark btn-sm"
           ref="modal1"
@@ -83,7 +83,7 @@
         <template v-slot:footer>
           <Button
               text="등록하기"
-              btnClass="btn-dark "
+              btnClass="btn-primary btn-sm"
               @click="$refs.modal1.closeModal()"
           />
         </template>
@@ -156,7 +156,7 @@
       <div class="section">
         <div class="flex items-center">
           <Textinput label="공지 사항" type="text" name="newNotice" v-model="newNotice" placeholder="공지사항 입력" class="mb-2 flex-grow" />
-          <Button :disabled="!canAddNotice" @click="addNotice" :class="{'btn-outline-dark': !isLoading, 'loading': isLoading}" class="btn inline-flex justify-center btn-sm ml-2 mt-5"><span>추가하기</span></Button>
+          <Button :disabled="!canAddNotice" @click="addNotice" :class="{'btn-outline-dark': !isLoading, 'loading': isLoading}" btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5"><span>추가하기</span></Button>
         </div>
         <ul>
           <li v-for="(notice, index) in notices" :key="index" class="list-item">
@@ -169,7 +169,8 @@
       <div class="section">
         <div class="flex items-center">
           <Textinput label="라이브 혜택" type="text" name="newBenefit" v-model="newBenefit" placeholder="라이브 혜택 입력" class="mb-2 flex-grow" />
-          <Button :disabled="!canAddBenefit" @click="addBenefit" :class="{'btn-outline-dark': !isLoading, 'loading': isLoading}" class="btn inline-flex justify-center btn-sm ml-2 mt-5"><span>추가하기</span></Button>
+          <Button :disabled="!canAddBenefit" @click="addBenefit" :class="{'btn-outline-dark': !isLoading, 'loading': isLoading}" 
+          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5"><span>추가하기</span></Button>
         </div>
         <ul>
           <li v-for="(item, index) in benefits" :key="index" class="list-item">

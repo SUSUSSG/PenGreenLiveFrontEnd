@@ -7,15 +7,15 @@
             {{ selectedBoradcastTitle }}
           </div>
         </div>
-        <div v-else class="card-title mr-7">
-          <div id="searchTitle" class="mt-2">날짜 선택</div>
+        <div v-else class="card-title mr-7 p-2">
+          <div id="searchTitle">날짜 선택</div>
           <div class="flex gap-4 ml-5 w-full">
             <div class="input-wrapper">
-              <label for="startDate">시작일:</label>
+              <span for="startDate">시작일:</span>
               <input type="date" id="startDate" v-model="startDate" />
             </div>
             <div class="input-wrapper">
-              <label for="endDate">종료일:</label>
+              <span for="endDate">종료일:</span>
               <input type="date" id="endDate" v-model="endDate" />
             </div>
             <Button btnClass="btn-primary btn-sm">검색</Button>
@@ -41,55 +41,57 @@
             />
           </div>
         </div>
-        <div v-if="!totalStats"></div>
-        <div v-else>
-          <div class="inline-flex mt-10 inline-flex items-center gap-4">
-            <div id="resultName" class="mr-5">방송 목록</div>
-            <select v-model="selectedBroadcastTitleOption">
-              <option :value="null">제목</option>
-              <option
-                v-for="option in broadcastOptions"
-                :key="option.value"
-                :value="option.value"
-              >
-                {{ option.label }}
-              </option>
-            </select>
-            <Button btnClass="btn-primary btn-sm" @click="toggleResult">상세조회</Button>
-          </div>
-        </div>
-        <!-- 상세통계 -->
-        <div v-if="!totalStats">
-          <div id="detailResultName" class="mt-12">판매 상품</div>
-          <div class="row inline-flex mt-5" id="product">
-            <div
-              v-for="(product, i) in products"
-              :key="i"
-              class="inline-flex ml-3"
-            >
-              <div class="inline-flex rounded pt-3 px-4 pl-0" id="productCard">
-                <div class="flex items-center justify-center">
-                  <img :src="product.img" alt="Product Image" />
+      </div>
+      </div>
+    </div>
+    <!-- 방송 이름별 상세 통계 -->
+    <div id="detail-result-container" class="w-full p-5 flex flex-col items-center">
+      <div v-if="!totalStats">
+        <div id="detailResultName" class="ml-3">판매 상품</div>
+        <div class="row inline-flex mt-5" id="product">
+          <div
+            v-for="(product, i) in products"
+            :key="i"
+            class="inline-flex ml-3"
+          >
+            <div class="inline-flex rounded pt-3 px-4 pl-0" id="productCard">
+              <div class="flex items-center justify-center">
+                <img :src="product.img" alt="Product Image" />
+              </div>
+              <div class="ml-3 flex flex-col justify-center">
+                <div
+                  class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"
+                >
+                  {{ product.name }}
                 </div>
-                <div class="ml-3 flex flex-col justify-center">
-                  <div
-                    class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"
-                  >
-                    {{ product.name }}
-                  </div>
-                  <div
-                    class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]"
-                  >
-                    {{ product.price }} ({{ product.discountRate }})
-                  </div>
+                <div
+                  class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]"
+                >
+                  {{ product.price }} ({{ product.discountRate }})
                 </div>
               </div>
             </div>
           </div>
-          <div class="mt-7 text-center">
-            <Button btnClass="btn-primary btn-sm" @click="toggleResult">확인</Button>
-          </div>
         </div>
+        <div class="mt-7 text-center">
+          <Button btnClass="btn-primary btn-sm" @click="toggleResult">확인</Button>
+        </div>
+    </div>
+    <!-- 방송 이름 선택 -->
+    <div v-else>
+      <div class="inline-flex inline-flex items-center gap-4">
+        <div id="searchTitle" class="mr-5">방송 목록</div>
+        <select v-model="selectedBroadcastTitleOption">
+          <option :value="null">제목</option>
+          <option
+            v-for="option in broadcastOptions"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+        <Button btnClass="btn-primary btn-sm" @click="toggleResult" :disabled="!selectedBroadcastTitleOption">상세조회</Button>
       </div>
     </div>
   </div>
@@ -98,13 +100,11 @@
 <script>
 import Card from "@/components/Card/analytics-card.vue";
 import Button from "@/components/Button";
-// import SplitDropdown from "@/components/Dropdown/SplitDropdown";
 
 export default {
   components: {
     Card,
     Button,
-    // SplitDropdown,
   },
   data() {
     return {
@@ -279,6 +279,15 @@ export default {
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   margin-bottom: 30px;
+  height: auto;
+}
+
+#detail-result-container {
+  border-radius: 0.5rem;
+  background: white;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  height: auto;
 }
 
 #result.grid {
@@ -296,11 +305,13 @@ export default {
 #detailResultName {
   font-size: 20px;
   /* margin-bottom: 30px;  */
-  color: black;
+  color: #111111;
 }
 
 #searchTitle {
+  font-weight: bold;
   width: 150px;
+  margin: auto 0;
 }
 
 #productCard {
@@ -311,7 +322,6 @@ export default {
 }
 
 .card-title {
-  font-weight: bold;
   font-size: 15px;
   display: flex;
   justify-content: center;
@@ -325,10 +335,10 @@ export default {
 
 .input-wrapper label {
   margin-right: 8px;
-  color: black;
+  color: #111111;
 }
 
 .text-base {
-  color: black;
+  color: #111111;
 }
 </style>

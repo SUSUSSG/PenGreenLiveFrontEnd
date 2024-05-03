@@ -35,7 +35,7 @@
                                                 <div>
                                                     <div
                                                         class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-3xl pr-7">
-                                                        <Icon :icon="product.icon" />
+                                                        <Icon :icon="product.icon" class="text-primary"/>
                                                     </div>
                                                 </div>
                                                 <div>
@@ -222,5 +222,8 @@ export default {
 .vgt-table thead th {
     padding: 10px;
 }
+.text-primary {
+    color: darkgreen;
+  }
 
 </style>
