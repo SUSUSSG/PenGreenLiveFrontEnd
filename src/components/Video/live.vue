@@ -106,7 +106,6 @@ export default {
   flex-direction: column;
   align-items: center; /* Center alignment horizontally */
   position: relative;
-  border-radius: 10px; /* 상위 요소에 둥근 테두리 추가 */
   overflow: hidden; /* 자식 요소가 둥근 테두리를 벗어나지 않도록 설정 */
 }
 
