@@ -127,7 +127,7 @@ export default {
 .product-card-container {
   width: 100%;
   display: flex;
-  justify-content: flex-start; /* ProductCard를 왼쪽으로 정렬 */
+  justify-content: flex-start; 
 }
 
 </style>
