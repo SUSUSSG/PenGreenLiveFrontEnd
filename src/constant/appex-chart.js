@@ -1588,11 +1588,11 @@ export const stackChart = {
   series: [
     {
       name: "긍정",
-      data: [44, 55, 41],
+      data: [44, 55, 41, 20, 37],
     },
     {
       name: "부정",
-      data: [13, 23, 20],
+      data: [13, 23, 20, 40, 28],
     },
   ],
   chartOptions: {
@@ -1625,6 +1625,8 @@ export const stackChart = {
         "04-01",
         "04-02",
         "04-03",
+        "04-03",
+        "04-03"
       ],
     },
     fill: {
