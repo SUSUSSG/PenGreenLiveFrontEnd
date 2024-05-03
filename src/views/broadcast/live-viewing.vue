@@ -40,9 +40,9 @@
         </header>
         <main class="main-content">
           <!-- 첫 번째 탭 그룹 -->
-          <div class="flex-1 overflow-auto">
+          <div class="overflow-auto">
             <TabGroup as="div" class="tab-group mt-4">
-              <TabList as="div" class="flex space-x-1">
+              <TabList as="div" class="flex space-x-1 justify-around">
                 <Tab v-for="tab in firstTabGroup" :key="tab" :class="{ 'tab-active': tab === activeFirstTab }"
                     @click="activeFirstTab = tab" class="tab">
                   {{ tab }}
@@ -73,7 +73,7 @@
               </TabPanels>
             </TabGroup>
           </div>
-          <div class="flex-1 overflow-auto mt-4">
+          <div class="overflow-auto mt-4">
             <!-- 두 번째 탭 그룹 -->
             <TabGroup as="div" class="tab-group mt-4">
               <TabList as="div" class="tab-list">
@@ -195,7 +195,7 @@ export default {
 
 .tab-list{
   display : flex;
-  width : 23vw;
+  justify-content: space-around;
 }
 
 .live-section {
@@ -299,7 +299,6 @@ export default {
   border: 1px solid #ddd; /* 패널의 테두리를 조금 더 눈에 띄게 함 */
   box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 그림자 효과로 입체감 추가 */
   margin: 10px; /* 기존의 주변 여백 유지 */
-  width: 23vw; /* 패널의 너비를 25% 뷰포트 너비로 설정 */
 }
 
 .exit-button {
