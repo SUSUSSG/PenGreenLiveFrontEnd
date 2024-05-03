@@ -2,7 +2,7 @@
   <div>
         <img :src="productImg"/>
         <div class="product-header">
-            <div class="brand-name">{{ brandName }}</div>
+            <div class="brand-name">{{ brand }}</div>
                 <div class="product-name">{{ productName }}</div>  
                 <p class="pt-5 pb-2">
                     <span class="discount-rate text-slate-900 dark:text-slate-300 text-base font-medium mt-2 ltr:mr-2 rtl:mr-2 text-red-500">{{discountRate}}%</span>
@@ -87,6 +87,7 @@
     import { ref, computed, defineProps } from 'vue';
 
     const props = defineProps({
+        brand: String,
         productName: String,
         price: Number,
         discountRate: Number,
@@ -115,8 +116,6 @@
         data() {
             return {
                 activeTab: 'description',
-                brandName: '동구밭',
-                productImage: 'src/assets/images/all-img/product-sample.jpg',
                 buttons: [
                     {
                         title: '상품정보',

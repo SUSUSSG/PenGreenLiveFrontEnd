@@ -13,7 +13,8 @@
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-            <LiveBoardPurchase class="purchase-section"             
+            <LiveBoardPurchase class="purchase-section"
+            :brand="selectedProduct.brand"             
             :productName="selectedProduct.productName"
             :price="selectedProduct.price"
             :discountRate="selectedProduct.discountRate"
@@ -147,9 +148,9 @@ const handleDiscountedPrice = (discountedPrice, product) => {
 
 let selectedProduct = ref(null);
 let productList = ref([
-  {productName: "동구밭 중건성 헤어케어 5종 기획세트", price : 47500, discountRate : 30, productImg : "src/assets/images/all-img/product-sample.jpg"},
-  {productName: "세타필 젠틀 바디워시 리프레싱 1,000ml", price : 26500, discountRate : 40, productImg : "https://image.oliveyoung.co.kr/uploads/images/goods/400/10/0000/0013/A00000013522735ko.jpg?l=ko"},
-  {productName: "가지가지 나뭇가지", price : 10000, discountRate : 30, productImg : "https://image.oliveyoung.co.kr/uploads/images/goods/400/10/0000/0013/A00000013522735ko.jpg?l=ko"}
+  {brand: "동구밭", productName: "동구밭 중건성 헤어케어 5종 기획세트", price : 47500, discountRate : 30, productImg : "src/assets/images/all-img/product-sample.jpg"},
+  {brand: "세타필", productName: "세타필 젠틀 바디워시 리프레싱 1,000ml", price : 26500, discountRate : 40, productImg : "https://image.oliveyoung.co.kr/uploads/images/goods/400/10/0000/0013/A00000013522735ko.jpg?l=ko"},
+  {brand: "민쉭이네", productName: "가지가지 나뭇가지", price : 10000, discountRate : 30, productImg : "https://ae01.alicdn.com/kf/S02dbb2aba6c14e829d6fd38a80523470G/33cm-DIY.jpeg_640x640.jpeg_.webp"}
 ]);
 
 const showProductDetails = (product) => {
