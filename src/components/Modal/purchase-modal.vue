@@ -10,8 +10,8 @@
           <div class="buy-options__item-area">
             <div class="buy-options__goods-item">
               <div class="goods-item__head">
-                  <span class="goods-item__title">
-                    동구밭 중건성 헤어케어 5종 기획세트
+                  <span class="goods-item__title" id="product-name">
+                    {{productName}}
                   </span>
               </div>
             <div class="goods-item__contents">
@@ -24,32 +24,30 @@
                         <span class="oyblind">수량증가</span>
                     </button>
                 </div>
-                <span class="price">
-                  <span>33,000</span><span class="unit">원</span>
+                <span class="price" id="discounted-price">
+                  <span>{{ formattedDiscountedPrice }}</span><span class="unit">원</span>
                 </span>
             </div>
             </div>
           </div>
         </div>
-      <!-- 요약 -->
       <div class="total-summary">
         <span class="total-summary__goods-sum">
-          구매수량<span id="total-count" class="count">1</span>개
+          구매수량<span id="total-count" class="count">{{ quantity }}</span>개
         </span>
           <span class="total-summary__price-sum">
-          총<span id="total-price" class="price">33,000</span>원
+          총<span id="total-price" class="price">{{ totalPrice }}</span>원
         </span>
       </div>
-      <!-- 배송지  -->
       <div id="today-delivery" class="today-delivery is-checked" style="display: block;">
-        <div id="today-delivery-address-box" class="today-delivery__address-box" style="">
+        <div id="today-delivery-address-box" class="today-delivery__address-box">
             <div class="address-info">
                 <p class="address-info__head">
                     <span class="flag">기본배송지</span>
                 </p>
-                <p class="address-info__contents">서울 강북구 도봉로 315 (수유동, 에피소드 수유 838)</p>
+                <p class="address-info__contents" id="address">서울 강북구 도봉로 315 (수유동, 에피소드 수유 838)</p>
             </div>
-            <button type="button" class="btn-text" onclick="javascript:mgoods.newDetail.popLayer.todayDeliveryChange.open('N')">변경</button>
+            <button type="button" class="btn-text">변경</button>
         </div>
       </div>
     </div>
@@ -61,7 +59,7 @@
 
 <script setup>
 import Button from "@/components/Button";
-import { ref, defineEmits } from 'vue';
+import { ref, computed, defineProps } from 'vue';
 
 const emit = defineEmits(['update:isOpen']);
 const close = () => {
@@ -69,7 +67,10 @@ const close = () => {
 };
 
 const props = defineProps({
-  isOpen: Boolean
+  isOpen: Boolean,
+  productName: String,
+  discountedPrice: Number,
+  address: String
 });
 
 const quantity = ref(1);
@@ -83,6 +84,13 @@ const decreaseQuantity = () => {
     quantity.value--;
   }
 };
+
+const totalPrice = computed(() => {
+  const price = quantity.value * props.discountedPrice;
+  return price.toLocaleString();
+});
+
+const formattedDiscountedPrice = computed(() => props.discountedPrice.toLocaleString());
 
 </script>
 
@@ -108,80 +116,6 @@ const decreaseQuantity = () => {
   background-color: #fff;
   border-radius: 18px 18px 0 0;
 }
-
-.product-title {
-  color: #131518;
-  font-size: 14px;
-  line-height: 17px;
-}
-
-.buy-info {
-  position: relative;
-  margin-bottom: 8px;
-  padding: 12px;
-  background-color: rgb(247, 249, 250);
-  border-radius: 4px;
-  color: rgb(47, 52, 56);
-}
-
-.product-contents {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.number-input {
-  display: flex;
-  align-items: center;
-  border: 1px solid #333;
-  border-radius: 0;
-  color: black;
-}
-
-.btn-control {
-  border: 1px solid #333;
-  cursor: pointer;
-  user-select: none;
-  border-radius: 0; /* 각진 버튼 디자인 */
-  transition: background-color 0.3s ease;
-}
-
-.btn-control:hover {
-  background-color: #ccc;
-}
-
-.input-number {
-  text-align: center;
-  border: none;
-  border-top: 1px solid #333;
-  border-bottom: 1px solid #333;
-  font-size: 15px;
-  background-color: white;
-  color: black;
-}
-
-.quantity-controls button {
-  width: 30px;
-  height: 30px;
-}
-
-.quantity-controls input {
-  text-align: center;
-  width: 50px;
-}
-
-.address-input {
-  margin-top: 10px;
-}
-
-.order-button {
-  background-color: black;
-  color: white;
-  border: none;
-  cursor: pointer;
-  height: 2.5rem;
-}
-
 
 /* 구매 정보 */
 .buy-options__view {
