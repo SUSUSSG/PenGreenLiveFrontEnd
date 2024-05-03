@@ -5,10 +5,10 @@
             <div class="brand-name">{{ brandName }}</div>
                 <div class="product-name">{{ productName }}</div>  
                 <p class="pt-5 pb-2">
-                    <span class="discount-rate text-slate-900 dark:text-slate-300 text-base font-medium mt-2 ltr:mr-2 rtl:mr-2 text-red-500">{{discountRate}}</span>
-                    <del class="product-price text-slate-500 dark:text-slate-500 font-normal text-base">{{productPrice}}</del>
+                    <span class="discount-rate text-slate-900 dark:text-slate-300 text-base font-medium mt-2 ltr:mr-2 rtl:mr-2 text-red-500">{{discountRate}}%</span>
+                    <del class="product-price text-slate-500 dark:text-slate-500 font-normal text-base">{{formattedPrice}}원</del>
                 </p>
-            <div class="discounted-price">{{discountedPrice}}</div>
+            <div class="discounted-price">{{ formattedDiscountedPrice }}원</div>
         </div>
         
         <div class="mt-[2rem]">
@@ -83,6 +83,20 @@
     </div>
 </template>
 
+<script setup>
+    import { ref, computed, defineProps } from 'vue';
+
+    const props = defineProps({
+        productName: String,
+        price: Number,
+        discountRate: Number,
+        discountedPrice: String,
+    });
+
+    const formattedPrice = computed(() => props.price.toLocaleString());
+    const formattedDiscountedPrice = computed(() => props.discountedPrice.toLocaleString());
+    
+</script>
 
 <script>
     import Card from "@/components/Card";
@@ -101,11 +115,7 @@
             return {
                 activeTab: 'description',
                 brandName: '동구밭',
-                productName: '동구밭 중건성 헤어케어 5종 기획세트',
                 productImage: 'src/assets/images/all-img/product-sample.jpg',
-                productPrice: '47,500원',
-                discountRate: '30%',
-                discountedPrice: '33,000원',
                 buttons: [
                     {
                         title: '상품정보',
