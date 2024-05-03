@@ -1,7 +1,7 @@
 <template>
   <div class="product-card slick-slide">										
     <div class="thum">
-      <img :src="noImageSrc" alt="상품 이미지" class="product-image"/>
+      <img :src="productImg" alt="상품 이미지" class="product-image"/>
     </div>
     <div class="info flex items-center">
       <a class="a_detail" name="Curation2">
@@ -23,14 +23,12 @@ import noImage from "@/assets/images/all-img/no-image.png";
 export default {
   name: 'ProductCard',
   data() {
-    return {
-      noImageSrc: 'src/assets/images/all-img/product-sample.jpg',
-    }
   },
   props: {
     productName: String,
     originalPrice: Number,
-    discountRate: Number
+    discountRate: Number,
+    productImg: String
   },
   computed: {
     discountedPrice() {

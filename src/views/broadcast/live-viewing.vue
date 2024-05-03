@@ -18,6 +18,7 @@
             :price="selectedProduct.price"
             :discountRate="selectedProduct.discountRate"
             :discountedPrice="selectedProduct.discountedPrice"
+            :product-img="selectedProduct.productImg"
             />
           </div>
         </div>
@@ -56,6 +57,7 @@
                         :product-name="product.productName"
                         :original-price="product.price"
                         :discount-rate="product.discountRate"
+                        :product-img="product.productImg"
                         @click="showProductDetails(product)"
                         @updateDiscountedPrice="handleDiscountedPrice($event, product)"
                         />
@@ -145,9 +147,9 @@ const handleDiscountedPrice = (discountedPrice, product) => {
 
 let selectedProduct = ref(null);
 let productList = ref([
-  {productName: "동구밭 중건성 헤어케어 5종 기획세트", price : 47500, discountRate : 30},
-  {productName: "가지가지 나뭇가지", price : 10000, discountRate : 30},
-  {productName: "가지가지 나뭇가지", price : 10000, discountRate : 30}
+  {productName: "동구밭 중건성 헤어케어 5종 기획세트", price : 47500, discountRate : 30, productImg : "src/assets/images/all-img/product-sample.jpg"},
+  {productName: "세타필 젠틀 바디워시 리프레싱 1,000ml", price : 26500, discountRate : 40, productImg : "https://image.oliveyoung.co.kr/uploads/images/goods/400/10/0000/0013/A00000013522735ko.jpg?l=ko"},
+  {productName: "가지가지 나뭇가지", price : 10000, discountRate : 30, productImg : "https://image.oliveyoung.co.kr/uploads/images/goods/400/10/0000/0013/A00000013522735ko.jpg?l=ko"}
 ]);
 
 const showProductDetails = (product) => {

@@ -1,6 +1,6 @@
 <template>
   <div>
-        <img :src="productImage"/>
+        <img :src="productImg"/>
         <div class="product-header">
             <div class="brand-name">{{ brandName }}</div>
                 <div class="product-name">{{ productName }}</div>  
@@ -91,6 +91,7 @@
         price: Number,
         discountRate: Number,
         discountedPrice: String,
+        productImg: String,
     });
 
     const formattedPrice = computed(() => props.price.toLocaleString());
