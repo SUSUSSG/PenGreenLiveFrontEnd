@@ -1,7 +1,7 @@
 <template>
   <div class="video-component" :style="{ width: width, height: height }">
     <div
-      class="title-bar w-full flex items-center justify-between p-"
+      class="title-bar w-full flex items-center justify-between"
       v-if="showTitleBar"
     >
       <div class="flex items-center">
@@ -110,17 +110,13 @@ export default {
 }
 
 .title-bar {
-  width: 92.5%;
-  padding-left: 1rem;
+  width: 100%;
   height: 5vh; /* Explicit height of the title bar */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
-  color: #fff;
+  color: black;
   z-index: 10;
-  border-top-left-radius: 10px; /* 왼쪽 상단 모서리 둥글게 */
-  border-top-right-radius: 10px; /* 오른쪽 상단 모서리 둥글게 */
 }
 
 .logo {
