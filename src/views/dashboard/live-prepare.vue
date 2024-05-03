@@ -102,5 +102,6 @@ export default {
   display: grid;
   grid-template-columns: repeat(5, 1fr); /* Creates four columns */
   grid-gap: 20px;
+  overflow: auto;
 }
 </style>
