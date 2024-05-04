@@ -37,7 +37,6 @@ export default {
 <style scoped>
 .video-wrapper {
   height: 100%;
-  border-radius: 10px;
   overflow: hidden;
 }
 

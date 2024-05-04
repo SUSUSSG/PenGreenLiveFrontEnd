@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white rounded p-4" id="broadCard">
+    <div class="bg-white" id="broadCard">
         <div class="text-base">
             송출 화면
         </div>
@@ -29,7 +29,6 @@ export default {
     width: auto;
     display: flex;
     flex-direction: column;
-    border-radius: 0.5rem;
     background: white;
     box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
