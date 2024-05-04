@@ -19,6 +19,8 @@ import router from "./router";
 import VCalendar from "v-calendar";
 import {createPinia} from 'pinia'
 import "v-calendar/dist/style.css";
+import store from './store';
+
 
 const pinia = createPinia()
 
@@ -37,6 +39,7 @@ const app = createApp(App)
     .use(VueGoodTablePlugin)
     .use(VueApexCharts)
     .use(VCalendar)
+    .use(store)
 
 app.config.globalProperties.$store = {};
 app.mount("#app");
