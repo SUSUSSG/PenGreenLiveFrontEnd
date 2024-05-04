@@ -34,7 +34,7 @@
       <div v-if="!selectedProduct">
         <header class="flex justify-between items-center p-4 border-b">
           <div></div> <!-- 좌측 공백 -->
-          <button class="exit-button">나가기</button>
+          <button class="exit-button" @click="onClickRedirect()">나가기</button>
         </header>
         <main class="main-content">
           <!-- 첫 번째 탭 그룹 -->
@@ -180,6 +180,11 @@ export default {
       address: '',
     }
   },
+  methods: {
+    onClickRedirect() {
+      this.$router.push({name: 'home'}) // 메인 페이지로 이동
+    }
+  }
 };
 </script>
 
