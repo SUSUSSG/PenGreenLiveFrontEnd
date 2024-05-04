@@ -37,12 +37,11 @@ export default {
 <style scoped>
 .video-wrapper {
   height: 100%;
-  border-radius: 10px;
   overflow: hidden;
 }
 
 .video{
-  max-height: 1010px;
+  max-height: 906px;
   width: auto!important;
 }
 </style>

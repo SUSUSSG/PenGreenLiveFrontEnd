@@ -1,7 +1,7 @@
 <template>
   <div class="video-component" :style="{ width: width, height: height }">
     <div
-      class="title-bar w-full flex items-center justify-between p-"
+      class="title-bar w-full flex items-center justify-between"
       v-if="showTitleBar"
     >
       <div class="flex items-center">
@@ -106,22 +106,17 @@ export default {
   flex-direction: column;
   align-items: center; /* Center alignment horizontally */
   position: relative;
-  border-radius: 10px; /* 상위 요소에 둥근 테두리 추가 */
   overflow: hidden; /* 자식 요소가 둥근 테두리를 벗어나지 않도록 설정 */
 }
 
 .title-bar {
-  width: 95.5%;
-  padding-left: 1rem;
+  width: 100%;
   height: 5vh; /* Explicit height of the title bar */
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #333;
-  color: #fff;
+  color: black;
   z-index: 10;
-  border-top-left-radius: 10px; /* 왼쪽 상단 모서리 둥글게 */
-  border-top-right-radius: 10px; /* 오른쪽 상단 모서리 둥글게 */
 }
 
 .logo {
@@ -143,12 +138,10 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
-
   z-index: 20;
-  width: 100%;
   position: absolute;
-  left: 220px;
-  bottom: 20px;
+  right: 40px;
+  bottom: 10px;
 }
 
 .icon-wrapper {
@@ -161,9 +154,9 @@ export default {
 .heart-icon,
 .mute-icon,
 .share-icon {
-  width: 70px; /* Increase icon size */
-  height: 70px;
-  margin-bottom: 5px; /* Spacing between icon and text */
+  width: 50px; /* Increase icon size */
+  height: 50px;
+  margin-bottom: 1px; /* Spacing between icon and text */
   border-radius: 50%;
   background-color: white;
   display: flex;

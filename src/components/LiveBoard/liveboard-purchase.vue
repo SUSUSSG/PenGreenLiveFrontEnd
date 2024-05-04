@@ -1,8 +1,8 @@
 <template>
   <div>
-        <img :src="productImage"/>
+        <img :src="productImg"/>
         <div class="product-header">
-            <div class="brand-name">{{ brandName }}</div>
+            <div class="brand-name">{{ brand }}</div>
                 <div class="product-name">{{ productName }}</div>  
                 <p class="pt-5 pb-2">
                     <span class="discount-rate text-slate-900 dark:text-slate-300 text-base font-medium mt-2 ltr:mr-2 rtl:mr-2 text-red-500">{{discountRate}}%</span>
@@ -87,10 +87,12 @@
     import { ref, computed, defineProps } from 'vue';
 
     const props = defineProps({
+        brand: String,
         productName: String,
         price: Number,
         discountRate: Number,
         discountedPrice: String,
+        productImg: String,
     });
 
     const formattedPrice = computed(() => props.price.toLocaleString());
@@ -114,8 +116,6 @@
         data() {
             return {
                 activeTab: 'description',
-                brandName: '동구밭',
-                productImage: 'src/assets/images/all-img/product-sample.jpg',
                 buttons: [
                     {
                         title: '상품정보',
@@ -147,7 +147,7 @@
 
 <style>
 
-.brand-name {
+.purchase-container .brand-name {
     /* color: #828c94; */
     font-weight: 500;
     display: block;
@@ -158,7 +158,7 @@
     color: #757575;
 }
 
-.product-name {
+.purchase-container .product-name {
     display: block;
     font-size: 17px;
     font-weight: 400;
@@ -167,7 +167,7 @@
     overflow-wrap: break-all;
 }
 
-.discounted-price {
+.purchase-container .discounted-price {
     display: flex;
     align-items: center;
     flex-wrap: wrap;

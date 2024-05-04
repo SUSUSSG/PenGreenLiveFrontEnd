@@ -1,12 +1,18 @@
 <template>
-  <div class="product-card">
-    <div class="icon-bg">
-      <img :src="noImageSrc" alt="상품 이미지" class="product-image"/>
+  <div class="product-card slick-slide">										
+    <div class="thum">
+      <img :src="productImg" alt="상품 이미지" class="product-image"/>
     </div>
-    <div class="info">
-      <div class="product-name">{{ productName }}</div>
-      <div class="original-price">{{ formattedOriginalPrice }}</div>
-      <div class="discounted-price">{{ formattedDiscountedPrice }}</div>
+    <div class="info flex items-center">
+      <a class="a_detail" name="Curation2">
+        <dl>
+          <dt class="tit original-name">{{ productName }}</dt>
+          <dd class="price">
+              <del class="original-price">{{ formattedOriginalPrice }}</del>
+              <strong class="discounted-price">{{ formattedDiscountedPrice }}</strong>
+            </dd> 
+        </dl>
+      </a>
     </div>
   </div>
 </template>
@@ -17,14 +23,12 @@ import noImage from "@/assets/images/all-img/no-image.png";
 export default {
   name: 'ProductCard',
   data() {
-    return {
-      noImageSrc: noImage
-    }
   },
   props: {
     productName: String,
     originalPrice: Number,
-    discountRate: Number
+    discountRate: Number,
+    productImg: String
   },
   computed: {
     discountedPrice() {
@@ -44,42 +48,60 @@ export default {
 </script>
 
 <style scoped>
-.product-card {
-  display: flex;
-  align-items: center;
-  padding: 10px;
-}
-.icon-bg {
-  background-color: grey;
-  padding: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80px; 
-  height: 80px; 
-}
-.product-image {
-  width: 100%; /* 부모 요소에 맞게 조정 */
-  height: 100%; /* 부모 요소에 맞게 조정 */
-  object-fit: cover;
-}
-.info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: 10px; /* 이미지와 정보 사이의 간격 */
-}
-.product-name {
-  font-size: 1.2em;
-  margin-bottom: 5px; /* 각 요소 간격 조정 */
-}
-.original-price {
-  text-decoration: line-through;
-  color: grey;
-}
-.discounted-price {
-  font-size: 1.2em;
-  color: red;
+.slick-slide {
+    float: left;
+    width: 310px;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #f0f1f4;
 }
 
+.product-card .thum {
+    position: relative;
+    float: left;
+    width: 80px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.product-card .thum img {
+    width: auto !important;
+    max-width: 80px;
+    height: auto !important;
+    max-height: 90px;
+}
+
+.product-card .info {
+    position: relative;
+    width: 190px;
+    height: 80px;
+    margin-left: 100px;
+}
+
+.product-card .info .tit {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    word-wrap: break-word;
+    line-height: 18px;
+    max-height: 36px;
+    color: #131518;
+    font-size: 14px;
+}
+
+.product-card .info .price {
+    margin-top: 2px;
+}
+
+.product-card .info .price del {
+    padding-right: 2px;
+    color: #b5b5b5;
+    font-size: 12px;
+}
+
+.product-card .info .price strong {
+    color: #e02020;
+    font-weight: 500;
+}
 </style>

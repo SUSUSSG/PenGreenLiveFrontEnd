@@ -1,5 +1,5 @@
 <template>
-  <div class="chat-card bg-white rounded p-4">
+  <div class="chat-card bg-white p-4">
     <div class="inline-flex justify-between items-center" :style="{ width: cardWidth }">
       <div class="text-base flex-grow">채팅</div>
       <div>
@@ -161,19 +161,19 @@ export default {
   height: 850px;
   display: flex;
   flex-direction: column;
-  border-radius: 0.5rem;
   background: white;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  /* 넘치는 내용이 없도록 함 */
 }
 
+.scroll-wrapper::-webkit-scrollbar {
+  display: none;
+}
 
 .scroll-wrapper {
   flex-grow: 1;
   overflow-y: auto;
   height: 100%;
-  /* Apply scroll to the wrapper */
 }
 
 .chat-container {
@@ -184,7 +184,7 @@ export default {
 
 .chat-message {
   padding: 0.5rem;
-  border-radius: 0.25rem;
+
 }
 
 .chat-user-id {
@@ -194,6 +194,8 @@ export default {
 }
 
 .chat-text {
+  margin-left: 0.5rem;
+  margin-top: 0.5rem;
   word-break: break-word;
 }
 
@@ -235,7 +237,6 @@ export default {
 
 .chat-container::-webkit-scrollbar-thumb {
   background-color: #888;
-  border-radius: 10px;
 }
 
 .chat-container::-webkit-scrollbar-thumb:hover {
@@ -259,7 +260,6 @@ export default {
 
 .chat-input-container {
   background-color: rgba(19, 64, 16, 0.2);
-  border-radius: 5px;
   border-top: 0px;
   margin-top: 3px;
 }
