@@ -36,12 +36,14 @@ export default {
 
 <style scoped>
 .video-wrapper {
-  height: 100%;
-  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 9 / 16;
 }
 
 .video{
   max-height: 906px;
-  width: auto!important;
+  width: 100%;
+  height: auto;
+  display: block;
 }
 </style>

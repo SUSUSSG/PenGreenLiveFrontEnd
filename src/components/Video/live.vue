@@ -130,6 +130,7 @@ export default {
   justify-content: center; /* Centering horizontally */
   align-items: flex-end; /* Aligning at the bottom */
   width: 100%;
+  height: 100%;
   position: absolute;
 }
 
