@@ -13,13 +13,13 @@
     <div class="scroll-wrapper">
       <div class="chat-container flex flex-col justify-end">
         <ul class="chat-messages">
-          <li v-for="message in chatMessages" :key="message.seq" class="chat-message">
-            <div class="chat-message-content">
-              <span class="message-info flex items-center">
-                <Icon v-if="showDeleteIcon" icon="heroicons:x-mark-20-solid" @click="deleteMessage(message.seq)"></Icon>
-                <span class="chat-user-id">{{ message.userId }}</span>
-                <span class="chat-text">{{ message.content }}</span>
-              </span>
+          <li v-for="message in chatMessages" :key="message.seq" class="chat-message flex">
+            <div class="mr-2 flex items-center">
+              <Icon v-if="showDeleteIcon" icon="heroicons:x-mark-20-solid" @click="deleteMessage(message.seq)"></Icon>
+            </div>
+            <div class="flex flex-col">
+              <span class="chat-user-id">{{ message.userId }}</span>
+              <span class="chat-text">{{ message.content }}</span>
             </div>
           </li>
         </ul>
@@ -177,6 +177,7 @@ export default {
 }
 
 .chat-container {
+  padding: 0.3rem;
   flex-direction: column;
   justify-content: flex-end;
 }
@@ -187,9 +188,9 @@ export default {
 }
 
 .chat-user-id {
-  margin-left: 5px;
   font-weight: bold;
-  color: #333;
+  font-size: 13px;
+  color: #23A100;
 }
 
 .chat-text {
@@ -256,15 +257,23 @@ export default {
   color: #134010;
   background-color: rgba(19, 64, 16, 0.2);
 }
+
 .chat-input-container {
   background-color: rgba(19, 64, 16, 0.2);
   border-top: 0px;
   margin-top: 3px;
 }
+
 .chat-send-button {
   background-color: #134010;
 }
+
 .py-\[18px\] {
   padding: 13px;
+}
+
+/* 추가 */
+.text-base {
+  font-weight: bold;
 }
 </style>
