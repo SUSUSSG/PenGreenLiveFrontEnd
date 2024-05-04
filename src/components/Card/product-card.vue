@@ -59,19 +59,19 @@ export default {
   height: 80px; 
 }
 .product-image {
-  width: 100%; /* 부모 요소에 맞게 조정 */
-  height: 100%; /* 부모 요소에 맞게 조정 */
+  width: 100%; 
+  height: 100%; 
   object-fit: cover;
 }
 .info {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: 10px; /* 이미지와 정보 사이의 간격 */
+  margin-left: 10px; 
 }
 .product-name {
   font-size: 1.2em;
-  margin-bottom: 5px; /* 각 요소 간격 조정 */
+  margin-bottom: 5px; 
 }
 .original-price {
   text-decoration: line-through;

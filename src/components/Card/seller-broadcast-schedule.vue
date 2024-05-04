@@ -21,7 +21,7 @@
       <button class="action-button" @click="onClickRedirect()">방송 준비</button>
     </div>
     <div v-else>
-      <p>방송 준비는 라이브 시작 15분전부터만 가능합니다.</p>
+      <p style="text-align: center;">방송 준비는 라이브 시작 <br> 15분전부터만 가능합니다.</p>
     </div>
   </div>
 </template>
@@ -127,7 +127,15 @@ export default {
 .product-card-container {
   width: 100%;
   display: flex;
-  justify-content: flex-start; /* ProductCard를 왼쪽으로 정렬 */
+  justify-content: flex-start; 
 }
+
+.product-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start; 
+  margin-left: -20px; 
+}
+
 
 </style>
