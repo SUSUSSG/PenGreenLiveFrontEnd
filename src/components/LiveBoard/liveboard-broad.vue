@@ -25,7 +25,7 @@ export default {
 
 <style scoped>
 #broadCard {
-    height: 850px;
+    height: 100%;
     width: auto;
     display: flex;
     flex-direction: column;
