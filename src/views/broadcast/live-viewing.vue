@@ -1,5 +1,5 @@
 <template>
-  <div class="live-container">
+  <div class="live-container" :style="{ height: computedHeight + 'px' }">
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
     <Live class="live-section" show-icon-side-bar="true" show-title-bar="true"></Live>
 
@@ -110,7 +110,8 @@ import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
 import LiveBoardPurchase from "@/components/liveboard/liveboard-purchase.vue"
 import Live from "@/components/Video/live.vue";
 import ProductCard from "@/components/Card/product-card.vue";
-import {ref, computed} from 'vue';
+import {ref, onMounted, computed, watch} from 'vue';
+import { useStore } from 'vuex';
 import {TabGroup, TabList, Tab, TabPanels, TabPanel} from '@headlessui/vue';
 import Button from "@/components/Button";
 import PurchaseModal from "@/components/Modal/purchase-modal.vue";
@@ -145,11 +146,11 @@ let faqs = [
 ];
 let address = '';
 
-
 const isOpen = ref(false);
 const openModal = () => {
   isOpen.value = true;
 };
+
 const updateModal = (value) => {
   isOpen.value = value;
 };
@@ -176,13 +177,33 @@ const closePurchaseModal = () => {
 const onClickRedirect = () => {
   router.push({name: 'home'})
 }
+
+const store = useStore();
+const boxHeight = computed(()=> store.getters.getBoxHeight);
+const computedHeight = ref(0); // 초기화
+
+const calculateHeight = () => {
+  const viewportHeight = window.innerHeight; // 브라우저 창의 내부 높이
+  computedHeight.value = viewportHeight - boxHeight.value;
+  console.log('viewportHeight' + viewportHeight);
+  console.log('header: ' + boxHeight.value);
+  console.log('live-container: ' + computedHeight.value);
+
+};
+
+onMounted(() => {
+  calculateHeight();
+  window.addEventListener('resize', calculateHeight);
+});
+
+watch(boxHeight, calculateHeight);
+
 </script>
 
 <style scoped>
 .live-container {
   display: flex;
-  height: 100vh;
-  gap: 1px; /* 각 요소 사이에 간격 추가 */
+  gap: 1px;
   background: #E5E7EB;
 }
 
@@ -332,6 +353,7 @@ const onClickRedirect = () => {
   flex-direction: column;
   width: 100%; /* 너비를 최대로 설정 */
 }
+
 /* 질문 및 답변 스타일 변경 */
 dt {
   font-weight: bold;
