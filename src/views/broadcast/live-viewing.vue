@@ -1,8 +1,7 @@
 <template>
   <div class="live-container" :style="{ height: computedHeight + 'px' }">
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
-    <Live class="live-section" show-icon-side-bar="true" show-title-bar="true"></Live>
-
+    <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true"></Live>
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
 
@@ -183,7 +182,7 @@ const boxHeight = computed(()=> store.getters.getBoxHeight);
 const computedHeight = ref(0); // 초기화
 
 const calculateHeight = () => {
-  const viewportHeight = window.innerHeight; // 브라우저 창의 내부 높이
+  const viewportHeight = window.innerHeight;
   computedHeight.value = viewportHeight - boxHeight.value;
   console.log('viewportHeight' + viewportHeight);
   console.log('header: ' + boxHeight.value);
@@ -213,6 +212,16 @@ watch(boxHeight, calculateHeight);
 }
 
 .live-section {
+  flex: 1;
+  min-width: 0;
+  padding: 20px;
+  margin: 10px;
+  background-color: #fff;
+  overflow : hidden;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.live-section-broad {
   flex: 1;
   min-width: 0;
   padding: 20px;
