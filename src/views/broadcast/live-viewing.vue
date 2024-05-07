@@ -226,7 +226,6 @@ watch(boxHeight, calculateHeight);
 .live-section-broad {
   flex: 1;
   min-width: 0;
-  padding: 20px;
   margin: 10px;
   background-color: #fff;
   overflow : hidden;
@@ -352,7 +351,7 @@ watch(boxHeight, calculateHeight);
 
 /* 오른쪽 라이브 섹션에 대한 너비 조정 */
 .live-section:last-child {
-  flex: 0.9; /* 기존보다 작은 flex-factor 적용 */
+  flex: 1; /* 기존보다 작은 flex-factor 적용 */
   margin-right : 20px;
 }
 
