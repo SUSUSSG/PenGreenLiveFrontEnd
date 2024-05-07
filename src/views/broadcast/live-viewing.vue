@@ -1,12 +1,13 @@
 <template>
   <div class="live-container" :style="{ height: computedHeight + 'px' }">
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
+
     <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true"></Live>
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
 
       <div v-if="selectedProduct">
-        <header class="flex justify-between py-4">
+        <header class="flex justify-between pb-4">
           <div></div> <!-- 좌측 공백 -->
           <Button text="돌아가기" @click="closePurchaseModal"/>
         </header>
@@ -32,16 +33,16 @@
             :discountedPrice="selectedProduct.discountedPrice"/>
         </div>
       </div>
-      <div v-if="!selectedProduct">
-        <header class="flex justify-between items-center p-4 border-b">
+      <div v-if="!selectedProduct" class="contents-wrap">
+        <header class="flex justify-between items-center pb-4 border-b">
           <div></div> <!-- 좌측 공백 -->
-          <button class="exit-button" @click="onClickRedirect()">나가기</button>
+          <Button class="exit-button" @click="onClickRedirect()">나가기</Button>
         </header>
         <main class="main-content">
           <!-- 첫 번째 탭 그룹 -->
           <div class="overflow-auto">
-            <TabGroup as="div" class="tab-group mt-4">
-              <TabList as="div" class="flex space-x-1 justify-around">
+            <TabGroup as="div" class="tab-group h-full">
+              <TabList as="div" class="tab-list">
                 <Tab v-for="tab in firstTabGroup" :key="tab" :class="{ 'tab-active': tab === activeFirstTab }"
                     @click="activeFirstTab = tab" class="tab">
                   {{ tab }}
@@ -72,9 +73,9 @@
               </TabPanels>
             </TabGroup>
           </div>
-          <div class="overflow-auto mt-4">
+          <div class="overflow-auto">
             <!-- 두 번째 탭 그룹 -->
-            <TabGroup as="div" class="tab-group mt-4">
+            <TabGroup as="div" class="tab-group h-full">
               <TabList as="div" class="tab-list">
                 <Tab v-for="tab in secondTabGroup" :key="tab" :class="{ 'tab-active': tab === activeSecondTab }"
                     @click="activeSecondTab = tab" class="tab">
@@ -101,6 +102,7 @@
         </main>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -231,9 +233,60 @@ watch(boxHeight, calculateHeight);
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
 }
 
+
+.contents-wrap {
+  height: 100%;
+  overflow: hidden;
+}
+
+.main-content {
+	height: calc(100% - 64px);
+    display: flex;
+    flex-direction: column;
+}
+
+.tab {
+  @apply py-2 px-4 bg-white text-gray-500 hover:bg-gray-100 focus:outline-none;
+  margin: 5px; /* 탭과 탭 패널에 마진 추가 */
+}
+
+.overflow-auto {
+    overflow: hidden;
+    flex: 1;
+}
+
+.tab-group {
+  box-sizing: border-box;
+    /* overflow: auto; */
+  height: 100%;
+}
+
+.tab-active {
+  @apply text-blue-500 border-b-2 border-blue-500;
+}
+
+
+.tab-panel {
+    @apply p-4 bg-gray-50;
+
+    padding: 1rem;
+    flex: 0 0 auto;
+    height: 75%;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+}
+
+.tab-panels {
+    box-sizing: border-box;
+    /* overflow: auto; */
+    height: 100%;
+}
+
 /* 구매 영역 */
 .scroll-wrapper {
-  max-height: calc(90vh - 100px);
+  max-height: calc(80vh - 100px);
   overflow-y: auto;
 }
 
@@ -280,7 +333,6 @@ watch(boxHeight, calculateHeight);
 .overlay {
   min-width: 0;
   border: 1px solid #ccc;
-  border-radius: 15px; 
   position: absolute;
   bottom: 0;
   top: 0;
@@ -305,38 +357,15 @@ watch(boxHeight, calculateHeight);
 }
 
 
-.tab {
-  @apply py-2 px-4 bg-white text-gray-500 hover:bg-gray-100 focus:outline-none;
-  margin: 5px; /* 탭과 탭 패널에 마진 추가 */
-}
-
-.tab-active {
-  @apply text-blue-500 border-b-2 border-blue-500;
-}
-
-.tab-panel {
-  @apply p-4 bg-gray-50;
-  flex: 0 0 auto; /* 패널의 크기가 변하지 않도록 설정 */
-  height: 30vh; /* 기존의 고정 높이 유지 */
-  overflow-y: auto; /* 내용이 넘칠 경우 스크롤이 가능하도록 설정 */
-  border: 1px solid #ddd; /* 패널의 테두리를 조금 더 눈에 띄게 함 */
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* 그림자 효과로 입체감 추가 */
-  margin: 10px; /* 기존의 주변 여백 유지 */
-}
-
 .exit-button {
   @apply bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600;
 }
 
-.tab-group {
-  @apply flex-1 min-h-0;
-  width: 100%; /* 너비를 좀 더 넓게 설정 */
-  margin: 0 auto; /* 좌우 마진으로 중앙 배치 조정 */
-}
+
 
 .product-list {
-  display: flex;
-  flex-wrap: wrap;
+  /* display: flex;/ */
+  /* flex-wrap: wrap; */
   gap: 10px; /* 상품 카드 사이의 간격을 설정합니다. */
 }
 
@@ -351,18 +380,12 @@ watch(boxHeight, calculateHeight);
   gap: 10px; /* 탭 사이 간격 */
 }
 
-.main-content {
-  display: flex;
-  flex-direction: column;
-  gap: 20px; /* 각 탭 그룹 사이의 간격 */
-}
 
-.main-content, .tab-group {
-  display: flex;
-  flex-direction: column;
-  width: 100%; /* 너비를 최대로 설정 */
-}
 
+.product-list ul {
+    height: 100%; /* ul의 높이를 부모의 100%로 설정 */
+    overflow: auto; /* ul 내부에서 스크롤 발생 */
+}
 /* 질문 및 답변 스타일 변경 */
 dt {
   font-weight: bold;
