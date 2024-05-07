@@ -41,7 +41,7 @@ export default {
 }
 
 .video{
-  max-height: 906px;
+  /* max-height: 906px; */
   width: 100%;
   height: auto;
   display: block;
