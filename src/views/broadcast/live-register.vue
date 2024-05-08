@@ -164,7 +164,7 @@
           <Card>
             <!-- 공지 사항 섹션 -->
             <div class="section">
-              <div class="flex items-center">
+              <div class="flex items-center justify-between">
                 <Textinput label="공지 사항" type="text" name="newNotice" v-model="newNotice" placeholder="공지사항 입력"
                   class="mb-2 flex-grow" />
                 <Button :disabled="!canAddNotice" @click="addNotice"
@@ -172,15 +172,19 @@
                   btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5" text="추가하기"></Button>
               </div>
               <ul>
-                <li v-for="(notice, index) in notices" :key="index" class="list-item">
-                  <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" class="flex-shrink-0"></Icon>{{
-                    notice }}
+                <li v-for="(notice, index) in notices" :key="index"
+                  class="list-item flex items-center justify-between mt-1">
+                  <div class="bg-gray-100 p-2 rounded">
+                    <span>{{ notice }}</span>
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" style="float: right;"
+                      class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                  </div>
                 </li>
               </ul>
             </div>
             <!-- 라이브 혜택 섹션 -->
-            <div class="section">
-              <div class="flex items-center">
+            <div class="section mt-7">
+              <div class="flex items-center justify-between">
                 <Textinput label="라이브 혜택" type="text" name="newBenefit" v-model="newBenefit" placeholder="라이브 혜택 입력"
                   class="mb-2 flex-grow" />
                 <Button :disabled="!canAddBenefit" @click="addBenefit"
@@ -188,26 +192,38 @@
                   btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" text="추가하기"></Button>
               </div>
               <ul>
-                <li v-for="(item, index) in benefits" :key="index" class="list-item">
-                  <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" class="flex-shrink-0"></Icon>{{
-                    item }}
+                <li v-for="(item, index) in benefits" :key="index" class="list-item flex items-center justify-between mt-1">
+                  <div class="bg-gray-100 p-2 rounded">
+                    <span>{{ item }}</span>
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" style="float: right;"
+                      class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                  </div>
                 </li>
               </ul>
             </div>
             <!-- FAQs 섹션 -->
-            <div class="section">
+            <div class="section mt-7">
               <div class="mb-4">
-                <Textinput label="질문" type="text" v-model="newQuestion" placeholder="질문을 입력해주세요" class="mb-2" />
-                <Textarea label="답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
-                <br>
-                <Button :isDisabled="!canAddAnswer" text="추가하기" @click="addAnswer" :isLoading="isLoading"
-                  class="btn-sm" />
+                <div class="mb-2"> <!-- 질문 -->
+                  <Textinput label="질문" type="text" v-model="newQuestion" placeholder="질문을 입력해주세요" />
+                </div>
+                <div class="mb-2"> <!-- 답변 -->
+                  <Textarea label="답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
+                </div>
+                <div class="text-center mb-2"> <!-- 추가하기 버튼을 오른쪽 중간에 위치시키기 위해 text-center 추가 -->
+                  <Button :disabled="!canAddAnswer" @click="addAnswer"
+                    :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
+                    btnClass="btn inline-flex justify-center btn-sm justify-between" text="추가하기"></Button>
+                </div>
               </div>
               <dl>
-                <div v-for="(item, index) in qa" :key="index" class="faq-item">
-                  <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" class="delete-icon"></Icon>
-                  <dt class="question">{{ item.question }}</dt>
-                  <dd class="answer">&nbsp;&nbsp;{{ item.answer }}</dd>
+                <div v-for="(item, index) in qa" :key="index" class="faq-item mt-1">
+                  <div class="bg-gray-100 p-2 rounded">
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" style="float: right;"
+                      class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                    <dt class="question">{{ item.question }}</dt>
+                    <dd class="answer">{{ item.answer }}</dd>
+                  </div>
                 </div>
               </dl>
             </div>
@@ -220,13 +236,13 @@
         <!-- 하단 버튼 모음 -->
         <div class="mt-10 flex justify-between items-center">
           <div v-if="stepNumber > 0">
-            <Button @click.prevent="prev()" text="Prev" btnClass="btn-dark" />
+            <Button @click.prevent="prev()" text="이전" btnClass="btn-dark" />
           </div>
           <div v-if="stepNumber < steps.length - 1" class="flex justify-end w-full">
-            <Button @click.prevent="next()" text="Next" btnClass="btn-dark" />
+            <Button @click.prevent="next()" text="다음" btnClass="btn-dark" />
           </div>
           <div v-else class="flex justify-end w-full">
-            <Button @click.prevent="save()" text="Save" btnClass="btn-dark" />
+            <Button @click.prevent="save()" text="등록" btnClass="btn-dark" />
           </div>
         </div>
       </form>
@@ -483,5 +499,9 @@ export default {
   justify-content: space-between;
   width: 100%;
   margin-top: 20px;
+}
+
+.question {
+  font-weight: bold;
 }
 </style>
