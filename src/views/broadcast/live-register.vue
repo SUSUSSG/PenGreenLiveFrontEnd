@@ -50,11 +50,7 @@
             <br>
             <Textinput label="라이브 한줄 요약" placeholder="라이브 한줄 요약을 입력하세요" name="liveSummary" v-model="liveSummary" />
             <br>
-            <div class="flex flex-col md:flex-row items-start md:items-center">
-              <label class="label-style">
-                대표 이미지 등록
-              </label>
-            </div>
+            <label>대표 이미지 등록</label>
             <div style="display: flex; align-items: center;">
               <div style="flex-shrink: 0;">
                 <img :src="imageSrc" alt="대표 이미지 미리보기" style="width: 100px; height: 100px" />
@@ -70,7 +66,7 @@
             <Textinput label="라이브 예정일/시간" type="datetime-local" name="liveDateTime" v-model="liveDateTime" />
             <div>
               <select-component :options="categories" v-model="selectedCategoryValue" placeholder="카테고리를 선택하세요"
-                label="카테고리" />
+                label="카테고리" class="mt-7"/>
               <div v-if="selectedCategoryLabel" class="selected-category-display">
                 선택된 카테고리: {{ selectedCategoryLabel }}
               </div>
@@ -84,10 +80,10 @@
             <!-- 라이브에 사용할 상품 등록 -->
             <div class="box">
               <div class="left-content">
-                <label class="label-style">상품 등록</label>
+                <label>상품 등록</label>
               </div>
               <div class="right-content">
-                <Modal title="상품등록" label="상품 등록하기" labelClass="btn-outline-dark btn-sm" ref="modal1">
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="modal1">
                   <h4 class="font-medium text-lg mb-3 text-slate-900">Lorem ipsum dolor sit.</h4>
                   <div class="text-base text-slate-600 dark:text-slate-300">상품 검색해서 집어넣으세요</div>
                   <template v-slot:footer>
@@ -98,8 +94,8 @@
             </div>
             <div class="card rounded-md bg-white dark:bg-slate-800">
               <div class="card-body flex flex-col p-6 overflow-auto">
-                <p>판매 상품 등록</p>
-                <hr class="section-divider"> <!-- 구분선 추가 -->
+                <!-- <p>판매 상품 등록</p> -->
+                <!-- <hr class="section-divider"> -->
                 <table class="min-w-full">
                   <thead>
                     <tr class="text-left">
@@ -108,7 +104,7 @@
                       <th class="px-6 py-3">기본 가격</th>
                       <th class="px-6 py-3">할인률 (%)</th>
                       <th class="px-6 py-3">할인된 가격</th>
-                      <th class="px-6 py-3">작업</th>
+                      <th class="px-10 py-3">작업</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -121,7 +117,7 @@
                       </td>
                       <td class="px-6 py-4">{{ formatCurrency(product.discountedPrice) }}</td>
                       <td class="px-6 py-4">
-                        <Button class="btn-sm" @click="registerProduct(index)" type="button">등록하기</Button>
+                        <Button @click="registerProduct(index)" :class="{ 'btn-outline-dark': !isLoading}" btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="추가" />
                       </td>
                     </tr>
                   </tbody>
@@ -130,17 +126,17 @@
             </div>
             <br>
             <!-- 등록된 상품 목록 -->
+            <label>상품 목록</label>
             <div class="card rounded-md bg-white dark:bg-slate-800">
               <div class="card-body flex flex-col p-6 overflow-auto">
-                <p>등록된 상품 목록</p>
-                <hr class="section-divider"> <!-- 구분선 추가 -->
+                <!-- <hr class="section-divider"> 구분선 추가 -->
                 <table class="min-w-full">
                   <thead>
                     <tr class="text-left">
                       <th class="px-6 py-3">상품 이름</th>
                       <th class="px-6 py-3">상품 코드</th>
                       <th class="px-6 py-3">할인가</th>
-                      <th class="px-6 py-3">작업</th>
+                      <th class="px-10 py-3">작업</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -149,7 +145,7 @@
                       <td class="px-6 py-4">{{ registered.code }}</td>
                       <td class="px-6 py-4">{{ formatCurrency(registered.discountedPrice) }}</td>
                       <td class="px-6 py-4">
-                        <Button class="btn-sm" @click="deleteRegisteredProduct(idx)" type="button">삭제</Button>
+                        <Button @click="deleteRegisteredProduct(idx)" :class="{ 'btn-outline-dark': !isLoading}" btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="삭제" />
                       </td>
                     </tr>
                   </tbody>
@@ -169,7 +165,7 @@
                   class="mb-2 flex-grow" />
                 <Button :disabled="!canAddNotice" @click="addNotice"
                   :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
-                  btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5" text="추가하기"></Button>
+                  btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5" text="추가"></Button>
               </div>
               <ul>
                 <li v-for="(notice, index) in notices" :key="index"
@@ -189,10 +185,11 @@
                   class="mb-2 flex-grow" />
                 <Button :disabled="!canAddBenefit" @click="addBenefit"
                   :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
-                  btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" text="추가하기"></Button>
+                  btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" text="추가"></Button>
               </div>
               <ul>
-                <li v-for="(item, index) in benefits" :key="index" class="list-item flex items-center justify-between mt-1">
+                <li v-for="(item, index) in benefits" :key="index"
+                  class="list-item flex items-center justify-between mt-1">
                   <div class="bg-gray-100 p-2 rounded">
                     <span>{{ item }}</span>
                     <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" style="float: right;"
@@ -213,7 +210,7 @@
                 <div class="text-center mb-2"> <!-- 추가하기 버튼을 오른쪽 중간에 위치시키기 위해 text-center 추가 -->
                   <Button :disabled="!canAddAnswer" @click="addAnswer"
                     :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
-                    btnClass="btn inline-flex justify-center btn-sm justify-between" text="추가하기"></Button>
+                    btnClass="btn inline-flex justify-center btn-sm justify-between" text="추가"></Button>
                 </div>
               </div>
               <dl>
@@ -504,4 +501,8 @@ export default {
 .question {
   font-weight: bold;
 }
+
+// label {
+//   font-weight: bold;
+// }
 </style>
