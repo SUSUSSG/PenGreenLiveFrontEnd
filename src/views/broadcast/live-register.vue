@@ -22,9 +22,9 @@
           class="absolute top-full text-base md:leading-6 mt-3 transition duration-150 md:opacity-100 opacity-0 group-hover:opacity-100"
           :class="stepNumber >= i
             ? ' text-slate-900 dark:text-slate-300'
-            : 'text-slate-500 dark:text-slate-300 dark:text-opacity-40'
-            ">
-          <p class="w-max">{{ item.title }}</p>
+            : 'text-slate-500 dark:text-slate-300 dark:text-opacity-40'" style="left: -25px;">
+          <!-- left 값을 조정하여 좌측으로 이동 -->
+          <div class="w-max">{{ item.title }}</div>
         </div>
       </div>
     </div>
@@ -66,7 +66,7 @@
             <Textinput label="라이브 예정일/시간" type="datetime-local" name="liveDateTime" v-model="liveDateTime" />
             <div>
               <select-component :options="categories" v-model="selectedCategoryValue" placeholder="카테고리를 선택하세요"
-                label="카테고리" class="mt-7"/>
+                label="카테고리" class="mt-7" />
               <div v-if="selectedCategoryLabel" class="selected-category-display">
                 선택된 카테고리: {{ selectedCategoryLabel }}
               </div>
@@ -117,7 +117,8 @@
                       </td>
                       <td class="px-6 py-4">{{ formatCurrency(product.discountedPrice) }}</td>
                       <td class="px-6 py-4">
-                        <Button @click="registerProduct(index)" :class="{ 'btn-outline-dark': !isLoading}" btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="추가" />
+                        <Button @click="registerProduct(index)" :class="{ 'btn-outline-dark': !isLoading }"
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="추가" />
                       </td>
                     </tr>
                   </tbody>
@@ -145,7 +146,8 @@
                       <td class="px-6 py-4">{{ registered.code }}</td>
                       <td class="px-6 py-4">{{ formatCurrency(registered.discountedPrice) }}</td>
                       <td class="px-6 py-4">
-                        <Button @click="deleteRegisteredProduct(idx)" :class="{ 'btn-outline-dark': !isLoading}" btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="삭제" />
+                        <Button @click="deleteRegisteredProduct(idx)" :class="{ 'btn-outline-dark': !isLoading }"
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="삭제" />
                       </td>
                     </tr>
                   </tbody>
@@ -504,5 +506,4 @@ export default {
 
 // label {
 //   font-weight: bold;
-// }
-</style>
+// }</style>
