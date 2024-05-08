@@ -14,7 +14,7 @@
           </span>
         </div>
 
-        <div class="absolute top-1/2 h-[2px] w-full" :class="stepNumber >= i
+        <div class="absolute top-1/2 h-[2px] w-full" :class="stepNumber > i
           ? 'bg-slate-900 dark:bg-slate-900'
           : 'bg-[#E0EAFF] dark:bg-slate-700'
           "></div>
