@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div :class="{'active-overlay': isOpen}">
+        <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
         <img :src="productImg"/>
         <div class="product-header">
             <div class="brand-name">{{ brand }}</div>
@@ -80,11 +81,25 @@
                 </TabPanels>
             </TabGroup>
         </div>
+
+        <div class="sticky bottom-0 flex justify-between items-center pt-4">
+          <Button class="w-full order-button" text="구매하기" @click="openModal"/>
+        </div>
+        
+        <div class="modal flex justify-between items-center modal-adjust z-30" v-show="isOpen">
+          <PurchaseModal @update:isOpen="updateModal"     
+            :productName="productName"
+            :price="price"
+            :discountedPrice="discountedPrice"/>
+        </div>
     </div>
 </template>
 
 <script setup>
     import { ref, computed, defineProps } from 'vue';
+    import Button from "@/components/Button";
+    import PurchaseModal from "@/components/Modal/purchase-modal.vue";
+
 
     const props = defineProps({
         brand: String,
@@ -97,7 +112,15 @@
 
     const formattedPrice = computed(() => props.price.toLocaleString());
     const formattedDiscountedPrice = computed(() => props.discountedPrice.toLocaleString());
-    
+    const isOpen = ref(false);
+    const openModal = () => {
+        isOpen.value = true;
+    };
+
+    const updateModal = (value) => {
+        isOpen.value = value;
+    };
+
 </script>
 
 <script>
@@ -176,4 +199,27 @@
     font-weight: 700;
 }
 
+.modal {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.overlay {
+  min-width: 0;
+  border: 1px solid #ccc;
+  position: absolute;
+  bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  /* display: none; */
+}
+
+.live-section.active-overlay {
+  position: relative;
+  z-index: 2; /* 오버레이가 필요할 때만 적용 */
+}
 </style>

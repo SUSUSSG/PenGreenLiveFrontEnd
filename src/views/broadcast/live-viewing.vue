@@ -3,36 +3,26 @@
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
 
     <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true"></Live>
-    <div class="live-section relative" :class="{'active-overlay': isOpen}">
-      <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
-
+    <div class="live-section relative">
       <div v-if="selectedProduct">
         <header class="flex justify-between pb-4">
-          <div></div> <!-- 좌측 공백 -->
+          <div></div>
           <Button text="돌아가기" @click="closePurchaseModal"/>
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-            <LiveBoardPurchase class="purchase-section"
-            :brand="selectedProduct.brand"             
-            :productName="selectedProduct.productName"
-            :price="selectedProduct.price"
-            :discountRate="selectedProduct.discountRate"
-            :discountedPrice="selectedProduct.discountedPrice"
-            :product-img="selectedProduct.productImg"
+              <LiveBoardPurchase class="purchase-section"
+              :brand="selectedProduct.brand"             
+              :productName="selectedProduct.productName"
+              :price="selectedProduct.price"
+              :discountRate="selectedProduct.discountRate"
+              :discountedPrice="selectedProduct.discountedPrice"
+              :product-img="selectedProduct.productImg"
             />
           </div>
         </div>
-        <div class="sticky bottom-0 flex justify-between items-center pt-4">
-          <Button class="w-full order-button" text="구매하기" @click="openModal"/>
-        </div>
-        <div class="modal flex justify-between items-center modal-adjust z-30" v-show="isOpen">
-          <PurchaseModal @update:isOpen="updateModal"     
-            :productName="selectedProduct.productName"
-            :price="selectedProduct.price"
-            :discountedPrice="selectedProduct.discountedPrice"/>
-        </div>
       </div>
+
       <div v-if="!selectedProduct" class="contents-wrap">
         <header class="flex justify-between items-center pb-4 border-b">
           <div></div> <!-- 좌측 공백 -->
@@ -115,7 +105,6 @@ import {ref, onMounted, computed, watch} from 'vue';
 import { useStore } from 'vuex';
 import {TabGroup, TabList, Tab, TabPanels, TabPanel} from '@headlessui/vue';
 import Button from "@/components/Button";
-import PurchaseModal from "@/components/Modal/purchase-modal.vue";
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -147,14 +136,6 @@ let faqs = [
 ];
 let address = '';
 
-const isOpen = ref(false);
-const openModal = () => {
-  isOpen.value = true;
-};
-
-const updateModal = (value) => {
-  isOpen.value = value;
-};
 
 const handleDiscountedPrice = (discountedPrice, product) => {
   product.discountedPrice = discountedPrice;
@@ -189,7 +170,6 @@ const calculateHeight = () => {
   console.log('viewportHeight' + viewportHeight);
   console.log('header: ' + boxHeight.value);
   console.log('live-container: ' + computedHeight.value);
-
 };
 
 onMounted(() => {
@@ -285,12 +265,8 @@ watch(boxHeight, calculateHeight);
 
 /* 구매 영역 */
 .scroll-wrapper {
-  max-height: calc(80vh - 100px);
+  max-height: calc(80vh - 67px);
   overflow-y: auto;
-}
-
-.purchase-container {
-  padding-bottom: 20px; 
 }
 
 .purchase-section img {
@@ -322,30 +298,6 @@ watch(boxHeight, calculateHeight);
   color: red;
 }
 
-.modal {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-}
-
-.overlay {
-  min-width: 0;
-  border: 1px solid #ccc;
-  position: absolute;
-  bottom: 0;
-  top: 0;
-  left: 0;
-  right: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  /* display: none; */
-}
-
-.live-section.active-overlay {
-  position: relative;
-  z-index: 2; /* 오버레이가 필요할 때만 적용 */
-}
-
 /* 구매 영역 끝 */
 
 
@@ -355,12 +307,9 @@ watch(boxHeight, calculateHeight);
   margin-right : 20px;
 }
 
-
 .exit-button {
   @apply bg-red-500 text-white py-2 px-4 rounded hover:bg-red-600;
 }
-
-
 
 .product-list {
   /* display: flex;/ */
