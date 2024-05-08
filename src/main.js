@@ -20,7 +20,7 @@ import VCalendar from "v-calendar";
 import {createPinia} from 'pinia'
 import "v-calendar/dist/style.css";
 import store from './store';
-
+import BaseSpinner from '@/components/UI/BaseSpinner'
 
 const pinia = createPinia()
 
@@ -40,6 +40,8 @@ const app = createApp(App)
     .use(VueApexCharts)
     .use(VCalendar)
     .use(store)
+    .component('base-spinner',BaseSpinner)
+
 
 app.config.globalProperties.$store = {};
 app.mount("#app");

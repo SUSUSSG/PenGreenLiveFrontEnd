@@ -40,6 +40,8 @@ const routes = [
     ],
   },
   { path: '/liveboard', name: '라이브보드', component: () => import('@/views/broadcast/liveboard.vue') },
+  { path: '/chat', name: 'chat', component: () => import('@/views/chat-view.vue') },
+
 ];
 
 export default routes;
