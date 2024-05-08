@@ -4,8 +4,8 @@
       <div class="relative z-[1] items-center item flex flex-start flex-1 last:flex-none group"
         v-for="(item, i) in steps" :key="i">
         <div :class="`   ${stepNumber >= i
-            ? 'bg-slate-900 text-white ring-slate-900 ring-offset-2 dark:ring-offset-slate-500 dark:bg-slate-900 dark:ring-slate-900'
-            : 'bg-white ring-slate-900 ring-opacity-70  text-slate-900 dark:text-slate-300 dark:bg-slate-600 dark:ring-slate-600 text-opacity-70'
+          ? 'bg-slate-900 text-white ring-slate-900 ring-offset-2 dark:ring-offset-slate-500 dark:bg-slate-900 dark:ring-slate-900'
+          : 'bg-white ring-slate-900 ring-opacity-70  text-slate-900 dark:text-slate-300 dark:bg-slate-600 dark:ring-slate-600 text-opacity-70'
           }`"
           class="transition duration-150 icon-box md:h-12 md:w-12 h-7 w-7 rounded-full flex flex-col items-center justify-center relative z-[66] ring-1 md:text-lg text-base font-medium">
           <span v-if="stepNumber <= i"> {{ i + 1 }}</span>
@@ -15,14 +15,14 @@
         </div>
 
         <div class="absolute top-1/2 h-[2px] w-full" :class="stepNumber >= i
-            ? 'bg-slate-900 dark:bg-slate-900'
-            : 'bg-[#E0EAFF] dark:bg-slate-700'
+          ? 'bg-slate-900 dark:bg-slate-900'
+          : 'bg-[#E0EAFF] dark:bg-slate-700'
           "></div>
         <div
           class="absolute top-full text-base md:leading-6 mt-3 transition duration-150 md:opacity-100 opacity-0 group-hover:opacity-100"
           :class="stepNumber >= i
-              ? ' text-slate-900 dark:text-slate-300'
-              : 'text-slate-500 dark:text-slate-300 dark:text-opacity-40'
+            ? ' text-slate-900 dark:text-slate-300'
+            : 'text-slate-500 dark:text-slate-300 dark:text-opacity-40'
             ">
           <p class="w-max">{{ item.title }}</p>
         </div>
@@ -46,15 +46,10 @@
         <!-- Step1 -->
         <div v-if="stepNumber === 0">
           <Card>
-            <!-- 라이브 제목 입력 -->
             <Textinput label="라이브 제목" placeholder="라이브 제목을 입력하세요" name="liveTitle" v-model="liveTitle" />
             <br>
-
-            <!-- 라이브 한줄 요약 입력 -->
             <Textinput label="라이브 한줄 요약" placeholder="라이브 한줄 요약을 입력하세요" name="liveSummary" v-model="liveSummary" />
             <br>
-
-            <!-- 대표 이미지 등록 -->
             <div class="flex flex-col md:flex-row items-start md:items-center">
               <label class="label-style">
                 대표 이미지 등록
@@ -72,12 +67,18 @@
               </div>
             </div>
             <br>
-
-            <!-- 라이브 예정일/시간 선택 -->
             <Textinput label="라이브 예정일/시간" type="datetime-local" name="liveDateTime" v-model="liveDateTime" />
+            <div>
+              <select-component :options="categories" v-model="selectedCategoryValue" placeholder="카테고리를 선택하세요"
+              label="카테고리" />
+              <div v-if="selectedCategoryLabel" class="selected-category-display">
+                선택된 카테고리: {{ selectedCategoryLabel }}
+              </div>
+            </div>
           </Card>
         </div>
 
+        <!-- 하단 버튼 모음 -->
         <div class="mt-10 flex justify-between items-center">
           <div v-if="stepNumber > 0">
             <Button @click.prevent="prev()" text="Prev" btnClass="btn-dark" />
@@ -100,12 +101,20 @@ import Icon from "@/components/Icon";
 import { ref } from "vue";
 import { useToast } from "vue-toastification";
 import Card from "@/components/Card";
+import Textinput from '@/components/Textinput';
+import Dropdown from "@/components/Dropdown/index.vue";
+import Textarea from "@/components/Textarea";
+import SelectComponent from "@/components/Select/index.vue";
 
 export default {
   components: {
     Button,
     Icon,
-    Card
+    Card,
+    Textinput,
+    Dropdown,
+    Textarea,
+    SelectComponent
   },
 
   setup() {
@@ -166,6 +175,47 @@ export default {
       stepNumber,
     };
   },
+  data() {
+    return {
+      // 추가
+      liveTitle: '',
+      liveSummary: '',
+      liveDateTime: '',
+      imageFile: null,
+      imageSrc: "https://via.placeholder.com/90x160",
+      selectedCategory: '',
+      selectedCategoryValue: '',
+      categories: [
+        {value: 'beauty', label: '뷰티'},
+        {value: 'food', label: '식품'},
+        {value: 'household', label: '생활용품'},
+        {value: 'children', label: '유아동'},
+        {value: 'electronics', label: '전자제품'},
+        {value: 'fashion', label: '패션'},
+      ],
+    }
+  },
+  computed: {
+    canSubmit() {
+      return this.liveTitle && this.liveSummary && this.liveDateTime && this.productIds && this.imageSrc;
+    },
+  },
+  methods: {
+    handleImageUpload(event) {
+      const file = event.target.files[0];
+      if (!file.type.includes('image/')) {
+        alert('이미지 파일만 업로드 가능합니다.');  // Notify user if the file is not an image
+        event.target.value = '';  // Reset the file input to clear the invalid file
+        return;
+      }
+      this.imageFile = file;
+      const reader = new FileReader();
+      reader.onload = e => {
+        this.imageSrc = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 };
 </script>
 
