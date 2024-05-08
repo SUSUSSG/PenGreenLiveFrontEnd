@@ -159,6 +159,61 @@
           </Card>
         </div>
 
+        <!-- Step3 -->
+        <div v-if="stepNumber === 2">
+          <Card>
+            <!-- 공지 사항 섹션 -->
+            <div class="section">
+              <div class="flex items-center">
+                <Textinput label="공지 사항" type="text" name="newNotice" v-model="newNotice" placeholder="공지사항 입력"
+                  class="mb-2 flex-grow" />
+                <Button :disabled="!canAddNotice" @click="addNotice"
+                  :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
+                  btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5" text="추가하기"></Button>
+              </div>
+              <ul>
+                <li v-for="(notice, index) in notices" :key="index" class="list-item">
+                  <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" class="flex-shrink-0"></Icon>{{
+                    notice }}
+                </li>
+              </ul>
+            </div>
+            <!-- 라이브 혜택 섹션 -->
+            <div class="section">
+              <div class="flex items-center">
+                <Textinput label="라이브 혜택" type="text" name="newBenefit" v-model="newBenefit" placeholder="라이브 혜택 입력"
+                  class="mb-2 flex-grow" />
+                <Button :disabled="!canAddBenefit" @click="addBenefit"
+                  :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
+                  btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" text="추가하기"></Button>
+              </div>
+              <ul>
+                <li v-for="(item, index) in benefits" :key="index" class="list-item">
+                  <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" class="flex-shrink-0"></Icon>{{
+                    item }}
+                </li>
+              </ul>
+            </div>
+            <!-- FAQs 섹션 -->
+            <div class="section">
+              <div class="mb-4">
+                <Textinput label="질문" type="text" v-model="newQuestion" placeholder="질문을 입력해주세요" class="mb-2" />
+                <Textarea label="답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
+                <br>
+                <Button :isDisabled="!canAddAnswer" text="추가하기" @click="addAnswer" :isLoading="isLoading"
+                  class="btn-sm" />
+              </div>
+              <dl>
+                <div v-for="(item, index) in qa" :key="index" class="faq-item">
+                  <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" class="delete-icon"></Icon>
+                  <dt class="question">{{ item.question }}</dt>
+                  <dd class="answer">&nbsp;&nbsp;{{ item.answer }}</dd>
+                </div>
+              </dl>
+            </div>
+          </Card>
+        </div>
+
 
 
 
@@ -285,10 +340,19 @@ export default {
       productIds: '',
       productsToRegister: [
         // Example products (this would normally come from a server)
-        {name: 'Product A', code: 'A001', price: 10000, discountRate: 0, discountedPrice: 10000},
-        {name: 'Product B', code: 'B001', price: 20000, discountRate: 0, discountedPrice: 20000}
+        { name: 'Product A', code: 'A001', price: 10000, discountRate: 0, discountedPrice: 10000 },
+        { name: 'Product B', code: 'B001', price: 20000, discountRate: 0, discountedPrice: 20000 }
       ],
       registeredProducts: [],
+
+      //step3
+      notices: [],
+      qa: [],
+      benefits: [],
+      newQuestion: '',
+      newAnswer: '',
+      newNotice: '',
+      newBenefit: '',
     }
   },
   computed: {
@@ -302,6 +366,17 @@ export default {
     selectedCategoryLabel() {
       const category = this.categories.find(cat => cat.value === this.selectedCategoryValue);
       return category ? category.label : '';
+    },
+    canAddNotice() {
+      // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
+      return this.newNotice.trim() !== '';
+    },
+    canAddBenefit() {
+      // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
+      return this.newBenefit.trim() !== '';
+    },
+    canAddAnswer() {
+      return this.newQuestion.trim() !== '' && this.newAnswer.trim() != '';
     },
   },
   watch: {
@@ -335,7 +410,7 @@ export default {
     },
     addProduct() {
       if (this.canAddProduct) {
-        this.products.push({...this.newProduct});
+        this.products.push({ ...this.newProduct });
         // Reset newProduct for the next entry
         this.newProduct = {
           name: '',
@@ -354,6 +429,45 @@ export default {
     },
     deleteRegisteredProduct(index) {
       this.registeredProducts.splice(index, 1);
+    },
+    submitForm() {
+      if (!this.canSubmit) return;
+      this.isLoading = true;
+      // Form submission logic would go here
+      setTimeout(() => {
+        this.isLoading = false;
+        alert('Form submitted successfully!');
+      }, 2000);
+      this.save();
+    },
+    addNotice() {
+      if (this.newNotice.trim()) {
+        this.notices.push(this.newNotice);
+        this.newNotice = ''; // 입력란 초기화
+      }
+    },
+    addBenefit() {
+      if (this.newBenefit.trim()) {
+        this.benefits.push(this.newBenefit);
+        this.newBenefit = ''; // 입력란 초기화
+      }
+    },
+    addAnswer() {
+      if (this.newQuestion.trim() && this.newAnswer.trim()) {
+        this.qa.push({ question: this.newQuestion, answer: this.newAnswer }); // Add as an object
+        this.newQuestion = '';
+        this.newAnswer = '';
+      }
+    },
+    deleteNotice(index) {
+      this.notices.splice(index, 1);
+    },
+
+    deleteBenefit(index) {
+      this.benefits.splice(index, 1);
+    },
+    deleteQA(index) {
+      this.qa.splice(index, 1);
     },
   }
 };
