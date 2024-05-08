@@ -1,19 +1,20 @@
 // src/store/modules/user.js
 const state = {
     rooms: [
-      { id: 1, name: 'Room 1' },
-      { id: 2, name: 'Room 2' },
+      { id: 1, name: 'Dummy Room1' },
+     
+
     ],
     enteredRooms: [
-      { id: 1, name: 'Room 1' },
+      { id: 1, name: 'Dummy Room1' },
     ],
   };
   
   const mutations = {
-    SET_ROOMS(state, rooms) {
+    setRooms(state, rooms) {
       state.rooms = rooms;
     },
-    SET_ENTERED_ROOMS(state, enteredRooms) {
+    setEnteredRooms(state, enteredRooms) {
       state.enteredRooms = enteredRooms;
     },
   };
