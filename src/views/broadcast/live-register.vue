@@ -8,8 +8,8 @@
           : 'bg-white ring-slate-900 ring-opacity-70  text-slate-900 dark:text-slate-300 dark:bg-slate-600 dark:ring-slate-600 text-opacity-70'
           }`"
           class="transition duration-150 icon-box md:h-12 md:w-12 h-7 w-7 rounded-full flex flex-col items-center justify-center relative z-[66] ring-1 md:text-lg text-base font-medium">
-          <span v-if="stepNumber <= i"> {{ i + 1 }}</span>
-          <span v-else class="text-3xl">
+          <span id="span" v-if="stepNumber <= i"> {{ i + 1 }}</span>
+          <span id="span" v-else class="text-3xl">
             <Icon icon="bx:check-double" />
           </span>
         </div>
@@ -70,13 +70,97 @@
             <Textinput label="라이브 예정일/시간" type="datetime-local" name="liveDateTime" v-model="liveDateTime" />
             <div>
               <select-component :options="categories" v-model="selectedCategoryValue" placeholder="카테고리를 선택하세요"
-              label="카테고리" />
+                label="카테고리" />
               <div v-if="selectedCategoryLabel" class="selected-category-display">
                 선택된 카테고리: {{ selectedCategoryLabel }}
               </div>
             </div>
           </Card>
         </div>
+
+        <!-- Step2 -->
+        <div v-if="stepNumber === 1">
+          <Card>
+            <!-- 라이브에 사용할 상품 등록 -->
+            <div class="box">
+              <div class="left-content">
+                <label class="label-style">상품 등록</label>
+              </div>
+              <div class="right-content">
+                <Modal title="상품등록" label="상품 등록하기" labelClass="btn-outline-dark btn-sm" ref="modal1">
+                  <h4 class="font-medium text-lg mb-3 text-slate-900">Lorem ipsum dolor sit.</h4>
+                  <div class="text-base text-slate-600 dark:text-slate-300">상품 검색해서 집어넣으세요</div>
+                  <template v-slot:footer>
+                    <Button text="등록하기" btnClass="btn-primary btn-sm" @click="$refs.modal1.closeModal()" />
+                  </template>
+                </Modal>
+              </div>
+            </div>
+            <div class="card rounded-md bg-white dark:bg-slate-800">
+              <div class="card-body flex flex-col p-6 overflow-auto">
+                <p>판매 상품 등록</p>
+                <hr class="section-divider"> <!-- 구분선 추가 -->
+                <table class="min-w-full">
+                  <thead>
+                    <tr class="text-left">
+                      <th class="px-6 py-3">상품 이름</th>
+                      <th class="px-6 py-3">상품 코드</th>
+                      <th class="px-6 py-3">기본 가격</th>
+                      <th class="px-6 py-3">할인률 (%)</th>
+                      <th class="px-6 py-3">할인된 가격</th>
+                      <th class="px-6 py-3">작업</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(product, index) in productsToRegister" :key="index" class="border-b">
+                      <td class="px-6 py-4">{{ product.name }}</td>
+                      <td class="px-6 py-4">{{ product.code }}</td>
+                      <td class="px-6 py-4">{{ formatCurrency(product.price) }}</td>
+                      <td class="px-6 py-4">
+                        <input type="number" v-model.number="product.discountRate" class="input-control">
+                      </td>
+                      <td class="px-6 py-4">{{ formatCurrency(product.discountedPrice) }}</td>
+                      <td class="px-6 py-4">
+                        <Button class="btn-sm" @click="registerProduct(index)" type="button">등록하기</Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <br>
+            <!-- 등록된 상품 목록 -->
+            <div class="card rounded-md bg-white dark:bg-slate-800">
+              <div class="card-body flex flex-col p-6 overflow-auto">
+                <p>등록된 상품 목록</p>
+                <hr class="section-divider"> <!-- 구분선 추가 -->
+                <table class="min-w-full">
+                  <thead>
+                    <tr class="text-left">
+                      <th class="px-6 py-3">상품 이름</th>
+                      <th class="px-6 py-3">상품 코드</th>
+                      <th class="px-6 py-3">할인가</th>
+                      <th class="px-6 py-3">작업</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(registered, idx) in registeredProducts" :key="idx" class="border-b">
+                      <td class="px-6 py-4">{{ registered.name }}</td>
+                      <td class="px-6 py-4">{{ registered.code }}</td>
+                      <td class="px-6 py-4">{{ formatCurrency(registered.discountedPrice) }}</td>
+                      <td class="px-6 py-4">
+                        <Button class="btn-sm" @click="deleteRegisteredProduct(idx)" type="button">삭제</Button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </Card>
+        </div>
+
+
+
 
         <!-- 하단 버튼 모음 -->
         <div class="mt-10 flex justify-between items-center">
@@ -105,6 +189,8 @@ import Textinput from '@/components/Textinput';
 import Dropdown from "@/components/Dropdown/index.vue";
 import Textarea from "@/components/Textarea";
 import SelectComponent from "@/components/Select/index.vue";
+import Modal from "@/components/Modal/Modal.vue";
+
 
 export default {
   components: {
@@ -114,7 +200,8 @@ export default {
     Textinput,
     Dropdown,
     Textarea,
-    SelectComponent
+    SelectComponent,
+    Modal
   },
 
   setup() {
@@ -177,7 +264,7 @@ export default {
   },
   data() {
     return {
-      // 추가
+      // step1
       liveTitle: '',
       liveSummary: '',
       liveDateTime: '',
@@ -186,19 +273,46 @@ export default {
       selectedCategory: '',
       selectedCategoryValue: '',
       categories: [
-        {value: 'beauty', label: '뷰티'},
-        {value: 'food', label: '식품'},
-        {value: 'household', label: '생활용품'},
-        {value: 'children', label: '유아동'},
-        {value: 'electronics', label: '전자제품'},
-        {value: 'fashion', label: '패션'},
+        { value: 'beauty', label: '뷰티' },
+        { value: 'food', label: '식품' },
+        { value: 'household', label: '생활용품' },
+        { value: 'children', label: '유아동' },
+        { value: 'electronics', label: '전자제품' },
+        { value: 'fashion', label: '패션' },
       ],
+
+      //step2
+      productIds: '',
+      productsToRegister: [
+        // Example products (this would normally come from a server)
+        {name: 'Product A', code: 'A001', price: 10000, discountRate: 0, discountedPrice: 10000},
+        {name: 'Product B', code: 'B001', price: 20000, discountRate: 0, discountedPrice: 20000}
+      ],
+      registeredProducts: [],
     }
   },
   computed: {
     canSubmit() {
       return this.liveTitle && this.liveSummary && this.liveDateTime && this.productIds && this.imageSrc;
     },
+    canAddProduct() {
+      // Checks if all required fields are filled and products array has less than 8 entries
+      return this.newProduct.name && this.newProduct.code && this.newProduct.price && this.products.length < 8;
+    },
+    selectedCategoryLabel() {
+      const category = this.categories.find(cat => cat.value === this.selectedCategoryValue);
+      return category ? category.label : '';
+    },
+  },
+  watch: {
+    'newProduct.discountRate': function (newRate) {
+      if (newRate) {
+        const discount = (this.newProduct.price * newRate) / 100;
+        this.newProduct.discountedPrice = this.newProduct.price - discount;
+      } else {
+        this.newProduct.discountedPrice = this.newProduct.price;
+      }
+    }
   },
   methods: {
     handleImageUpload(event) {
@@ -214,9 +328,46 @@ export default {
         this.imageSrc = e.target.result;
       };
       reader.readAsDataURL(file);
-    }
+    },
+    formatCurrency(value) {
+      if (!value) return '';
+      return `${parseInt(value).toLocaleString('ko-KR')}원`;
+    },
+    addProduct() {
+      if (this.canAddProduct) {
+        this.products.push({...this.newProduct});
+        // Reset newProduct for the next entry
+        this.newProduct = {
+          name: '',
+          code: '',
+          price: 0,
+          discountRate: 0,
+          discountedPrice: 0,
+        };
+      }
+    },
+    registerProduct(index) {
+      const product = this.productsToRegister[index];
+      product.discountedPrice = product.price - (product.price * product.discountRate / 100);
+      this.registeredProducts.push(product);
+      this.productsToRegister.splice(index, 1); // Optionally remove from to-register list
+    },
+    deleteRegisteredProduct(index) {
+      this.registeredProducts.splice(index, 1);
+    },
   }
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+#span {
+  color: black;
+}
+
+.box {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 20px;
+}
+</style>
