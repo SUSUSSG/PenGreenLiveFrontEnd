@@ -1,5 +1,5 @@
 <template>
-  <header :class="navbarTypeClass()">
+  <header :class="navbarTypeClass()" ref="box">
     <div
       :class="`app-header md:px-6 px-[15px]  dark:bg-slate-800 shadow-base dark:shadow-base3 bg-white ${borderSwicthClass()} ${
         this.$store.themeSettingsStore.navbarColor
@@ -92,6 +92,7 @@
   </header>
 </template>
 <script>
+import { ref, onMounted } from 'vue';
 import Profile from "./Navtools/Profile.vue";
 import SwitchDark from "./Navtools/SwitchDark.vue";
 import Mainnav from "./horizental-nav.vue";
@@ -101,6 +102,7 @@ import Logo from "./Navtools/Logo.vue";
 import MobileLogo from "./Navtools/MobileLogo.vue";
 import window from "@/mixins/window";
 import HandleMobileMenu from "./Navtools/HandleMobileMenu.vue";
+import { useStore } from 'vuex';
 
 export default {
   mixins: [window],
@@ -146,6 +148,20 @@ export default {
       }
     },
   },
+  setup() {
+    const box = ref(null);
+    const store = useStore();
+
+    onMounted(() => {
+      if (box.value) {
+        const boxHeight = box.value.clientHeight;
+        store.dispatch('updateBoxHeight', boxHeight);
+      }
+    });
+    return {
+      box
+    };
+  }
 };
 </script>
 <style lang="scss" scoped>
