@@ -38,10 +38,6 @@ export const menuItems = [
         childtitle: "상품 목록",
         childlink: "product-list",
         },
-        {
-        childtitle: "상품 카테고리",
-        childlink: "product-category",
-        },
     ],
   },
 
