@@ -18,6 +18,7 @@
     "@fullcalendar/timegrid": "6.0.3",
     "@fullcalendar/vue3": "6.0.3",
     "@headlessui/vue": "^1.6.4",
+    "@stomp/stompjs": "^7.0.0",
     "@videojs-player/vue": "^1.0.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue-leaflet/vue-leaflet": "^0.6.1",
@@ -31,10 +32,12 @@
     "dayjs": "^1.11.6",
     "gsap": "^3.11.3",
     "leaflet": "^1.9.2",
+    "net": "^1.0.2",
     "pinia": "^2.0.28",
     "postcss": "^8",
     "simplebar": "^5.3.8",
     "simplebar-vue3": "^0.2.0",
+    "sockjs-client": "^1.6.1",
     "swiper": "^8.2.6",
     "tailwindcss": "^3",
     "uuid": "^9.0.0",
@@ -58,7 +61,9 @@
     "vue3-dropzone": "^2.0.1",
     "vuedraggable": "^4.1.0",
     "vuex": "^4.0.2",
-    "yup": "^0.32.11"
+    "webstomp-client": "^1.2.6",
+    "yup": "^0.32.11",
+    "openvidu-browser": "2.29.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
