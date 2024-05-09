@@ -58,7 +58,8 @@
     "vue3-dropzone": "^2.0.1",
     "vuedraggable": "^4.1.0",
     "vuex": "^4.0.2",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "openvidu-browser": "2.29.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
