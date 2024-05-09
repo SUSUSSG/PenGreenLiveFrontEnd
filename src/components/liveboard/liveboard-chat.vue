@@ -18,8 +18,8 @@
               <Icon v-if="showDeleteIcon" icon="heroicons:x-mark-20-solid" @click="deleteMessage(message.seq)"></Icon>
             </div>
             <div class="flex flex-col">
-              <span class="chat-user-id">{{ message.userId }}</span>
-              <span class="chat-text">{{ message.content }}</span>
+              <span class="chat-user-id">{{ message.writer }}</span>
+              <span class="chat-text">{{ message.message }}</span>
             </div>
           </li>
         </ul>
@@ -74,7 +74,7 @@
 import Card from "@/components/Card";
 import Alert from "@/components/Alert";
 import Button from "@/components/Button";
-import Modal from "@/components/Modal/index.vue"; // 정확한 경로로 모달 컴포넌트 임포트
+import Modal from "@/components/Modal/index.vue";
 import Textinput from "@/components/Textinput/index.vue";
 import Icon from "@/components/Icon";
 import { Client } from "@stomp/stompjs";
@@ -105,10 +105,7 @@ export default {
     }
   },
   mounted() {
-    console.log("마운트됨+웹소켓 연결 시도함");
-
     this.connect();
-    console.log("마운트됨+웹소켓 연결됨");
   },
   beforeUnmount() {
     this.disconnect();
@@ -116,41 +113,27 @@ export default {
   data() {
     return {
       notice: "채팅 공지사항이 올라올 곳입니다.",
-      isOpen: false, // 모달 상태,
+      isOpen: false,
       chatNotice: '',
       forbiddenword: '',
       forbiddenwordList: [],
-      chatMessages: [
-        // 샘플 채팅 데이터
-        { seq: 1, userId: '혜지', content: '롯데 이겼어?', timestamp: '11:00 AM' },
-        { seq: 2, userId: '민석', content: '아니 졌어', timestamp: '11:00 AM' },
-        { seq: 3, userId: '소진', content: 'NC 이겼어?', timestamp: '11:00 AM' },
-        { seq: 4, userId: '진욱', content: '아니 졌어', timestamp: '11:00 AM' },
-        { seq: 5, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 6, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 7, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 8, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 9, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 10, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 11, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 12, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 13, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 14, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-      ],
+      newMessage: '',
+      chatMessages: [],
       websocketClient: null,
-      currentRoom: {id:1},
+      currentRoom: { id: 1 },
+      messageIdCounter: 1
     }
   },
   methods: {
     connect() {
-      const url = "ws://localhost:8090/ws/init"; // 서버 URL
+      const url = "ws://localhost:8090/ws/init";
       this.websocketClient = new Client({
         brokerURL: url,
         onConnect: () => {
           this.websocketClient.subscribe(
             `/sub/room/${this.currentRoom.id}`,
             (msg) => {
-              this.chatMessages.push(JSON.parse(msg.body));
+              this.chatMessages.push({ ...JSON.parse(msg.body), seq: this.messageIdCounter++ });
             }
           );
           this.websocketClient.publish({
@@ -172,7 +155,7 @@ export default {
     },
 
     sendChat() {
-      if (!this.websocketClient) return;
+      if (!this.websocketClient || !this.newMessage.trim()) return;
       this.websocketClient.publish({
         destination: `/pub/room/${this.currentRoom.id}`,
         body: JSON.stringify({ message: this.newMessage, writer: "user1" }),
@@ -180,7 +163,7 @@ export default {
       this.newMessage = ""; // 입력 필드 초기화
     },
     editChatting() {
-      this.isOpen = true; // 모달 상태를 true로 설정하여 직접 열기
+      this.isOpen = true;
     },
     submitNotice() {
       if (this.chatNotice.trim()) {
@@ -189,8 +172,8 @@ export default {
     },
     submitForbiddenword() {
       if (this.forbiddenword.trim()) {
-        this.forbiddenwordList.push(this.forbiddenword)
-        this.forbiddenword = ''
+        this.forbiddenwordList.push(this.forbiddenword);
+        this.forbiddenword = '';
       }
     },
     removeForbiddenword(index) {
@@ -198,12 +181,10 @@ export default {
     },
     deleteMessage(seq) {
       this.chatMessages = this.chatMessages.filter(message => message.seq !== seq);
-    },
-
+    }
   }
 }
 </script>
-
 <style>
 .chat-card {
   width: 100%;
