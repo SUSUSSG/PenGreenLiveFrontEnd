@@ -52,7 +52,7 @@
       </div>
     </div>
     <div class="w-full p-[20px]">
-      <Button class="order-button w-full">눌러서 구매하기</Button>
+      <Button class="order-button w-full" @click="triggerTossPay">눌러서 구매하기</Button>
     </div>
   </div>
 </template>
@@ -61,16 +61,21 @@
 import Button from "@/components/Button";
 import { ref, computed, defineProps } from 'vue';
 
-const emit = defineEmits(['update:isOpen']);
+const emit = defineEmits(['update:isOpen', 'openTossPay']);
 const close = () => {
   emit('update:isOpen', false);
 };
+
+function triggerTossPay() {
+  emit('openTossPay'); 
+}
 
 const props = defineProps({
   isOpen: Boolean,
   productName: String,
   discountedPrice: Number,
-  address: String
+  address: String,
+  activatePayPopup: Boolean,
 });
 
 const quantity = ref(1);

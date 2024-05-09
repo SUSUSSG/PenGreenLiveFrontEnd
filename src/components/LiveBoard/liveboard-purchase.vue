@@ -90,7 +90,13 @@
           <PurchaseModal @update:isOpen="updateModal"     
             :productName="productName"
             :price="price"
-            :discountedPrice="discountedPrice"/>
+            :discountedPrice="discountedPrice"
+            @openTossPay="handleOpenTossPay"
+            />
+        </div>
+
+        <div v-if="showTossPay" class="modal flex justify-between items-center modal-adjust z-50">
+            <TossPay></TossPay>
         </div>
     </div>
 </template>
@@ -99,7 +105,8 @@
     import { ref, computed, defineProps } from 'vue';
     import Button from "@/components/Button";
     import PurchaseModal from "@/components/Modal/purchase-modal.vue";
-
+    import TossPay from "@/components/Pay/CheckoutView.vue";
+    import "@/components/Pay/style.css";
 
     const props = defineProps({
         brand: String,
@@ -120,6 +127,12 @@
     const updateModal = (value) => {
         isOpen.value = value;
     };
+
+    const showTossPay = ref(false);
+
+    function handleOpenTossPay() {
+    showTossPay.value = true; 
+    }
 
 </script>
 
