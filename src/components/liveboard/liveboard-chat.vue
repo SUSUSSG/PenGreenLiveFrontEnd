@@ -133,7 +133,12 @@ export default {
           this.websocketClient.subscribe(
             `/sub/room/${this.currentRoom.id}`,
             (msg) => {
-              this.chatMessages.push({ ...JSON.parse(msg.body), seq: this.messageIdCounter++ });
+              try {
+                const parsedMessage = JSON.parse(msg.body);
+                this.chatMessages.push({ ...parsedMessage, seq: this.messageIdCounter++ });
+              } catch (e) {
+                this.chatMessages.push({ seq: this.messageIdCounter++, writer: "System", message: msg.body });
+              }
             }
           );
           this.websocketClient.publish({
@@ -185,6 +190,7 @@ export default {
   }
 }
 </script>
+
 <style>
 .chat-card {
   width: 100%;
@@ -214,7 +220,6 @@ export default {
 
 .chat-message {
   padding: 0.5rem;
-
 }
 
 .chat-user-id {
@@ -282,7 +287,6 @@ export default {
   color: white;
 }
 
-/* 채팅 color 추가 */
 .green-alert {
   color: #134010;
   background-color: rgba(19, 64, 16, 0.2);
@@ -294,15 +298,10 @@ export default {
   margin-top: 3px;
 }
 
-.chat-send-button {
-  background-color: #134010;
-}
-
 .py-\[18px\] {
   padding: 13px;
 }
 
-/* 추가 */
 .text-base {
   font-weight: bold;
 }
