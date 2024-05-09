@@ -61,7 +61,7 @@
 import Button from "@/components/Button";
 import { ref, computed, defineProps } from 'vue';
 
-const emit = defineEmits(['update:isOpen', 'openTossPay']);
+const emit = defineEmits(['update:isOpen', 'openTossPay', 'updateTotalPrice']);
 const close = () => {
   emit('update:isOpen', false);
 };
@@ -92,6 +92,7 @@ const decreaseQuantity = () => {
 
 const totalPrice = computed(() => {
   const price = quantity.value * props.discountedPrice;
+  emit('updateTotalPrice', price);
   return price.toLocaleString();
 });
 

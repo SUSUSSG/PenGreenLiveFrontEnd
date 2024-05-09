@@ -92,11 +92,16 @@
             :price="price"
             :discountedPrice="discountedPrice"
             @openTossPay="handleOpenTossPay"
+            @updateTotalPrice="handleTotalPrice"
             />
         </div>
 
         <div v-if="showTossPay" class="modal flex justify-between items-center modal-adjust z-50">
-            <TossPay></TossPay>
+            <TossPay 
+             :productName="productName"
+             :totalPrice="updateTotalPrice"
+             @openTossPay="close">
+            </TossPay>
         </div>
     </div>
 </template>
@@ -131,7 +136,16 @@
     const showTossPay = ref(false);
 
     function handleOpenTossPay() {
-    showTossPay.value = true; 
+        showTossPay.value = true; 
+    }
+
+    function close() {
+        showTossPay.value = false; 
+    }
+
+    let updateTotalPrice = ref(null);
+    function handleTotalPrice(totalPrice) {
+        updateTotalPrice = totalPrice;
     }
 
 </script>

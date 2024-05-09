@@ -1,5 +1,10 @@
 <template>
   <div class="wrapper block">
+    <div class="modal-handle-area w-full h-[2rem] flex justify-center items-center" @click="triggerTossPay">
+        <span class="modal-handle">
+          <img src="/src/assets/images/svg/down.svg"/>
+        </span>
+    </div>
     <div class="box_section">
       <!-- 결제 UI -->
       <div id="payment-method">
@@ -14,25 +19,32 @@
 </template>
   
 <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref, onMounted, defineProps } from 'vue';
   import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
   import "@/components/Pay/style.css";
   import { nanoid } from "nanoid";
   
   const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
   const customerKey = nanoid();
-  const amount = ref(50000);
   const paymentWidget = ref(null);
   const paymentMethodWidget = ref(null);
   const inputEnabled = ref(false);
+  const emit = defineEmits(['openTossPay']);
+
+  function triggerTossPay() {
+    emit('openTossPay'); 
+  }
+
+  const props = defineProps({
+    productName: String,
+    totalPrice: String,
+  });
   
   async function requestPayment() {
     try {
-      const orderId = nanoid();
-      // 서버에 orderId와 amount 저장 로직 필요
       await paymentWidget.value.requestPayment({
-        orderId: "20240508",
-        orderName: "토스 티셔츠 외 2건",
+        orderId: nanoid(),
+        orderName: props.productName,
         customerName: "김토스",
         customerEmail: "customer123@gmail.com",
         customerMobilePhone: "01012341234",
@@ -44,14 +56,9 @@
     }
   }
   
-  function updateAmount(newAmount) {
-    amount.value = newAmount;
-    paymentMethodWidget.value.updateAmount(amount.value);
-  }
-  
   onMounted(async () => {
     paymentWidget.value = await loadPaymentWidget(clientKey, ANONYMOUS);
-    paymentMethodWidget.value = paymentWidget.value.renderPaymentMethods("#payment-method", { value: amount.value }, { variantKey: "DEFAULT" });
+    paymentMethodWidget.value = paymentWidget.value.renderPaymentMethods("#payment-method", { value: props.totalPrice }, { variantKey: "DEFAULT" });
     paymentWidget.value.renderAgreement("#agreement", { variantKey: "AGREEMENT" });
 
     paymentMethodWidget.value.on("ready", () => {
