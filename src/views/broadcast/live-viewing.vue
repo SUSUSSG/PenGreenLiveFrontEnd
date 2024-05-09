@@ -167,9 +167,6 @@ const computedHeight = ref(0); // 초기화
 const calculateHeight = () => {
   const viewportHeight = window.innerHeight;
   computedHeight.value = viewportHeight - boxHeight.value;
-  console.log('viewportHeight' + viewportHeight);
-  console.log('header: ' + boxHeight.value);
-  console.log('live-container: ' + computedHeight.value);
 };
 
 onMounted(() => {
