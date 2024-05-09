@@ -77,6 +77,7 @@ import Button from "@/components/Button";
 import Modal from "@/components/Modal/index.vue"; // 정확한 경로로 모달 컴포넌트 임포트
 import Textinput from "@/components/Textinput/index.vue";
 import Icon from "@/components/Icon";
+import { Client } from "@stomp/stompjs";
 
 export default {
   components: {
@@ -103,6 +104,15 @@ export default {
       default: true
     }
   },
+  mounted() {
+    console.log("마운트됨+웹소켓 연결 시도함");
+
+    this.connect();
+    console.log("마운트됨+웹소켓 연결됨");
+  },
+  beforeUnmount() {
+    this.disconnect();
+  },
   data() {
     return {
       notice: "채팅 공지사항이 올라올 곳입니다.",
@@ -127,10 +137,48 @@ export default {
         { seq: 13, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
         { seq: 14, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
       ],
-      maxChatMessages: 50
+      websocketClient: null,
+      currentRoom: {id:1},
     }
   },
   methods: {
+    connect() {
+      const url = "ws://localhost:8090/ws/init"; // 서버 URL
+      this.websocketClient = new Client({
+        brokerURL: url,
+        onConnect: () => {
+          this.websocketClient.subscribe(
+            `/sub/room/${this.currentRoom.id}`,
+            (msg) => {
+              this.chatMessages.push(JSON.parse(msg.body));
+            }
+          );
+          this.websocketClient.publish({
+            destination: `/pub/room/${this.currentRoom.id}/entered`,
+            body: JSON.stringify({ message: "입장했습니다.", writer: "user1" }),
+          });
+        },
+        onWebSocketError: (error) => {
+          console.error('WebSocket Error:', error);
+        },
+      });
+      this.websocketClient.activate();
+    },
+
+    disconnect() {
+      if (this.websocketClient) {
+        this.websocketClient.deactivate();
+      }
+    },
+
+    sendChat() {
+      if (!this.websocketClient) return;
+      this.websocketClient.publish({
+        destination: `/pub/room/${this.currentRoom.id}`,
+        body: JSON.stringify({ message: this.newMessage, writer: "user1" }),
+      });
+      this.newMessage = ""; // 입력 필드 초기화
+    },
     editChatting() {
       this.isOpen = true; // 모달 상태를 true로 설정하여 직접 열기
     },
@@ -150,7 +198,8 @@ export default {
     },
     deleteMessage(seq) {
       this.chatMessages = this.chatMessages.filter(message => message.seq !== seq);
-    }
+    },
+
   }
 }
 </script>
