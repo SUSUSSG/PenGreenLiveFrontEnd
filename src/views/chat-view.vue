@@ -1,24 +1,18 @@
 <template>
   <div class="wrap">
     <div class="container">
-      <!-- 채팅방 목록을 보여주는 섹션 -->
       <section class="room-list">
-        <!-- 채팅방 탭 -->
         <section class="room-tab">
-          <!-- 전체 채팅 방 탭 -->
           <div :class="activatedRoomTab" @click="activeTab('ALL')">
             전체 채팅 방
           </div>
-          <!-- 내가 속한 채팅 방 탭 -->
           <div :class="activatedEnteredTab" @click="activeTab('MINE')">
             내가 속한 채팅 방
           </div>
         </section>
-        <!-- 채팅방 목록 -->
         <section style="width: 100%; height: calc(100% - 50px); overflow: auto">
           <keep-alive>
             <div style="overflow: hidden">
-              <!-- 전체 채팅 방 목록 -->
               <template v-if="isAllTab">
                 <template v-for="room in rooms" :key="room.id">
                   <section style="padding: 5px">
@@ -28,7 +22,6 @@
                   </section>
                 </template>
               </template>
-              <!-- 내가 속한 채팅 방 목록 -->
               <template v-else>
                 <template v-for="room in enteredRooms" :key="room.id">
                   <section style="padding: 5px">
@@ -42,16 +35,14 @@
           </keep-alive>
         </section>
       </section>
-      <!-- 채팅창 -->
       <section class="chat-area">
         <div class="chat-wrap">
-          <!-- 채팅방 정보 표시 -->
           <section class="chat-header">
             <p>
               접속 중인 방 이름: <span>{{ enteredRoomName }}</span>
             </p>
           </section>
-          <!-- 채팅 메시지 목록 -->
+
           <section class="chat-list" v-if="!isLoading">
             <template v-for="message in messages" :key="message">
               <div
@@ -68,9 +59,9 @@
               </div>
             </template>
           </section>
-          <!-- 로딩 중 스피너 표시 -->
+
           <base-spinner v-else />
-          <!-- 메시지 입력 영역 -->
+
           <section class="chat-input-area">
             <input
               class="chat-input"
@@ -85,6 +76,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
@@ -92,9 +84,7 @@ import { Client } from "@stomp/stompjs";
 export default {
   name: "chat-view",
   setup() {
-    // Vuex 스토어 사용
     const store = useStore();
-    // 상태 변수들
     const activeRoomTab = ref("ALL");
     const rooms = ref([]);
     const enteredRooms = ref([]);
@@ -103,7 +93,6 @@ export default {
     const websocketClient = ref(null);
     const textMessage = ref("");
     const messages = ref([]);
-    // 계산된 속성들
     const activatedRoomTab = computed(() =>
       activeRoomTab.value === "ALL" ? "active-all-room" : "all-room"
     );
@@ -114,7 +103,6 @@ export default {
     const enteredRoomName = computed(() =>
       currentRoom.value ? currentRoom.value.name : ""
     );
-    // 메서드들
     const loadRooms = async () => {
       try {
         await store.dispatch("user/loadRooms");
@@ -182,14 +170,12 @@ export default {
       textMessage.value = "";
       messages.value = [];
     };
-    // 라이프사이클 훅
     onMounted(async () => {
       await loadRooms();
     });
     onBeforeUnmount(() => {
       disconnect();
     });
-    // 반환
     return {
       activeRoomTab,
       rooms,
@@ -214,7 +200,6 @@ export default {
   },
 };
 </script>
-
 <style>
 @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap");
 
