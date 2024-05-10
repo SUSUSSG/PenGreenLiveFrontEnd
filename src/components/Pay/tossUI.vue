@@ -51,6 +51,7 @@
                 </div>
             </div>
 
+            <!-- 신용카드 무이자 할부 안내 -->
             <div class="consumer-cache-tlrnqy"></div>
             <div class="p-grid consumer-cache-pypvcf">
                 <div class="p-grid-col p-grid-col12">
@@ -59,6 +60,195 @@
                         <button class="reset-button radius--s typography--p typography--medium p-text-button p-text-button--grey p-text-button--normal consumer-cache-128nlh6" type="button" @click="showInterestFreeInstallmentInfo">
                             <span class="typography typography--p typography--regular color--grey700 consumer-cache-128nlh6">신용카드 무이자 할부 안내 ></span>
                         </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 결제 약관 -->
+            <div class="p-grid consumer-cache-pypvcf ">
+                <div class="p-grid-col p-grid-col12">
+                    <div class="consumer-cache-0">
+                        <div class="m-agreement-v3-agreement-wrapper">
+                            <div class="m-agreement-v3-agreement-container">
+                                <div class="m-agreement-v3-agreement m-agreement-v3-agreement--medium m-agreement-v3-agreement--have-checkbox m-agreement-v3-agreement--with-arrow">
+                                    <div class="m-agreement-v3-layout__row">
+                                        <div></div>
+                                        <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
+                                            <input id="1val-checkbox" type="checkbox" aria-label="[필수]  결제 서비스 이용 약관, 개인정보 처리 동의" class="consumer-cache-9mopdq" checked>
+                                            <label for="1val-checkbox" class="consumer-cache-2tkdon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="consumer-cache-1ovurkh" style="width: 24px; height: 24px; margin-right: 0px;">
+                                                    <g origin="50% 50%" style="transform: none; transform-origin: 12px 12.3px;">
+                                                        <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="#e5e8eb" pathLength="1"></path>
+                                                        <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="rgba(49, 130, 246, 1)" pathLength="1" stroke-dashoffset="0px" stroke-dasharray="1px 1px"></path>
+                                                    </g>
+                                                </svg>
+                                            </label>
+                                        </div>
+                                        <div class="m-agreement-v3-layout__animation z-10" @click="toggleAgreement" style="opacity: 1; transform: none;">                                      
+                                            <div class="m-agreement-v3-field" >
+                                                <div class="m-agreement-v3-field__text" role="button" tabindex="0" aria-label="[필수]  결제 서비스 이용 약관, 개인정보 처리 동의 자세히 보기">
+                                                    <span role="text" class="text adaptive-grey700-text text--word-break typography-t6 text--font-weight-regular text--display-inline-block" style="color: #4e5968;">[필수]  결제 서비스 이용 약관, 개인정보 처리 동의</span>
+                                                </div>
+                                            </div>
+                                            <span
+                                            :class="['m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow', { 'm-agreement-v3-layout__arrow--open': isOpen }]"
+                                            role="button"
+                                            data-logging-label="icon-arrow-right-mono"
+                                            >                                                
+                                                <span
+                                                    class="m-icon__inner svg-icon adaptive-grey600-text m-icon__inner--colored"
+                                                    aria-label="[필수] 결제 서비스 이용 약관, 개인정보 처리 동의 자세히 보기"
+                                                    role="img"
+                                                    :style="{ color: isOpen ? 'var(--adaptiveGrey600)' : 'var(--adaptiveGrey400)' }"
+                                                >                                                    
+                                                <svg enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                        <path clip-rule="evenodd" d="m9.8 6.5c-.2 0-.5.1-.6.3-.4.4-.4.9 0 1.3l3.8 3.8-3.9 3.9c-.4.4-.4.9 0 1.3s.9.4 1.3 0l4.5-4.5c.4-.4.4-.9 0-1.3l-4.5-4.5c-.2-.1-.4-.3-.6-.3" fill="#b0b8c1" fill-rule="evenodd"></path>
+                                                    </svg>
+                                                </span>
+                                                <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
+                                            </span>
+                                            <div class="m-agreement-v3-layout__right-pad" style="width: 16px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-agreement-v3-layout__overlay" aria-hidden="true" style="display: flex; align-items: stretch;">
+                                    <label for="1val-checkbox" class="m-agreement-v3-layout__overlay-checkbox" aria-hidden="true" style="flex-grow: 0; flex-shrink: 0;"></label>
+                                    <label class="m-agreement-v3-layout__overlay-action" aria-hidden="true" style="flex: 1 1 0px;"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <Transition name="slide">
+                            <!-- 세부 이용약관 -->
+                            <div class="m-collapsible content" v-show="isOpen">
+                                <div>
+                                    <div class="m-agreement-v3-agreement-wrapper">
+                                        <div class="m-agreement-v3-agreement-container">
+                                            <div class="m-agreement-v3-agreement m-agreement-v3-agreement--medium m-agreement-v3-agreement--have-checkbox m-agreement-v3-agreement--with-arrow">
+                                                <div class="m-agreement-v3-layout__row">
+                                                    <div style="width: 24px;"></div>
+                                                    <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
+                                                        <input id="2val-checkbox" type="checkbox" aria-label="서비스 이용약관" class="consumer-cache-9mopdq" checked="">
+                                                        <label for="2val-checkbox" class="consumer-cache-2tkdon">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="consumer-cache-1ovurkh" style="width: 24px; height: 24px; margin-right: 0px;">
+                                                                <g origin="50% 50%" style="transform: none; transform-origin: 12px 12.3px;">
+                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="#e5e8eb" pathLength="1"></path>
+                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="rgba(49, 130, 246, 1)" pathLength="1" stroke-dashoffset="0px" stroke-dasharray="1px 1px"></path>
+                                                                </g>
+                                                            </svg>
+                                                        </label>
+                                                    </div>
+                                                    <div class="m-agreement-v3-layout__animation" style="opacity: 1; transform: none;">
+                                                        <div class="m-agreement-v3-field">
+                                                            <div class="m-agreement-v3-field__text" role="button" tabindex="0" aria-label="서비스 이용약관 자세히 보기">
+                                                                <span role="text" class="text adaptive-grey700-text text--word-break typography-t6 text--font-weight-regular text--display-inline-block" style="color: var(--adaptiveGrey700);"> 서비스 이용약관</span>
+                                                            </div>
+                                                        </div>
+                                                        <span class="m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow" role="button" data-logging-label="icon-arrow-right-mono">
+                                                            <span class="m-icon__inner svg-icon adaptive-grey400-text m-icon__inner--colored" aria-label="서비스 이용약관 자세히 보기" role="img" style="color: var(--adaptiveGrey400);">
+                                                                <svg enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path clip-rule="evenodd" d="m9.8 6.5c-.2 0-.5.1-.6.3-.4.4-.4.9 0 1.3l3.8 3.8-3.9 3.9c-.4.4-.4.9 0 1.3s.9.4 1.3 0l4.5-4.5c.4-.4.4-.9 0-1.3l-4.5-4.5c-.2-.1-.4-.3-.6-.3" fill="#b0b8c1" fill-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
+                                                        </span>
+                                                        <div class="m-agreement-v3-layout__right-pad" style="width: 16px;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-agreement-v3-layout__overlay" aria-hidden="true" style="display: flex; align-items: stretch;">
+                                                <label for="2val-checkbox" class="m-agreement-v3-layout__overlay-checkbox" aria-hidden="true" style="flex: 0 0 88px;"></label>
+                                                <label class="m-agreement-v3-layout__overlay-action" aria-hidden="true" style="flex: 1 1 0px;"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-agreement-v3-agreement-wrapper">
+                                        <div class="m-agreement-v3-agreement-container">
+                                            <div class="m-agreement-v3-agreement m-agreement-v3-agreement--medium m-agreement-v3-agreement--have-checkbox m-agreement-v3-agreement--with-arrow">
+                                                <div class="m-agreement-v3-layout__row">
+                                                    <div style="width: 24px;"></div>
+                                                    <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
+                                                        <input id="3val-checkbox" type="checkbox" aria-label="개인정보 수집 및 이용 동의 (토스페이먼츠)" class="consumer-cache-9mopdq" checked="">
+                                                        <label for="3val-checkbox" class="consumer-cache-2tkdon">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="consumer-cache-1ovurkh" style="width: 24px; height: 24px; margin-right: 0px;">
+                                                                <g origin="50% 50%" style="transform: none; transform-origin: 12px 12.3px;">
+                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="#e5e8eb" pathLength="1"></path>
+                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="rgba(49, 130, 246, 1)" pathLength="1" stroke-dashoffset="0px" stroke-dasharray="1px 1px"></path>
+                                                                </g>
+                                                            </svg>
+                                                        </label>
+                                                    </div>
+                                                    <div class="m-agreement-v3-layout__animation" style="opacity: 1; transform: none;">
+                                                        <div class="m-agreement-v3-field">
+                                                            <div class="m-agreement-v3-field__text" role="button" tabindex="0" aria-label="개인정보 수집 및 이용 동의 (토스페이먼츠) 자세히 보기">
+                                                                <span role="text" class="text adaptive-grey700-text text--word-break typography-t6 text--font-weight-regular text--display-inline-block" style="color: var(--adaptiveGrey700);"> 개인정보 수집 및 이용 동의 (토스페이먼츠)</span>
+                                                            </div>
+                                                        </div>
+                                                        <span class="m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow" role="button" data-logging-label="icon-arrow-right-mono">
+                                                            <span class="m-icon__inner svg-icon adaptive-grey400-text m-icon__inner--colored" aria-label="개인정보 수집 및 이용 동의 (토스페이먼츠) 자세히 보기" role="img" style="color: var(--adaptiveGrey400);">
+                                                                <svg enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path clip-rule="evenodd" d="m9.8 6.5c-.2 0-.5.1-.6.3-.4.4-.4.9 0 1.3l3.8 3.8-3.9 3.9c-.4.4-.4.9 0 1.3s.9.4 1.3 0l4.5-4.5c.4-.4.4-.9 0-1.3l-4.5-4.5c-.2-.1-.4-.3-.6-.3" fill="#b0b8c1" fill-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
+                                                        </span>
+                                                        <div class="m-agreement-v3-layout__right-pad" style="width: 16px;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-agreement-v3-layout__overlay" aria-hidden="true" style="display: flex; align-items: stretch;">
+                                                <label for="3val-checkbox" class="m-agreement-v3-layout__overlay-checkbox" aria-hidden="true" style="flex: 0 0 88px;"></label>
+                                                <label class="m-agreement-v3-layout__overlay-action" aria-hidden="true" style="flex: 1 1 0px;"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="m-agreement-v3-agreement-wrapper">
+                                        <div class="m-agreement-v3-agreement-container">
+                                            <div class="m-agreement-v3-agreement m-agreement-v3-agreement--medium m-agreement-v3-agreement--have-checkbox m-agreement-v3-agreement--with-arrow">
+                                                <div class="m-agreement-v3-layout__row">
+                                                    <div style="width: 24px;"></div>
+                                                    <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
+                                                        <input id="4val-checkbox" type="checkbox" aria-label="개인정보 제공 안내" class="consumer-cache-9mopdq" checked="">
+                                                        <label for="4val-checkbox" class="consumer-cache-2tkdon">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="consumer-cache-1ovurkh" style="width: 24px; height: 24px; margin-right: 0px;">
+                                                                <g origin="50% 50%" style="transform: none; transform-origin: 12px 12.3px;">
+                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="#e5e8eb" pathLength="1"></path>
+                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="rgba(49, 130, 246, 1)" pathLength="1" stroke-dashoffset="0px" stroke-dasharray="1px 1px"></path>
+                                                                </g>
+                                                            </svg>
+                                                        </label>
+                                                    </div>
+                                                    <div class="m-agreement-v3-layout__animation" style="opacity: 1; transform: none;">
+                                                        <div class="m-agreement-v3-field">
+                                                            <div class="m-agreement-v3-field__text" role="button" tabindex="0" aria-label="개인정보 제공 안내 자세히 보기">
+                                                                <span role="text" class="text adaptive-grey700-text text--word-break typography-t6 text--font-weight-regular text--display-inline-block" style="color: var(--adaptiveGrey700);"> 개인정보 제공 안내</span>
+                                                            </div>
+                                                        </div>
+                                                        <span class="m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow" role="button" data-logging-label="icon-arrow-right-mono">
+                                                            <span class="m-icon__inner svg-icon adaptive-grey400-text m-icon__inner--colored" aria-label="개인정보 제공 안내 자세히 보기" role="img" style="color: var(--adaptiveGrey400);">
+                                                                <svg enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                                                    <path clip-rule="evenodd" d="m9.8 6.5c-.2 0-.5.1-.6.3-.4.4-.4.9 0 1.3l3.8 3.8-3.9 3.9c-.4.4-.4.9 0 1.3s.9.4 1.3 0l4.5-4.5c.4-.4.4-.9 0-1.3l-4.5-4.5c-.2-.1-.4-.3-.6-.3" fill="#b0b8c1" fill-rule="evenodd"></path>
+                                                                </svg>
+                                                            </span>
+                                                            <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
+                                                        </span>
+                                                        <div class="m-agreement-v3-layout__right-pad" style="width: 16px;"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="m-agreement-v3-layout__overlay" aria-hidden="true" style="display: flex; align-items: stretch;">
+                                                <label for="4val-checkbox" class="m-agreement-v3-layout__overlay-checkbox" aria-hidden="true" style="flex: 0 0 88px;"></label>
+                                                <label class="m-agreement-v3-layout__overlay-action" aria-hidden="true" style="flex: 1 1 0px;"></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </Transition>
+
+                        <div style="flex: 0 0 auto; height: 10px;"></div>
+                        <div class="consumer-cache-1vnjgb6">
+                            <span role="text" class="text adaptive-grey500-text text--word-break typography-t7 text--font-weight-regular text--display-inline-block" style="color: var(--adaptiveGrey500);"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -77,7 +267,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted , computed} from 'vue';
 import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 import "@/components/Pay/style.css";
@@ -90,6 +280,12 @@ const paymentMethodWidget = ref(null);
 const inputEnabled = ref(false);
 const selectedMethod = ref(null);
 const selectedCardCompany = ref(null);
+const isOpen = ref(false);
+
+
+function toggleAgreement() {
+  isOpen.value = !isOpen.value; 
+}
 
 const paymentMethods = [
   { key: 'credit', method:'카드', label: '신용·체크카드' },
@@ -127,13 +323,6 @@ const widgetClientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
   
 const tossPayments = ref(null);
 onMounted(async() => {
-    paymentWidget.value = await loadPaymentWidget(widgetClientKey, customerKey);
-    paymentWidget.value.renderAgreement("#agreement", { variantKey: "AGREEMENT" });
-
-    paymentMethodWidget.value.on("ready", () => {
-      inputEnabled.value = true;
-    });
-  
     loadTossPaymentsSDK().then(() => {
         tossPayments.value = TossPayments(clientKey);
         // paymentWidget = PaymentWidget(widgetClientKey, customerKey); // 회원 결제
@@ -170,8 +359,8 @@ async function requestPayment() {
         successUrl: `${window.location.origin}/success`,
         failUrl: `${window.location.origin}/fail`,
         flowMode: 'DIRECT',
-        easyPay: '카카오페이',
-        // cardCompany: '신한',
+        // easyPay: '카카오페이',
+        cardCompany: '신한',
     });
   } catch (error) {
     console.error('Payment request failed:', error);
@@ -564,4 +753,217 @@ button, input, optgroup, select, textarea {
     -webkit-appearance: none;
     transition: background-color .2s ease;
 }
+
+/* 이용 약관 */
+.m-agreement-v3-agreement-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.m-agreement-v3-agreement {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+}
+
+.m-agreement-v3-layout__row {
+    display: -webkit-box;
+    display: flex;
+}
+.consumer-cache-uzd4c2 {
+    display: inline-block;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+}
+.m-agreement-v3-field__checkbox {
+    margin-right: 8px;
+}
+
+.consumer-cache-9mopdq {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    padding: 0px;
+    margin: -1px;
+    width: 1px;
+    height: 1px;
+    border: 0px;
+    overflow: hidden;
+    clip: rect(0px, 0px, 0px, 0px);
+    white-space: nowrap;
+    appearance: none;
+}
+
+.m-agreement-v3-field__checkbox label {
+    -webkit-box-align: normal;
+    align-items: normal;
+}
+
+.m-agreement-v3-agreement-container:is(label), .m-agreement-v3-agreement-container label {
+    display: -webkit-box;
+    display: flex;
+    margin: 0;
+    cursor: pointer;
+}
+
+.consumer-cache-2tkdon {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    margin: 0px;
+}
+
+.m-agreement-v3-agreement--medium-bold .m-agreement-v3-field__checkbox label svg, .m-agreement-v3-agreement--medium .m-agreement-v3-field__checkbox label svg {
+    margin-top: 5px;
+}
+
+.consumer-cache-1ovurkh {
+    flex: 0 0 auto;
+}
+
+.m-agreement-v3-layout__animation {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-flex: 1;
+    flex: 1;
+}
+
+.m-agreement-v3-agreement--medium-bold .m-agreement-v3-field, .m-agreement-v3-agreement--medium .m-agreement-v3-field {
+    min-height: 34px;
+}
+
+.m-agreement-v3-agreement .m-agreement-v3-field {
+    font-weight: unset !important;
+}
+.m-agreement-v3-field {
+    line-height: 0;
+    font-weight: unset !important;
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-flex: 1;
+    flex: 1;
+}
+
+.m-agreement-v3-agreement--medium-bold .m-agreement-v3-field__text, .m-agreement-v3-agreement--medium .m-agreement-v3-field__text {
+    margin: 6px 0;
+}
+
+.m-agreement-v3-field__text {
+    -webkit-box-flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.text--word-break.text--display-block, .text--word-break.text--display-inline-block {
+    max-width: 100%;
+}
+.text--display-inline-block {
+    display: inline-block;
+}
+.text--font-weight-regular {
+    font-weight: 400;
+}
+.text {
+    color: #191f28;
+}
+
+.font-size--15, .typography-t6 {
+    font-size: 15px;
+    line-height: 1.5;
+}
+.adaptive-grey700-text {
+    color: #4e5968;
+}
+
+.m-agreement-v3-agreement--medium-bold .m-agreement-v3-layout__arrow, .m-agreement-v3-agreement--medium .m-agreement-v3-layout__arrow {
+    margin-top: 5px;
+}
+.svg-icon-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+}
+
+.m-agreement-v3-layout__arrow {
+    -webkit-transition: -webkit-transform .2s ease-in-out;
+    transition: -webkit-transform .2s ease-in-out;
+    transition: transform .2s ease-in-out;
+    transition: transform .2s ease-in-out, -webkit-transform .2s ease-in-out;
+}
+
+.svg-icon-wrapper>.svg-icon, .svg-icon-wrapper>.svg-icon-fallback {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.svg-icon img, .svg-icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.m-agreement-v3-layout__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.m-agreement-v3-layout__overlay-action {
+    outline: none;
+}
+
+.m-agreement-v3-agreement {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    flex-direction: column;
+}
+
+.consumer-cache-uzd4c2 {
+    display: inline-block;
+    -webkit-tap-highlight-color: transparent;
+    cursor: pointer;
+}
+
+.m-agreement-v3-layout__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.m-agreement-v3-field__checkbox label {
+    -webkit-box-align: normal;
+    align-items: normal;
+}
+
+.m-agreement-v3-layout__arrow--open {
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg);
+}
+
+.svg-icon-fallback {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: -9999;
+    visibility: hidden;
+}
+
+
+
+
 </style>
