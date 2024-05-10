@@ -8,20 +8,33 @@
                 </div>
             </div>
             <div id="payment-method">
-                <div class="p-grid consumer-cache-67e79o">
-                    <template v-for="method in paymentMethods">
-                        <div class="p-grid-col p-grid-col6">
-                            <button :class="['p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l consumer-cache-1jf8qw4', {selected: selectedMethod === method.key}]" @click="selectMethod(method.key)">
-                                <span v-if="method.icon" class="icon p-icon p-button__icon" aria-hidden="false" role="presentation" style="height: 42px; width: 80px; min-width: 22px; padding: 2px 0px;">
-                                    <img :src="method.icon" />
-                                </span>
-                                {{ method.label }}
-                            </button>
+          
+            </div>
+            <div class="p-grid consumer-cache-67e79o">
+            <!-- Payment method buttons -->
+            <template v-for="method in paymentMethods">
+                <div class="p-grid-col p-grid-col6">
+                    <button :class="['p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l consumer-cache-1jf8qw4', {selected: selectedMethod === method.key}]" @click="selectMethod(method.key)">
+                        <span v-if="method.icon" class="icon p-icon p-button__icon" aria-hidden="false" role="presentation" style="height: 42px; width: 80px; min-width: 22px; padding: 2px 0px;">
+                            <img :src="method.icon" />
+                        </span>
+                        {{ method.label }}
+                    </button>
+                </div>
+            </template>
+            </div>
+            <div class="p-grid consumer-cache-67e79o">
+                <div class="p-grid-col p-grid-col3" v-for="(item, index) in cardCompany" :key="index">
+                    <button class="p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l with-icon consumer-cache-ykbrbs" type="button" aria-disabled="false">
+                        <div class="consumer-cache-1bd0tgn">
+                            <span class="icon p-icon p-button__icon" aria-hidden="false" role="presentation" :style="{height: '28px', width: '52px', minWidth: '22px', padding: '2px 0px'}">
+                                <img :src="item.icon"/>
+                            </span>
+                            <span class="typography typography--small typography--regular color--grey700" :style="{color: 'rgb(25, 31, 40)'}">{{ item.name }}</span>
                         </div>
-                    </template>
+                    </button>
                 </div>
             </div>
-
             <div class="consumer-cache-tlrnqy"></div>
             <div class="p-grid consumer-cache-pypvcf">
                 <div class="p-grid-col p-grid-col12">
@@ -51,7 +64,7 @@ import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 import { nanoid } from "nanoid";
 import "@/components/Pay/style.css";
 
-const clientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
 const customerKey = nanoid();
 const amount = ref(50000);
 const paymentWidget = ref(null);
@@ -60,13 +73,28 @@ const inputEnabled = ref(false);
 const selectedMethod = ref(null);
 const paymentMethods = [
   { key: 'credit', method:'카드', label: '신용·체크카드' },
-  { key: 'npay', method:'간편결제', provider: '네이버페이', icon: '/src/assets/images/svg/pay/npay.svg'},
-  { key: 'kakaopay', method:'간편결제', provider: '카카오페이', icon: '/src/assets/images/svg/pay/kakaopay.svg'},
-  { key: 'tosspay', method:'간편결제', provider: '토스페이', icon: '/src/assets/images/svg/pay/tosspay.svg'},
+  { key: 'npay', method:'간편결제', flowMode: 'DIRECT', easyPay: '네이버페이', icon: '/src/assets/images/svg/pay/npay.svg'},
+  { key: 'kakaopay', method:'간편결제', flowMode: 'DIRECT', easyPay: '카카오페이', icon: '/src/assets/images/svg/pay/kakaopay.svg'},
+  { key: 'tosspay', method:'간편결제', flowMode: 'DIRECT', easyPay: '토스페이', icon: '/src/assets/images/svg/pay/tosspay.svg'},
   { key: 'account_transfer', method:'계좌이체', label: '계좌이체'},
-  { key: 'samsungpay', method:'간편결제', provider: '삼성페이', icon: '/src/assets/images/svg/pay/samsungpay.svg'},
-  { key: 'ssgpay', method:'간편결제', provider: 'SSG페이', icon: '/src/assets/images/svg/pay/ssgpay.svg'}
+  { key: 'samsungpay', method:'간편결제', flowMode: 'DIRECT', easyPay: '삼성페이', icon: '/src/assets/images/svg/pay/samsungpay.svg'},
+  { key: 'ssgpay', method:'간편결제', flowMode: 'DIRECT', easyPay: 'SSG페이', icon: '/src/assets/images/svg/pay/ssgpay.svg'}
 ];
+
+const cardCompany = [
+        { name: '신한', icon: '/src/assets/images/svg/pay/shinhan.svg'},
+        { name: '현대', icon: '/src/assets/images/svg/pay/hyundai.svg' },
+        { name: '삼성', icon: '/src/assets/images/svg/pay/samsungcard.svg' },
+        { name: '롯데', icon: '/src/assets/images/svg/pay/loca.svg' },
+        { name: '토스뱅크', icon: '/src/assets/images/svg/pay/tossbank.svg' },
+        { name: '하나', icon: '/src/assets/images/svg/pay/hana.svg' },
+        { name: '국민', icon: '/src/assets/images/svg/pay/kb.svg' },
+        { name: '비씨', icon: '/src/assets/images/svg/pay/bc.svg' },
+        { name: '농협', icon: '/src/assets/images/svg/pay/nh.svg' },
+        { name: '카카오뱅크', icon: '/src/assets/images/svg/pay/kakaobank.svg' },
+        { name: '케이뱅크', icon: '/src/assets/images/svg/pay/kbank.svg' },
+        { name: '더보기', icon: '/src/assets/images/svg/etc.svg' }
+      ]
 
 function selectMethod(method) {
   selectedMethod.value = method;
@@ -100,16 +128,17 @@ async function requestPayment() {
       paymentData.easyPay = { provider: selectedMethod.value.provider };
     }
 
-    paymentMethodWidget.value = paymentData;
-
     // 결제 요청
-    await paymentWidget.value.requestPayment({
+    await tossPayments.value.requestPayment('카드', {
         amount:15000,
         orderId: "20240508",
         orderName: "토스 티셔츠 외 2건",
         customerName: "김토스",
         successUrl: `${window.location.origin}/success`,
         failUrl: `${window.location.origin}/fail`,
+        flowMode: 'DIRECT',
+        // easyPay: '토스페이',
+        cardCompany: '국민',
     });
   } catch (error) {
     console.error('Payment request failed:', error);
@@ -118,6 +147,7 @@ async function requestPayment() {
 
 onMounted(async () => {
   paymentWidget.value = await loadPaymentWidget(clientKey, ANONYMOUS);
+//   paymentMethodWidget.value = await paymentWidget.value.renderPaymentMethods("#payment-method", { value: amount.value }, { variantKey: "DEFAULT" });
   // paymentMethodWidget.value.on("ready", () => {
   //   inputEnabled.value = true;
   // });
