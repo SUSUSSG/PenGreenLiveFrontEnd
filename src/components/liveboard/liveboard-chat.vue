@@ -64,9 +64,7 @@
           </div>
         </div>
       </template>
-
     </Modal>
-
   </div>
 </template>
 
@@ -131,16 +129,32 @@ export default {
         brokerURL: url,
         onConnect: () => {
           this.websocketClient.subscribe(
-            `/sub/room/${this.currentRoom.id}`,
-            (msg) => {
-              try {
-                const parsedMessage = JSON.parse(msg.body);
-                this.chatMessages.push({ ...parsedMessage, seq: this.messageIdCounter++ });
-              } catch (e) {
-                this.chatMessages.push({ seq: this.messageIdCounter++, writer: "System", message: msg.body });
-              }
+          `/sub/room/${this.currentRoom.id}`,
+          (msg) => {
+            try {
+              console.log("메시지 파싱 전");
+              const parsedMessage = JSON.parse(msg.body); // JSON 파싱
+              console.log("메시지 파싱 후", parsedMessage);
+
+              // 메시지 객체에 작성자와 메시지 내용을 분리하여 추가
+              this.chatMessages.push({
+                seq: this.messageIdCounter++,
+                writer: parsedMessage.writer, // 작성자 ID
+                message: parsedMessage.message // 메시지 내용
+              });
+
+            } catch (e) {
+              console.error("메시지 파싱 중 에러 발생:", e);
+              // 파싱 에러 발생 시 기본 정보로 메시지 추가
+              this.chatMessages.push({
+                seq: this.messageIdCounter++,
+                writer: "System",
+                message: "메시지를 파싱할 수 없습니다."
+              });
             }
-          );
+          }
+        );
+
           this.websocketClient.publish({
             destination: `/pub/room/${this.currentRoom.id}/entered`,
             body: JSON.stringify({ message: "입장했습니다.", writer: "user1" }),
@@ -190,6 +204,7 @@ export default {
   }
 }
 </script>
+
 
 <style>
 .chat-card {

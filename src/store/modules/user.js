@@ -11,19 +11,19 @@ const state = {
 };
 
 const mutations = {
-  // setRooms(state, payload) {
-  //   state.rooms = payload;
-  // },
+  setRooms(state, payload) {
+    state.rooms = payload;
+  },
 
-  // setEnteredRooms(state, payload) {
-  //     state.enteredRooms = payload;
-  // }
-  setRooms(state, rooms) {
-    state.rooms = rooms;
-  },
-  setEnteredRooms(state, enteredRooms) {
-    state.enteredRooms = enteredRooms;
-  },
+  setEnteredRooms(state, payload) {
+      state.enteredRooms = payload;
+  }
+  // setRooms(state, rooms) {
+  //   state.rooms = rooms;
+  // },
+  // setEnteredRooms(state, enteredRooms) {
+  //   state.enteredRooms = enteredRooms;
+  // },
 };
 
 const actions = {
