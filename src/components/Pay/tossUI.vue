@@ -34,18 +34,37 @@
                     </button>
                 </div>
             </div>
+            <div class="consumer-cache-ymq71h" v-if="selectedMethod==='credit'">
+                <div class="consumer-cache-105f3td">
+                    <div class="input radius--m p-select input--medium p-select--medium">
+                        <span class="input__field p-select__field"><span class="p-select__field-title">일시불</span></span>
+                        <select class="p-select__native" aria-invalid="false" aria-label="할부 선택" id="input-:rn:">
+                            <option class="" disabled="" value="">할부 선택</option>
+                            <option value="0" selected>일시불</option><option value="2">2개월</option>
+                            <option value="3">3개월</option><option value="4">4개월</option>
+                            <option value="5">5개월</option><option value="6">6개월</option>
+                            <option value="7">7개월</option><option value="8">8개월</option>
+                            <option value="9">9개월</option><option value="10">10개월</option>
+                            <option value="11">11개월</option><option value="12">12개월</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
             <div class="consumer-cache-tlrnqy"></div>
             <div class="p-grid consumer-cache-pypvcf">
                 <div class="p-grid-col p-grid-col12">
                     <div class="consumer-cache-1emeqpj">
                         <span class="typography typography--p typography--regular color--grey700 consumer-cache-128nlh6"></span>
-                        <button class="reset-button radius--s typography--p typography--medium p-text-button p-text-button--grey p-text-button--normal consumer-cache-128nlh6" type="button">
+                        <button class="reset-button radius--s typography--p typography--medium p-text-button p-text-button--grey p-text-button--normal consumer-cache-128nlh6" type="button" @click="showInterestFreeInstallmentInfo">
                             <span class="typography typography--p typography--regular color--grey700 consumer-cache-128nlh6">신용카드 무이자 할부 안내 ></span>
                         </button>
                     </div>
                 </div>
             </div>
+            <div id="payment-method"></div>
             <div id="agreement"></div>
+
             <button @click="requestPayment" class="button" id="payment-button" style="margin-top: 30px">결제하기</button>
             </section>
             <div id="tds-pc__portal-container">
@@ -104,14 +123,20 @@ function selectMethod(method) {
 function selectCardCompany(cardCompany) {
     selectedCardCompany.value = cardCompany;
 }
-
+const widgetClientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
+  
 const tossPayments = ref(null);
-onMounted(() => {
+onMounted(async() => {
+    paymentWidget.value = await loadPaymentWidget(widgetClientKey, customerKey);
+    paymentWidget.value.renderAgreement("#agreement", { variantKey: "AGREEMENT" });
+
+    paymentMethodWidget.value.on("ready", () => {
+      inputEnabled.value = true;
+    });
+  
     loadTossPaymentsSDK().then(() => {
         tossPayments.value = TossPayments(clientKey);
-        selectedMethod.value = paymentMethods[0];
-        selectMethod(selectedMethod.value.key);
-        console.log(selectedMethod.value);
+        // paymentWidget = PaymentWidget(widgetClientKey, customerKey); // 회원 결제
     });
 });
 
@@ -153,13 +178,23 @@ async function requestPayment() {
   }
 }
 
-onMounted(async () => {
-  paymentWidget.value = await loadPaymentWidget(clientKey, ANONYMOUS);
-//   paymentMethodWidget.value = await paymentWidget.value.renderPaymentMethods("#payment-method", { value: amount.value }, { variantKey: "DEFAULT" });
-  // paymentMethodWidget.value.on("ready", () => {
-  //   inputEnabled.value = true;
-  // });
-});
+function showInterestFreeInstallmentInfo() {
+  const url = "https://pgweb.tosspayments.com/tosspayments/MainPopUp.do";
+  const windowFeatures = "width=600,height=600,scrollbars=yes,resizable=yes";
+
+  // window.open을 사용하여 팝업 창을 띄웁니다.
+  window.open(url, "_blank", windowFeatures);
+}
+
+// onMounted(async () => {
+//   paymentWidget.value = await loadPaymentWidget(clientKey, ANONYMOUS);
+// //   paymentMethodWidget.value = await paymentWidget.value.renderPaymentMethods("#payment-method", { value: amount.value }, { variantKey: "DEFAULT" });
+//   paymentMethodWidget.value.on("ready", () => {
+//     inputEnabled.value = true;
+//     selectedMethod.value = paymentMethods[0];
+//     selectMethod(selectedMethod.value.key);
+//   });
+// });
 </script>
 
 
@@ -198,7 +233,6 @@ onMounted(async () => {
     display: flex;
     flex-wrap: wrap;
     margin-right: -24px;
-    margin-right: calc(var(--pGridGutter)* -1);
 }
 
 .consumer-cache-67e79o > .p-grid-col {
@@ -325,7 +359,6 @@ onMounted(async () => {
 .p-button .p-button__icon {
     box-sizing: content-box;
     color: #8b95a1;
-    color: var(--grey500);
 }
 .icon, .svg-icon {
     width: 24px;
@@ -388,7 +421,6 @@ img, svg {
     height: 64px;
     font-size: 13px;
     border: 1px solid rgb(255, 255, 255);
-    background-color: rgb(255, 255, 255);
     border-radius: 4px;
 }
 
@@ -398,11 +430,138 @@ img, svg {
 
 .typography--small {
     font-size: 13px;
-    font-size: var(--font-size-small);
 }
 .consumer-cache-1bd0tgn {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+/* 할부창 */
+.consumer-cache-ymq71h {
+    -webkit-box-align: stretch;
+    align-items: stretch;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    width: 100%;
+    margin-right: 4px;
+    margin-left: 4px;
+    margin-top: 8px;
+}
+
+ .consumer-cache-105f3td > div.input {
+    background-color: rgb(249, 250, 251);
+    border-radius: 14px;
+}
+
+.p-select {
+    background-image: url(data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMTYgMTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgY2xhc3M9ImxpbmUtaWNvbiI+PHBhdGggZD0iTTggMTEuMTVhLjg5Ny44OTcgMCAwMS0uNjM2LS4yNjRsLTQuNS00LjVhLjkuOSAwIDExMS4yNzItMS4yNzNMOCA4Ljk3N2wzLjg2NC0zLjg2NGEuOS45IDAgMTExLjI3MiAxLjI3M2wtNC41IDQuNUEuODk3Ljg5NyAwIDAxOCAxMS4xNSIgZmlsbD0iI0IwQjhDMSIgZmlsbC1ydWxlPSJldmVub2RkIi8+PC9zdmc+);
+    background-position: right 18px top 14px;
+    background-repeat: no-repeat;
+    background-size: 20px;
+    padding: 0 48px 0 0;
+    cursor: pointer;
+    text-align: left;
+}
+
+
+.input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 48px;
+    margin: 1px auto 0;
+    font-size: 15px;
+    line-height: 20px;
+    color: #333d4b;
+    background-color: #fff;
+    border: none;
+    outline: none;
+    box-shadow: inset 0 0 0 1px rgba(0, 27, 55, .1);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    overflow: hidden;
+    transition: background .2s ease, color .1s ease, box-shadow .2s ease;
+}
+
+
+.radius--m {
+    border-radius: 8px;
+}
+
+.p-select__field {
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    padding-right: 6px;
+}
+
+
+.input__date-range-picker__input, .input__field, .input__file-field__input-label {
+    flex-grow: 1;
+    outline: 0;
+    border: 0;
+    background: none;
+    line-height: 48px;
+    font-size: inherit;
+    padding: 0 18px;
+    margin: 0;
+    color: inherit;
+}
+.input__field {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+}
+
+.p-select__field-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+button, select {
+    text-transform: none;
+}
+
+.p-select__native {
+    position: absolute; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+button, input, optgroup, select, textarea {
+    font-family: inherit;
+    font-size: 100%;
+    line-height: 1.15;
+    margin: 0;
+}
+
+.p-select__field {
+    line-height: 1.6;
+    display: flex;
+    align-items: center;
+    padding-right: 6px;
+}
+
+.p-text-button {
+    cursor: pointer;
+    font-size: inherit;
+    white-space: nowrap;
+    text-decoration: none;
+    display: inline-flex;
+    -webkit-appearance: none;
+    transition: background-color .2s ease;
 }
 </style>
