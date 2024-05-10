@@ -7,30 +7,29 @@
                     <h4 class="typography typography--h6 typography--bold color--grey700 consumer-cache-1cmoblx">결제 방법</h4>
                 </div>
             </div>
-            <div id="payment-method">
-          
-            </div>
             <div class="p-grid consumer-cache-67e79o">
-            <!-- Payment method buttons -->
-            <template v-for="method in paymentMethods">
-                <div class="p-grid-col p-grid-col6">
-                    <button :class="['p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l consumer-cache-1jf8qw4', {selected: selectedMethod === method.key}]" @click="selectMethod(method.key)">
-                        <span v-if="method.icon" class="icon p-icon p-button__icon" aria-hidden="false" role="presentation" style="height: 42px; width: 80px; min-width: 22px; padding: 2px 0px;">
-                            <img :src="method.icon" />
-                        </span>
-                        {{ method.label }}
-                    </button>
-                </div>
-            </template>
+                <!-- Payment method buttons -->
+                <template v-for="method in paymentMethods">
+                    <div class="p-grid-col p-grid-col6">
+                        <button :class="['p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l consumer-cache-1jf8qw4', 
+                            {selected: selectedMethod === method.key}]" 
+                            @click="selectMethod(method.key)">
+                            <span v-if="method.icon" class="icon p-icon p-button__icon" aria-hidden="false" role="presentation" style="height: 42px; width: 80px; min-width: 22px; padding: 2px 0px;">
+                                <img :src="method.icon" />
+                            </span>
+                            {{ method.label }}
+                        </button>
+                    </div>
+                </template>
             </div>
-            <div class="p-grid consumer-cache-67e79o">
-                <div class="p-grid-col p-grid-col3" v-for="(item, index) in cardCompany" :key="index">
-                    <button class="p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l with-icon consumer-cache-ykbrbs" type="button" aria-disabled="false">
+            <div class="p-grid consumer-cache-67e79o"  v-if="selectedMethod==='credit'">
+                <div class="p-grid-col p-grid-col3" v-for="(cardCompany, index) in cardCompanys" :key="index">
+                    <button :class="['p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l with-icon consumer-cache-ykbrbs', {selected: selectedCardCompany === cardCompany.name}]"  @click="selectCardCompany(cardCompany.name)" type="button" aria-disabled="false">
                         <div class="consumer-cache-1bd0tgn">
                             <span class="icon p-icon p-button__icon" aria-hidden="false" role="presentation" :style="{height: '28px', width: '52px', minWidth: '22px', padding: '2px 0px'}">
-                                <img :src="item.icon"/>
+                                <img :src="cardCompany.icon"/>
                             </span>
-                            <span class="typography typography--small typography--regular color--grey700" :style="{color: 'rgb(25, 31, 40)'}">{{ item.name }}</span>
+                            <span class="typography typography--small typography--regular color--grey700" :style="{color: 'rgb(25, 31, 40)'}">{{ cardCompany.name }}</span>
                         </div>
                     </button>
                 </div>
@@ -71,6 +70,8 @@ const paymentWidget = ref(null);
 const paymentMethodWidget = ref(null);
 const inputEnabled = ref(false);
 const selectedMethod = ref(null);
+const selectedCardCompany = ref(null);
+
 const paymentMethods = [
   { key: 'credit', method:'카드', label: '신용·체크카드' },
   { key: 'npay', method:'간편결제', flowMode: 'DIRECT', easyPay: '네이버페이', icon: '/src/assets/images/svg/pay/npay.svg'},
@@ -81,7 +82,7 @@ const paymentMethods = [
   { key: 'ssgpay', method:'간편결제', flowMode: 'DIRECT', easyPay: 'SSG페이', icon: '/src/assets/images/svg/pay/ssgpay.svg'}
 ];
 
-const cardCompany = [
+const cardCompanys = [
         { name: '신한', icon: '/src/assets/images/svg/pay/shinhan.svg'},
         { name: '현대', icon: '/src/assets/images/svg/pay/hyundai.svg' },
         { name: '삼성', icon: '/src/assets/images/svg/pay/samsungcard.svg' },
@@ -100,11 +101,18 @@ function selectMethod(method) {
   selectedMethod.value = method;
 }
 
+function selectCardCompany(cardCompany) {
+    selectedCardCompany.value = cardCompany;
+}
+
 const tossPayments = ref(null);
 onMounted(() => {
-  loadTossPaymentsSDK().then(() => {
-    tossPayments.value = TossPayments(clientKey);
-  });
+    loadTossPaymentsSDK().then(() => {
+        tossPayments.value = TossPayments(clientKey);
+        selectedMethod.value = paymentMethods[0];
+        selectMethod(selectedMethod.value.key);
+        console.log(selectedMethod.value);
+    });
 });
 
 function loadTossPaymentsSDK() {
@@ -137,8 +145,8 @@ async function requestPayment() {
         successUrl: `${window.location.origin}/success`,
         failUrl: `${window.location.origin}/fail`,
         flowMode: 'DIRECT',
-        // easyPay: '토스페이',
-        cardCompany: '국민',
+        easyPay: '카카오페이',
+        // cardCompany: '신한',
     });
   } catch (error) {
     console.error('Payment request failed:', error);
@@ -375,4 +383,26 @@ img, svg {
     padding-top: 24px;
 }
 
+.consumer-cache-ykbrbs {
+    position: relative;
+    height: 64px;
+    font-size: 13px;
+    border: 1px solid rgb(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    border-radius: 4px;
+}
+
+.consumer-cache-ykbrbs.selected {
+    border: 1px solid rgb(51, 61, 75);
+}
+
+.typography--small {
+    font-size: 13px;
+    font-size: var(--font-size-small);
+}
+.consumer-cache-1bd0tgn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 </style>
