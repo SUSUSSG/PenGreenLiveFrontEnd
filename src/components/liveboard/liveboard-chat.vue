@@ -100,6 +100,14 @@ export default {
     showDeleteIcon: {
       type: Boolean,
       default: true
+    },
+    currentRoom: {
+      type: Object,
+      default: () => ({ id: 1 })
+    },
+    currentWriter: {
+      type: String,
+      default: 'user'    
     }
   },
   mounted() {
@@ -118,7 +126,6 @@ export default {
       newMessage: '',
       chatMessages: [],
       websocketClient: null,
-      currentRoom: { id: 1 },
       messageIdCounter: 1
     }
   },
@@ -157,7 +164,7 @@ export default {
 
           this.websocketClient.publish({
             destination: `/pub/room/${this.currentRoom.id}/entered`,
-            body: JSON.stringify({ message: "입장했습니다.", writer: "user1" }),
+            body: JSON.stringify({ message: "입장했습니다.", writer: this.currentWriter }),
           });
         },
         onWebSocketError: (error) => {
@@ -177,7 +184,7 @@ export default {
       if (!this.websocketClient || !this.newMessage.trim()) return;
       this.websocketClient.publish({
         destination: `/pub/room/${this.currentRoom.id}`,
-        body: JSON.stringify({ message: this.newMessage, writer: "user1" }),
+        body: JSON.stringify({ message: this.newMessage, writer: this.currentWriter }),
       });
       this.newMessage = ""; // 입력 필드 초기화
     },

@@ -1,6 +1,6 @@
 <template>
   <div class="live-container" :style="{ height: computedHeight + 'px' }">
-    <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :showEditButton="false"/>
+    <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: 1 }" :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
     <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true"></Live>
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
