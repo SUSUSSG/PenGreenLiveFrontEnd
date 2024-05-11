@@ -203,9 +203,11 @@ watch(boxHeight, calculateHeight);
 
 <style scoped>
 .live-container {
+  width: 85.5%;
+  margin: 0 auto;
   display: flex;
   gap: 1px;
-  background: #E5E7EB;
+  /* background: #E5E7EB; */
 }
 
 .tab-list{
