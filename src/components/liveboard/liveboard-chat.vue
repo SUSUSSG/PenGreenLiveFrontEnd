@@ -111,7 +111,7 @@ export default {
     },
     currentWriter: {
       type: String,
-      default: 'user'    
+      default: 'user'
     }
   },
   watch: {
@@ -148,7 +148,8 @@ export default {
       remainingTime: 10,
       spamTimeout: null,
       countdownInterval: null,
-      alertMessage: ''
+      alertMessage: '',
+      messageTimestamps: []
     }
   },
   methods: {
@@ -208,8 +209,29 @@ export default {
         return;
       }
 
+      const now = Date.now();
+      this.messageTimestamps.push(now);
+
+      // Check for spamming within 3 seconds
+      this.messageTimestamps = this.messageTimestamps.filter(timestamp => now - timestamp <= 3000);
+      if (this.messageTimestamps.length >= 5) {
+        this.isBlocked = true;
+        this.remainingTime = 10;
+        this.alertMessage = `도배 방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
+        this.spamTimeout = setTimeout(this.resetSpamBlock, 10000);
+        this.countdownInterval = setInterval(() => {
+          this.remainingTime--;
+          if (this.remainingTime > 0) {
+            this.alertMessage = `도배 방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
+          } else {
+            clearInterval(this.countdownInterval);
+          }
+        }, 1000);
+        return;
+      }
+
       if (this.newMessage === this.lastMessage) {
-        this.repeatCount++;
+        this.repeatCountthis.repeatCount++;
       } else {
         this.repeatCount = 1;
         this.lastMessage = this.newMessage;
@@ -218,13 +240,13 @@ export default {
       if (this.repeatCount >= 3) {
         this.isBlocked = true;
         this.remainingTime = 10;
-        this.alertMessage = `도배 방지로 채팅이 ${this.remainingTime}초 간 비활성화되었습니다.`;
+        this.alertMessage = `도배 방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
         this.spamTimeout = setTimeout(this.resetSpamBlock, 10000);
         this.countdownInterval = setInterval(() => {
           this.remainingTime--;
           if (this.remainingTime > 0) {
-            this.alertMessage = `도배 방지로 채팅이 ${this.remainingTime}초 간 비활성화되었습니다.`;
-          }else {
+            this.alertMessage = `도배 방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
+          } else {
             clearInterval(this.countdownInterval);
           }
         }, 1000);
@@ -242,6 +264,7 @@ export default {
       this.isBlocked = false;
       this.repeatCount = 0;
       this.lastMessage = '';
+      this.messageTimestamps = [];
       this.alertMessage = '';
       clearInterval(this.countdownInterval);
     },
