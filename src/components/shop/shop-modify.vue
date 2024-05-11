@@ -59,37 +59,38 @@ export default {
       }
     },
     getChannelSeqFromUrl() {
-      // URL에서 채널 ID를 추출하는 로직 (여기서는 간단히 예시로 구현)
       const path = window.location.pathname;
       return path.split('/').pop();
     },
     loadShopInfo() {
-  const url = `http://localhost:8090/shop/${this.shopInfo.channelSeq}`;
-  axios.get(url)
-    .then(response => {
-      this.shopInfo.nickname = response.data.channelNM;
-      this.shopInfo.shoplink = response.data.channelUrl;
-      this.shopInfo.description = response.data.channelInfo;
+      const url = `http://localhost:8090/shop/${this.shopInfo.channelSeq}`;
+      axios.get(url)
+        .then(response => {
+          this.shopInfo.nickname = response.data.channelNM;
+          this.shopInfo.shoplink = response.data.channelUrl;
+          this.shopInfo.description = response.data.channelInfo;
 
-      // 이미지 데이터 처리를 위해 별도의 요청을 보내거나, 적절한 응답 처리 필요
-      if (response.data.channelImage) {
-        // 예를 들어, 이미지가 base64 문자열로 저장되어 있을 경우 직접 할당
-        this.previewImage = `data:image/jpeg;base64,${response.data.channelImage}`;
-      }
-    })
-    .catch(error => {
-      console.error('상점 정보 로드 실패:', error);
-      alert('상점 정보 로드 중 오류가 발생했습니다.');
-    });
-},
-
+          
+          if (response.data.channelImage) {
+            this.previewImage = `data:image/jpeg;base64,${response.data.channelImage}`;
+            this.shopInfo.image = response.data.channelImage;  
+          }
+        })
+        .catch(error => {
+          console.error('상점 정보 로드 실패:', error);
+          alert('상점 정보 로드 중 오류가 발생했습니다.');
+        });
+    },
 
     saveShopInfo() {
       const formData = new FormData();
       formData.append('nickname', this.shopInfo.nickname);
       formData.append('shoplink', this.shopInfo.shoplink);
       formData.append('description', this.shopInfo.description);
-      formData.append('image', this.shopInfo.image);
+
+      if (this.shopInfo.image instanceof File) {
+        formData.append('image', this.shopInfo.image);
+      }
 
       const url = `http://localhost:8090/shop-modify/${this.shopInfo.channelSeq}`;
 
@@ -106,6 +107,7 @@ export default {
           alert('상점 정보 업데이트 중 오류가 발생했습니다.');
         });
     },
+
     resetForm() {
 
       this.previewImage = null;
