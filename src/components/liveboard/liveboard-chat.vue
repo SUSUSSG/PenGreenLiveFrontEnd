@@ -10,6 +10,9 @@
     <div class="mt-3 mb-3">
       <Alert class="green-alert" dismissible>{{ notice }}</Alert>
     </div>
+    <div v-if="alertMessage" class="mt-3 mb-3">
+      <Alert class="red-alert" dismissible>{{ alertMessage }}</Alert>
+    </div>
     <div class="scroll-wrapper">
       <div class="chat-container flex flex-col justify-end">
         <ul class="chat-messages">
@@ -17,7 +20,8 @@
             <div class="mr-2 flex items-center">
               <Icon v-if="showDeleteIcon" icon="heroicons:x-mark-20-solid" @click="deleteMessage(message.seq)"></Icon>
             </div>
-            <div class="flex flex-col">
+            <div class="flex flex-row">
+              <span class="chat-time">{{ message.time }}</span>
               <span class="chat-user-id">{{ message.writer }}</span>
               <span class="chat-text">{{ message.message }}</span>
             </div>
@@ -26,9 +30,9 @@
       </div>
     </div>
     <div class="chat-input-container">
-      <textarea type="text" placeholder="채팅을 입력하세요" v-model="newMessage" class="chat-input-field"
-        @keyup.enter="sendChat" />
-      <button type="button" class="chat-send-button" @click="sendChat">
+      <textarea type="text" :placeholder="isBlocked ? `채팅이 비활성화됨 (${remainingTime})` : '채팅을 입력하세요'" v-model="newMessage" class="chat-input-field"
+        @keyup.enter.prevent="sendChat" :disabled="isBlocked" />
+      <button type="button" class="chat-send-button" @click="sendChat" :disabled="isBlocked">
         <Icon icon="heroicons-outline:paper-airplane" class="transform rotate-[60deg]" />
       </button>
     </div>
@@ -110,6 +114,17 @@ export default {
       default: 'user'    
     }
   },
+  watch: {
+    chatMessages: {
+      handler() {
+        this.$nextTick(() => {
+          const container = this.$el.querySelector(".scroll-wrapper");
+          container.scrollTop = container.scrollHeight;
+        });
+      },
+      deep: true,
+    },
+  },
   mounted() {
     this.connect();
   },
@@ -126,7 +141,14 @@ export default {
       newMessage: '',
       chatMessages: [],
       websocketClient: null,
-      messageIdCounter: 1
+      messageIdCounter: 1,
+      lastMessage: '',
+      repeatCount: 0,
+      isBlocked: false,
+      remainingTime: 10,
+      spamTimeout: null,
+      countdownInterval: null,
+      alertMessage: ''
     }
   },
   methods: {
@@ -145,10 +167,11 @@ export default {
 
               // 메시지 객체에 작성자와 메시지 내용을 분리하여 추가
               this.chatMessages.push({
-                seq: this.messageIdCounter++,
-                writer: parsedMessage.writer, // 작성자 ID
-                message: parsedMessage.message // 메시지 내용
-              });
+              seq: this.messageIdCounter++,
+              writer: parsedMessage.writer, // 작성자 ID
+              message: parsedMessage.message, // 메시지 내용
+              time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) // 현재 시간 정보
+            }); 
 
             } catch (e) {
               console.error("메시지 파싱 중 에러 발생:", e);
@@ -181,37 +204,75 @@ export default {
     },
 
     sendChat() {
-      if (!this.websocketClient || !this.newMessage.trim()) return;
+      if (!this.websocketClient || !this.newMessage.trim() || this.isBlocked) {
+        return;
+      }
+
+      if (this.newMessage === this.lastMessage) {
+        this.repeatCount++;
+      } else {
+        this.repeatCount = 1;
+        this.lastMessage = this.newMessage;
+      }
+
+      if (this.repeatCount >= 3) {
+        this.isBlocked = true;
+        this.remainingTime = 10;
+        this.alertMessage = `도배 방지로 채팅이 ${this.remainingTime}초 간 비활성화되었습니다.`;
+        this.spamTimeout = setTimeout(this.resetSpamBlock, 10000);
+        this.countdownInterval = setInterval(() => {
+          this.remainingTime--;
+          if (this.remainingTime > 0) {
+            this.alertMessage = `도배 방지로 채팅이 ${this.remainingTime}초 간 비활성화되었습니다.`;
+          }else {
+            clearInterval(this.countdownInterval);
+          }
+        }, 1000);
+        return;
+      }
+
       this.websocketClient.publish({
         destination: `/pub/room/${this.currentRoom.id}`,
         body: JSON.stringify({ message: this.newMessage, writer: this.currentWriter }),
       });
       this.newMessage = ""; // 입력 필드 초기화
     },
+
+    resetSpamBlock() {
+      this.isBlocked = false;
+      this.repeatCount = 0;
+      this.lastMessage = '';
+      this.alertMessage = '';
+      clearInterval(this.countdownInterval);
+    },
+
     editChatting() {
       this.isOpen = true;
     },
+
     submitNotice() {
       if (this.chatNotice.trim()) {
         this.notice = this.chatNotice;
       }
     },
+
     submitForbiddenword() {
       if (this.forbiddenword.trim()) {
         this.forbiddenwordList.push(this.forbiddenword);
         this.forbiddenword = '';
       }
     },
+
     removeForbiddenword(index) {
       this.forbiddenwordList.splice(index, 1);
     },
+
     deleteMessage(seq) {
       this.chatMessages = this.chatMessages.filter(message => message.seq !== seq);
     }
   }
 }
 </script>
-
 
 <style>
 .chat-card {
@@ -224,10 +285,6 @@ export default {
   overflow: hidden;
 }
 
-.scroll-wrapper::-webkit-scrollbar {
-  display: none;
-}
-
 .scroll-wrapper {
   flex-grow: 1;
   overflow-y: auto;
@@ -235,46 +292,64 @@ export default {
 }
 
 .chat-container {
-  padding: 0.3rem;
   flex-direction: column;
   justify-content: flex-end;
 }
 
 .chat-message {
-  padding: 0.5rem;
+  padding: 0.5rem 0;
 }
 
 .chat-user-id {
   font-weight: bold;
-  font-size: 13px;
+  font-size: 16px;
   color: #23A100;
+  margin-left: 8px;
+  text-wrap: nowrap;
 }
 
 .chat-text {
-  margin-left: 0.5rem;
-  margin-top: 0.5rem;
   word-break: break-word;
+  margin-left: 12px;
+}
+
+.chat-time {
+  font-size: 10px;
+  color: #888;
+  overflow-wrap: unset;
+  text-wrap: nowrap;
+  margin-top: 4px;
 }
 
 .chat-input-container {
-  padding: 0.5rem;
-  background: #f4f4f4;
-  border-top: 1px solid #ccc;
   display: flex;
+  margin-top: 3px;
 }
 
 .chat-input-field {
   flex: 1;
-  border: none;
-  padding: 0.5rem;
+  border: 1px solid;
   background: white;
-  border-radius: 0.25rem;
+  border-radius: 5rem;
+  height: 40px;
+  align-content: center;
+  text-indent: 1rem;
+  resize: none;
+  overflow-y: hidden;
+}
+
+.chat-input-field::after {
+  border-color: #1C6D16;
+}
+
+.chat-input-field::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .chat-send-button {
   width: 2.5rem;
   height: 2.5rem;
-  background: #3071a9;
+  background: #1C6D16;
   color: white;
   border: none;
   border-radius: 50%;
@@ -288,22 +363,6 @@ export default {
   background: #265d8a;
 }
 
-.chat-container::-webkit-scrollbar {
-  width: 12px;
-}
-
-.chat-container::-webkit-scrollbar-thumb {
-  background-color: #888;
-}
-
-.chat-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.chat-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
 .btn-green {
   background-color: #134010;
   color: white;
@@ -314,10 +373,9 @@ export default {
   background-color: rgba(19, 64, 16, 0.2);
 }
 
-.chat-input-container {
-  background-color: rgba(19, 64, 16, 0.2);
-  border-top: 0px;
-  margin-top: 3px;
+.red-alert {
+  color: #D32F2F;
+  background-color: rgba(211, 47, 47, 0.2);
 }
 
 .py-\[18px\] {
