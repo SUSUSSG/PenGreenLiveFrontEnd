@@ -6,7 +6,7 @@
         <div class="flex-col">
           <div class="flex-row">
             <LiveboardBroad />
-            <LiveBoardChat :current-room="{ id: 6 }" :current-writer="'판매자'"/>
+            <LiveBoardChat :current-room="{ id: 1 }" :current-writer="'판매자'"/>
           </div>
         </div>
         <div class="flex-col">
