@@ -73,15 +73,10 @@
                                 <div class="m-agreement-v3-agreement m-agreement-v3-agreement--medium m-agreement-v3-agreement--have-checkbox m-agreement-v3-agreement--with-arrow">
                                     <div class="m-agreement-v3-layout__row">
                                         <div></div>
-                                        <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
-                                            <input id="1val-checkbox" type="checkbox" aria-label="[필수]  결제 서비스 이용 약관, 개인정보 처리 동의" class="consumer-cache-9mopdq" checked>
+                                        <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2 z-10" @click="checkAgreement">
+                                            <input id="1val-checkbox" type="checkbox" aria-label="[필수]  결제 서비스 이용 약관, 개인정보 처리 동의" class="consumer-cache-9mopdq">
                                             <label for="1val-checkbox" class="consumer-cache-2tkdon">
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="consumer-cache-1ovurkh" style="width: 24px; height: 24px; margin-right: 0px;">
-                                                    <g origin="50% 50%" style="transform: none; transform-origin: 12px 12.3px;">
-                                                        <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="#e5e8eb" pathLength="1"></path>
-                                                        <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="rgba(49, 130, 246, 1)" pathLength="1" stroke-dashoffset="0px" stroke-dasharray="1px 1px"></path>
-                                                    </g>
-                                                </svg>
+                                                <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
                                             </label>
                                         </div>
                                         <div class="m-agreement-v3-layout__animation z-10" @click="toggleAgreement" style="opacity: 1; transform: none;">                                      
@@ -93,17 +88,13 @@
                                             <span
                                             :class="['m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow', { 'm-agreement-v3-layout__arrow--open': isOpen }]"
                                             role="button"
-                                            data-logging-label="icon-arrow-right-mono"
-                                            >                                                
+                                            data-logging-label="icon-arrow-right-mono">                                                
                                                 <span
                                                     class="m-icon__inner svg-icon adaptive-grey600-text m-icon__inner--colored"
                                                     aria-label="[필수] 결제 서비스 이용 약관, 개인정보 처리 동의 자세히 보기"
                                                     role="img"
-                                                    :style="{ color: isOpen ? 'var(--adaptiveGrey600)' : 'var(--adaptiveGrey400)' }"
-                                                >                                                    
-                                                <svg enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                        <path clip-rule="evenodd" d="m9.8 6.5c-.2 0-.5.1-.6.3-.4.4-.4.9 0 1.3l3.8 3.8-3.9 3.9c-.4.4-.4.9 0 1.3s.9.4 1.3 0l4.5-4.5c.4-.4.4-.9 0-1.3l-4.5-4.5c-.2-.1-.4-.3-.6-.3" fill="#b0b8c1" fill-rule="evenodd"></path>
-                                                    </svg>
+                                                    :style="{ color: isOpen ? 'var(--adaptiveGrey600)' : 'var(--adaptiveGrey400)' }">                                                    
+                                                    <img src="src/assets/images/svg/arrow-right.svg">
                                                 </span>
                                                 <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
                                             </span>
@@ -129,12 +120,7 @@
                                                     <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
                                                         <input id="2val-checkbox" type="checkbox" aria-label="서비스 이용약관" class="consumer-cache-9mopdq" checked="">
                                                         <label for="2val-checkbox" class="consumer-cache-2tkdon">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="consumer-cache-1ovurkh" style="width: 24px; height: 24px; margin-right: 0px;">
-                                                                <g origin="50% 50%" style="transform: none; transform-origin: 12px 12.3px;">
-                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="#e5e8eb" pathLength="1"></path>
-                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="rgba(49, 130, 246, 1)" pathLength="1" stroke-dashoffset="0px" stroke-dasharray="1px 1px"></path>
-                                                                </g>
-                                                            </svg>
+                                                            <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
                                                         </label>
                                                     </div>
                                                     <div class="m-agreement-v3-layout__animation" style="opacity: 1; transform: none;">
@@ -145,9 +131,7 @@
                                                         </div>
                                                         <span class="m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow" role="button" data-logging-label="icon-arrow-right-mono">
                                                             <span class="m-icon__inner svg-icon adaptive-grey400-text m-icon__inner--colored" aria-label="서비스 이용약관 자세히 보기" role="img" style="color: var(--adaptiveGrey400);">
-                                                                <svg enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path clip-rule="evenodd" d="m9.8 6.5c-.2 0-.5.1-.6.3-.4.4-.4.9 0 1.3l3.8 3.8-3.9 3.9c-.4.4-.4.9 0 1.3s.9.4 1.3 0l4.5-4.5c.4-.4.4-.9 0-1.3l-4.5-4.5c-.2-.1-.4-.3-.6-.3" fill="#b0b8c1" fill-rule="evenodd"></path>
-                                                                </svg>
+                                                                <img src="src/assets/images/svg/arrow-right.svg">
                                                             </span>
                                                             <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
                                                         </span>
@@ -169,12 +153,7 @@
                                                     <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
                                                         <input id="3val-checkbox" type="checkbox" aria-label="개인정보 수집 및 이용 동의 (토스페이먼츠)" class="consumer-cache-9mopdq" checked="">
                                                         <label for="3val-checkbox" class="consumer-cache-2tkdon">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="consumer-cache-1ovurkh" style="width: 24px; height: 24px; margin-right: 0px;">
-                                                                <g origin="50% 50%" style="transform: none; transform-origin: 12px 12.3px;">
-                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="#e5e8eb" pathLength="1"></path>
-                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="rgba(49, 130, 246, 1)" pathLength="1" stroke-dashoffset="0px" stroke-dasharray="1px 1px"></path>
-                                                                </g>
-                                                            </svg>
+                                                            <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
                                                         </label>
                                                     </div>
                                                     <div class="m-agreement-v3-layout__animation" style="opacity: 1; transform: none;">
@@ -185,9 +164,7 @@
                                                         </div>
                                                         <span class="m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow" role="button" data-logging-label="icon-arrow-right-mono">
                                                             <span class="m-icon__inner svg-icon adaptive-grey400-text m-icon__inner--colored" aria-label="개인정보 수집 및 이용 동의 (토스페이먼츠) 자세히 보기" role="img" style="color: var(--adaptiveGrey400);">
-                                                                <svg enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path clip-rule="evenodd" d="m9.8 6.5c-.2 0-.5.1-.6.3-.4.4-.4.9 0 1.3l3.8 3.8-3.9 3.9c-.4.4-.4.9 0 1.3s.9.4 1.3 0l4.5-4.5c.4-.4.4-.9 0-1.3l-4.5-4.5c-.2-.1-.4-.3-.6-.3" fill="#b0b8c1" fill-rule="evenodd"></path>
-                                                                </svg>
+                                                                <img src="src/assets/images/svg/arrow-right.svg">
                                                             </span>
                                                             <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
                                                         </span>
@@ -209,12 +186,7 @@
                                                     <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
                                                         <input id="4val-checkbox" type="checkbox" aria-label="개인정보 제공 안내" class="consumer-cache-9mopdq" checked="">
                                                         <label for="4val-checkbox" class="consumer-cache-2tkdon">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="consumer-cache-1ovurkh" style="width: 24px; height: 24px; margin-right: 0px;">
-                                                                <g origin="50% 50%" style="transform: none; transform-origin: 12px 12.3px;">
-                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="#e5e8eb" pathLength="1"></path>
-                                                                    <path fill="none" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M6,11.5 10.6,16 18,8.6" stroke="rgba(49, 130, 246, 1)" pathLength="1" stroke-dashoffset="0px" stroke-dasharray="1px 1px"></path>
-                                                                </g>
-                                                            </svg>
+                                                            <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
                                                         </label>
                                                     </div>
                                                     <div class="m-agreement-v3-layout__animation" style="opacity: 1; transform: none;">
@@ -225,9 +197,7 @@
                                                         </div>
                                                         <span class="m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow" role="button" data-logging-label="icon-arrow-right-mono">
                                                             <span class="m-icon__inner svg-icon adaptive-grey400-text m-icon__inner--colored" aria-label="개인정보 제공 안내 자세히 보기" role="img" style="color: var(--adaptiveGrey400);">
-                                                                <svg enable-background="new 0 0 24 24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                                                    <path clip-rule="evenodd" d="m9.8 6.5c-.2 0-.5.1-.6.3-.4.4-.4.9 0 1.3l3.8 3.8-3.9 3.9c-.4.4-.4.9 0 1.3s.9.4 1.3 0l4.5-4.5c.4-.4.4-.9 0-1.3l-4.5-4.5c-.2-.1-.4-.3-.6-.3" fill="#b0b8c1" fill-rule="evenodd"></path>
-                                                                </svg>
+                                                                <img src="src/assets/images/svg/arrow-right.svg">
                                                             </span>
                                                             <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
                                                         </span>
@@ -281,7 +251,14 @@ const inputEnabled = ref(false);
 const selectedMethod = ref(null);
 const selectedCardCompany = ref(null);
 const isOpen = ref(false);
+const isAgreement = ref(false);
+const checked = ref(false);
 
+
+function checkAgreement() {
+    checked.value = !checked.value;
+    console.log("동의");
+}
 
 function toggleAgreement() {
   isOpen.value = !isOpen.value; 
@@ -963,7 +940,11 @@ button, input, optgroup, select, textarea {
     visibility: hidden;
 }
 
-
+.check-box {
+    width: 24px;
+    height: 24px;
+    margin-top: 5px;
+}
 
 
 </style>
