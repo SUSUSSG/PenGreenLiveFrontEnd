@@ -240,7 +240,7 @@ export default {
       if (this.repeatCount >= 3) {
         this.isBlocked = true;
         this.remainingTime = 10;
-        this.alertMessage = `도배 방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
+        this.alertMessage = `도배방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
         this.spamTimeout = setTimeout(this.resetSpamBlock, 10000);
         this.countdownInterval = setInterval(() => {
           this.remainingTime--;
