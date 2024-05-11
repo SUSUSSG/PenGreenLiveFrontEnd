@@ -32,7 +32,8 @@
                     </div>
                     <template v-slot:footer>
                         <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal()" />
-                        <Button text="등록" btnClass="btn-dark btn-sm" @click="$refs.modal1.closeModal(); resetModalData()" />
+                        <Button text="등록" btnClass="btn-dark btn-sm"
+                            @click="$refs.modal1.closeModal(); resetModalData()" />
                     </template>
                 </Modal>
 
@@ -73,37 +74,29 @@
             </div>
 
             <div class="-mx-6">
-                <vue-good-table :columns="columns" styleClass=" vgt-table centered lesspadding2 table-head "
-                    :rows="advancedTable" :pagination-options="{
-                        enabled: true,
-                        perPage: perpage,
-                    }" :sort-options="{
-                        enabled: false,
-                    }" :select-options="{
-                        enabled: true,
-                        selectOnCheckboxOnly: true,
-                        selectioninfoClass: 'custom-class',
-                        selectionText: 'rows selected',
-                        clearSelectionText: 'clear',
-                        disableSelectinfo: true,
-                        selectAllByGroup: true,
-                    }">
+                <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
+                    :rows="products" :pagination-options="{ enabled: true, perPage: perpage }"
+                    :sort-options="{ enabled: false }">
+
                     <template v-slot:table-row="props">
                         <span v-if="props.column.field == 'productCode'" @click="openEditModal(props.row)"
                             class="cursor-pointer">
-                            {{ props.row.productCode }}
+                            {{ props.row.productCd }}
                         </span>
                         <span v-if="props.column.field == 'greenproduct'">
-                            {{ props.row.greenproduct }}
+                            {{ props.row.greenProductCd }}
                         </span>
                         <span v-if="props.column.field == 'productName'">
-                            {{ props.row.productName }}
+                            {{ props.row.productNm }}
                         </span>
                         <span v-if="props.column.field == 'category'">
-                            {{ props.row.category }}
+                            {{ props.row.categoryCd }}
                         </span>
                         <span v-if="props.column.field == 'price'">
-                            {{ props.row.price }}
+                            {{ formatNumber(props.row.listPrice) }}
+                        </span>
+                        <span v-if="props.column.field == 'stock'">
+                            {{ props.row.productStock }}
                         </span>
                         <span v-if="props.column.field == 'brand'">
                             {{ props.row.brand }}
@@ -129,6 +122,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Card from "@/components/Card";
 import Icon from "@/components/Icon";
 import Tooltip from "@/components/Tooltip";
@@ -150,6 +144,7 @@ export default {
     },
     data() {
         return {
+            products: [],
             addModalData: {
                 productcode: '',
                 productname: '',
@@ -191,23 +186,27 @@ export default {
             columns: [
                 {
                     label: "상품 코드",
-                    field: "productCode",
+                    field: "productCd",
                 },
                 {
                     label: "녹색제품 통합ID",
-                    field: "greenproduct",
+                    field: "greenProductCd",
                 },
                 {
                     label: "상품명",
-                    field: "productName",
+                    field: "productNm",
                 },
                 {
                     label: "카테고리",
-                    field: "category",
+                    field: "categoryCd",
                 },
                 {
                     label: "정가",
-                    field: "price",
+                    field: "listPrice",
+                },
+                {
+                    label: "재고",
+                    field: "productStock",
                 },
                 {
                     label: "브랜드",
@@ -221,7 +220,21 @@ export default {
             ],
         };
     },
+    created() {
+        this.fetchProducts();
+    },
     methods: {
+        fetchProducts() {
+            axios.get('http://localhost:8090/product-list')
+                .then(response => {
+                    this.products = response.data; // 데이터 저장
+                    this.advancedTable = this.products; // advancedTable 업데이트
+                })
+                .catch(error => {
+                    console.error("상품 목록을 불러오는데 실패했습니다:", error);
+                });
+        },
+
         handleAddImageUpload(event) {
             const file = event.target.files[0];
             if (file) {
@@ -254,7 +267,7 @@ export default {
                 categorycode: row.category,
                 listprice: row.price,
                 brand: row.brand,
-                imageSrc: row.imageUrl, 
+                imageSrc: row.imageUrl,
             };
             this.$refs.editModal.openModal();
         },
@@ -298,31 +311,35 @@ export default {
             this.$refs.modal1.openModal();
         },
         resetModalData() {
-        this.addModalData = {
-            productcode: '',
-            productname: '',
-            categorycode: '',
-            listprice: '',
-            brand: '',
-            greenrpdouct: '',
-            imageSrc: null,
-        };
-    },
+            this.addModalData = {
+                productcode: '',
+                productname: '',
+                categorycode: '',
+                listprice: '',
+                brand: '',
+                greenrpdouct: '',
+                imageSrc: null,
+            };
+        },
 
-    resetEditModalData() {
-        this.editModalData = {
-            productcode: '',
-            productname: '',
-            categorycode: '',
-            listprice: '',
-            brand: '',
-            greenrpdouct: '',
-            imageSrc: null,
-        };
-    },
+        resetEditModalData() {
+            this.editModalData = {
+                productcode: '',
+                productname: '',
+                categorycode: '',
+                listprice: '',
+                brand: '',
+                greenrpdouct: '',
+                imageSrc: null,
+            };
+        },
+        formatNumber(value) {
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        },
     }
 
 };
+
 </script>
 <style lang="scss" scoped>
 .action-btn {
