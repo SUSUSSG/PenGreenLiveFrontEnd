@@ -253,7 +253,7 @@ const props = defineProps({
 });
 
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
-const selectedPayment = ref({key: 'credit'});
+const selectedPayment = ref({ key: 'credit', method:'카드', flowMode: 'DIRECT', label: '신용·체크카드' });
 const selectedCardCompany = ref(null);
 const isOpen = ref(false);
 const checked = ref(false);
@@ -358,6 +358,8 @@ async function requestPayment() {
     if (selectedPayment.value.method === '카드') {
       defaultRequestPaymentData.value.cardCompany = selectedCardCompany.value;
     }
+
+    console.log(defaultRequestPaymentData.value);
 
     await tossPayments.value.requestPayment('카드', {
         ...defaultRequestPaymentData.value,
