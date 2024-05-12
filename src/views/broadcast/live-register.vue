@@ -83,9 +83,30 @@
                 <label>상품 등록</label>
               </div>
               <div class="right-content">
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="modal1">
-                  <h4 class="font-medium text-lg mb-3 text-slate-900">Lorem ipsum dolor sit.</h4>
-                  <div class="text-base text-slate-600 dark:text-slate-300">상품 검색해서 집어넣으세요</div>
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="modal1" :sizeClass="'max-w-3xl'">
+                  <vue-good-table :columns="columns" styleClass=" vgt-table centered lesspadding2 table-head "
+                    :rows="channelSalesProduct" :pagination-options="{
+                      enabled: false
+                    }" :sort-options="{
+                      enabled: false,
+                    }" :select-options="{
+                      enabled: true,
+                    }">
+                    <template v-slot:table-row="props">
+                        <span v-if="props.column.field == 'productImg'" class="product-img">
+                            <img :src="props.row.productImg" />
+                        </span>
+                      <span v-if="props.column.field == 'productCode'">
+                        {{ props.row.productCode }}
+                      </span>
+                      <span v-if="props.column.field == 'productName'" class="product-name">
+                        {{ props.row.productName }}
+                      </span>
+                      <span v-if="props.column.field == 'listPrice'">
+                        {{ props.row.listPrice }}
+                      </span>
+                    </template>
+                  </vue-good-table>
                   <template v-slot:footer>
                     <Button text="등록하기" btnClass="btn-primary btn-sm" @click="$refs.modal1.closeModal()" />
                   </template>
@@ -260,6 +281,7 @@ import Dropdown from "@/components/Dropdown/index.vue";
 import Textarea from "@/components/Textarea";
 import SelectComponent from "@/components/Select/index.vue";
 import Modal from "@/components/Modal/Modal.vue";
+import { channelSalesProduct } from "@/constant/channel-sales-product-data";
 
 
 export default {
@@ -359,6 +381,26 @@ export default {
         { name: 'Product B', code: 'B001', price: 20000, discountRate: 0, discountedPrice: 20000 }
       ],
       registeredProducts: [],
+
+      channelSalesProduct,
+      columns: [
+        {
+          label: "이미지",
+          field: "productImg",
+        },
+        {
+          label: "상품명",
+          field: "productName",
+        },
+        {
+          label: "상품코드",
+          field: "productCode",
+        },
+        {
+          label: "판매가",
+          field: "originalPrice",
+        },
+      ],
 
       //step3
       notices: [],
@@ -503,7 +545,4 @@ export default {
 .question {
   font-weight: bold;
 }
-
-// label {
-//   font-weight: bold;
-// }</style>
+</style>
