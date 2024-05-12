@@ -1,7 +1,11 @@
+// vite.config.js
 import { defineConfig } from "vite";
 import path from "path";
 import Vue from "@vitejs/plugin-vue";
 import ViteImages from "vite-plugin-vue-images";
+
+const host = "localhost";
+const port = "8090";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -17,4 +21,18 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: true,
+    proxy: {
+      '/api/': {
+        target: `http://${host}:${port}`,
+        changeOrigin: true,
+      },
+      '/ws/': {
+        target: `ws://${host}:${port}`,
+        changeOrigin: false,
+        ws: true,
+      }
+    }
+  }
 });

@@ -15,6 +15,13 @@ const routes = [
       { path: 'live-viewing', name: '라이브시청', component: () => import('@/views/broadcast/live-viewing.vue') },
       { path: 'success', name: '결제완료', component: () => import('@/components/Pay/SuccessView.vue') },
       { path: 'fail', name: '결제실패', component: () => import('@/components/Pay/FailView.vue') },
+      {
+        path: '/live-viewing/:broadcastId',
+        name: '방송시청',
+        component: () => import('@/views/broadcast/live-viewing.vue')
+      },
+      { path: 'test', name: '테스트', component: () => import('@/views/test/test-openvidu.vue')},
+      { path: 'test-viewer', name: '테스트시청자', component: () => import('@/views/test/test-viewer.vue')}
     ],
   },
   {
@@ -41,7 +48,9 @@ const routes = [
       { path: 'member/edit-profile', name: '정보수정', component: () => import('@/views/mypage/edit-profile.vue') },
     ],
   },
-  { path: '/liveboard', name: '라이브보드', component: () => import('@/views/broadcast/liveboard.vue') },
+  { path: '/liveboard/:broadcastId', name: '라이브보드', component: () => import('@/views/broadcast/liveboard.vue') },
+  { path: '/chat', name: 'chat', component: () => import('@/views/chat-view.vue') },
+
 ];
 
 export default routes;

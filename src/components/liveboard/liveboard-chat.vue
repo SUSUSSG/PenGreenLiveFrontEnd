@@ -10,6 +10,9 @@
     <div class="mt-3 mb-3">
       <Alert class="green-alert" dismissible>{{ notice }}</Alert>
     </div>
+    <div v-if="alertMessage" class="mt-3 mb-3">
+      <Alert class="red-alert" dismissible>{{ alertMessage }}</Alert>
+    </div>
     <div class="scroll-wrapper">
       <div class="chat-container flex flex-col justify-end">
         <ul class="chat-messages">
@@ -17,18 +20,19 @@
             <div class="mr-2 flex items-center">
               <Icon v-if="showDeleteIcon" icon="heroicons:x-mark-20-solid" @click="deleteMessage(message.seq)"></Icon>
             </div>
-            <div class="flex flex-col">
-              <span class="chat-user-id">{{ message.userId }}</span>
-              <span class="chat-text">{{ message.content }}</span>
+            <div class="flex flex-row">
+              <span class="chat-time">{{ message.time }}</span>
+              <span class="chat-user-id">{{ message.writer }}</span>
+              <span class="chat-text">{{ message.message }}</span>
             </div>
           </li>
         </ul>
       </div>
     </div>
     <div class="chat-input-container">
-      <textarea type="text" placeholder="채팅을 입력하세요" v-model="newMessage" class="chat-input-field"
-        @keyup.enter="sendChat" />
-      <button type="button" class="chat-send-button" @click="sendChat">
+      <textarea type="text" :placeholder="isBlocked ? `채팅이 비활성화됨 (${remainingTime})` : '채팅을 입력하세요'" v-model="newMessage" class="chat-input-field"
+        @keyup.enter.prevent="sendChat" :disabled="isBlocked" />
+      <button type="button" class="chat-send-button" @click="sendChat" :disabled="isBlocked">
         <Icon icon="heroicons-outline:paper-airplane" class="transform rotate-[60deg]" />
       </button>
     </div>
@@ -64,9 +68,7 @@
           </div>
         </div>
       </template>
-
     </Modal>
-
   </div>
 </template>
 
@@ -74,9 +76,10 @@
 import Card from "@/components/Card";
 import Alert from "@/components/Alert";
 import Button from "@/components/Button";
-import Modal from "@/components/Modal/index.vue"; // 정확한 경로로 모달 컴포넌트 임포트
+import Modal from "@/components/Modal/index.vue";
 import Textinput from "@/components/Textinput/index.vue";
 import Icon from "@/components/Icon";
+import { Client } from "@stomp/stompjs";
 
 export default {
   components: {
@@ -101,53 +104,211 @@ export default {
     showDeleteIcon: {
       type: Boolean,
       default: true
+    },
+    currentRoom: {
+      type: Object,
+      default: () => ({ id: 1 })
+    },
+    currentWriter: {
+      type: String,
+      default: 'user'
     }
+  },
+  watch: {
+    chatMessages: {
+      handler() {
+        this.$nextTick(() => {
+          const container = this.$el.querySelector(".scroll-wrapper");
+          container.scrollTop = container.scrollHeight;
+        });
+      },
+      deep: true,
+    },
+  },
+  mounted() {
+    this.connect();
+  },
+
+  beforeUnmount() {
+    this.disconnect();
   },
   data() {
     return {
       notice: "채팅 공지사항이 올라올 곳입니다.",
-      isOpen: false, // 모달 상태,
+      isOpen: false,
       chatNotice: '',
       forbiddenword: '',
       forbiddenwordList: [],
-      chatMessages: [
-        // 샘플 채팅 데이터
-        { seq: 1, userId: '혜지', content: '롯데 이겼어?', timestamp: '11:00 AM' },
-        { seq: 2, userId: '민석', content: '아니 졌어', timestamp: '11:00 AM' },
-        { seq: 3, userId: '소진', content: 'NC 이겼어?', timestamp: '11:00 AM' },
-        { seq: 4, userId: '진욱', content: '아니 졌어', timestamp: '11:00 AM' },
-        { seq: 5, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 6, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 7, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 8, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 9, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 10, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 11, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 12, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 13, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-        { seq: 14, userId: 'lorem', content: "의미없는 텍스트입니다. ㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ", timestamp: '11:01 AM' },
-      ],
-      maxChatMessages: 50
+      newMessage: '',
+      chatMessages: [],
+      websocketClient: null,
+      messageIdCounter: 1,
+      lastMessage: '',
+      repeatCount: 0,
+      isBlocked: false,
+      remainingTime: 10,
+      spamTimeout: null,
+      countdownInterval: null,
+      alertMessage: '',
+      messageTimestamps: []
     }
   },
   methods: {
-    editChatting() {
-      this.isOpen = true; // 모달 상태를 true로 설정하여 직접 열기
+    connect() {
+      const url = "ws://localhost:8090/ws/init";
+      this.websocketClient = new Client({
+        brokerURL: url,
+        onConnect: () => {
+          this.websocketClient.subscribe(
+            `/sub/room/${this.currentRoom.id}/notice`,
+            (msg) => {
+              const noticeData = JSON.parse(msg.body);
+              this.notice = noticeData.message;  // 공지사항 업데이트
+            }
+          );
+          this.websocketClient.subscribe(
+          `/sub/room/${this.currentRoom.id}`,
+          (msg) => {
+            try {
+              console.log("메시지 파싱 전");
+              const parsedMessage = JSON.parse(msg.body); // JSON 파싱
+              console.log("메시지 파싱 후", parsedMessage);
+
+              // 메시지 객체에 작성자와 메시지 내용을 분리하여 추가
+              this.chatMessages.push({
+              seq: this.messageIdCounter++,
+              writer: parsedMessage.writer, // 작성자 ID
+              message: parsedMessage.message, // 메시지 내용
+              time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) // 현재 시간 정보
+            }); 
+
+            } catch (e) {
+              console.error("메시지 파싱 중 에러 발생:", e);
+              // 파싱 에러 발생 시 기본 정보로 메시지 추가
+              this.chatMessages.push({
+                seq: this.messageIdCounter++,
+                writer: "System",
+                message: "메시지를 파싱할 수 없습니다."
+              });
+            }
+          }
+        );
+
+          this.websocketClient.publish({
+            destination: `/pub/room/${this.currentRoom.id}/entered`,
+            body: JSON.stringify({ message: "입장했습니다.", writer: this.currentWriter }),
+          });
+        },
+        onWebSocketError: (error) => {
+          console.error('WebSocket Error:', error);
+        },
+      });
+      this.websocketClient.activate();
     },
+
+    disconnect() {
+      if (this.websocketClient) {
+        this.websocketClient.deactivate();
+      }
+    },
+
+    sendChat() {
+      if (!this.websocketClient || !this.newMessage.trim() || this.isBlocked) {
+        return;
+      }
+
+      const now = Date.now();
+      this.messageTimestamps.push(now);
+
+      // Check for spamming within 3 seconds
+      this.messageTimestamps = this.messageTimestamps.filter(timestamp => now - timestamp <= 3000);
+      if (this.messageTimestamps.length >= 5) {
+        this.isBlocked = true;
+        this.remainingTime = 10;
+        this.alertMessage = `도배 방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
+        this.spamTimeout = setTimeout(this.resetSpamBlock, 10000);
+        this.countdownInterval = setInterval(() => {
+          this.remainingTime--;
+          if (this.remainingTime > 0) {
+            this.alertMessage = `도배 방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
+          } else {
+            clearInterval(this.countdownInterval);
+          }
+        }, 1000);
+        return;
+      }
+
+      if (this.newMessage === this.lastMessage) {
+        this.repeatCountthis.repeatCount++;
+      } else {
+        this.repeatCount = 1;
+        this.lastMessage = this.newMessage;
+      }
+
+      if (this.repeatCount >= 3) {
+        this.isBlocked = true;
+        this.remainingTime = 10;
+        this.alertMessage = `도배 방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
+        this.spamTimeout = setTimeout(this.resetSpamBlock, 10000);
+        this.countdownInterval = setInterval(() => {
+          this.remainingTime--;
+          if (this.remainingTime > 0) {
+            this.alertMessage = `도배 방지로 채팅이 비활성화되었습니다. ${this.remainingTime}초 남았습니다.`;
+          } else {
+            clearInterval(this.countdownInterval);
+          }
+        }, 1000);
+        return;
+      }
+
+      this.websocketClient.publish({
+        destination: `/pub/room/${this.currentRoom.id}`,
+        body: JSON.stringify({ message: this.newMessage, writer: this.currentWriter }),
+      });
+      this.newMessage = ""; // 입력 필드 초기화
+    },
+
+    resetSpamBlock() {
+      this.isBlocked = false;
+      this.repeatCount = 0;
+      this.lastMessage = '';
+      this.messageTimestamps = [];
+      this.alertMessage = '';
+      clearInterval(this.countdownInterval);
+    },
+
+    editChatting() {
+      this.isOpen = true;
+    },
+
     submitNotice() {
       if (this.chatNotice.trim()) {
         this.notice = this.chatNotice;
+        const noticeMessage = {
+          type: 'NOTICE',
+          message: this.chatNotice,
+          writer: 'System'
+        };
+        this.websocketClient.publish({
+          destination: `/pub/room/${this.currentRoom.id}/notice`,
+          body: JSON.stringify(noticeMessage),
+        });
+        this.chatNotice = '';  // 입력 필드 초기화
       }
     },
+
+
     submitForbiddenword() {
       if (this.forbiddenword.trim()) {
-        this.forbiddenwordList.push(this.forbiddenword)
-        this.forbiddenword = ''
+        this.forbiddenwordList.push(this.forbiddenword);
+        this.forbiddenword = '';
       }
     },
+
     removeForbiddenword(index) {
       this.forbiddenwordList.splice(index, 1);
     },
+
     deleteMessage(seq) {
       this.chatMessages = this.chatMessages.filter(message => message.seq !== seq);
     }
@@ -166,10 +327,6 @@ export default {
   overflow: hidden;
 }
 
-.scroll-wrapper::-webkit-scrollbar {
-  display: none;
-}
-
 .scroll-wrapper {
   flex-grow: 1;
   overflow-y: auto;
@@ -177,47 +334,64 @@ export default {
 }
 
 .chat-container {
-  padding: 0.3rem;
   flex-direction: column;
   justify-content: flex-end;
 }
 
 .chat-message {
-  padding: 0.5rem;
-
+  padding: 0.5rem 0;
 }
 
 .chat-user-id {
   font-weight: bold;
-  font-size: 13px;
+  font-size: 16px;
   color: #23A100;
+  margin-left: 8px;
+  text-wrap: nowrap;
 }
 
 .chat-text {
-  margin-left: 0.5rem;
-  margin-top: 0.5rem;
   word-break: break-word;
+  margin-left: 12px;
+}
+
+.chat-time {
+  font-size: 10px;
+  color: #888;
+  overflow-wrap: unset;
+  text-wrap: nowrap;
+  margin-top: 4px;
 }
 
 .chat-input-container {
-  padding: 0.5rem;
-  background: #f4f4f4;
-  border-top: 1px solid #ccc;
   display: flex;
+  margin-top: 3px;
 }
 
 .chat-input-field {
   flex: 1;
-  border: none;
-  padding: 0.5rem;
+  border: 1px solid;
   background: white;
-  border-radius: 0.25rem;
+  border-radius: 5rem;
+  height: 40px;
+  align-content: center;
+  text-indent: 1rem;
+  resize: none;
+  overflow-y: hidden;
+}
+
+.chat-input-field::after {
+  border-color: #1C6D16;
+}
+
+.chat-input-field::-webkit-scrollbar-track {
+  background: transparent;
 }
 
 .chat-send-button {
   width: 2.5rem;
   height: 2.5rem;
-  background: #3071a9;
+  background: #1C6D16;
   color: white;
   border: none;
   border-radius: 50%;
@@ -231,48 +405,25 @@ export default {
   background: #265d8a;
 }
 
-.chat-container::-webkit-scrollbar {
-  width: 12px;
-}
-
-.chat-container::-webkit-scrollbar-thumb {
-  background-color: #888;
-}
-
-.chat-container::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-.chat-container::-webkit-scrollbar-track {
-  background: transparent;
-}
-
 .btn-green {
   background-color: #134010;
   color: white;
 }
 
-/* 채팅 color 추가 */
 .green-alert {
   color: #134010;
   background-color: rgba(19, 64, 16, 0.2);
 }
 
-.chat-input-container {
-  background-color: rgba(19, 64, 16, 0.2);
-  border-top: 0px;
-  margin-top: 3px;
-}
-
-.chat-send-button {
-  background-color: #134010;
+.red-alert {
+  color: #D32F2F;
+  background-color: rgba(211, 47, 47, 0.2);
 }
 
 .py-\[18px\] {
   padding: 13px;
 }
 
-/* 추가 */
 .text-base {
   font-weight: bold;
 }
