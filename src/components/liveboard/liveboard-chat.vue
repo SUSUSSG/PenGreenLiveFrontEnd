@@ -23,14 +23,19 @@
             <div class="flex flex-row">
               <span class="chat-time">{{ message.time }}</span>
               <span class="chat-user-id">{{ message.writer }}</span>
-              <span class="chat-text">{{ message.message }}</span>
+              <span :class="{'chat-text': true, 'text-gray': message.message === '비속어가 포함된 채팅입니다.'}">
+                {{ message.message }}
+              </span>
             </div>
           </li>
         </ul>
       </div>
     </div>
     <div class="chat-input-container">
-      <textarea type="text" :placeholder="isBlocked ? `채팅이 비활성화됨 (${remainingTime})` : '채팅을 입력하세요'" v-model="newMessage" class="chat-input-field"
+      <button @click="toggleTTS" class="mr-2 focus:outline-none">
+        <Icon :icon="isTTSEnabled ? 'heroicons-solid:volume-up' : 'heroicons-solid:volume-off'" class="w-6 h-6" />
+      </button>
+      <input type="text" :placeholder="isBlocked ? `채팅이 비활성화됨 (${remainingTime})` : '채팅을 입력하세요'" v-model="newMessage" class="chat-input-field"
         @keyup.enter.prevent="sendChat" :disabled="isBlocked" />
       <button type="button" class="chat-send-button" @click="sendChat" :disabled="isBlocked">
         <Icon icon="heroicons-outline:paper-airplane" class="transform rotate-[60deg]" />
@@ -126,6 +131,8 @@ export default {
     },
   },
   mounted() {
+    this.speechSynthesis = window.speechSynthesis;
+
     this.connect();
   },
 
@@ -150,7 +157,8 @@ export default {
       spamTimeout: null,
       countdownInterval: null,
       alertMessage: '',
-      messageTimestamps: []
+      messageTimestamps: [],
+      isTTSEnabled: true,
     }
   },
   methods: {
@@ -172,6 +180,8 @@ export default {
             try {
               console.log("메시지 파싱 전");
               const parsedMessage = JSON.parse(msg.body); // JSON 파싱
+              this.speakMessage(parsedMessage.message); // TTS로 메시지 읽기
+
               console.log("메시지 파싱 후", parsedMessage);
 
               // 메시지 객체에 작성자와 메시지 내용을 분리하여 추가
@@ -311,9 +321,21 @@ export default {
 
     deleteMessage(seq) {
       this.chatMessages = this.chatMessages.filter(message => message.seq !== seq);
-    }
+    },
+    toggleTTS() {
+      this.isTTSEnabled = !this.isTTSEnabled;
+    },
+    speakMessage(message) {
+      if (this.isTTSEnabled) {
+        const utterance = new SpeechSynthesisUtterance(message);
+        utterance.lang = 'ko-KR';
+        utterance.rate = 1.3;
+        this.speechSynthesis.speak(utterance);
+      }
+  },
   }
 }
+
 </script>
 
 <style>
@@ -375,7 +397,7 @@ export default {
   border-radius: 5rem;
   height: 40px;
   align-content: center;
-  text-indent: 1rem;
+  padding-left: 1rem;
   resize: none;
   overflow-y: hidden;
 }
@@ -400,7 +422,9 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
+.text-gray {
+    color: #c3c3c3;
+  }
 .chat-send-button:hover {
   background: #265d8a;
 }

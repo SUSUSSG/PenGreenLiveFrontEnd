@@ -1,6 +1,6 @@
 <template>
   <!-- 결제 성공 시 -->
-  <section class="h-[80vh] flex flex-col justify-center"> <!-- v-if="confirmed"> -->
+  <section class="h-[80vh] flex flex-col justify-center" v-if="confirmed">
     <div class="box_section py-[10rem] flex flex-col " style="width: 550px">
       <div class="w-full pb-[1rem] flex justify-center items-stretchs">
         <img style="width: 75px" src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" />
@@ -34,7 +34,7 @@
   const route = useRoute();
   const router = useRouter();
   const confirmed = ref(false);
-  const jsonData = ref(null);
+  const jsonData = ref({orderId:null});
   const totalPrice = ref(null);
 
   onMounted(async () => {
@@ -53,7 +53,6 @@
     async function confirm() {
       try {
         const { response, json } = await confirmPayment(requestData);
-        console.log(json);
         if (!response.ok) {
           router.push(`/fail?message=${json.message}&code=${json.code}`);
         } else {
