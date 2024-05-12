@@ -12,8 +12,8 @@
                 <template v-for="method in paymentMethods">
                     <div class="p-grid-col p-grid-col6">
                         <button :class="['p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l consumer-cache-1jf8qw4', 
-                            {selected: selectedMethod === method.key}]" 
-                            @click="selectMethod(method.key)">
+                            {selected: selectedPayment.key === method.key}]" 
+                            @click="selectMethod(method)">
                             <span v-if="method.icon" class="icon p-icon p-button__icon" aria-hidden="false" role="presentation" style="height: 42px; width: 80px; min-width: 22px; padding: 2px 0px;">
                                 <img :src="method.icon" />
                             </span>
@@ -22,7 +22,7 @@
                     </div>
                 </template>
             </div>
-            <div class="p-grid consumer-cache-67e79o"  v-if="selectedMethod==='credit'">
+            <div class="p-grid consumer-cache-67e79o"  v-if="selectedPayment.key==='credit'">
                 <div class="p-grid-col p-grid-col3" v-for="(cardCompany, index) in cardCompanys" :key="index">
                     <button :class="['p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l with-icon consumer-cache-ykbrbs', {selected: selectedCardCompany === cardCompany.name}]"  @click="selectCardCompany(cardCompany.name)" type="button" aria-disabled="false">
                         <div class="consumer-cache-1bd0tgn">
@@ -34,13 +34,13 @@
                     </button>
                 </div>
             </div>
-            <div class="consumer-cache-ymq71h" v-if="selectedMethod==='credit'">
+            <div class="consumer-cache-ymq71h" v-if="selectedPayment.key==='credit'">
                 <div class="consumer-cache-105f3td">
                     <div class="input radius--m p-select input--medium p-select--medium">
-                        <span class="input__field p-select__field"><span class="p-select__field-title">일시불</span></span>
-                        <select class="p-select__native" aria-invalid="false" aria-label="할부 선택" id="input-:rn:">
+                        <span class="input__field p-select__field"><span class="p-select__field-title">{{selectedText }}</span></span>
+                        <select class="p-select__native" aria-invalid="false" aria-label="할부 선택" v-model="selected">
                             <option class="" disabled="" value="">할부 선택</option>
-                            <option value="0" selected>일시불</option><option value="2">2개월</option>
+                            <option value="0">일시불</option><option value="2">2개월</option>
                             <option value="3">3개월</option><option value="4">4개월</option>
                             <option value="5">5개월</option><option value="6">6개월</option>
                             <option value="7">7개월</option><option value="8">8개월</option>
@@ -73,10 +73,10 @@
                                 <div class="m-agreement-v3-agreement m-agreement-v3-agreement--medium m-agreement-v3-agreement--have-checkbox m-agreement-v3-agreement--with-arrow">
                                     <div class="m-agreement-v3-layout__row">
                                         <div></div>
-                                        <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2 z-10" @click="checkAgreement">
+                                        <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2" >
                                             <input id="1val-checkbox" type="checkbox" aria-label="[필수]  결제 서비스 이용 약관, 개인정보 처리 동의" class="consumer-cache-9mopdq">
                                             <label for="1val-checkbox" class="consumer-cache-2tkdon">
-                                                <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
+                                                <img class="check-box z-10" @click="checkAgreement" :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'"  />
                                             </label>
                                         </div>
                                         <div class="m-agreement-v3-layout__animation z-10" @click="toggleAgreement" style="opacity: 1; transform: none;">                                      
@@ -118,7 +118,7 @@
                                                 <div class="m-agreement-v3-layout__row">
                                                     <div style="width: 24px;"></div>
                                                     <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
-                                                        <input id="2val-checkbox" type="checkbox" aria-label="서비스 이용약관" class="consumer-cache-9mopdq" checked="">
+                                                        <input id="2val-checkbox" type="checkbox" aria-label="서비스 이용약관" class="consumer-cache-9mopdq">
                                                         <label for="2val-checkbox" class="consumer-cache-2tkdon">
                                                             <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
                                                         </label>
@@ -151,7 +151,7 @@
                                                 <div class="m-agreement-v3-layout__row">
                                                     <div style="width: 24px;"></div>
                                                     <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
-                                                        <input id="3val-checkbox" type="checkbox" aria-label="개인정보 수집 및 이용 동의 (토스페이먼츠)" class="consumer-cache-9mopdq" checked="">
+                                                        <input id="3val-checkbox" type="checkbox" aria-label="개인정보 수집 및 이용 동의 (토스페이먼츠)" class="consumer-cache-9mopdq">
                                                         <label for="3val-checkbox" class="consumer-cache-2tkdon">
                                                             <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
                                                         </label>
@@ -184,7 +184,7 @@
                                                 <div class="m-agreement-v3-layout__row">
                                                     <div style="width: 24px;"></div>
                                                     <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
-                                                        <input id="4val-checkbox" type="checkbox" aria-label="개인정보 제공 안내" class="consumer-cache-9mopdq" checked="">
+                                                        <input id="4val-checkbox" type="checkbox" aria-label="개인정보 제공 안내" class="consumer-cache-9mopdq">
                                                         <label for="4val-checkbox" class="consumer-cache-2tkdon">
                                                             <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
                                                         </label>
@@ -222,8 +222,6 @@
                     </div>
                 </div>
             </div>
-            <div id="payment-method"></div>
-            <div id="agreement"></div>
 
             <button @click="requestPayment" class="button" id="payment-button" style="margin-top: 30px">결제하기</button>
             </section>
@@ -238,34 +236,42 @@
 
 <script setup>
 import { ref, onMounted , computed} from 'vue';
-import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
-import { nanoid } from "nanoid";
 import "@/components/Pay/style.css";
 
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
-const customerKey = nanoid();
-const amount = ref(50000);
-const paymentWidget = ref(null);
-const paymentMethodWidget = ref(null);
-const inputEnabled = ref(false);
-const selectedMethod = ref(null);
+const selectedPayment = ref({key: null});
 const selectedCardCompany = ref(null);
 const isOpen = ref(false);
-const isAgreement = ref(false);
 const checked = ref(false);
-
+const selected=ref('0');
 
 function checkAgreement() {
-    checked.value = !checked.value;
-    console.log("동의");
+  checked.value = !checked.value;
 }
 
 function toggleAgreement() {
   isOpen.value = !isOpen.value; 
 }
 
+const selectedText = computed(() => {
+    switch (selected.value) {
+        case '0': return '일시불';
+        case '2': return '2개월';
+        case '3': return '3개월';
+        case '4': return '4개월';
+        case '5': return '5개월';
+        case '6': return '6개월';
+        case '7': return '7개월';
+        case '8': return '8개월';
+        case '9': return '9개월';
+        case '10': return '10개월';
+        case '11': return '11개월';
+        case '12': return '12개월';
+    }
+});
+
 const paymentMethods = [
-  { key: 'credit', method:'카드', label: '신용·체크카드' },
+  { key: 'credit', method:'카드', flowMode: 'DIRECT', label: '신용·체크카드' },
   { key: 'npay', method:'간편결제', flowMode: 'DIRECT', easyPay: '네이버페이', icon: '/src/assets/images/svg/pay/npay.svg'},
   { key: 'kakaopay', method:'간편결제', flowMode: 'DIRECT', easyPay: '카카오페이', icon: '/src/assets/images/svg/pay/kakaopay.svg'},
   { key: 'tosspay', method:'간편결제', flowMode: 'DIRECT', easyPay: '토스페이', icon: '/src/assets/images/svg/pay/tosspay.svg'},
@@ -290,19 +296,17 @@ const cardCompanys = [
       ]
 
 function selectMethod(method) {
-  selectedMethod.value = method;
+    selectedPayment.value = method;
 }
 
 function selectCardCompany(cardCompany) {
     selectedCardCompany.value = cardCompany;
 }
-const widgetClientKey = "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm";
   
 const tossPayments = ref(null);
 onMounted(async() => {
     loadTossPaymentsSDK().then(() => {
         tossPayments.value = TossPayments(clientKey);
-        // paymentWidget = PaymentWidget(widgetClientKey, customerKey); // 회원 결제
     });
 });
 
@@ -318,27 +322,28 @@ function loadTossPaymentsSDK() {
 
 async function requestPayment() {
   try {
-    let paymentData = {
-      type: 'NORMAL',  // 기본적으로 NORMAL 타입을 사용
-      method: selectedMethod.value.method,
-    };
-
-    if (selectedMethod.value.method === '간편결제' && selectedMethod.value.provider) {
-      paymentData.easyPay = { provider: selectedMethod.value.provider };
-    }
-
-    // 결제 요청
-    await tossPayments.value.requestPayment('카드', {
+    const defaultRequestPaymentData = ref({
         amount:15000,
         orderId: "20240508",
         orderName: "토스 티셔츠 외 2건",
         customerName: "김토스",
         successUrl: `${window.location.origin}/success`,
         failUrl: `${window.location.origin}/fail`,
-        flowMode: 'DIRECT',
-        // easyPay: '카카오페이',
-        cardCompany: '신한',
+        flowMode: selectedPayment.value.flowMode,
+    })
+
+    if (selectedPayment.value.method === '간편결제') {
+      defaultRequestPaymentData.value.easyPay = selectedPayment.value.easyPay;
+    }
+
+    if (selectedPayment.value.method === '카드') {
+      defaultRequestPaymentData.value.cardCompany = selectedCardCompany.value;
+    }
+
+    await tossPayments.value.requestPayment('카드', {
+        ...defaultRequestPaymentData.value,
     });
+
   } catch (error) {
     console.error('Payment request failed:', error);
   }
@@ -347,20 +352,8 @@ async function requestPayment() {
 function showInterestFreeInstallmentInfo() {
   const url = "https://pgweb.tosspayments.com/tosspayments/MainPopUp.do";
   const windowFeatures = "width=600,height=600,scrollbars=yes,resizable=yes";
-
-  // window.open을 사용하여 팝업 창을 띄웁니다.
   window.open(url, "_blank", windowFeatures);
 }
-
-// onMounted(async () => {
-//   paymentWidget.value = await loadPaymentWidget(clientKey, ANONYMOUS);
-// //   paymentMethodWidget.value = await paymentWidget.value.renderPaymentMethods("#payment-method", { value: amount.value }, { variantKey: "DEFAULT" });
-//   paymentMethodWidget.value.on("ready", () => {
-//     inputEnabled.value = true;
-//     selectedMethod.value = paymentMethods[0];
-//     selectMethod(selectedMethod.value.key);
-//   });
-// });
 </script>
 
 
@@ -549,9 +542,7 @@ function showInterestFreeInstallmentInfo() {
     width: 100%;
     height: 100%;
 }
-svg {
-    overflow: hidden;
-}
+
 img, svg {
     vertical-align: middle;
 }
@@ -881,7 +872,7 @@ button, input, optgroup, select, textarea {
     height: 100%;
 }
 
-.svg-icon img, .svg-icon svg {
+.svg-icon img {
     display: block;
     width: 100%;
     height: 100%;
@@ -945,6 +936,5 @@ button, input, optgroup, select, textarea {
     height: 24px;
     margin-top: 5px;
 }
-
 
 </style>
