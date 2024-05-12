@@ -32,7 +32,8 @@
                     </div>
                     <template v-slot:footer>
                         <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal()" />
-                        <Button text="등록" btnClass="btn-dark btn-sm" @click="$refs.modal1.closeModal(); resetModalData()" />
+                        <Button text="등록" btnClass="btn-dark btn-sm"
+                            @click="$refs.modal1.closeModal(); resetModalData()" />
                     </template>
                 </Modal>
 
@@ -40,7 +41,7 @@
 
                 <Modal title="상품 정보 수정" ref="editModal" :showButtons="false" @closed="resetEditModalData">
                     <div class="text-base text-slate-600 dark:text-slate-300">
-                        <Textinput label="상품코드" type="text" name="editproductcode" v-model="editModalData.productcode"
+                        <Textinput label="상품코드" type="text" name="editproductcode" v-model="editModalData.productCd"
                             class="mb-2" />
                         <div class="flex items-center">
                             <Textinput label="녹색제품 통합ID" type="text" name="greenrpdouct"
@@ -48,11 +49,13 @@
                             <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5">
                                 <span>인증하기</span></button>
                         </div>
-                        <Textinput label="상품명" type="text" name="editproductname" v-model="editModalData.productname"
+                        <Textinput label="상품명" type="text" name="editproductname" v-model="editModalData.productNm"
                             class="mb-2" />
-                        <Textinput label="카테고리" type="text" name="editcategorycode" v-model="editModalData.categorycode"
+                        <Textinput label="카테고리" type="text" name="editcategorycode" v-model="editModalData.categoryCd"
                             class="mb-2" />
-                        <Textinput label="정가" type="number" name="editlistprice" v-model="editModalData.listprice"
+                            <Textinput label="정가" type="text" v-model="formattedListPrice"
+                name="editlistprice" class="mb-2" />
+                        <Textinput label="재고" type="number" name="editproductstock" v-model="editModalData.productStock"
                             class="mb-2" />
                         <Textinput label="브랜드" type="text" name="brand" v-model="editModalData.brand" class="mb-2" />
                         <label class="ltr:inline-block rtl:block input-label">상품이미지</label><br>
@@ -73,42 +76,35 @@
             </div>
 
             <div class="-mx-6">
-                <vue-good-table :columns="columns" styleClass=" vgt-table centered lesspadding2 table-head "
-                    :rows="advancedTable" :pagination-options="{
-                        enabled: true,
-                        perPage: perpage,
-                    }" :sort-options="{
-                        enabled: false,
-                    }" :select-options="{
-                        enabled: true,
-                        selectOnCheckboxOnly: true,
-                        selectioninfoClass: 'custom-class',
-                        selectionText: 'rows selected',
-                        clearSelectionText: 'clear',
-                        disableSelectinfo: true,
-                        selectAllByGroup: true,
-                    }">
+                <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
+                    :rows="products" :pagination-options="{ enabled: true, perPage: perpage }"
+                    :sort-options="{ enabled: false }">
+
                     <template v-slot:table-row="props">
-                        <span v-if="props.column.field == 'productCode'" @click="openEditModal(props.row)"
+                        <span v-if="props.column.field === 'productCd'" @click="openEditModal(props.row)"
                             class="cursor-pointer">
-                            {{ props.row.productCode }}
+                            {{ props.row.productCd }}
                         </span>
-                        <span v-if="props.column.field == 'greenproduct'">
-                            {{ props.row.greenproduct }}
+
+                        <span v-if="props.column.field === 'greenProductCd'">
+                            {{ props.row.greenProductCd }}
                         </span>
-                        <span v-if="props.column.field == 'productName'">
-                            {{ props.row.productName }}
+                        <span v-if="props.column.field === 'productNm'">
+                            {{ props.row.productNm }}
                         </span>
-                        <span v-if="props.column.field == 'category'">
-                            {{ props.row.category }}
+                        <span v-if="props.column.field === 'categoryCd'">
+                            {{ props.row.categoryCd }}
                         </span>
-                        <span v-if="props.column.field == 'price'">
-                            {{ props.row.price }}
+                        <span v-if="props.column.field === 'listPrice'">
+                            {{ formatNumber(props.row.listPrice) }}
                         </span>
-                        <span v-if="props.column.field == 'brand'">
+                        <span v-if="props.column.field === 'productStock'">
+                            {{ props.row.productStock }}
+                        </span>
+                        <span v-if="props.column.field === 'brand'">
                             {{ props.row.brand }}
                         </span>
-                        <span v-if="props.column.field == 'customer'" class="flex">
+                        <span v-if="props.column.field === 'customer'" class="flex">
                             <img v-for="entry in props.row.customer" :key="entry.name" :src="entry.image"
                                 :alt="entry.name" class="object-cover w-full h-full rounded-full"
                                 style="width: 24px; margin-right: 5px;" />
@@ -129,6 +125,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Card from "@/components/Card";
 import Icon from "@/components/Icon";
 import Tooltip from "@/components/Tooltip";
@@ -150,6 +147,7 @@ export default {
     },
     data() {
         return {
+            products: [],
             addModalData: {
                 productcode: '',
                 productname: '',
@@ -160,12 +158,13 @@ export default {
                 imageSrc: null,
             },
             editModalData: {
-                productcode: '',
-                productname: '',
-                categorycode: '',
-                listprice: '',
+                productCd: '',
+                productNm: '',
+                categoryCd: '',
+                listPrice: '',
+                productStock: '',
                 brand: '',
-                greenrpdouct: '',
+                greenProductCd: '',
                 imageSrc: null,
             },
             advancedTable,
@@ -191,23 +190,27 @@ export default {
             columns: [
                 {
                     label: "상품 코드",
-                    field: "productCode",
+                    field: "productCd",
                 },
                 {
                     label: "녹색제품 통합ID",
-                    field: "greenproduct",
+                    field: "greenProductCd",
                 },
                 {
                     label: "상품명",
-                    field: "productName",
+                    field: "productNm",
                 },
                 {
                     label: "카테고리",
-                    field: "category",
+                    field: "categoryCd",
                 },
                 {
                     label: "정가",
-                    field: "price",
+                    field: "listPrice",
+                },
+                {
+                    label: "재고",
+                    field: "productStock",
                 },
                 {
                     label: "브랜드",
@@ -221,7 +224,46 @@ export default {
             ],
         };
     },
+    computed: {
+        formattedListPrice: {
+            get() {
+                // 숫자를 로컬 문자열 형식으로 포매팅
+                return this.editModalData.listPrice.toLocaleString();
+            },
+            set(value) {
+                // 입력값에서 콤마 제거 후 숫자로 변환하여 저장
+                this.editModalData.listPrice = parseFloat(value.replace(/,/g, ''));
+            }
+        }
+    },
+    created() {
+        this.fetchProducts();
+    },
     methods: {
+        fetchProducts() {
+            axios.get('http://localhost:8090/product-list')
+                .then(response => {
+                    this.products = response.data;
+                    console.log("Products loaded", this.products);
+                })
+                .catch(error => {
+                    console.error("Error loading products:", error);
+                });
+        },
+        formatNumber(value) {
+            console.log('Formatting number:', value);
+            if (!value) return '0원';
+            return value.toLocaleString() + '원';
+        },
+        updateListPrice(value) {
+            // 입력값에서 콤마 제거 후 숫자로 변환
+            this.editModalData.listPrice = parseFloat(value.replace(/,/g, ''));
+        },
+        displayFormattedPrice(value) {
+            // 숫자를 로컬 문자열 형식으로 포매팅
+            if (!value) return '0';  // 값이 없거나 0인 경우 '0'을 반환
+            return parseFloat(value).toLocaleString();  // 포매팅 적용
+        },
         handleAddImageUpload(event) {
             const file = event.target.files[0];
             if (file) {
@@ -248,13 +290,14 @@ export default {
         },
         openEditModal(row) {
             this.editModalData = {
-                productcode: row.productCode,
-                greenrpdouct: row.greenproduct,
-                productname: row.productName,
-                categorycode: row.category,
-                listprice: row.price,
+                productCd: row.productCd,
+                greenProductCd: row.greenProductCd,
+                productNm: row.productNm,
+                categoryCd: row.categoryCd,
+                listPrice: row.listPrice, // 숫자형으로 저장되어 있어야 함
+                productStock: row.productStock,
                 brand: row.brand,
-                imageSrc: row.imageUrl, 
+                imageSrc: row.imageUrl,
             };
             this.$refs.editModal.openModal();
         },
@@ -298,31 +341,37 @@ export default {
             this.$refs.modal1.openModal();
         },
         resetModalData() {
-        this.addModalData = {
-            productcode: '',
-            productname: '',
-            categorycode: '',
-            listprice: '',
-            brand: '',
-            greenrpdouct: '',
-            imageSrc: null,
-        };
-    },
+            this.addModalData = {
+                productcode: '',
+                productname: '',
+                categorycode: '',
+                listprice: '',
+                brand: '',
+                greenrpdouct: '',
+                imageSrc: null,
+            };
+        },
 
-    resetEditModalData() {
-        this.editModalData = {
-            productcode: '',
-            productname: '',
-            categorycode: '',
-            listprice: '',
-            brand: '',
-            greenrpdouct: '',
-            imageSrc: null,
-        };
-    },
+        resetEditModalData() {
+            this.editModalData = {
+                productcode: '',
+                productname: '',
+                categorycode: '',
+                listprice: '',
+                brand: '',
+                greenrpdouct: '',
+                imageSrc: null,
+            };
+        },
+        formatNumber(value) {
+            console.log('Formatting number:', value);  
+            if (!value) return '0';  
+            return value.toLocaleString(); 
+        }
     }
 
 };
+
 </script>
 <style lang="scss" scoped>
 .action-btn {
@@ -340,6 +389,6 @@ export default {
 .buttons-container {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 16px; // Adjust spacing as needed
+    margin-bottom: 16px; 
 }
 </style>

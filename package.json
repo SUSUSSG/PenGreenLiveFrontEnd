@@ -19,6 +19,7 @@
     "@fullcalendar/vue3": "6.0.3",
     "@headlessui/vue": "^1.6.4",
     "@stomp/stompjs": "^7.0.0",
+    "@tosspayments/payment-widget-sdk": "^0.10.2",
     "@videojs-player/vue": "^1.0.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vue-leaflet/vue-leaflet": "^0.6.1",
