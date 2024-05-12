@@ -225,6 +225,11 @@ export default {
     }
   },
   methods: {
+    handleDeviceSelection(selection) {
+      // 선택된 장치를 상위 컴포넌트로 전달
+      this.$emit('broadcast-device-selected', selection);
+      this.showLivePrepareModal = false; // 모달 닫기
+    },
     toggleIcon(item) {
       // 아이콘 활성화 상태를 토글
       item.isActive = !item.isActive;
