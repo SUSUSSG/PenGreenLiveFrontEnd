@@ -34,7 +34,7 @@
                 <TabPanels>
                     <TabPanel>
                         <div class="text-slate-600 dark:text-slate-400 text-sm font-normal">
-                            <img src="src/assets/images/all-img/product-explain-sample.jpg">
+                            <img src="/src/assets/images/all-img/product-explain-sample.jpg">
                         </div>
                     </TabPanel>
                     <TabPanel>
@@ -181,14 +181,14 @@
                         id: 1,
                         name: "Hello",
                         date: "2024-04-30",
-                        image: "src/assets/images/all-img/cus-2.png",
+                        image: "/src/assets/images/all-img/cus-2.png",
                         comment: "거품이 잘 나요. 너무 마음에 듭니다. 이제 미용실 안가도 돼요."
                     },
                     {
                         id: 2,
                         name: "world",
                         date: "2024-04-30",
-                        image: "src/assets/images/all-img/cus-1.png",
+                        image: "/src/assets/images/all-img/cus-1.png",
                         comment: "좋은 제품을 구매해서 기쁩니다."
                     },
                 ]
