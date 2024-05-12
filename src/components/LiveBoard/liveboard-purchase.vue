@@ -97,11 +97,13 @@
         </div>
 
         <div v-if="showTossPay" class="modal flex justify-between items-center modal-adjust z-50">
-            <TossPay 
-             :productName="productName"
-             :totalPrice="updateTotalPrice"
-             @openTossPay="close">
-            </TossPay>
+            <div class="scroll">
+                <TossPay 
+                :productName="productName"
+                :totalPrice="updateTotalPrice"
+                @openTossPay="close">
+                </TossPay>
+            </div>
         </div>
     </div>
 </template>
@@ -110,7 +112,7 @@
     import { ref, computed, defineProps } from 'vue';
     import Button from "@/components/Button";
     import PurchaseModal from "@/components/Modal/purchase-modal.vue";
-    import TossPay from "@/components/Pay/CheckoutView.vue";
+    import TossPay from "@/components/Pay/tosspayments-module.vue";
     import "@/components/Pay/style.css";
 
     const props = defineProps({
@@ -227,10 +229,14 @@
 }
 
 .modal {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex; /* Ensure it uses flexbox for proper child alignment */
+    flex-direction: column; /* Stack children vertically */
+    max-height: 100%; /* Limit the height to 80% of the viewport height */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
 
 .overlay {
@@ -248,5 +254,10 @@
 .live-section.active-overlay {
   position: relative;
   z-index: 2; /* 오버레이가 필요할 때만 적용 */
+}
+.scroll {
+    flex-grow: 1;
+    overflow-y: auto;
+    height: 100%;
 }
 </style>
