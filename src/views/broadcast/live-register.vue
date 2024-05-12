@@ -84,7 +84,8 @@
               </div>
               <div class="right-content">
                 <!-- 모달 -->
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" :sizeClass="'max-w-3xl'">
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" :sizeClass="'max-w-3xl'"
+                  ref="salesProductModal">
                   <!-- <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
                     :rows="channelSalesProduct" :pagination-options="{ enabled: false }"
                     :sort-options="{ enabled: false }" :select-options="{ enabled: true }"
@@ -153,44 +154,59 @@
                       <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
                       <td class="px-6 py-4">
                         <input type="number" v-model.number="product.discountRate" class="input-control">
+                        <Button @click="applyDiscount(index)" :class="{ 'btn-outline-dark': !isLoading }"
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="적용" />
                       </td>
                       <td class="px-6 py-4">{{ formatCurrency(product.discountedPrice) }}</td>
                       <td class="px-6 py-4">
                         <Button @click="registerProduct(index)" :class="{ 'btn-outline-dark': !isLoading }"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="확인" />
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="등록" />
                       </td>
                     </tr>
                   </tbody>
                 </table>
+                <!-- </div> -->
+                <br>
+                <!-- 등록된 상품 목록 -->
+                <!-- <label>상품 목록</label> -->
+                <!-- <div class="card rounded-md bg-white dark:bg-slate-800">
+                  <div class="card-body flex flex-col p-6 overflow-auto"> -->
+                <!-- <table class="min-w-full">
+                      <thead>
+                        <tr class="text-left">
+                          <th class="px-6 py-3">상품 이름</th>
+                          <th class="px-6 py-3">상품 코드</th>
+                          <th class="px-6 py-3">할인가</th>
+                          <th class="px-10 py-3">작업</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(registered, idx) in registeredProducts" :key="idx" class="border-b">
+                          <td class="px-6 py-4">{{ registered.name }}</td>
+                          <td class="px-6 py-4">{{ registered.code }}</td>
+                          <td class="px-6 py-4">{{ formatCurrency(registered.discountedPrice) }}</td>
+                          <td class="px-6 py-4">
+                            <Button @click="deleteRegisteredProduct(idx)" :class="{ 'btn-outline-dark': !isLoading }"
+                            btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="삭제" />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table> -->
+                <ul>
+                  <li v-for="(registered, idx) in registeredProducts" :key="idx"
+                    class="list-item flex items-center justify-between mt-1">
+                    <div class="bg-gray-100 p-2 rounded">
+                      <span class="registered-name">{{ registered.name }}</span>
+                      <span class="registered-code">{{ registered.code }}</span>
+                      <span class="registered-price">{{ formatCurrency(registered.discountedPrice) }}</span>
+                      <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" style="float: right;"
+                        class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
-            <br>
-            <!-- 등록된 상품 목록 -->
-            <!-- <label>상품 목록</label>
-            <div class="card rounded-md bg-white dark:bg-slate-800">
-              <div class="card-body flex flex-col p-6 overflow-auto">
-                <table class="min-w-full">
-                  <thead>
-                    <tr class="text-left">
-                      <th class="px-6 py-3">상품 이름</th>
-                      <th class="px-6 py-3">상품 코드</th>
-                      <th class="px-6 py-3">할인가</th>
-                      <th class="px-10 py-3">작업</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(registered, idx) in registeredProducts" :key="idx" class="border-b">
-                      <td class="px-6 py-4">{{ registered.name }}</td>
-                      <td class="px-6 py-4">{{ registered.code }}</td>
-                      <td class="px-6 py-4">{{ formatCurrency(registered.discountedPrice) }}</td>
-                      <td class="px-6 py-4">
-                        <Button @click="deleteRegisteredProduct(idx)" :class="{ 'btn-outline-dark': !isLoading }"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="삭제" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+            <!-- </div>
             </div> -->
           </Card>
         </div>
@@ -394,7 +410,6 @@ export default {
       selectedRows: [],
       productIds: '',
       productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
-      // { name: 'Product A', code: 'A001', originalPrice: 10000, discountRate: 0, discountedPrice: 10000 },
       registeredProducts: [], // 그 테이블에서 할인률이 적용된 상품들
 
       channelSalesProduct,
@@ -427,45 +442,36 @@ export default {
       newBenefit: '',
     }
   },
-  computed: {
-    canSubmit() {
-      return this.liveTitle && this.liveSummary && this.liveDateTime && this.productIds && this.imageSrc;
-    },
-    canAddProduct() {
-      // Checks if all required fields are filled and products array has less than 8 entries
-      return this.newProduct.name && this.newProduct.code && this.newProduct.originalPrice && this.products.length < 8;
-    },
-    selectedCategoryLabel() {
-      const category = this.categories.find(cat => cat.value === this.selectedCategoryValue);
-      return category ? category.label : '';
-    },
-    canAddNotice() {
-      // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
-      return this.newNotice.trim() !== '';
-    },
-    canAddBenefit() {
-      // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
-      return this.newBenefit.trim() !== '';
-    },
-    canAddAnswer() {
-      return this.newQuestion.trim() !== '' && this.newAnswer.trim() != '';
-    },
-  },
-  watch: {
-    'newProduct.discountRate': function (newRate) {
-      if (newRate) {
-        const discount = (this.newProduct.price * newRate) / 100;
-        this.newProduct.discountedPrice = this.newProduct.originalPrice - discount;
-      } else {
-        this.newProduct.discountedPrice = this.newProduct.originalPrice;
-      }
-    }
-  },
+  // computed: {
+  //   canSubmit() {
+  //     return this.liveTitle && this.liveSummary && this.liveDateTime && this.productIds && this.imageSrc;
+  //   },
+  //   canAddProduct() {
+  //     // Checks if all required fields are filled and products array has less than 8 entries
+  //     return this.newProduct.name && this.newProduct.code && this.newProduct.originalPrice && this.products.length < 8;
+  //   },
+  //   selectedCategoryLabel() {
+  //     const category = this.categories.find(cat => cat.value === this.selectedCategoryValue);
+  //     return category ? category.label : '';
+  //   },
+  //   canAddNotice() {
+  //     // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
+  //     return this.newNotice.trim() !== '';
+  //   },
+  //   canAddBenefit() {
+  //     // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
+  //     return this.newBenefit.trim() !== '';
+  //   },
+  //   canAddAnswer() {
+  //     return this.newQuestion.trim() !== '' && this.newAnswer.trim() != '';
+  //   },
+  // },
   methods: {
     addSelectedProductsToTable() {
+      this.modalOpen = true;
+
       // 선택된 상품 목록을 productsToRegister 배열에 추가
       this.productsToRegister = this.selectedRows.map(product => ({
-
         name: product.productName,
         code: product.productCode,
         originalPrice: product.originalPrice
@@ -473,7 +479,16 @@ export default {
 
       // 선택된 결과를 콘솔에 출력
       console.log('선택된 상품 목록:', this.productsToRegister);
+
+      this.isOpen = true;
+      this.$refs.salesProductModal.openModal();
     },
+    applyDiscount(index) {
+      const product = this.productsToRegister[index];
+      const discount = (product.originalPrice * product.discountRate) / 100;
+      product.discountedPrice = product.originalPrice - discount;
+    },
+
 
     handleImageUpload(event) {
       const file = event.target.files[0];
@@ -554,6 +569,9 @@ export default {
     deleteQA(index) {
       this.qa.splice(index, 1);
     },
+    deleteProduct(idx) {
+      this.registered.splice(idx, 1);
+    }
   }
 };
 </script>
@@ -572,5 +590,16 @@ export default {
 
 .question {
   font-weight: bold;
+}
+
+.registered-code,
+.registered-price,
+.registered-name {
+  margin-right: 30px;
+}
+
+.registered-name {
+  font-weight: bold;
+  color: #134010;
 }
 </style>
