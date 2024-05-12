@@ -39,7 +39,7 @@
               >
                 <h2
                   v-if="title"
-                  class="capitalize leading-6 tracking-wider font-medium text-base text-white"
+                  class="capitalize leading-6 tracking-wider font-medium text-base"
                 >
                   {{ title }}
                 </h2>

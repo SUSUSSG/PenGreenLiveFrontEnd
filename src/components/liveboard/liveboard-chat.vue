@@ -128,6 +128,7 @@ export default {
   mounted() {
     this.connect();
   },
+
   beforeUnmount() {
     this.disconnect();
   },
@@ -158,6 +159,13 @@ export default {
       this.websocketClient = new Client({
         brokerURL: url,
         onConnect: () => {
+          this.websocketClient.subscribe(
+            `/sub/room/${this.currentRoom.id}/notice`,
+            (msg) => {
+              const noticeData = JSON.parse(msg.body);
+              this.notice = noticeData.message;  // 공지사항 업데이트
+            }
+          );
           this.websocketClient.subscribe(
           `/sub/room/${this.currentRoom.id}`,
           (msg) => {
@@ -276,8 +284,19 @@ export default {
     submitNotice() {
       if (this.chatNotice.trim()) {
         this.notice = this.chatNotice;
+        const noticeMessage = {
+          type: 'NOTICE',
+          message: this.chatNotice,
+          writer: 'System'
+        };
+        this.websocketClient.publish({
+          destination: `/pub/room/${this.currentRoom.id}/notice`,
+          body: JSON.stringify(noticeMessage),
+        });
+        this.chatNotice = '';  // 입력 필드 초기화
       }
     },
+
 
     submitForbiddenword() {
       if (this.forbiddenword.trim()) {
