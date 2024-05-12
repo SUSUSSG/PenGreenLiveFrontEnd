@@ -1,36 +1,22 @@
 <template>
   <div class="video-wrapper">
-    <video ref="videoPlayer" class="video" playsinline>
-      <source :src="videoSource" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+    <!-- ref 속성을 추가하여 video 요소를 직접 참조할 수 있습니다. -->
+    <video ref="videoElement" autoPlay class="video"></video>
   </div>
 </template>
 
 <script>
 export default {
+  name: 'VideoPlayer',
+
   props: {
-    videoSource: {
-      type: String,
-      required: true
-    }
+    streamManager: Object,
   },
+
   mounted() {
-    this.initializePlayer();
+    // this.$refs를 통해 video 요소에 접근하고, 해당 요소에 비디오 스트림을 추가합니다.
+    this.streamManager.addVideoElement(this.$refs.videoElement);
   },
-  methods: {
-    initializePlayer() {
-      const videoElement = this.$refs.videoPlayer;
-      videoElement.muted = true; // Start the video muted
-      videoElement.play()
-          .then(() => {
-            console.log("Video playback started!");
-          })
-          .catch((error) => {
-            console.error("Error starting video playback:", error);
-          });
-    }
-  }
 };
 </script>
 
@@ -40,8 +26,7 @@ export default {
   aspect-ratio: 9 / 16;
 }
 
-.video{
-  /* max-height: 906px; */
+.video {
   width: 100%;
   height: auto;
   display: block;
