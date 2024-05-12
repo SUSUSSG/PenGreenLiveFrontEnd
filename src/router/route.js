@@ -12,7 +12,11 @@ const routes = [
       { path: 'member/login', name: '일반회원로그인', component: () => import('@/views/user/login.vue') },
       { path: 'enterprise/join', name: '판매자로그인', component: () => import('@/views/enterprise/join.vue') },
       { path: 'login', name: '로그인', component: () => import('@/views/enterprise/login.vue') },
-      { path: 'live-viewing', name: '라이브시청', component: () => import('@/views/broadcast/live-viewing.vue') },
+      {
+        path: '/live-viewing/:broadcastId',
+        name: 'LiveViewing',
+        component: () => import('@/views/broadcast/live-viewing.vue')
+      },
       { path: 'test', name: '테스트', component: () => import('@/views/test/test-openvidu.vue')},
       { path: 'test-viewer', name: '테스트시청자', component: () => import('@/views/test/test-viewer.vue')}
     ],
