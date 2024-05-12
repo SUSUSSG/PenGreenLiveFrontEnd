@@ -85,7 +85,9 @@ export default {
     toggleBroadcast() {
       this.isBroadcasting = !this.isBroadcasting;
       this.updateResultDisplayText();
+      this.$emit('start-broadcast');
       if (!this.isBroadcasting) {
+        this.$emit('stop-broadcast')
         this.$router.push('/broadcast-statistics');
       }
     },
