@@ -32,6 +32,9 @@
       </div>
     </div>
     <div class="chat-input-container">
+      <button @click="toggleTTS" class="mr-2 focus:outline-none">
+        <Icon :icon="isTTSEnabled ? 'heroicons-solid:volume-up' : 'heroicons-solid:volume-off'" class="w-6 h-6" />
+      </button>
       <input type="text" :placeholder="isBlocked ? `채팅이 비활성화됨 (${remainingTime})` : '채팅을 입력하세요'" v-model="newMessage" class="chat-input-field"
         @keyup.enter.prevent="sendChat" :disabled="isBlocked" />
       <button type="button" class="chat-send-button" @click="sendChat" :disabled="isBlocked">
@@ -128,6 +131,8 @@ export default {
     },
   },
   mounted() {
+    this.speechSynthesis = window.speechSynthesis;
+
     this.connect();
   },
 
@@ -152,12 +157,13 @@ export default {
       spamTimeout: null,
       countdownInterval: null,
       alertMessage: '',
-      messageTimestamps: []
+      messageTimestamps: [],
+      isTTSEnabled: true,
     }
   },
   methods: {
     connect() {
-      const url = "ws://localhost:8090/ws/init";
+      const url = "ws://223.130.147.232:8090/ws/init";
       this.websocketClient = new Client({
         brokerURL: url,
         onConnect: () => {
@@ -174,6 +180,8 @@ export default {
             try {
               console.log("메시지 파싱 전");
               const parsedMessage = JSON.parse(msg.body); // JSON 파싱
+              this.speakMessage(parsedMessage.message); // TTS로 메시지 읽기
+
               console.log("메시지 파싱 후", parsedMessage);
 
               // 메시지 객체에 작성자와 메시지 내용을 분리하여 추가
@@ -313,9 +321,21 @@ export default {
 
     deleteMessage(seq) {
       this.chatMessages = this.chatMessages.filter(message => message.seq !== seq);
-    }
+    },
+    toggleTTS() {
+      this.isTTSEnabled = !this.isTTSEnabled;
+    },
+    speakMessage(message) {
+      if (this.isTTSEnabled) {
+        const utterance = new SpeechSynthesisUtterance(message);
+        utterance.lang = 'ko-KR';
+        utterance.rate = 1.3;
+        this.speechSynthesis.speak(utterance);
+      }
+  },
   }
 }
+
 </script>
 
 <style>
