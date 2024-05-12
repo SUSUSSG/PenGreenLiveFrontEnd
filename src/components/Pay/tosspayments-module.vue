@@ -1,5 +1,5 @@
 <template>
-    <div class="consumer-cache-1cchlll w-[375px]">
+    <div class="consumer-cache-1cchlll w-full">
     <div class="consumer-cache-8z48kx">
         <section class="consumer-cache-bd75t9">
             <div class="p-grid consumer-cache-67e79o">
@@ -232,12 +232,11 @@
                 </div>
             </div>
 
-            <button @click="requestPayment" class="button" id="payment-button" style="margin-top: 30px">결제하기</button>
-            </section>
-            <div id="tds-pc__portal-container">
-                <div class="p-toast-container p-toast-container--top"></div>
-                <div class="p-toast-container p-toast-container--bottom"></div>
+            <div class="w-full flex items-center justify-center">
+                <button @click="requestPayment" class="button w-full" id="payment-button">결제하기</button>
             </div>
+        </section>
+           
         </div>
     </div>
     
@@ -246,6 +245,12 @@
 <script setup>
 import { ref, onMounted , computed} from 'vue';
 import "@/components/Pay/style.css";
+
+
+const props = defineProps({
+    productName: String,
+    totalPrice: String,
+});
 
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
 const selectedPayment = ref({key: 'credit'});
@@ -337,9 +342,9 @@ function loadTossPaymentsSDK() {
 async function requestPayment() {
   try {
     const defaultRequestPaymentData = ref({
-        amount:15000,
+        amount: props.totalPrice,
         orderId: "20240508",
-        orderName: "토스 티셔츠 외 2건",
+        orderName: props.productName,
         customerName: "김토스",
         successUrl: `${window.location.origin}/success`,
         failUrl: `${window.location.origin}/fail`,
