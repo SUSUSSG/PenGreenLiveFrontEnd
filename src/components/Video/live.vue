@@ -12,7 +12,7 @@
 
     <div class="video-and-sidebar-wrapper">
       <div v-if="streamManager">
-        <VideoPlayer :stream-manager="streamManager"></VideoPlayer>
+        <VideoPlayer :stream-manager="streamManager" :is-muted="isMuted"></VideoPlayer>
       </div>
       <div class="icons-sidebar" v-if="showIconSideBar">
         <div class="icon-wrapper" @click="toggleLike">
