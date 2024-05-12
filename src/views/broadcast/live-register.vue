@@ -84,27 +84,49 @@
               </div>
               <div class="right-content">
                 <!-- 모달 -->
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" :sizeClass="'max-w-3xl'" @on-selected-rows-change="onSelectedRowsChange">
-                  <vue-good-table :columns="columns" styleClass=" vgt-table centered lesspadding2 table-head "
-                    :rows="channelSalesProduct" :pagination-options="{
-                      enabled: false}" :sort-options="{enabled: false,}" :select-options="{enabled: true,}" v-model="selectedProducts">
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" :sizeClass="'max-w-3xl'">
+                  <!-- <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
+                    :rows="channelSalesProduct" :pagination-options="{ enabled: false }"
+                    :sort-options="{ enabled: false }" :select-options="{ enabled: true }"
+                    v-model:selected-rows="selectedRows"
+                    @on-selected-rows-change="updateSelectedRows">
                     <template v-slot:table-row="props">
-                      <span v-if="props.column.field == 'productImg'" class="product-img">
+                      <span v-if="props.column.field == 'productImg'">
                         <img :src="props.row.productImg" />
                       </span>
                       <span v-if="props.column.field == 'productCode'">
                         {{ props.row.productCode }}
                       </span>
-                      <span v-if="props.column.field == 'productName'" class="product-name">
+                      <span v-if="props.column.field == 'productName'">
                         {{ props.row.productName }}
                       </span>
                       <span v-if="props.column.field == 'originalPrice'">
                         {{ props.row.originalPrice }}
                       </span>
                     </template>
-                  </vue-good-table>
+</vue-good-table> -->
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>선택</th>
+                        <th>상품 이미지</th>
+                        <th>상품 이름</th>
+                        <th>상품 코드</th>
+                        <th>원가</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="row in channelSalesProduct" :key="row.productCode">
+                        <td><input type="checkbox" v-model="selectedRows" :value="row"></td>
+                        <td><img :src="row.productImg"></td>
+                        <td>{{ row.productName }}</td>
+                        <td> {{ row.productCode }}</td>
+                        <td>{{ row.originalPrice }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <template v-slot:footer>
-                    <Button text="상품 등록" btnClass="btn-primary btn-sm" @click="addSelectedProductsToTable"/>
+                    <Button text="상품 등록" btnClass="btn-primary btn-sm" @click="addSelectedProductsToTable" />
                   </template>
                 </Modal>
               </div>
@@ -121,7 +143,7 @@
                       <th class="px-6 py-3">정가</th>
                       <th class="px-6 py-3">할인률 (%)</th>
                       <th class="px-6 py-3">할인된 가격</th>
-                      <th class="px-10 py-3">작업</th>
+                      <th class="px-10 py-3">추가</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -135,7 +157,7 @@
                       <td class="px-6 py-4">{{ formatCurrency(product.discountedPrice) }}</td>
                       <td class="px-6 py-4">
                         <Button @click="registerProduct(index)" :class="{ 'btn-outline-dark': !isLoading }"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="추가" />
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="확인" />
                       </td>
                     </tr>
                   </tbody>
@@ -338,7 +360,7 @@ export default {
       toast.success("Form Saved", {
         timeout: 2000,
       });
-  };
+    };
 
     return {
       submit,
@@ -369,12 +391,11 @@ export default {
       ],
 
       //step2
-      selectedProducts: [],
+      selectedRows: [],
       productIds: '',
-      productsToRegister: [
-        // { name: 'Product A', code: 'A001', originalPrice: 10000, discountRate: 0, discountedPrice: 10000 },
-      ],
-      registeredProducts: [],
+      productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
+      // { name: 'Product A', code: 'A001', originalPrice: 10000, discountRate: 0, discountedPrice: 10000 },
+      registeredProducts: [], // 그 테이블에서 할인률이 적용된 상품들
 
       channelSalesProduct,
       columns: [
@@ -441,6 +462,19 @@ export default {
     }
   },
   methods: {
+    addSelectedProductsToTable() {
+      // 선택된 상품 목록을 productsToRegister 배열에 추가
+      this.productsToRegister = this.selectedRows.map(product => ({
+
+        name: product.productName,
+        code: product.productCode,
+        originalPrice: product.originalPrice
+      }));
+
+      // 선택된 결과를 콘솔에 출력
+      console.log('선택된 상품 목록:', this.productsToRegister);
+    },
+
     handleImageUpload(event) {
       const file = event.target.files[0];
       if (!file.type.includes('image/')) {
@@ -520,8 +554,6 @@ export default {
     deleteQA(index) {
       this.qa.splice(index, 1);
     },
-    addSelectedProductsToTable() {}
-
   }
 };
 </script>
