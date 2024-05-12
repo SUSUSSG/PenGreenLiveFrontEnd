@@ -84,8 +84,7 @@
               </div>
               <div class="right-content">
                 <!-- 모달 -->
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" :sizeClass="'max-w-3xl'"
-                  ref="salesProductModal">
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal">
                   <!-- <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
                     :rows="channelSalesProduct" :pagination-options="{ enabled: false }"
                     :sort-options="{ enabled: false }" :select-options="{ enabled: true }"
@@ -108,21 +107,21 @@
 </vue-good-table> -->
                   <table>
                     <thead>
-                      <tr>
-                        <th>선택</th>
-                        <th>상품 이미지</th>
-                        <th>상품 이름</th>
-                        <th>상품 코드</th>
-                        <th>원가</th>
+                      <tr class>
+                        <th class="px-4">선택</th>
+                        <th class="px-3">상품 이미지</th>
+                        <th class="px-6">상품 이름</th>
+                        <th class="px-5">상품 코드</th>
+                        <th class="px-8 py-2">원가</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="row in channelSalesProduct" :key="row.productCode">
-                        <td><input type="checkbox" v-model="selectedRows" :value="row"></td>
-                        <td><img :src="row.productImg"></td>
-                        <td>{{ row.productName }}</td>
-                        <td> {{ row.productCode }}</td>
-                        <td>{{ row.originalPrice }}</td>
+                        <td class="px-6"><input type="checkbox" v-model="selectedRows" :value="row"></td>
+                        <td class="px-7"><img :src="row.productImg"></td>
+                        <td class="px-6">{{ row.productName }}</td>
+                        <td class="px-6"> {{ row.productCode }}</td>
+                        <td class="px-6">{{ row.originalPrice }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -139,16 +138,16 @@
                 <table class="min-w-full">
                   <thead>
                     <tr class="text-left">
-                      <th class="px-6 py-3">상품 이름</th>
-                      <th class="px-6 py-3">상품 코드</th>
-                      <th class="px-6 py-3">정가</th>
-                      <th class="px-6 py-3">할인률 (%)</th>
-                      <th class="px-6 py-3">할인된 가격</th>
+                      <th class="px-6">상품 이름</th>
+                      <th class="px-6">상품 코드</th>
+                      <th class="px-9">정가</th>
+                      <th class="px-20">할인율 (%)</th>
+                      <th class="px-6">할인된 가격</th>
                       <th class="px-10 py-3">추가</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(product, index) in productsToRegister" :key="index" class="border-b">
+                    <tr v-for="(product, index) in productsToRegister" :key="index">
                       <td class="px-6 py-4">{{ product.name }}</td>
                       <td class="px-6 py-4">{{ product.code }}</td>
                       <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
@@ -197,8 +196,8 @@
                     class="list-item flex items-center justify-between mt-1">
                     <div class="bg-gray-100 p-2 rounded">
                       <span class="registered-name">{{ registered.name }}</span>
-                      <span class="registered-code">{{ registered.code }}</span>
-                      <span class="registered-price">{{ formatCurrency(registered.discountedPrice) }}</span>
+                      <span class="registered-code">({{ registered.code }})</span>
+                      방송 판매가 : <span class="registered-price"> {{ formatCurrency(registered.discountedPrice) }}</span>
                       <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" style="float: right;"
                         class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
                     </div>
@@ -407,10 +406,10 @@ export default {
       ],
 
       //step2
-      selectedRows: [],
-      productIds: '',
+      selectedRows: [], //모달에서 선택한 상품
+      // productIds: '',
       productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
-      registeredProducts: [], // 그 테이블에서 할인률이 적용된 상품들
+      registeredProducts: [], // 그 테이블에서 할인율이 적용된 상품들
 
       channelSalesProduct,
       columns: [
@@ -593,13 +592,22 @@ export default {
 }
 
 .registered-code,
-.registered-price,
-.registered-name {
+.registered-price {
   margin-right: 30px;
 }
 
 .registered-name {
+  margin-right: 5px;
   font-weight: bold;
   color: #134010;
 }
+
+.registered-price {
+  font-weight: bold;
+}
+
+thead {
+  margin-bottom: 20px;
+}
+
 </style>
