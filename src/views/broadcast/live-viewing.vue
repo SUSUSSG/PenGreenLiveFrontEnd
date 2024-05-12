@@ -4,7 +4,8 @@
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: 1 }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
-    <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true" :stream-manager="mainStreamManager"></Live>
+    <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true"
+          :stream-manager="mainStreamManager"></Live>
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
       <div v-if="selectedProduct">
@@ -14,13 +15,13 @@
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-              <LiveBoardPurchase class="purchase-section"
-              :brand="selectedProduct.brand"             
-              :productName="selectedProduct.productName"
-              :price="selectedProduct.price"
-              :discountRate="selectedProduct.discountRate"
-              :discountedPrice="selectedProduct.discountedPrice"
-              :product-img="selectedProduct.productImg"
+            <LiveBoardPurchase class="purchase-section"
+                               :brand="selectedProduct.brand"
+                               :productName="selectedProduct.productName"
+                               :price="selectedProduct.price"
+                               :discountRate="selectedProduct.discountRate"
+                               :discountedPrice="selectedProduct.discountedPrice"
+                               :product-img="selectedProduct.productImg"
             />
           </div>
         </div>
@@ -99,19 +100,18 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted, computed, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import {ref, onMounted, computed, watch} from 'vue';
+import {useRoute, useRouter} from 'vue-router';
 import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
+import {OpenVidu} from 'openvidu-browser';
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
 import LiveBoardPurchase from "@/components/liveboard/liveboard-purchase.vue";
 import Live from "@/components/Video/live.vue";
 import ProductCard from "@/components/Card/product-card.vue";
 import Button from "@/components/Button";
-import { useRouter } from 'vue-router'
 import PurchaseModal from "@/components/Modal/purchase-modal.vue";
-import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
-import { useStore } from 'vuex';
+import {TabGroup, TabList, Tab, TabPanels, TabPanel} from '@headlessui/vue';
+import {useStore} from 'vuex';
 
 // 라우트 및 환경변수 설정
 const route = useRoute();
@@ -166,8 +166,8 @@ const notices = [
   "현금으로 결제할시 추가 서비스 들어갑니다 ^^"
 ];
 const faqs = [
-  { question: "질문 1", answer: "답변 1" },
-  { question: "질문 2", answer: "답변 2" }
+  {question: "질문 1", answer: "답변 1"},
+  {question: "질문 2", answer: "답변 2"}
 ];
 
 // 뷰포트 및 스크롤 높이 계산
@@ -175,22 +175,16 @@ const store = useStore();
 const boxHeight = computed(() => store.getters.getBoxHeight);
 const computedHeight = ref(0);
 
-const calculateHeight = () => {
-  const viewportHeight = window.innerHeight;
-  computedHeight.value = viewportHeight - boxHeight.value;
-};
-
-
 // 세션 참가/종료 및 토큰 관련 메소드
 const joinSession = async () => {
   OV.value = new OpenVidu();
   session.value = OV.value.initSession();
-  session.value.on("streamCreated", ({ stream }) => {
+  session.value.on("streamCreated", ({stream}) => {
     mainStreamManager.value = session.value.subscribe(stream);
   });
 
   const token = await getToken(mySessionId.value);
-  session.value.connect(token, { clientData: myUserName });
+  session.value.connect(token, {clientData: myUserName});
 
   window.addEventListener("beforeunload", leaveSession);
 };
@@ -211,13 +205,8 @@ const getToken = async (sessionId) => {
   const sessionData = await createSession(sessionId);
   return createToken(sessionData);
 };
-
-const calculateHeight = () => {
-  const viewportHeight = window.innerHeight;
-  computedHeight.value = viewportHeight - boxHeight.value;
-
 const createSession = async (sessionId) => {
-  const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`, { customSessionId: sessionId });
+  const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`, {customSessionId: sessionId});
   return response.data;
 };
 
@@ -225,16 +214,31 @@ const createToken = async (sessionId) => {
   const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`);
   return response.data;
 };
-
+const calculateHeight = () => {
+  const viewportHeight = window.innerHeight;
+  computedHeight.value = viewportHeight - boxHeight.value;
+}
 // 모달 및 제품 선택 제어
-const openModal = () => { isOpen.value = true; };
-const updateModal = (value) => { isOpen.value = value; };
-const showProductDetails = (product) => { selectedProduct.value = product; };
-const closePurchaseModal = () => { selectedProduct.value = null; };
-const handleDiscountedPrice = (discountedPrice, product) => { product.discountedPrice = discountedPrice; };
+const openModal = () => {
+  isOpen.value = true;
+};
+const updateModal = (value) => {
+  isOpen.value = value;
+};
+const showProductDetails = (product) => {
+  selectedProduct.value = product;
+};
+const closePurchaseModal = () => {
+  selectedProduct.value = null;
+};
+const handleDiscountedPrice = (discountedPrice, product) => {
+  product.discountedPrice = discountedPrice;
+};
 
 // 나가기 버튼 동작
-const onClickRedirect = () => { router.push({ name: 'home' }); };
+const onClickRedirect = () => {
+  router.push({name: 'home'});
+};
 
 // 초기 설정 및 리스너 등록
 onMounted(() => {
@@ -243,7 +247,7 @@ onMounted(() => {
   window.addEventListener('resize', calculateHeight);
 });
 
-watch(boxHeight, calculateHeight);
+watch(boxHeight, calculateHeight)
 </script>
 
 <style scoped>
