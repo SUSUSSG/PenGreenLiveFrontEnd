@@ -244,6 +244,7 @@
 
 <script setup>
 import { ref, onMounted , computed} from 'vue';
+import { nanoid } from "nanoid"; 
 import "@/components/Pay/style.css";
 
 
@@ -343,7 +344,7 @@ async function requestPayment() {
   try {
     const defaultRequestPaymentData = ref({
         amount: props.totalPrice,
-        orderId: "20240508",
+        orderId: nanoid(),
         orderName: props.productName,
         customerName: "김토스",
         successUrl: `${window.location.origin}/success`,

@@ -34,6 +34,7 @@
     "gsap": "^3.11.3",
     "leaflet": "^1.9.2",
     "net": "^1.0.2",
+    "openvidu-browser": "2.29.0",
     "pinia": "^2.0.28",
     "postcss": "^8",
     "simplebar": "^5.3.8",
@@ -63,8 +64,7 @@
     "vuedraggable": "^4.1.0",
     "vuex": "^4.0.2",
     "webstomp-client": "^1.2.6",
-    "yup": "^0.32.11",
-    "openvidu-browser": "2.29.0"
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@babel/core": "^7.12.16",
