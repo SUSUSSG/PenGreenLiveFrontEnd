@@ -14,7 +14,7 @@ const routes = [
       { path: 'login', name: '로그인', component: () => import('@/views/enterprise/login.vue') },
       {
         path: '/live-viewing/:broadcastId',
-        name: 'LiveViewing',
+        name: '방송시청',
         component: () => import('@/views/broadcast/live-viewing.vue')
       },
       { path: 'test', name: '테스트', component: () => import('@/views/test/test-openvidu.vue')},
@@ -45,7 +45,7 @@ const routes = [
       { path: 'member/edit-profile', name: '정보수정', component: () => import('@/views/mypage/edit-profile.vue') },
     ],
   },
-  { path: '/liveboard', name: '라이브보드', component: () => import('@/views/broadcast/liveboard.vue') },
+  { path: '/liveboard/:broadcastId', name: '라이브보드', component: () => import('@/views/broadcast/liveboard.vue') },
   { path: '/chat', name: 'chat', component: () => import('@/views/chat-view.vue') },
 
 ];
