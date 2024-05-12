@@ -83,32 +83,28 @@
                 <label>상품 등록</label>
               </div>
               <div class="right-content">
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="modal1" :sizeClass="'max-w-3xl'">
+                <!-- 모달 -->
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" :sizeClass="'max-w-3xl'" @on-selected-rows-change="onSelectedRowsChange">
                   <vue-good-table :columns="columns" styleClass=" vgt-table centered lesspadding2 table-head "
                     :rows="channelSalesProduct" :pagination-options="{
-                      enabled: false
-                    }" :sort-options="{
-                      enabled: false,
-                    }" :select-options="{
-                      enabled: true,
-                    }">
+                      enabled: false}" :sort-options="{enabled: false,}" :select-options="{enabled: true,}" v-model="selectedProducts">
                     <template v-slot:table-row="props">
-                        <span v-if="props.column.field == 'productImg'" class="product-img">
-                            <img :src="props.row.productImg" />
-                        </span>
+                      <span v-if="props.column.field == 'productImg'" class="product-img">
+                        <img :src="props.row.productImg" />
+                      </span>
                       <span v-if="props.column.field == 'productCode'">
                         {{ props.row.productCode }}
                       </span>
                       <span v-if="props.column.field == 'productName'" class="product-name">
                         {{ props.row.productName }}
                       </span>
-                      <span v-if="props.column.field == 'listPrice'">
-                        {{ props.row.listPrice }}
+                      <span v-if="props.column.field == 'originalPrice'">
+                        {{ props.row.originalPrice }}
                       </span>
                     </template>
                   </vue-good-table>
                   <template v-slot:footer>
-                    <Button text="등록하기" btnClass="btn-primary btn-sm" @click="$refs.modal1.closeModal()" />
+                    <Button text="상품 등록" btnClass="btn-primary btn-sm" @click="addSelectedProductsToTable"/>
                   </template>
                 </Modal>
               </div>
@@ -122,7 +118,7 @@
                     <tr class="text-left">
                       <th class="px-6 py-3">상품 이름</th>
                       <th class="px-6 py-3">상품 코드</th>
-                      <th class="px-6 py-3">기본 가격</th>
+                      <th class="px-6 py-3">정가</th>
                       <th class="px-6 py-3">할인률 (%)</th>
                       <th class="px-6 py-3">할인된 가격</th>
                       <th class="px-10 py-3">작업</th>
@@ -132,7 +128,7 @@
                     <tr v-for="(product, index) in productsToRegister" :key="index" class="border-b">
                       <td class="px-6 py-4">{{ product.name }}</td>
                       <td class="px-6 py-4">{{ product.code }}</td>
-                      <td class="px-6 py-4">{{ formatCurrency(product.price) }}</td>
+                      <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
                       <td class="px-6 py-4">
                         <input type="number" v-model.number="product.discountRate" class="input-control">
                       </td>
@@ -148,10 +144,9 @@
             </div>
             <br>
             <!-- 등록된 상품 목록 -->
-            <label>상품 목록</label>
+            <!-- <label>상품 목록</label>
             <div class="card rounded-md bg-white dark:bg-slate-800">
               <div class="card-body flex flex-col p-6 overflow-auto">
-                <!-- <hr class="section-divider"> 구분선 추가 -->
                 <table class="min-w-full">
                   <thead>
                     <tr class="text-left">
@@ -174,7 +169,7 @@
                   </tbody>
                 </table>
               </div>
-            </div>
+            </div> -->
           </Card>
         </div>
 
@@ -343,7 +338,7 @@ export default {
       toast.success("Form Saved", {
         timeout: 2000,
       });
-    };
+  };
 
     return {
       submit,
@@ -374,11 +369,10 @@ export default {
       ],
 
       //step2
+      selectedProducts: [],
       productIds: '',
       productsToRegister: [
-        // Example products (this would normally come from a server)
-        { name: 'Product A', code: 'A001', price: 10000, discountRate: 0, discountedPrice: 10000 },
-        { name: 'Product B', code: 'B001', price: 20000, discountRate: 0, discountedPrice: 20000 }
+        // { name: 'Product A', code: 'A001', originalPrice: 10000, discountRate: 0, discountedPrice: 10000 },
       ],
       registeredProducts: [],
 
@@ -397,7 +391,7 @@ export default {
           field: "productCode",
         },
         {
-          label: "판매가",
+          label: "정가",
           field: "originalPrice",
         },
       ],
@@ -418,7 +412,7 @@ export default {
     },
     canAddProduct() {
       // Checks if all required fields are filled and products array has less than 8 entries
-      return this.newProduct.name && this.newProduct.code && this.newProduct.price && this.products.length < 8;
+      return this.newProduct.name && this.newProduct.code && this.newProduct.originalPrice && this.products.length < 8;
     },
     selectedCategoryLabel() {
       const category = this.categories.find(cat => cat.value === this.selectedCategoryValue);
@@ -440,9 +434,9 @@ export default {
     'newProduct.discountRate': function (newRate) {
       if (newRate) {
         const discount = (this.newProduct.price * newRate) / 100;
-        this.newProduct.discountedPrice = this.newProduct.price - discount;
+        this.newProduct.discountedPrice = this.newProduct.originalPrice - discount;
       } else {
-        this.newProduct.discountedPrice = this.newProduct.price;
+        this.newProduct.discountedPrice = this.newProduct.originalPrice;
       }
     }
   },
@@ -472,7 +466,7 @@ export default {
         this.newProduct = {
           name: '',
           code: '',
-          price: 0,
+          originalPrice: 0,
           discountRate: 0,
           discountedPrice: 0,
         };
@@ -480,7 +474,7 @@ export default {
     },
     registerProduct(index) {
       const product = this.productsToRegister[index];
-      product.discountedPrice = product.price - (product.price * product.discountRate / 100);
+      product.discountedPrice = product.originalPrice - (product.originalPrice * product.discountRate / 100);
       this.registeredProducts.push(product);
       this.productsToRegister.splice(index, 1); // Optionally remove from to-register list
     },
@@ -526,6 +520,8 @@ export default {
     deleteQA(index) {
       this.qa.splice(index, 1);
     },
+    addSelectedProductsToTable() {}
+
   }
 };
 </script>
