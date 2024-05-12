@@ -85,7 +85,7 @@
                                         <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2" >
                                             <input id="1val-checkbox" type="checkbox" aria-label="[필수]  결제 서비스 이용 약관, 개인정보 처리 동의" class="consumer-cache-9mopdq">
                                             <label for="1val-checkbox" class="consumer-cache-2tkdon">
-                                                <img class="check-box z-10" @click="checkAgreement" :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'"  />
+                                                <img class="check-box z-10" @click="checkAgreement" :src="checked ? '/src/assets/images/svg/check.svg' : '/src/assets/images/svg/check-before.svg'"  />
                                             </label>
                                         </div>
                                         <div class="m-agreement-v3-layout__animation z-10" @click="toggleAgreement" style="opacity: 1; transform: none;">                                      
@@ -103,7 +103,7 @@
                                                     aria-label="[필수] 결제 서비스 이용 약관, 개인정보 처리 동의 자세히 보기"
                                                     role="img"
                                                     :style="{ color: isOpen ? 'var(--adaptiveGrey600)' : 'var(--adaptiveGrey400)' }">                                                    
-                                                    <img src="src/assets/images/svg/arrow-right.svg">
+                                                    <img src="/src/assets/images/svg/arrow-right.svg">
                                                 </span>
                                                 <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
                                             </span>
@@ -129,7 +129,7 @@
                                                     <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
                                                         <input id="2val-checkbox" type="checkbox" aria-label="서비스 이용약관" class="consumer-cache-9mopdq">
                                                         <label for="2val-checkbox" class="consumer-cache-2tkdon">
-                                                            <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
+                                                            <img :src="checked ? '/src/assets/images/svg/check.svg' : '/src/assets/images/svg/check-before.svg'" class="check-box" />
                                                         </label>
                                                     </div>
                                                     <div class="m-agreement-v3-layout__animation" style="opacity: 1; transform: none;">
@@ -140,7 +140,7 @@
                                                         </div>
                                                         <span class="m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow" role="button" data-logging-label="icon-arrow-right-mono">
                                                             <span class="m-icon__inner svg-icon adaptive-grey400-text m-icon__inner--colored" aria-label="서비스 이용약관 자세히 보기" role="img" style="color: var(--adaptiveGrey400);">
-                                                                <img src="src/assets/images/svg/arrow-right.svg">
+                                                                <img src="/src/assets/images/svg/arrow-right.svg">
                                                             </span>
                                                             <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
                                                         </span>
@@ -162,7 +162,7 @@
                                                     <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
                                                         <input id="3val-checkbox" type="checkbox" aria-label="개인정보 수집 및 이용 동의 (토스페이먼츠)" class="consumer-cache-9mopdq">
                                                         <label for="3val-checkbox" class="consumer-cache-2tkdon">
-                                                            <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
+                                                            <img :src="checked ? '/src/assets/images/svg/check.svg' : '/src/assets/images/svg/check-before.svg'" class="check-box" />
                                                         </label>
                                                     </div>
                                                     <div class="m-agreement-v3-layout__animation" style="opacity: 1; transform: none;">
@@ -173,7 +173,7 @@
                                                         </div>
                                                         <span class="m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow" role="button" data-logging-label="icon-arrow-right-mono">
                                                             <span class="m-icon__inner svg-icon adaptive-grey400-text m-icon__inner--colored" aria-label="개인정보 수집 및 이용 동의 (토스페이먼츠) 자세히 보기" role="img" style="color: var(--adaptiveGrey400);">
-                                                                <img src="src/assets/images/svg/arrow-right.svg">
+                                                                <img src="/src/assets/images/svg/arrow-right.svg">
                                                             </span>
                                                             <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
                                                         </span>
@@ -195,7 +195,7 @@
                                                     <div class="m-agreement-v3-field__checkbox consumer-cache-uzd4c2">
                                                         <input id="4val-checkbox" type="checkbox" aria-label="개인정보 제공 안내" class="consumer-cache-9mopdq">
                                                         <label for="4val-checkbox" class="consumer-cache-2tkdon">
-                                                            <img :src="checked ? 'src/assets/images/svg/check.svg' : 'src/assets/images/svg/check-before.svg'" class="check-box" />
+                                                            <img :src="checked ? '/src/assets/images/svg/check.svg' : '/src/assets/images/svg/check-before.svg'" class="check-box" />
                                                         </label>
                                                     </div>
                                                     <div class="m-agreement-v3-layout__animation" style="opacity: 1; transform: none;">
@@ -206,7 +206,7 @@
                                                         </div>
                                                         <span class="m-icon svg-icon-wrapper m-icon--type-default m-agreement-v3-layout__arrow" role="button" data-logging-label="icon-arrow-right-mono">
                                                             <span class="m-icon__inner svg-icon adaptive-grey400-text m-icon__inner--colored" aria-label="개인정보 제공 안내 자세히 보기" role="img" style="color: var(--adaptiveGrey400);">
-                                                                <img src="src/assets/images/svg/arrow-right.svg">
+                                                                <img src="/src/assets/images/svg/arrow-right.svg">
                                                             </span>
                                                             <img class="svg-icon-fallback" role="presentation" src="https://static.toss.im/icons/svg/icon-arrow-right-mono.svg">
                                                         </span>
