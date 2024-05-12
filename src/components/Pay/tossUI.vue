@@ -9,7 +9,7 @@
             </div>
             <div class="p-grid consumer-cache-67e79o">
                 <!-- Payment method buttons -->
-                <template v-for="method in paymentMethods">
+                <template v-for="method in paymentMethods" :paymentMethods="paymentMethods">
                     <div class="p-grid-col p-grid-col6">
                         <button :class="['p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l consumer-cache-1jf8qw4', 
                             {selected: selectedPayment.key === method.key}]" 
@@ -21,6 +21,14 @@
                         </button>
                     </div>
                 </template>
+                <div class="p-grid-col p-grid-col12" v-if="addBtn">
+                    <button @click="showAllPayment" class="p-button p-button--default p-button--block p-button--fill p-button--large p-button--has-icon padding--l consumer-cache-sgh3ys" type="button" aria-disabled="false">
+                        <span class="more-payment-methods">더보기</span>
+                        <span class="icon p-icon more-payment-methods" aria-hidden="false" role="presentation" style="height: 20px; width: 20px; min-width: 20px;">
+                            <img src="/src/assets//images/svg/arrow-bottom.svg"/>
+                        </span>
+                    </button>
+                </div>
             </div>
             <div class="p-grid consumer-cache-67e79o"  v-if="selectedPayment.key==='credit'">
                 <div class="p-grid-col p-grid-col3" v-for="(cardCompany, index) in cardCompanys" :key="index">
@@ -34,6 +42,7 @@
                     </button>
                 </div>
             </div>
+
             <div class="consumer-cache-ymq71h" v-if="selectedPayment.key==='credit'">
                 <div class="consumer-cache-105f3td">
                     <div class="input radius--m p-select input--medium p-select--medium">
@@ -239,11 +248,12 @@ import { ref, onMounted , computed} from 'vue';
 import "@/components/Pay/style.css";
 
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
-const selectedPayment = ref({key: null});
+const selectedPayment = ref({key: 'credit'});
 const selectedCardCompany = ref(null);
 const isOpen = ref(false);
 const checked = ref(false);
 const selected=ref('0');
+const addBtn = ref(true);
 
 function checkAgreement() {
   checked.value = !checked.value;
@@ -270,15 +280,14 @@ const selectedText = computed(() => {
     }
 });
 
-const paymentMethods = [
+const paymentMethods = ref([
   { key: 'credit', method:'카드', flowMode: 'DIRECT', label: '신용·체크카드' },
   { key: 'npay', method:'간편결제', flowMode: 'DIRECT', easyPay: '네이버페이', icon: '/src/assets/images/svg/pay/npay.svg'},
   { key: 'kakaopay', method:'간편결제', flowMode: 'DIRECT', easyPay: '카카오페이', icon: '/src/assets/images/svg/pay/kakaopay.svg'},
   { key: 'tosspay', method:'간편결제', flowMode: 'DIRECT', easyPay: '토스페이', icon: '/src/assets/images/svg/pay/tosspay.svg'},
-  { key: 'account_transfer', method:'계좌이체', label: '계좌이체'},
   { key: 'samsungpay', method:'간편결제', flowMode: 'DIRECT', easyPay: '삼성페이', icon: '/src/assets/images/svg/pay/samsungpay.svg'},
-  { key: 'ssgpay', method:'간편결제', flowMode: 'DIRECT', easyPay: 'SSG페이', icon: '/src/assets/images/svg/pay/ssgpay.svg'}
-];
+  { key: 'ssgpay', method:'간편결제', flowMode: 'DIRECT', easyPay: 'SSG페이', icon: '/src/assets/images/svg/pay/ssgpay.svg'},
+]);
 
 const cardCompanys = [
         { name: '신한', icon: '/src/assets/images/svg/pay/shinhan.svg'},
@@ -294,6 +303,11 @@ const cardCompanys = [
         { name: '케이뱅크', icon: '/src/assets/images/svg/pay/kbank.svg' },
         { name: '더보기', icon: '/src/assets/images/svg/etc.svg' }
       ]
+
+function showAllPayment() {
+    paymentMethods.value.push({ key: 'account_transfer', method:'계좌이체', label: '계좌이체'});
+    addBtn.value = !addBtn.value;
+}
 
 function selectMethod(method) {
     selectedPayment.value = method;
@@ -592,6 +606,17 @@ img, svg {
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.consumer-cache-sgh3ys {
+    position: relative;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(229, 232, 235);
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: 400;
+    color: rgb(51, 61, 75);
+    padding: 6px 8px !important;
 }
 
 /* 할부창 */
