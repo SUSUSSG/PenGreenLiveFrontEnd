@@ -23,14 +23,16 @@
             <div class="flex flex-row">
               <span class="chat-time">{{ message.time }}</span>
               <span class="chat-user-id">{{ message.writer }}</span>
-              <span class="chat-text">{{ message.message }}</span>
+              <span :class="{'chat-text': true, 'text-gray': message.message === '비속어가 포함된 채팅입니다.'}">
+                {{ message.message }}
+              </span>
             </div>
           </li>
         </ul>
       </div>
     </div>
     <div class="chat-input-container">
-      <textarea type="text" :placeholder="isBlocked ? `채팅이 비활성화됨 (${remainingTime})` : '채팅을 입력하세요'" v-model="newMessage" class="chat-input-field"
+      <input type="text" :placeholder="isBlocked ? `채팅이 비활성화됨 (${remainingTime})` : '채팅을 입력하세요'" v-model="newMessage" class="chat-input-field"
         @keyup.enter.prevent="sendChat" :disabled="isBlocked" />
       <button type="button" class="chat-send-button" @click="sendChat" :disabled="isBlocked">
         <Icon icon="heroicons-outline:paper-airplane" class="transform rotate-[60deg]" />
@@ -155,7 +157,7 @@ export default {
   },
   methods: {
     connect() {
-      const url = "ws://223.130.147.232:8090/ws/init";
+      const url = "ws://localhost:8090/ws/init";
       this.websocketClient = new Client({
         brokerURL: url,
         onConnect: () => {
@@ -375,7 +377,7 @@ export default {
   border-radius: 5rem;
   height: 40px;
   align-content: center;
-  text-indent: 1rem;
+  padding-left: 1rem;
   resize: none;
   overflow-y: hidden;
 }
@@ -400,7 +402,9 @@ export default {
   align-items: center;
   justify-content: center;
 }
-
+.text-gray {
+    color: #c3c3c3;
+  }
 .chat-send-button:hover {
   background: #265d8a;
 }
