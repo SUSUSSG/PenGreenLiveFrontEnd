@@ -11,11 +11,9 @@
 
 <script>
 import VideoPlayer from "@/components/Video/videoplayer.vue";
-import OvVideo from "@/views/test/OvVideo.vue";
 
 export default {
   components: {
-    OvVideo,
     VideoPlayer,
   },
   props: {
