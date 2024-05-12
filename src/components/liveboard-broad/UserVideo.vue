@@ -3,8 +3,8 @@
     <div class="text-base">
       송출 화면
     </div>
-    <div v-if="streamManager" class="video-player">
-      <VideoPlayer :stream-manager="streamManager"/>
+    <div v-if="streamManager">
+      <VideoPlayer :stream-manager="streamManager" class="video-player"/>
     </div>
   </div>
 </template>

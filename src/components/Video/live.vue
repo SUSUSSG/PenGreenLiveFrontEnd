@@ -11,7 +11,9 @@
     </div>
 
     <div class="video-and-sidebar-wrapper">
-      <VideoPlayer :videoSource="videoSourceSrc"></VideoPlayer>
+      <div v-if="streamManager">
+        <VideoPlayer :stream-manager="streamManager"></VideoPlayer>
+      </div>
       <div class="icons-sidebar" v-if="showIconSideBar">
         <div class="icon-wrapper" @click="toggleLike">
           <img
@@ -42,7 +44,6 @@ import muteIcon from "@/assets/images/all-img/mute.png";
 import shareIcon from "@/assets/images/all-img/share.png";
 import soundIcon from "@/assets/images/all-img/speaker.png";
 import redheart from "@/assets/images/all-img/redheart.png";
-import videoSource from "@/assets/video/test-video.mp4";
 
 export default {
   components: {
@@ -65,20 +66,21 @@ export default {
       type: Boolean,
       default: false,
     },
+    streamManager: Object,
   },
   data() {
     return {
       isLiked: false,
       likesCount: 100, // Dummy data
       isMuted: false,
-      videoUrl: "https://example.com/dummy-video-url", // Dummy data
       announceIconSrc: announceIcon,
       heartIconSrc: heartIcon,
       activeHeartIconSrc: redheart,
       muteIconSrc: muteIcon,
       soundIconSrc: soundIcon,
       shareIconSrc: shareIcon,
-      videoSourceSrc: videoSource,
+      OV: null,
+      session: null,
     };
   },
   methods: {
