@@ -57,14 +57,15 @@ export default {
   methods: {
     toggleVideo(isActive) {
       if (this.publisher) {
-        this.publisher.publishVideo(isActive);
+        console.log(!isActive);
+        this.publisher.publishVideo(!isActive);
       } else {
         console.error('Publisher is not initialized');
       }
     },
     toggleAudio(isActive) {
       if (this.publisher) {
-        this.publisher.publishAudio(isActive);
+        this.publisher.publishAudio(!isActive);
       } else {
         console.error('Publisher is not initialized');
       }
