@@ -32,10 +32,12 @@ export default {
     imgSrc: String,
     name: String,
     isSelected: Boolean,
+    categoryCd: String  // 카테고리 코드를 받을 수 있게 프로퍼티 추가
   },
   methods: {
     handleClick() {
-      this.$emit("select", this.name);
+      // 카테고리 코드를 이벤트와 함께 전달
+      this.$emit('category-selected', this.categoryCd);
     },
     scaleUp(event) {
       event.target.style.transform = "scale(1.1)";
@@ -46,6 +48,7 @@ export default {
   },
 };
 </script>
+
 
 <style scoped>
 

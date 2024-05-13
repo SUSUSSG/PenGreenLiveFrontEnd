@@ -71,7 +71,7 @@
           background-color: white;
         "
       >
-        <Categories />
+          <Categories @category-selected="onCategorySelected" />
         <hr class="mt-6 mb-12" />
       </div>
 
@@ -172,7 +172,7 @@ export default {
     MenuHeaderNav,
     ScrollTopButton,
   },
-  created() {
+  mounted() {
     this.fetchMainCarousels();
     this.fetchScheduledBroadcasts();
     this.fetchLiveChanceCarousels();
@@ -212,6 +212,16 @@ export default {
           discount: "64% 49,000원",
         },
       ],
+      categoryCodes: {
+        "전체": null,
+        "뷰티": "BCT-CTG-001",
+        "식품": "BCT-CTG-002",
+        "생활용품": "BCT-CTG-003",
+        "유아동": "BCT-CTG-004",
+        "테크": "BCT-CTG-005",
+        "패션": "BCT-CTG-006"
+      },
+      selectedCategory: "전체",
     };
   },
   methods: {
@@ -227,27 +237,43 @@ export default {
         });
     },
     fetchScheduledBroadcasts() {
-      axios
-        .get("http://localhost:8090/schedule")
+      const categoryCode = this.selectedCategory === '전체' ? null : this.selectedCategory;
+      const params = {};
+      if (categoryCode) {
+        params.categoryCd = categoryCode;
+      }
+      axios.get("http://localhost:8090/schedule", { params:params })
         .then((response) => {
           this.cardsData = response.data;
-          console.log("Scheduled broadcasts data:", this.cardsData); // 로그 출력
+          console.log("Scheduled broadcasts data:", this.cardsData);
         })
         .catch((error) => {
           console.error("Failed to fetch scheduled broadcasts:", error);
         });
     },
     fetchLiveChanceCarousels() {
-      axios
-        .get("http://localhost:8090/live-chance")
+      const categoryCode = this.selectedCategory === '전체' ? null : this.selectedCategory;
+      const params = {};
+      if (categoryCode) {
+        params.categoryCd = categoryCode;
+      }
+      axios.get("http://localhost:8090/live-chance", { params: params })  // params 객체를 올바르게 전달
         .then((response) => {
           this.liveItems = response.data;
-          console.log("Live chance carousels data:", this.liveItems); // 로그 출력
+          console.log("Live chance carousels data:", this.liveItems);
         })
         .catch((error) => {
           console.error("Failed to fetch live chance carousels:", error);
         });
     },
+
+
+    onCategorySelected(categoryCd) {
+      this.selectedCategory = categoryCd;
+      this.fetchScheduledBroadcasts();
+      this.fetchLiveChanceCarousels();
+    }
+    
   },
 };
 </script>
