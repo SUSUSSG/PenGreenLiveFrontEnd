@@ -57,7 +57,6 @@ export default {
 .menu-wrapper {
   display: flex;
   flex-direction: row;
-  width: 77%;
   height: 3rem;
   justify-content: center;
   align-items: center;
@@ -70,7 +69,7 @@ export default {
   justify-content: center;
   gap: 0.5rem;
   align-items: center;
-  font-size: 1rem;
+  font-size: 0.9rem;
   width: 25.6%;
   height: 100%;
   position: relative;
@@ -90,7 +89,7 @@ export default {
   a.active {
     color: #1f1606;
     font-weight: 500;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
 
     &::after {
       content: "";

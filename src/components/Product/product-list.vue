@@ -53,8 +53,8 @@
                             class="mb-2" />
                         <Textinput label="카테고리" type="text" name="editcategorycode" v-model="editModalData.categoryCd"
                             class="mb-2" />
-                            <Textinput label="정가" type="text" v-model="formattedListPrice"
-                name="editlistprice" class="mb-2" />
+                        <Textinput label="정가" type="text" v-model="formattedListPrice" name="editlistprice"
+                            class="mb-2" />
                         <Textinput label="재고" type="number" name="editproductstock" v-model="editModalData.productStock"
                             class="mb-2" />
                         <Textinput label="브랜드" type="text" name="brand" v-model="editModalData.brand" class="mb-2" />
@@ -227,42 +227,52 @@ export default {
     computed: {
         formattedListPrice: {
             get() {
-                // 숫자를 로컬 문자열 형식으로 포매팅
                 return this.editModalData.listPrice.toLocaleString();
             },
             set(value) {
-                // 입력값에서 콤마 제거 후 숫자로 변환하여 저장
                 this.editModalData.listPrice = parseFloat(value.replace(/,/g, ''));
             }
         }
     },
     created() {
         this.fetchProducts();
+        this.fetchProductsByVendorSeq();
     },
     methods: {
-        fetchProducts() {
-            axios.get('http://localhost:8090/product-list')
+        fetchProductsByVendorSeq() {
+            const vendorSeq = 1
+            if (vendorSeq) {
+                this.fetchProducts(vendorSeq);
+            } else {
+                console.error("No vendor sequence found in session");
+            }
+        },
+        fetchProducts(vendorSeq) {
+            axios.get(`http://localhost:8090/product-list/${vendorSeq}`)
                 .then(response => {
                     this.products = response.data;
-                    console.log("Products loaded", this.products);
+                    console.log("Vendor-specific products loaded", this.products);
                 })
                 .catch(error => {
-                    console.error("Error loading products:", error);
+                    console.error("Error loading vendor-specific products:", error);
                 });
         },
+        getVendorSeqFromSession() {
+            // 세션에서 vendor_seq 읽어오는 로직 구현
+            return sessionStorage.getItem('vendorSeq');
+        },
+
         formatNumber(value) {
             console.log('Formatting number:', value);
-            if (!value) return '0원';
-            return value.toLocaleString() + '원';
+            if (!value) return '0';
+            return value.toLocaleString();
         },
         updateListPrice(value) {
-            // 입력값에서 콤마 제거 후 숫자로 변환
             this.editModalData.listPrice = parseFloat(value.replace(/,/g, ''));
         },
         displayFormattedPrice(value) {
-            // 숫자를 로컬 문자열 형식으로 포매팅
-            if (!value) return '0';  // 값이 없거나 0인 경우 '0'을 반환
-            return parseFloat(value).toLocaleString();  // 포매팅 적용
+            if (!value) return '0';
+            return parseFloat(value).toLocaleString();  
         },
         handleAddImageUpload(event) {
             const file = event.target.files[0];
@@ -294,7 +304,7 @@ export default {
                 greenProductCd: row.greenProductCd,
                 productNm: row.productNm,
                 categoryCd: row.categoryCd,
-                listPrice: row.listPrice, // 숫자형으로 저장되어 있어야 함
+                listPrice: row.listPrice, 
                 productStock: row.productStock,
                 brand: row.brand,
                 imageSrc: row.imageUrl,
@@ -364,9 +374,9 @@ export default {
             };
         },
         formatNumber(value) {
-            console.log('Formatting number:', value);  
-            if (!value) return '0';  
-            return value.toLocaleString(); 
+            console.log('Formatting number:', value);
+            if (!value) return '0';
+            return value.toLocaleString();
         }
     }
 
@@ -389,6 +399,6 @@ export default {
 .buttons-container {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 16px; 
+    margin-bottom: 16px;
 }
 </style>
