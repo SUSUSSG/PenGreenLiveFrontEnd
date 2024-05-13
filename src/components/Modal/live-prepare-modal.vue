@@ -17,7 +17,7 @@
           <input type="range" id="microphoneVolume" v-model="microphoneVolume" min="0" max="100" disabled>
         </div>
         <button @click="toggleMonitor">{{ monitorActive ? '마이크 테스트 중지' : '마이크 테스트' }}</button>
-        <button class="test-broadcasting" @click="testBroadcasting">테스트 완료</button>
+        <button class="test-broadcasting" @click="testBroadcasting">장치 선택 완료</button>
       </div>
     </div>
   </div>
@@ -86,16 +86,15 @@ export default {
       }
     },
     testBroadcasting() {
-      // Emit an event with the selected settings
-      this.$emit('test-broadcast', {
+      // Emitting with camera and microphone IDs
+      this.$emit('broadcast-device-selected', {
         camera: this.selectedCamera,
         microphone: this.selectedMicrophone,
-        micVolume: this.microphoneVolume,
-        outVolume: this.outputVolume
       });
       this.showModal = false;
-      closeModal();
+      this.closeModal();
     },
+
     async getMediaDevices() {
       try {
         // Only proceed if the user has granted permission
@@ -211,7 +210,7 @@ export default {
 
       // 모달 상태 업데이트
       this.showModal = false;
-      this.destroy()
+      this.$el.remove();  // DOM에서 컴포넌트 제거
     }
   }
 };

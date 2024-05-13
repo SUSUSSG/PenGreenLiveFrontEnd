@@ -12,7 +12,7 @@
 
     <div class="video-and-sidebar-wrapper">
       <div v-if="streamManager">
-        <VideoPlayer :stream-manager="streamManager"></VideoPlayer>
+        <VideoPlayer :stream-manager="streamManager" :is-muted="isMuted"></VideoPlayer>
       </div>
       <div class="icons-sidebar" v-if="showIconSideBar">
         <div class="icon-wrapper" @click="toggleLike">
@@ -24,7 +24,7 @@
           <span class="likes-count">{{ likesCount }}</span>
         </div>
         <div class="icon-wrapper" @click="toggleMute">
-          <img :src="isMuted ? soundIconSrc : muteIconSrc" class="mute-icon" />
+          <img :src="isMuted ? muteIconSrc : soundIconSrc" class="mute-icon" />
           <span class="icon-label">Mute</span>
         </div>
         <div class="icon-wrapper" @click="share">
@@ -93,10 +93,16 @@ export default {
       // Additional functionality to actually mute the video can be implemented here
     },
     share() {
+      // 현재 페이지 URL을 클립보드에 복사
+      const currentUrl = window.location.href; // 현재 페이지의 URL을 가져옴
       navigator.clipboard
-        .writeText(this.videoUrl)
-        .then(() => alert("Video URL copied to clipboard!"))
-        .catch((err) => console.error("Failed to copy text: ", err));
+          .writeText(currentUrl)
+          .then(() => {
+            alert("Video URL copied to clipboard!"); // 성공 메시지
+          })
+          .catch((err) => {
+            console.error("Failed to copy text: ", err); // 오류 처리
+          });
     },
   },
 };
