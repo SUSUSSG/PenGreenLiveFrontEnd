@@ -15,7 +15,7 @@
           <LiveboardPrompt />
         </div>
         <div class="flex-col">
-          <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호"/>
+          <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호" @broadcast-device-selected="handleDeviceChange"/>
         </div>
       </div>
     </div>
@@ -55,16 +55,38 @@ export default {
     };
   },
   methods: {
+    handleDeviceChange({ camera, microphone }) {
+      // 카메라 변경
+      if (camera) {
+        navigator.mediaDevices
+            .getUserMedia({ video: { deviceId: camera } })
+            .then((newVideoStream) => {
+              const videoTrack = newVideoStream.getVideoTracks()[0];
+              this.publisher.replaceTrack(videoTrack);
+            });
+      }
+
+      // 마이크 변경
+      if (microphone) {
+        navigator.mediaDevices
+            .getUserMedia({ audio: { deviceId: microphone } })
+            .then((newAudioStream) => {
+              const audioTrack = newAudioStream.getAudioTracks()[0];
+              this.publisher.replaceTrack(audioTrack);
+            });
+      }
+    },
     toggleVideo(isActive) {
       if (this.publisher) {
-        this.publisher.publishVideo(isActive);
+        console.log(!isActive);
+        this.publisher.publishVideo(!isActive);
       } else {
         console.error('Publisher is not initialized');
       }
     },
     toggleAudio(isActive) {
       if (this.publisher) {
-        this.publisher.publishAudio(isActive);
+        this.publisher.publishAudio(!isActive);
       } else {
         console.error('Publisher is not initialized');
       }
