@@ -1,8 +1,8 @@
 <template>
   <section class="border-container">
-    <ScrollTopButton/>
-    <MenuHeaderNav/>
-    <hr/>
+    <ScrollTopButton />
+    <MenuHeaderNav />
+    <hr />
     <div>
       <swiper
         :slidesPerView="'auto'"
@@ -19,46 +19,64 @@
           :key="index"
           class="carousel-slide"
         >
-        <div class="slide-background"> 
-          <div  :style="{ backgroundImage: `url(${item.mainImage})`, filter: 'blur(30px) brightness(110%) saturate(100%) contrast(100%)', position:'absolute', width:'100%', 'z-index':'0', height:'100%'}">.</div>
+          <div class="slide-background">
+            <img :src="'data:image/jpeg;base64,' + item.broadcastImage"
+              :style="{
+                filter:
+                  'blur(30px) brightness(110%) saturate(110%) contrast(90%)',
+                position: 'absolute',
+                width: '100%',
+                'z-index': '0',
+                height: '100%',
+              }"
+            />
             <img
-              :src="item.mainImage"
+              :src="'data:image/jpeg;base64,' + item.broadcastImage"
               alt="Carousel Image"
               class="background-image"
             />
             <div class="slide-content">
-              <div style="display:flex; flex-direction:column; width:100%; ">
-                <h4 v-if="item.title">{{ item.title }}</h4>
-                <p v-if="item.description">{{ item.description }}</p>
+              <div style="display: flex; flex-direction: column; width: 100%">
+                <h4 v-if="item.broadcastTitle">{{ item.broadcastTitle }}</h4>
+                <p v-if="item.broadcastSummary">{{ item.broadcastSummary }}</p>
               </div>
               <div class="additional-images-container">
                 <div
-                  v-for="(additionalImage, subIndex) in item.additionalImages"
-                  :key="'additional-image-' + index + '-' + subIndex"
+                  v-for="(product, subIndex) in item.products"
+                  :key="'product-' + index + '-' + subIndex"
                 >
-                  <img :src="additionalImage" class="additional-image" />
+                  <img :src="product.productImage" class="additional-image" />
                   <div class="additional-image-title">
-                    {{ item.additionalImagesTitle[subIndex] }}
+                    {{ product.productNm }}
                   </div>
                   <div class="additional-image-price">
-                    {{ item.additionalImagesPrice[subIndex] }}
+                    {{ product.discountPrice }}
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+        </div>
         </swiper-slide>
       </swiper>
     </div>
-    
+
     <section class="under-category-section">
-      <hr class="mb-3"/>
-      <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
-        <Categories/>
-        <hr class="mt-6 mb-12"/>
+      <hr class="mb-3" />
+      <div
+        style="
+          position: sticky;
+          top: 5.5rem;
+          z-index: 10;
+          background-color: white;
+        "
+      >
+        <Categories />
+        <hr class="mt-6 mb-12" />
       </div>
 
-      <h5 class="live-title mb-6" style="padding-left : 32px;">바로 지금! 라이브 찬스</h5>
+      <h5 class="live-title mb-6" style="padding-left: 32px">
+        바로 지금! 라이브 찬스
+      </h5>
       <div class="live-section">
         <swiper
           :slidesPerView="'auto'"
@@ -87,10 +105,17 @@
           </swiper-slide>
         </swiper>
       </div>
-      <hr class="mt-6 mb-12"/>
+      <hr class="mt-6 mb-12" />
       <div class="more-link-wrapper">
-        <h5 class="live-title mb-6" style="padding-left : 32px;">예정된 라이브</h5>
-        <router-link to="/schedule" class="more-link mb-3" style="padding-right: 32px;">더 보기</router-link>
+        <h5 class="live-title mb-6" style="padding-left: 32px">
+          예정된 라이브
+        </h5>
+        <router-link
+          to="/schedule"
+          class="more-link mb-3"
+          style="padding-right: 32px"
+          >더 보기</router-link
+        >
       </div>
       <swiper
         :slidesPerView="'auto'"
@@ -116,7 +141,6 @@
     </section>
     <hr />
   </section>
-  
 </template>
 
 <script>
@@ -130,6 +154,8 @@ import CardComponent from "@/components/Card/BroadcastCard.vue";
 import menuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
+import axios from "axios";
+
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 export default {
@@ -140,6 +166,11 @@ export default {
     CardComponent,
     MenuHeaderNav,
     ScrollTopButton,
+  },
+  created() {
+    this.fetchMainCarousels();
+    this.fetchScheduledBroadcasts();
+    this.fetchLiveChanceCarousels();
   },
   data() {
     return {
@@ -188,37 +219,6 @@ export default {
           ],
           additionalImagesTitle: ["테스트 상품1", "테스트 상품2"],
           additionalImagesPrice: ["10,000원", "15,000원"],
-        },
-      ],
-      hotLiveCarousels: [
-        {
-          viewersCount: 158,
-          mainImage:
-            "https://img.etoday.co.kr/pto_db/2024/04/20240419110132_2014644_647_358.jpg",
-          title: "첫 번째 슬라이드",
-          description: "첫 번째 슬라이드에 대한 설명입니다.",
-          additionalImages: [
-            "https://emoji.slack-edge.com/T0674GTPH0A/%25EB%258D%25A4%25EB%25B8%2594%25EB%258F%2584%25EC%2596%25B4%25EB%25B0%2595%25EC%2588%2598/cf86b0e2fc5e5f82.gif",
-            "http://via.placeholder.com/80x80",
-          ],
-        },
-        {
-          viewersCount: 163,
-          mainImage: "https://i.ytimg.com/vi/7DSJl9e-UUE/maxresdefault.jpg",
-          title: "두 번째 슬라이드",
-          description: "두 번째 슬라이드에 대한 설명입니다.",
-          additionalImages: [
-            "http://via.placeholder.com/80x80",
-            "http://via.placeholder.com/80x80",
-          ],
-        },
-        {
-          viewersCount: 179,
-          mainImage:
-            "https://i.ytimg.com/vi/mZPkoLfdGQg/oardefault.jpg?sqp=-oaymwEYCJUDENAFSFqQAgHyq4qpAwcIARUAAIhC&rs=AOn4CLCFJ-0K3KXYHBQNleHWKeh-ljm5Nw",
-          title: "3 번째 슬라이드",
-          description: "3 번째 슬라이드에 대한 설명입니다.",
-          additionalImages: ["http://via.placeholder.com/80x80"],
         },
       ],
       cardsData: [
@@ -333,11 +333,45 @@ export default {
       ],
     };
   },
+  methods: {
+    fetchMainCarousels() {
+      axios
+        .get("http://localhost:8090/main-carousels")
+        .then((response) => {
+          this.carousels = response.data;
+          console.log("Main carousels data:", this.carousels); // 로그 출력
+        })
+        .catch((error) => {
+          console.error("Failed to fetch main carousels:", error);
+        });
+    },
+    fetchScheduledBroadcasts() {
+      axios
+        .get("http://localhost:8090/schedule")
+        .then((response) => {
+          this.cardsData = response.data;
+          console.log("Scheduled broadcasts data:", this.cardsData); // 로그 출력
+        })
+        .catch((error) => {
+          console.error("Failed to fetch scheduled broadcasts:", error);
+        });
+    },
+    fetchLiveChanceCarousels() {
+      axios
+        .get("http://localhost:8090/live-chance")
+        .then((response) => {
+          this.liveItems = response.data;
+          console.log("Live chance carousels data:", this.liveItems); // 로그 출력
+        })
+        .catch((error) => {
+          console.error("Failed to fetch live chance carousels:", error);
+        });
+    },
+  },
 };
 </script>
 <style scoped>
-
-.border-container{
+.border-container {
   width: 74%;
   margin: auto;
   border: 1px solid rgb(224, 224, 224);
@@ -370,7 +404,7 @@ export default {
   border-radius: 20px;
   margin: 2rem 0 2rem 2rem;
   aspect-ratio: 3 / 4;
-  z-index:1;
+  z-index: 1;
 }
 
 .main-caro .slide-content {
@@ -387,7 +421,7 @@ export default {
 .main-caro h2 {
   font-size: 2em;
   margin-bottom: 0.5em;
-  font-weight: 500!important;
+  font-weight: 500 !important;
 }
 
 .main-caro p {
@@ -400,7 +434,7 @@ export default {
   padding: 4px 16px;
   width: -webkit-fit-content;
   border-radius: 50px;
-  margin-top: 1rem; 
+  margin-top: 1rem;
 }
 
 .main-caro .start-button {
@@ -425,7 +459,7 @@ export default {
   align-items: center;
   width: 120px;
 }
-.main-caro .additional-image-price{
+.main-caro .additional-image-price {
   padding-left: 4px;
   font-weight: bold;
 }
