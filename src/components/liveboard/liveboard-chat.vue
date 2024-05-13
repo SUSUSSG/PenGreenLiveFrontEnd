@@ -16,6 +16,10 @@
     <div class="scroll-wrapper">
       <div class="chat-container flex flex-col justify-end">
         <ul class="chat-messages">
+          <div class="enter-message" style="display: none;">
+            -- 채팅방에 입장했습니다 --<br>
+            바람직한 채팅 문화를 위해 바른 언어를 사용해요😉🐧
+          </div>
           <li v-for="message in chatMessages" :key="message.seq" class="chat-message flex">
             <div class="mr-2 flex items-center">
               <Icon v-if="showDeleteIcon" icon="heroicons:x-mark-20-solid" @click="deleteMessage(message.seq)"></Icon>
@@ -134,6 +138,19 @@ export default {
     this.speechSynthesis = window.speechSynthesis;
 
     this.connect();
+    
+    this.$nextTick(() => {
+    const enterMessage = this.$el.querySelector('.enter-message');
+    enterMessage.style.display = 'block';
+
+    setTimeout(() => {
+      
+      enterMessage.classList.add('fade-out');
+      setTimeout(() => {
+        enterMessage.style.display = 'none';
+      },1000);
+    }, 5000);
+  });
   },
 
   beforeUnmount() {
@@ -164,6 +181,7 @@ export default {
   methods: {
     connect() {
       const url = "ws://223.130.147.232:8090/ws/init";
+      // const url = "ws://localhost:8090/ws/init";
       this.websocketClient = new Client({
         brokerURL: url,
         onConnect: () => {
@@ -450,5 +468,20 @@ export default {
 
 .text-base {
   font-weight: bold;
+}
+
+.enter-message {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  text-align:center; 
+  font-weight:bold; 
+  opacity: 1;
+  transition: opacity 1s ease-out;
+}
+.enter-message.fade-out {
+  opacity: 0;
 }
 </style>
