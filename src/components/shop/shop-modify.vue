@@ -92,7 +92,7 @@ export default {
         formData.append('image', this.shopInfo.image);
       }
 
-      const url = `http://localhost:8090/shop-modify/${this.shopInfo.channelSeq}`;
+      const url = `http://localhost:8090/shop/${this.shopInfo.channelSeq}`;
 
       axios.put(url, formData, {
         headers: {
