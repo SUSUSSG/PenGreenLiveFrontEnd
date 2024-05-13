@@ -25,46 +25,50 @@
 </template>
   
 <script setup>
-  import { ref, onMounted } from 'vue';
-  import { useRoute, useRouter } from 'vue-router';
-  import { confirmPayment } from '@/constant/confirmPayment';
-  import Button from '@/components/Button';
-  import '@/components/Pay/style.css';
+import { ref, onMounted } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import axios from 'axios';
+import Button from '@/components/Button';
+import "@/components/Pay/style.css";
 
-  const route = useRoute();
-  const router = useRouter();
-  const confirmed = ref(false);
-  const jsonData = ref({orderId:null});
-  const totalPrice = ref(null);
 
-  onMounted(async () => {
-    // route.query에서 orderId, amount, paymentKey 값을 가져옵니다.
-    const orderId = route.query.orderId;
-    const amount = route.query.amount;
-    const paymentKey = route.query.paymentKey;
+const route = useRoute();
+const router = useRouter();
+const confirmed = ref(false);
+const jsonData = ref({ orderId: null });
+const totalPrice = ref(null);
+const submittedData = ref(null);
 
-    if (!orderId || !amount || !paymentKey) {
-      console.error('Missing query parameters:', { orderId, amount, paymentKey });
-      return;
+onMounted(async () => {
+  const { orderId, amount, paymentKey } = route.query;
+
+  if (!orderId || !amount || !paymentKey) {
+    console.error('Missing query parameters:', { orderId, amount, paymentKey });
+    return;
+  }
+
+  const requestData = { orderId, amount, paymentKey };
+  const config = {
+    headers: { "Content-Type": "application/json" }
+  };
+
+  try {
+    const response = await axios.post('http://localhost:8090/api/payments/confirm', requestData, config);
+    if (response.status === 200) {
+      confirmed.value = true;
+      jsonData.value = response.data;
+      totalPrice.value = response.data.totalAmount.toLocaleString();
+      console.log('Payment confirmed:', jsonData.value);
+    } else {
+      console.log(`Received unexpected status code: ${response.status}`);
     }
-
-    const requestData = { orderId, amount, paymentKey };
-
-    async function confirm() {
-      try {
-        const { response, json } = await confirmPayment(requestData);
-        if (!response.ok) {
-          router.push(`/fail?message=${json.message}&code=${json.code}`);
-        } else {
-          confirmed.value = true;
-          jsonData.value = json;
-          totalPrice.value = json.totalAmount.toLocaleString();
-          console.log(jsonData);
-        }
-      } catch (error) {
-        console.error('Payment confirmation failed:', error);
-      }
+  } catch (error) {
+    if (error.response) {
+      console.error('Payment confirmation failed:', error.response.data);
+      router.push(`/fail?message=${error.response.data.message}&code=${error.response.status}`);
+    } else {
+      console.error('Error sending request:', error.message);
     }
-    confirm();
-  });
+  }
+});
 </script>

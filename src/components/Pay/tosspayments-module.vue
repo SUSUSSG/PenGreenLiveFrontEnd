@@ -223,7 +223,6 @@
                                 </div>
                             </div>
                         </Transition>
-
                         <div style="flex: 0 0 auto; height: 10px;"></div>
                         <div class="consumer-cache-1vnjgb6">
                             <span role="text" class="text adaptive-grey500-text text--word-break typography-t7 text--font-weight-regular text--display-inline-block" style="color: var(--adaptiveGrey500);"></span>
@@ -231,22 +230,19 @@
                     </div>
                 </div>
             </div>
-
             <div class="w-full flex items-center justify-center">
                 <button @click="requestPayment" class="button w-full" id="payment-button">결제하기</button>
             </div>
         </section>
-           
         </div>
     </div>
-    
 </template>
 
 <script setup>
 import { ref, onMounted , computed} from 'vue';
 import { nanoid } from "nanoid"; 
+import axios from 'axios';
 import "@/components/Pay/style.css";
-
 
 const props = defineProps({
     productName: String,
@@ -340,7 +336,26 @@ function loadTossPaymentsSDK() {
   });
 }
 
+const submittedData = ref(null);
+
+async function postPaymentInfo() {
+    const formData = {"orderId": orderId, "amount": totalPrice};
+    try {
+        const response = await axios.post("http://localhost:8090" +'/api/payments/verify', formData);
+        submittedData.value = response.data;
+    } catch (error) {
+        console.error('Error submitting form:', error);
+        submittedData.value = `Error: ${error.message}`;
+    }
+
+    console.log("결제 요청전 검증", submittedData.value);
+}
+
+
+// 결제 요청 
 async function requestPayment() {
+    postPaymentInfo();
+
   try {
     const defaultRequestPaymentData = ref({
         amount: props.totalPrice,
@@ -356,11 +371,9 @@ async function requestPayment() {
       defaultRequestPaymentData.value.easyPay = selectedPayment.value.easyPay;
     }
 
-    if (selectedPayment.value.method === '카드') {
+    else if (selectedPayment.value.method === '카드') {
       defaultRequestPaymentData.value.cardCompany = selectedCardCompany.value;
     }
-
-    console.log(defaultRequestPaymentData.value);
 
     await tossPayments.value.requestPayment('카드', {
         ...defaultRequestPaymentData.value,
