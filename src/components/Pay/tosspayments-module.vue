@@ -241,11 +241,8 @@
 <script setup>
 import { ref, onMounted , computed} from 'vue';
 import { nanoid } from "nanoid"; 
-import {useStore} from 'vuex';
 import axios from 'axios';
 import "@/components/Pay/style.css";
-
-const store = useStore();
 
 const props = defineProps({
     productName: String,
