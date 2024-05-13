@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="flex-col">
-          <LiveBoardStatistics />
+          <LiveBoardStatistics :session-id="mySessionId" :start-check="readyToCheck" />
           <LiveboardProduct />
           <LiveboardPrompt />
         </div>
@@ -53,6 +53,8 @@ export default {
       mySessionId: '',
       myUserName: "Admin",
       isSessionActive: false,
+      totalViewers : 0,
+      readyToCheck: false,
     };
   },
   methods: {
@@ -147,6 +149,8 @@ export default {
             });
       });
       this.isSessionActive = true;
+      this.readyToCheck = true;  // 방송을 시작할 때 true로 설정
+      console.log(this.readyToCheck);
       window.addEventListener("beforeunload", this.leaveSession);
     },
     //세션을 종료합니다.
@@ -169,6 +173,7 @@ export default {
       // Remove beforeunload listener
       window.removeEventListener("beforeunload", this.leaveSession);
       this.isSessionActive = false;
+      this.readyToCheck = false;  // 방송을 중지할 때 false로 설정
       this.$router.push('/broadcast-statistics');
     },
     // 비동기 요청으로 세션을 만들고 세션 접속에 필요한 토큰을 가져옵니다.
@@ -184,7 +189,7 @@ export default {
       return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions/${sessionId}/connections`, {}, {
         headers: { 'Content-Type': 'application/json' }
       }).then(response => response.data);
-    }
+    },
   },
   //컴포넌트가 생성될 시 mySessionId변수에 현재 url정보(방송id)를 할당합니다.
   created() {
