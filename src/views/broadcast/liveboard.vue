@@ -51,18 +51,27 @@ export default {
       publisher: undefined,
       subscribers: [],
       mySessionId: '',
-      myUserName: "Admin"
+      myUserName: "Admin",
+      isSessionActive: false,
     };
   },
   methods: {
     handleDeviceChange({ camera, microphone }) {
       // 카메라 변경
       if (camera) {
+        console.log("카메라");
+        console.log(camera);
         navigator.mediaDevices
-            .getUserMedia({ video: { deviceId: camera } })
+            .getUserMedia({
+              video: { deviceId: camera, width: 900, height: 1600 } // 새로운 해상도 설정
+            })
             .then((newVideoStream) => {
+              console.log(camera);
               const videoTrack = newVideoStream.getVideoTracks()[0];
               this.publisher.replaceTrack(videoTrack);
+            })
+            .catch((error) => {
+              console.error('Error accessing camera stream:', error);
             });
       }
 
@@ -73,6 +82,9 @@ export default {
             .then((newAudioStream) => {
               const audioTrack = newAudioStream.getAudioTracks()[0];
               this.publisher.replaceTrack(audioTrack);
+            })
+            .catch((error) => {
+              console.error('Error accessing microphone:', error);
             });
       }
     },
@@ -92,6 +104,10 @@ export default {
       }
     },
     joinSession() {
+      if (this.isSessionActive) {
+        console.log("세션은 이미 활성화 상태입니다.");
+        return;
+      }
       this.OV = new OpenVidu();
       this.session = this.OV.initSession();
       this.session.on("streamCreated", ({ stream }) => {
@@ -127,9 +143,15 @@ export default {
               console.log("There was an error connecting to the session:", error.code, error.message);
             });
       });
+      this.isSessionActive = true;
       window.addEventListener("beforeunload", this.leaveSession);
     },
     leaveSession() {
+      if (!this.isSessionActive) {
+        console.log("세션은 이미 종료되었습니다.");
+        return;
+      }
+      console.log("세션 끝");
       // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
       if (this.session) this.session.disconnect();
 
@@ -142,6 +164,8 @@ export default {
 
       // Remove beforeunload listener
       window.removeEventListener("beforeunload", this.leaveSession);
+      this.isSessionActive = false;
+      this.$router.push('/broadcast-statistics');
     },
     getToken(sessionId) {
       return this.createSession(sessionId).then(sessionId => this.createToken(sessionId));
