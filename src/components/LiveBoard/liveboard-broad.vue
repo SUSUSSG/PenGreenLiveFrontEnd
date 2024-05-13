@@ -4,7 +4,7 @@
       송출 화면
     </div>
     <div v-if="streamManager" class="video-player">
-      <VideoPlayer :stream-manager="streamManager"/>
+      <VideoPlayer :stream-manager="streamManager" :is-muted="true"/>
     </div>
   </div>
 </template>
