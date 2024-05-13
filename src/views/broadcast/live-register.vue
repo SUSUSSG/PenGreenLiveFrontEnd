@@ -53,11 +53,11 @@
             <label>대표 이미지 등록</label>
             <div style="display: flex; align-items: center;">
               <div style="flex-shrink: 0;">
-                <img :src="imageSrc" alt="대표 이미지 미리보기" style="width: 100px; height: 100px" />
+                <img :src="imageSrc" alt="대표 이미지 미리보기" style="width: 180px; height: 320px" />
               </div>
               <div style="margin-left: 20px;">
                 <p>최대 용량 : 1mb</p>
-                <p>권장 사이즈 : 400 x 400</p>
+                <p>권장 사이즈 : 720 x 1280</p>
                 <input type="file" id="imageUpload" @change="handleImageUpload"
                   accept="image/jpeg, image/png, image/gif" class="mb-2" />
               </div>
@@ -104,7 +104,7 @@
                         <!-- <td class="px-7"><img :src="'data:image/png;base64,' + product.productImg"></td> -->
                         <td class="px-6">{{ product.productName }}</td>
                         <td class="px-6">{{ product.productCode }}</td>
-                        <td class="px-6">{{ product.originalPrice }}</td>
+                        <td class="px-6">{{ formatCurrency(product.originalPrice) }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -136,12 +136,12 @@
                       <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
                       <td class="px-6 py-4">
                         <input type="number" v-model.number="product.discountRate" class="input-control">
-                        <Button @click="applyDiscount(index)" :class="{ 'btn-outline-dark': !isLoading }"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="적용" />
+                        <Button @click="applyDiscount(index)" btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5"
+                          type="button" text="적용" />
                       </td>
-                      <td class="px-6 py-4">{{ formatCurrency(product.discountedPrice) }}</td>
+                      <td class="px-6 py-4">{{ formatCurrency(product.discountPrice) }}</td>
                       <td class="px-6 py-4">
-                        <Button @click="registerProduct(index)" :class="{ 'btn-outline-dark': !isLoading }"
+                        <Button @click="registerProduct(index)"
                           btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="등록" />
                       </td>
                     </tr>
@@ -154,7 +154,7 @@
                     <div class="bg-gray-100 p-2 rounded">
                       <span class="registered-name">{{ registered.name }}</span>
                       <span class="registered-code">({{ registered.code }})</span>
-                      방송 판매가 : <span class="registered-price"> {{ formatCurrency(registered.discountedPrice) }}</span>
+                      방송 판매가 : <span class="registered-price"> {{ formatCurrency(registered.discountPrice) }}</span>
                       <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" style="float: right;"
                         class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
                     </div>
@@ -173,9 +173,9 @@
               <div class="flex items-center justify-between">
                 <Textinput label="공지 사항" type="text" name="newNotice" v-model="newNotice" placeholder="공지사항 입력"
                   class="mb-2 flex-grow" />
-                <Button :disabled="!canAddNotice" @click="addNotice"
-                  :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
-                  btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5" text="추가"></Button>
+                <Button @click="addNotice" type="button"
+                  btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark"
+                  text="추가"></Button>
               </div>
               <ul>
                 <li v-for="(notice, index) in notices" :key="index"
@@ -193,9 +193,8 @@
               <div class="flex items-center justify-between">
                 <Textinput label="라이브 혜택" type="text" name="newBenefit" v-model="newBenefit" placeholder="라이브 혜택 입력"
                   class="mb-2 flex-grow" />
-                <Button :disabled="!canAddBenefit" @click="addBenefit"
-                  :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
-                  btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" text="추가"></Button>
+                <Button @click="addBenefit" type="button"
+                  btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" text="추가"></Button>
               </div>
               <ul>
                 <li v-for="(item, index) in benefits" :key="index"
@@ -218,9 +217,9 @@
                   <Textarea label="답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
                 </div>
                 <div class="text-center mb-2"> <!-- 추가하기 버튼을 오른쪽 중간에 위치시키기 위해 text-center 추가 -->
-                  <Button :disabled="!canAddAnswer" @click="addAnswer"
-                    :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
-                    btnClass="btn inline-flex justify-center btn-sm justify-between" text="추가"></Button>
+                  <Button @click="addAnswer" type="button"
+                    btnClass="btn inline-flex justify-center btn-sm justify-between btn-outline-dark"
+                    text="추가"></Button>
                 </div>
               </div>
               <dl>
@@ -228,8 +227,8 @@
                   <div class="bg-gray-100 p-2 rounded">
                     <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" style="float: right;"
                       class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
-                    <dt class="question">{{ item.question }}</dt>
-                    <dd class="answer">{{ item.answer }}</dd>
+                    <dt class="question">{{ item.questionTitle }}</dt>
+                    <dd class="answer">{{ item.questionAnswer }}</dd>
                   </div>
                 </div>
               </dl>
@@ -249,7 +248,7 @@
             <Button @click.prevent="next()" text="다음" btnClass="btn-dark" />
           </div>
           <div v-else class="flex justify-end w-full">
-            <Button @click.prevent="save()" text="등록" btnClass="btn-dark" />
+            <Button @click="saveBroadcast()" text="등록" btnClass="btn-dark" />
           </div>
         </div>
       </form>
@@ -302,18 +301,18 @@ export default {
     const toast = useToast();
     let stepNumber = ref(0);
 
-    const submit = () => {
-      let totalSteps = steps.length;
-      const isLastStep = stepNumber.value === totalSteps - 1;
-      if (isLastStep) {
-        stepNumber = totalSteps - 1;
-        toast.success("Form Submitted", {
-          timeout: 2000,
-        });
-      } else {
-        stepNumber.value++;
-      }
-    };
+    // const submit = () => {
+    //   let totalSteps = steps.length;
+    //   const isLastStep = stepNumber.value === totalSteps - 1;
+    //   if (isLastStep) {
+    //     stepNumber = totalSteps - 1;
+    //     toast.success("Form Submitted", {
+    //       timeout: 2000,
+    //     });
+    //   } else {
+    //     stepNumber.value++;
+    //   }
+    // };
 
     const prev = () => {
       if (stepNumber.value > 0) {
@@ -334,7 +333,7 @@ export default {
     };
 
     return {
-      submit,
+      // submit,
       prev,
       next,
       save,
@@ -356,6 +355,7 @@ export default {
       //step2
       channelSalesProduct: [
         {
+          productSeq: '',
           productImg: '',
           productName: '',
           productCode: '', //상품번호 추가
@@ -409,6 +409,7 @@ export default {
         .then(response => {
           console.log(response.data);
           this.channelSalesProduct = response.data.map(product => ({
+            productSeq: product.productSeq,
             productImg: product.productImage,
             productName: product.productNm,
             productCode: product.productCd,
@@ -432,6 +433,7 @@ export default {
         if (!isDuplicateInProductsToRegister && !isDuplicateInRegisteredProducts) {
           // productsToRegister 배열에 추가
           this.productsToRegister.push({
+            productSeq: product.productSeq,
             name: product.productName,
             code: product.productCode,
             originalPrice: product.originalPrice
@@ -449,7 +451,7 @@ export default {
     applyDiscount(index) {
       const product = this.productsToRegister[index];
       const discount = (product.originalPrice * product.discountRate) / 100;
-      product.discountedPrice = product.originalPrice - discount;
+      product.discountPrice = product.originalPrice - discount;
     },
 
 
@@ -471,37 +473,14 @@ export default {
       if (!value) return '';
       return `${parseInt(value).toLocaleString('ko-KR')}원`;
     },
-    addProduct() {
-      if (this.canAddProduct) {
-        this.products.push({ ...this.newProduct });
-        // Reset newProduct for the next entry
-        this.newProduct = {
-          name: '',
-          code: '',
-          originalPrice: 0,
-          discountRate: 0,
-          discountedPrice: 0,
-        };
-      }
-    },
     registerProduct(index) {
       const product = this.productsToRegister[index];
-      product.discountedPrice = product.originalPrice - (product.originalPrice * product.discountRate / 100);
+      product.discountPrice = product.originalPrice - (product.originalPrice * product.discountRate / 100);
       this.registeredProducts.push(product);
       this.productsToRegister.splice(index, 1); // Optionally remove from to-register list
     },
     deleteRegisteredProduct(index) {
       this.registeredProducts.splice(index, 1);
-    },
-    submitForm() {
-      if (!this.canSubmit) return;
-      this.isLoading = true;
-      // Form submission logic would go here
-      setTimeout(() => {
-        this.isLoading = false;
-        alert('Form submitted successfully!');
-      }, 2000);
-      this.save();
     },
     addNotice() {
       if (this.newNotice.trim()) {
@@ -517,7 +496,7 @@ export default {
     },
     addAnswer() {
       if (this.newQuestion.trim() && this.newAnswer.trim()) {
-        this.qa.push({ question: this.newQuestion, answer: this.newAnswer }); // Add as an object
+        this.qa.push({ questionTitle: this.newQuestion, questionAnswer: this.newAnswer }); // Add as an object
         this.newQuestion = '';
         this.newAnswer = '';
       }
@@ -535,6 +514,50 @@ export default {
     deleteProduct(idx) {
       this.registeredProducts.splice(idx, 1);
     },
+    saveBroadcast() {
+      const toast = useToast();
+
+      // JSON 형식의 데이터 구성
+      const requestData = {
+        broadcastTitle: this.liveTitle,
+        broadcastSummary: this.liveSummary,
+        broadcastScheduledTime: this.liveDateTime,
+        categoryCd: this.selectedCategory,
+        registeredProducts: this.registeredProducts, // registeredProducts는 배열
+        notices: this.notices, // notices는 배열
+        qa: this.qa, // qa는 배열
+        benefits: this.benefits // benefits는 배열
+      };
+      console.log(requestData.broadcastTitle);
+      console.log(requestData.broadcastSummary);
+      console.log(requestData.broadcastScheduledTime);
+      console.log(requestData.categoryCd);
+      console.log(requestData.registeredProducts);
+      console.log(requestData.notices);
+      console.log(requestData.qa);
+      console.log(requestData.benefits);
+
+      // 이미지 파일을 FormData에 추가
+      const formData = new FormData();
+      if (this.imageFile) {
+        formData.append('image', this.imageFile);
+        console.log(formData);
+      }
+
+      // JSON 형식의 데이터를 백엔드로 전송
+      axios.post('http://localhost:8090/live-register', requestData)
+        .then(response => {
+          toast.success("방송 정보가 등록되었습니다.", {
+            timeout: 2000,
+          });
+        })
+        .catch(error => {
+          console.error("등록 실패 : ", error);
+          toast.error("방송 등록에 실패했습니다.", {
+            timeout: 2000,
+          });
+        });
+    }
   }
 };
 </script>
