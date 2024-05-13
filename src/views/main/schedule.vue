@@ -1,30 +1,41 @@
 <template>
-  <ScrollTopButton/>
-  <MenuHeaderNav class="under-category-section" style="width: 77%; margin: auto"/>
-  <DataTab class="under-category-section" style="width: 77%; margin: auto; border:1px 1px 0 1px solid #e6e7eb"/>
-  <div class="under-category-section" style="width: 77%; margin: auto; border:1px solid #e6e7eb; position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
-    <Categories style="padding-bottom: 1rem;"/>
-  </div>
+  <ScrollTopButton />
 
-  <div class="content-wrapper">
-   
-    <CardSchedule
-      v-for="(item, index) in liveData"
-      :key="index"
-      :liveTime="item.liveTime"
-      :thumbnailUrl="item.thumbnailUrl"
-      :liveTitle="item.liveTitle"
-      :liveBenefitTitle="item.liveBenefitTitle"
-      :productName="item.productName"
-      :productImgUrl="item.productImgUrl"
-      :productDescription="item.productDescription"
-      :productPrice="item.productPrice"
-      :shopName="item.shopName"
-      :shopThumbnailUrl="item.shopThumbnailUrl"
-      class="mt-8"
-    />
-    <hr class="mt-6" />
+  <div class="border-container">
+    <MenuHeaderNav />
     <hr />
+    <DataTab />
+    <hr />
+    <div
+      style="
+        position: sticky;
+        top: 5.5rem;
+        z-index: 10;
+        background-color: white;
+      "
+    >
+      <Categories style="padding-bottom: 1rem" />
+      <hr />
+    </div>
+    <div class="content-wrapper">
+      <CardSchedule
+        v-for="(item, index) in liveData"
+        :key="index"
+        :liveTime="item.liveTime"
+        :thumbnailUrl="item.thumbnailUrl"
+        :liveTitle="item.liveTitle"
+        :liveBenefitTitle="item.liveBenefitTitle"
+        :productName="item.productName"
+        :productImgUrl="item.productImgUrl"
+        :productDescription="item.productDescription"
+        :productPrice="item.productPrice"
+        :shopName="item.shopName"
+        :shopThumbnailUrl="item.shopThumbnailUrl"
+        class="mt-8"
+      />
+      <hr class="mt-6" />
+      <hr />
+    </div>
   </div>
 </template>
 
@@ -127,25 +138,20 @@ export default {
 };
 </script>
 <style scoped>
-.content-wrapper {
-  width: 77%;
+.border-container {
+  width: 74%;
   margin: auto;
+  border: 1px solid rgb(224, 224, 224);
+  border-top: none;
+}
+.content-wrapper {
   display: flex !important;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-left: 1px solid lightgray;
-  border-right: 1px solid lightgray;
-}
-.under-category-section {
-  border-left: 1px solid #e6e7eb;
-  border-right: 1px solid #e6e7eb;
-}
-.under-category-section::-webkit-scrollbar {
-  display: none;
 }
 
-hr {
-  width: 100%;
+.under-category-section::-webkit-scrollbar {
+  display: none;
 }
 </style>
