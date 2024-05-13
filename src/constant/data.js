@@ -53,7 +53,7 @@ export const menuItems = [
         },
         {
         childtitle: "상점 정보 관리",
-        childlink: "shop-modify",
+        childlink: "/shop",
         },
     ],
   },
