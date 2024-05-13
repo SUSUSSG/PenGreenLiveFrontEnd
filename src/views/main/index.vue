@@ -20,7 +20,8 @@
           class="carousel-slide"
         >
           <div class="slide-background">
-            <img :src="'data:image/jpeg;base64,' + item.broadcastImage"
+            <img
+              :src="'data:image/jpeg;base64,' + item.broadcastImage"
               :style="{
                 filter:
                   'blur(30px) brightness(110%) saturate(110%) contrast(90%)',
@@ -55,7 +56,7 @@
                 </div>
               </div>
             </div>
-        </div>
+          </div>
         </swiper-slide>
       </swiper>
     </div>
@@ -89,17 +90,21 @@
           style="padding-left: 32px"
         >
           <swiper-slide v-for="(item, index) in liveItems" :key="index">
-            <img :src="item.mainImage" alt="Main Image" class="main-image" />
-            <p class="live-main-title">{{ item.mainTitle }}</p>
+            <img
+              :src="'data:image/jpeg;base64,' + item.broadcastImage"
+              alt="Main Image"
+              class="main-image"
+            />
+            <p class="live-main-title">{{ item.broadcastTitle }}</p>
             <div class="live-item">
               <img
-                :src="item.thumbnail"
+                :src="'data:image/jpeg;base64,' + item.productImage"
                 alt="Live Thumbnail"
                 class="live-thumbnail"
               />
               <div class="live-info">
-                <div class="live-title">{{ item.title }}</div>
-                <div class="live-discount">{{ item.discount }}</div>
+                <div class="live-title">{{ item.productNm }}</div>
+                <div class="live-discount">{{ item.discountPrice }}</div>
               </div>
             </div>
           </swiper-slide>
@@ -129,10 +134,10 @@
       >
         <swiper-slide v-for="(card, index) in cardsData" :key="'card-' + index">
           <CardComponent
-            :imageSrc="card.imageSrc"
-            :title="card.title"
-            :text="card.text"
-            :datetime="card.datetime"
+            :src="'data:image/jpeg;base64,' + card.broadcastImage"
+            :title="card.broadcastTitle"
+            :text="card.broadcastSummary"
+            :datetime="card.broadcastScheduledTime"
             :buttonText="card.buttonText"
           />
         </swiper-slide>
@@ -178,46 +183,14 @@ export default {
       carousels: [
         {
           mainImage:
-            "https://g-selected.pstatic.net/MjAyNDA0MjNfMjI5/MDAxNzEzODQ5MDI3MDE3.A_xY4KPpLycWqmbe8uKSRHR8evuG_uOTK92gplRC0tcg.4mFLnckQ8tHdxJf3jt0cJYrOb-lgIzzyaHv3KSbfZfog.PNG/live_up1.png?type=w600_q90",
-          title: "이찬원과 함께하는 가정의 달",
-          description: "6,506명이 기다리는 중",
-          additionalImages: [
-            "https://phinf.pstatic.net/dthumb/?src=%22https%3A%2F%2Fshop-phinf.pstatic.net%2F20240125_126%2F17061434095045bT0Y_JPEG%2F107279237300263844_1793856330.jpg%22&service=selective&type=f240_240_q90",
-            "https://phinf.pstatic.net/dthumb/?src=%22https%3A%2F%2Fshop-phinf.pstatic.net%2F20240125_192%2F1706144165346yli4D_JPEG%2F107279949049973868_573632295.jpg%22&service=selective&type=f240_240_q90",
-          ],
-          additionalImagesTitle: ["테스트 상품1", "테스트 상품2"],
-          additionalImagesPrice: ["10,000원", "15,000원"],
-        },
-        {
-          mainImage: "https://i.ytimg.com/vi/7DSJl9e-UUE/maxresdefault.jpg",
-          title: "두 번째 슬라이드",
-          description: "두 번째 슬라이드에 대한 설명입니다.",
-          additionalImages: [
-            "http://via.placeholder.com/80x80",
-            "http://via.placeholder.com/80x80",
-          ],
-          additionalImagesTitle: ["테스트 상품3", "테스트 상품4"],
-          additionalImagesPrice: ["10,000원", "15,000원"],
-        },
-        {
-          mainImage:
-            "https://i.ytimg.com/vi/mZPkoLfdGQg/oardefault.jpg?sqp=-oaymwEYCJUDENAFSFqQAgHyq4qpAwcIARUAAIhC&rs=AOn4CLCFJ-0K3KXYHBQNleHWKeh-ljm5Nw",
-          title: "3 번째 슬라이드",
-          description: "3 번째 슬라이드에 대한 설명입니다.",
-          additionalImages: ["http://via.placeholder.com/80x80"],
-          additionalImagesTitle: ["테스트 상품2"],
-          additionalImagesPrice: ["10,000원"],
-        },
-        {
-          mainImage:
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIRG7wmkHtth99WlKY9lAjoeQ_UYo1Gx8SJmcOEseQ8U93wnGFikyhOaxhWv0jOg4of1o&usqp=CAU",
-          title: "4 번째 슬라이드",
-          description: "4 번째 슬라이드에 대한 설명입니다.",
+          title: "slide title",
+          description: "slide description",
           additionalImages: [
             "http://via.placeholder.com/80x80",
             "http://via.placeholder.com/80x80",
           ],
-          additionalImagesTitle: ["테스트 상품1", "테스트 상품2"],
+          additionalImagesTitle: ["product1", "product2"],
           additionalImagesPrice: ["10,000원", "15,000원"],
         },
       ],
@@ -229,42 +202,6 @@ export default {
           datetime: "2024-04-26T10:30:00",
           buttonText: "알림 설정",
         },
-        {
-          imageSrc: "http://via.placeholder.com/150x150",
-          title: "Title 2",
-          text: "This is the description for card 2.",
-          datetime: "2024-04-26T12:30:00",
-        },
-        {
-          imageSrc: "http://via.placeholder.com/150x150",
-          title: "Title 3",
-          text: "This is the description for card 3.",
-          datetime: "2024-04-26T17:30:00",
-        },
-        {
-          imageSrc: "http://via.placeholder.com/150x150",
-          title: "Title 4",
-          text: "This is the description for card 4.",
-          datetime: "2024-04-27T10:30:00",
-        },
-        {
-          imageSrc: "http://via.placeholder.com/150x150",
-          title: "Title 4",
-          text: "This is the description for card 4.",
-          datetime: "2024-04-27T12:30:00",
-        },
-        {
-          imageSrc: "http://via.placeholder.com/150x150",
-          title: "Title 4",
-          text: "This is the description for card 4.",
-          datetime: "2024-04-28T11:30:00",
-        },
-        {
-          imageSrc: "http://via.placeholder.com/150x150",
-          title: "Title 4",
-          text: "This is the description for card 4.",
-          datetime: "2024-04-28T19:30:00",
-        },
       ],
       liveItems: [
         {
@@ -273,62 +210,6 @@ export default {
           mainTitle: "라이브 메인 타이틀1",
           title: "제로스토킹 네이버 가젯의 단 상품대",
           discount: "64% 49,000원",
-        },
-        {
-          mainImage: "http://via.placeholder.com/90x160",
-          thumbnail: "https://via.placeholder.com/90x90",
-          mainTitle: "라이브 메인 타이틀2",
-          title: "두 번째 라이브 아이템",
-          discount: "50% 20,000원",
-        },
-        {
-          mainImage: "http://via.placeholder.com/90x160",
-          thumbnail: "https://via.placeholder.com/90x90",
-          mainTitle: "라이브 메인 타이틀2",
-          title: "두 번째 라이브 아이템",
-          discount: "50% 20,000원",
-        },
-        {
-          mainImage: "http://via.placeholder.com/90x160",
-          thumbnail: "https://via.placeholder.com/90x90",
-          mainTitle: "라이브 메인 타이틀2",
-          title: "두 번째 라이브 아이템",
-          discount: "50% 20,000원",
-        },
-        {
-          mainImage: "http://via.placeholder.com/90x160",
-          thumbnail: "https://via.placeholder.com/90x90",
-          mainTitle: "라이브 메인 타이틀2",
-          title: "두 번째 라이브 아이템",
-          discount: "50% 20,000원",
-        },
-        {
-          mainImage: "http://via.placeholder.com/90x160",
-          thumbnail: "https://via.placeholder.com/90x90",
-          mainTitle: "라이브 메인 타이틀2",
-          title: "두 번째 라이브 아이템",
-          discount: "50% 20,000원",
-        },
-        {
-          mainImage: "http://via.placeholder.com/90x160",
-          thumbnail: "https://via.placeholder.com/90x90",
-          mainTitle: "라이브 메인 타이틀2",
-          title: "두 번째 라이브 아이템",
-          discount: "50% 20,000원",
-        },
-        {
-          mainImage: "http://via.placeholder.com/90x160",
-          thumbnail: "https://via.placeholder.com/90x90",
-          mainTitle: "라이브 메인 타이틀2",
-          title: "두 번째 라이브 아이템",
-          discount: "50% 20,000원",
-        },
-        {
-          mainImage: "http://via.placeholder.com/90x160",
-          thumbnail: "https://via.placeholder.com/90x90",
-          mainTitle: "라이브 메인 타이틀2",
-          title: "두 번째 라이브 아이템",
-          discount: "50% 20,000원",
         },
       ],
     };
