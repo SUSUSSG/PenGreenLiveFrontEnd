@@ -64,11 +64,14 @@
             </div>
             <br>
             <Textinput label="라이브 예정일/시간" type="datetime-local" name="liveDateTime" v-model="liveDateTime" />
-            <div>
-              <select-component :options="categories" v-model="selectedCategoryValue" placeholder="카테고리를 선택하세요"
-                label="카테고리" class="mt-7" />
-              <div v-if="selectedCategoryLabel" class="selected-category-display">
-                선택된 카테고리: {{ selectedCategoryLabel }}
+            <div class="mt-5">
+              <label>방송 카테고리 선택</label>
+              <div class="mt-2">
+                <select v-model="selectedCategory" @change="handleCategoryChange">
+                  <option value="" disabled selected hidden>선택하기</option>
+                  <option v-for="category in categories" :key="category.value" :value="category.value">{{
+                    category.label}}</option>
+                </select>
               </div>
             </div>
           </Card>
@@ -85,26 +88,6 @@
               <div class="right-content">
                 <!-- 모달 -->
                 <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal">
-                  <!-- <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
-                    :rows="channelSalesProduct" :pagination-options="{ enabled: false }"
-                    :sort-options="{ enabled: false }" :select-options="{ enabled: true }"
-                    v-model:selected-rows="selectedRows"
-                    @on-selected-rows-change="updateSelectedRows">
-                    <template v-slot:table-row="props">
-                      <span v-if="props.column.field == 'productImg'">
-                        <img :src="props.row.productImg" />
-                      </span>
-                      <span v-if="props.column.field == 'productCode'">
-                        {{ props.row.productCode }}
-                      </span>
-                      <span v-if="props.column.field == 'productName'">
-                        {{ props.row.productName }}
-                      </span>
-                      <span v-if="props.column.field == 'originalPrice'">
-                        {{ props.row.originalPrice }}
-                      </span>
-                    </template>
-</vue-good-table> -->
                   <table>
                     <thead>
                       <tr class>
@@ -164,33 +147,29 @@
                     </tr>
                   </tbody>
                 </table>
-                <!-- </div> -->
                 <br>
                 <!-- 등록된 상품 목록 -->
-                <!-- <label>상품 목록</label> -->
-                <!-- <div class="card rounded-md bg-white dark:bg-slate-800">
-                  <div class="card-body flex flex-col p-6 overflow-auto"> -->
-                <!-- <table class="min-w-full">
-                      <thead>
-                        <tr class="text-left">
-                          <th class="px-6 py-3">상품 이름</th>
-                          <th class="px-6 py-3">상품 코드</th>
-                          <th class="px-6 py-3">할인가</th>
-                          <th class="px-10 py-3">작업</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(registered, idx) in registeredProducts" :key="idx" class="border-b">
-                          <td class="px-6 py-4">{{ registered.name }}</td>
-                          <td class="px-6 py-4">{{ registered.code }}</td>
-                          <td class="px-6 py-4">{{ formatCurrency(registered.discountedPrice) }}</td>
-                          <td class="px-6 py-4">
-                            <Button @click="deleteRegisteredProduct(idx)" :class="{ 'btn-outline-dark': !isLoading }"
-                            btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="삭제" />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table> -->
+                <table>
+                  <thead>
+                    <tr class="text-left">
+                      <th class="px-6 py-3">상품 이름</th>
+                      <th class="px-6 py-3">상품 코드</th>
+                      <th class="px-6 py-3">할인가</th>
+                      <th class="px-10 py-3">작업</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="(registered, idx) in registeredProducts" :key="idx" class="border-b">
+                      <td class="px-6 py-4">{{ registered.name }}</td>
+                      <td class="px-6 py-4">{{ registered.code }}</td>
+                      <td class="px-6 py-4">{{ formatCurrency(registered.discountedPrice) }}</td>
+                      <td class="px-6 py-4">
+                        <Button @click="deleteRegisteredProduct(idx)" :class="{ 'btn-outline-dark': !isLoading }"
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="삭제" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
                 <ul>
                   <li v-for="(registered, idx) in registeredProducts" :key="idx"
                     class="list-item flex items-center justify-between mt-1">
@@ -205,8 +184,6 @@
                 </ul>
               </div>
             </div>
-            <!-- </div>
-            </div> -->
           </Card>
         </div>
 
@@ -303,6 +280,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
 import { ref } from "vue";
@@ -394,20 +373,11 @@ export default {
       liveDateTime: '',
       imageFile: null,
       imageSrc: "https://via.placeholder.com/90x160",
-      selectedCategory: '',
-      selectedCategoryValue: '',
-      categories: [
-        { value: 'beauty', label: '뷰티' },
-        { value: 'food', label: '식품' },
-        { value: 'household', label: '생활용품' },
-        { value: 'children', label: '유아동' },
-        { value: 'electronics', label: '전자제품' },
-        { value: 'fashion', label: '패션' },
-      ],
+      categories: [], // 카테고리 목록을 담은 배열
+      selectedCategory: '', //선택된 카테고리
 
       //step2
       selectedRows: [], //모달에서 선택한 상품
-      // productIds: '',
       productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
       registeredProducts: [], // 그 테이블에서 할인율이 적용된 상품들
 
@@ -441,31 +411,32 @@ export default {
       newBenefit: '',
     }
   },
-  // computed: {
-  //   canSubmit() {
-  //     return this.liveTitle && this.liveSummary && this.liveDateTime && this.productIds && this.imageSrc;
-  //   },
-  //   canAddProduct() {
-  //     // Checks if all required fields are filled and products array has less than 8 entries
-  //     return this.newProduct.name && this.newProduct.code && this.newProduct.originalPrice && this.products.length < 8;
-  //   },
-  //   selectedCategoryLabel() {
-  //     const category = this.categories.find(cat => cat.value === this.selectedCategoryValue);
-  //     return category ? category.label : '';
-  //   },
-  //   canAddNotice() {
-  //     // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
-  //     return this.newNotice.trim() !== '';
-  //   },
-  //   canAddBenefit() {
-  //     // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
-  //     return this.newBenefit.trim() !== '';
-  //   },
-  //   canAddAnswer() {
-  //     return this.newQuestion.trim() !== '' && this.newAnswer.trim() != '';
-  //   },
-  // },
+  created() {
+    this.loadCategories();
+  },
   methods: {
+    // 카테고리 목록을 가져오는 API
+    loadCategories() {
+      const url = `http://localhost:8090/broadcast-category`;
+
+      axios.get(url)
+        .then(response => {
+          this.categories = response.data.map(category => {
+            return {
+              value: category.categoryCd,
+              label: category.categoryNm
+            };
+          });
+        })
+        .catch(error => {
+          console.error('카테고리 목록 가져오는 동안 에러 발생 : ', error);
+        });
+    },
+    handleCategoryChange() {
+      console.log(this.selectedCategory); //확인용
+    },
+
+    // 모달에 있는 상품 등록
     addSelectedProductsToTable() {
       this.modalOpen = true;
 
@@ -617,5 +588,9 @@ export default {
 
 thead {
   margin-bottom: 20px;
+}
+
+label {
+  color: black;
 }
 </style>
