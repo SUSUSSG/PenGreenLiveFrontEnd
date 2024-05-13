@@ -469,47 +469,28 @@ export default {
     addSelectedProductsToTable() {
       this.modalOpen = true;
 
-      const uncheckedProducts = [];
-
-      // selectedRows 배열을 반복하면서 체크된 상품을 productsToRegister 배열에 추가하고,
-      // 체크 해제된 상품은 uncheckedProducts 배열에 저장합니다.
       this.selectedRows.forEach(product => {
+        // 이미 productsToRegister 배열에 존재하는지 확인
         const isDuplicateInProductsToRegister = this.productsToRegister.some(item => item.code === product.productCode);
+        // 이미 registeredProducts 배열에 존재하는지 확인
         const isDuplicateInRegisteredProducts = this.registeredProducts.some(item => item.code === product.productCode);
-
-        // 선택된 항목이 이미 productsToRegister 배열에 존재하지 않고, registeredProducts 배열에도 존재하지 않는 경우에만 추가합니다.
         if (!isDuplicateInProductsToRegister && !isDuplicateInRegisteredProducts) {
+          // productsToRegister 배열에 추가
           this.productsToRegister.push({
             name: product.productName,
             code: product.productCode,
             originalPrice: product.originalPrice
           });
-        } else {
-          // 체크버튼이 해제된 경우 해당 상품을 uncheckedProducts 배열에 추가합니다.
-          if (!product.checked) {
-            uncheckedProducts.push(product);
-          }
         }
       });
 
-      // uncheckedProducts 상품 제거
-      uncheckedProducts.forEach(product => {
-        const indexInProductsToRegister = this.productsToRegister.findIndex(item => item.code === product.productCode);
-        if (indexInProductsToRegister !== -1) {
-          this.productsToRegister.splice(indexInProductsToRegister, 1);
-        }
-
-        const indexInRegisteredProducts = this.registeredProducts.findIndex(item => item.code === product.productCode);
-        if (indexInRegisteredProducts !== -1) {
-          this.registeredProducts.splice(indexInRegisteredProducts, 1);
-        }
-      });
-
+      // 선택된 결과를 콘솔에 출력
       console.log('선택된 상품 목록:', this.productsToRegister);
 
       this.isOpen = true;
       this.$refs.salesProductModal.openModal();
     },
+
     applyDiscount(index) {
       const product = this.productsToRegister[index];
       const discount = (product.originalPrice * product.discountRate) / 100;
@@ -597,8 +578,8 @@ export default {
       this.qa.splice(index, 1);
     },
     deleteProduct(idx) {
-      this.registered.splice(idx, 1);
-    }
+      this.registeredProducts.splice(idx, 1);
+    },
   }
 };
 </script>
