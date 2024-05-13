@@ -27,8 +27,8 @@
               class="background-image"
             />
             <div class="slide-content">
-              <div>
-                <h2 v-if="item.title">{{ item.title }}</h2>
+              <div style="display:flex; flex-direction:column; width:100%; ">
+                <h4 v-if="item.title">{{ item.title }}</h4>
                 <p v-if="item.description">{{ item.description }}</p>
               </div>
               <div class="additional-images-container">
@@ -58,7 +58,7 @@
         <hr class="mt-6 mb-12"/>
       </div>
 
-      <h4 class="live-title mb-6" style="padding-left : 32px;">바로 지금! 라이브 찬스</h4>
+      <h5 class="live-title mb-6" style="padding-left : 32px;">바로 지금! 라이브 찬스</h5>
       <div class="live-section">
         <swiper
           :slidesPerView="'auto'"
@@ -89,7 +89,7 @@
       </div>
       <hr class="mt-6 mb-12"/>
       <div class="more-link-wrapper">
-        <h4 class="live-title mb-6" style="padding-left : 32px;">예정된 라이브</h4>
+        <h5 class="live-title mb-6" style="padding-left : 32px;">예정된 라이브</h5>
         <router-link to="/schedule" class="more-link mb-3" style="padding-right: 32px;">더 보기</router-link>
       </div>
       <swiper
@@ -391,9 +391,16 @@ export default {
 }
 
 .main-caro p {
-  font-size: 1em;
-  color: #ff4343;
-  font-weight: 500;
+  font-size: 0.8em;
+  color: #ffffff;
+  font-weight: 400;
+  background-color: #ff2424;
+  word-break: break-word;
+  word-wrap: break-word;
+  padding: 4px 16px;
+  width: -webkit-fit-content;
+  border-radius: 50px;
+  margin-top: 1rem; 
 }
 
 .main-caro .start-button {
@@ -539,4 +546,8 @@ export default {
   font-weight: bold;
   font-size: 16px;
 }
+/* 
+.h5{
+  font-size: 1.8rem;
+} */
 </style>
