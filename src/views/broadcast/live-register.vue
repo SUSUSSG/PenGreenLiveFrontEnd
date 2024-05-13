@@ -70,7 +70,7 @@
                 <select v-model="selectedCategory" @change="handleCategoryChange">
                   <option value="" disabled selected hidden>선택하기</option>
                   <option v-for="category in categories" :key="category.value" :value="category.value">{{
-                    category.label}}</option>
+                    category.label }}</option>
                 </select>
               </div>
             </div>
@@ -90,21 +90,21 @@
                 <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal">
                   <table>
                     <thead>
-                      <tr class>
+                      <tr>
                         <th class="px-4">선택</th>
-                        <th class="px-3">상품 이미지</th>
+                        <!-- <th class="px-3">상품 이미지</th> -->
                         <th class="px-6">상품 이름</th>
                         <th class="px-5">상품 코드</th>
                         <th class="px-8 py-2">원가</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="row in channelSalesProduct" :key="row.productCode">
-                        <td class="px-6"><input type="checkbox" v-model="selectedRows" :value="row"></td>
-                        <td class="px-7"><img :src="row.productImg"></td>
-                        <td class="px-6">{{ row.productName }}</td>
-                        <td class="px-6"> {{ row.productCode }}</td>
-                        <td class="px-6">{{ row.originalPrice }}</td>
+                      <tr v-for="(product, index) in channelSalesProduct" :key="index">
+                        <td class="px-6"><input type="checkbox" v-model="selectedRows" :value="product"></td>
+                        <!-- <td class="px-7"><img :src="'data:image/png;base64,' + product.productImg"></td> -->
+                        <td class="px-6">{{ product.productName }}</td>
+                        <td class="px-6">{{ product.productCode }}</td>
+                        <td class="px-6">{{ product.originalPrice }}</td>
                       </tr>
                     </tbody>
                   </table>
@@ -148,28 +148,6 @@
                   </tbody>
                 </table>
                 <br>
-                <!-- 등록된 상품 목록 -->
-                <table>
-                  <thead>
-                    <tr class="text-left">
-                      <th class="px-6 py-3">상품 이름</th>
-                      <th class="px-6 py-3">상품 코드</th>
-                      <th class="px-6 py-3">할인가</th>
-                      <th class="px-10 py-3">작업</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(registered, idx) in registeredProducts" :key="idx" class="border-b">
-                      <td class="px-6 py-4">{{ registered.name }}</td>
-                      <td class="px-6 py-4">{{ registered.code }}</td>
-                      <td class="px-6 py-4">{{ formatCurrency(registered.discountedPrice) }}</td>
-                      <td class="px-6 py-4">
-                        <Button @click="deleteRegisteredProduct(idx)" :class="{ 'btn-outline-dark': !isLoading }"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="삭제" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
                 <ul>
                   <li v-for="(registered, idx) in registeredProducts" :key="idx"
                     class="list-item flex items-center justify-between mt-1">
@@ -292,7 +270,6 @@ import Dropdown from "@/components/Dropdown/index.vue";
 import Textarea from "@/components/Textarea";
 import SelectComponent from "@/components/Select/index.vue";
 import Modal from "@/components/Modal/Modal.vue";
-import { channelSalesProduct } from "@/constant/channel-sales-product-data";
 
 
 export default {
@@ -373,33 +350,20 @@ export default {
       liveDateTime: '',
       imageFile: null,
       imageSrc: "https://via.placeholder.com/90x160",
-      categories: [], // 카테고리 목록을 담은 배열
+      categories: [], // 카테고리 목록을 담을 배열
       selectedCategory: '', //선택된 카테고리
 
       //step2
-      selectedRows: [], //모달에서 선택한 상품
+      channelSalesProduct: [
+        {
+          productImg: '',
+          productName: '',
+          productCode: '', //상품번호 추가
+          originalPrice: ''
+        }],
+      selectedRows: [], //모달에서 선택된 상품
       productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
-      registeredProducts: [], // 그 테이블에서 할인율이 적용된 상품들
-
-      channelSalesProduct,
-      columns: [
-        {
-          label: "이미지",
-          field: "productImg",
-        },
-        {
-          label: "상품명",
-          field: "productName",
-        },
-        {
-          label: "상품코드",
-          field: "productCode",
-        },
-        {
-          label: "정가",
-          field: "originalPrice",
-        },
-      ],
+      registeredProducts: [], // 할인율이 적용된 상품들
 
       //step3
       notices: [],
@@ -412,7 +376,8 @@ export default {
     }
   },
   created() {
-    this.loadCategories();
+    this.loadCategories(); // 카테고리 목록 가져오기
+    this.loadChannelSalesProduct(); // 판매자가 판매하는 제품 목록 가져오기
   },
   methods: {
     // 카테고리 목록을 가져오는 API
@@ -434,6 +399,25 @@ export default {
     },
     handleCategoryChange() {
       console.log(this.selectedCategory); //확인용
+    },
+
+    // 판매자 판매 상품 목록을 가져오는 API
+    loadChannelSalesProduct() {
+      const url = `http://localhost:8090/channel-sales-product`;
+
+      axios.get(url)
+        .then(response => {
+          console.log(response.data);
+          this.channelSalesProduct = response.data.map(product => ({
+            productImg: product.productImage,
+            productName: product.productNm,
+            productCode: product.productCd,
+            originalPrice: product.listPrice
+          }));
+        })
+        .catch(error => {
+          console.error('판매자 판매 상품 목록 가져올 때 에러 발생 : ', error)
+        })
     },
 
     // 모달에 있는 상품 등록
