@@ -1,7 +1,6 @@
 <template>
   <div class="modal-overlay" v-if="showModal">
     <div class="modal-content">
-      <!-- <Button @click="closeModal">닫기</Button> -->
       <div class="camera-feed">
         <video ref="cameraFeed" autoplay></video>
       </div>

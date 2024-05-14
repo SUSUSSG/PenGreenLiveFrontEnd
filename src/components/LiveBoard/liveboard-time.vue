@@ -83,13 +83,13 @@ export default {
   },
   methods: {
     toggleBroadcast() {
+      if (this.isBroadcasting) {
+        this.$emit('stop-broadcast');
+      } else {
+        this.$emit('start-broadcast');
+      }
       this.isBroadcasting = !this.isBroadcasting;
       this.updateResultDisplayText();
-      this.$emit('start-broadcast');
-      if (!this.isBroadcasting) {
-        this.$emit('stop-broadcast')
-        this.$router.push('/broadcast-statistics');
-      }
     },
     getCurrentTime() {
       let now = new Date();
