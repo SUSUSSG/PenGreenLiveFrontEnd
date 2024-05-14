@@ -5,6 +5,7 @@
     <hr />
     <div>
       <swiper
+        v-if="!loadingCarousels"
         :slidesPerView="'auto'"
         :centeredSlides="true"
         :spaceBetween="0"
@@ -62,6 +63,9 @@
           </div>
         </swiper-slide>
       </swiper>
+      <div v-else class="skeleton-container" style="padding:0px!important; margin:0px!important;">
+        <SkeletonMainCarousel/>
+      </div>
     </div>
 
     <section class="under-category-section">
@@ -83,6 +87,7 @@
       </h5>
       <div class="live-section">
         <swiper
+          v-if="liveItems.length"
           :slidesPerView="'auto'"
           :spaceBetween="30"
           :pagination="false"
@@ -112,6 +117,9 @@
             </div>
           </swiper-slide>
         </swiper>
+        <div v-else class="skeleton-container">
+          <SkeletonChance v-for="n in 4" :key="n" />
+        </div>
       </div>
       <hr class="mt-6 mb-12" />
       <div class="more-link-wrapper">
@@ -126,6 +134,7 @@
         >
       </div>
       <swiper
+        v-if="cardsData.length"
         :slidesPerView="'auto'"
         :spaceBetween="30"
         :pagination="false"
@@ -145,6 +154,9 @@
           />
         </swiper-slide>
       </swiper>
+      <div v-else class="skeleton-container">
+        <SkeletonChance v-for="n in 5" :key="n" />
+      </div>
       <div class="pb-20" />
     </section>
     <hr />
@@ -161,6 +173,10 @@ import Categories from "@/components/Category/Categories.vue";
 import CardComponent from "@/components/Card/BroadcastCard.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
+import SkeletonCarousel from "@/components/Skeleton/Schedule-skeleton.vue"; 
+import SkeletonChance from "@/components/Skeleton/Main-chance-skeleton.vue"; 
+
+import SkeletonMainCarousel from "@/components/Skeleton/Main-Carou-skeleton.vue"; 
 import axios from "axios";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
@@ -173,6 +189,9 @@ export default {
     CardComponent,
     MenuHeaderNav,
     ScrollTopButton,
+    SkeletonCarousel,
+    SkeletonChance,
+    SkeletonMainCarousel, // SkeletonCarousel 컴포넌트 등록
   },
   mounted() {
     this.fetchMainCarousels();
@@ -182,38 +201,9 @@ export default {
   data() {
     return {
       modules: [Navigation, Pagination, Autoplay],
-      carousels: [
-        {
-          mainImage:
-            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIRG7wmkHtth99WlKY9lAjoeQ_UYo1Gx8SJmcOEseQ8U93wnGFikyhOaxhWv0jOg4of1o&usqp=CAU",
-          title: "slide title",
-          description: "slide description",
-          additionalImages: [
-            "http://via.placeholder.com/80x80",
-            "http://via.placeholder.com/80x80",
-          ],
-          additionalImagesTitle: ["product1", "product2"],
-          additionalImagesPrice: ["10,000원", "15,000원"],
-        },
-      ],
-      cardsData: [
-        {
-          imageSrc: "http://via.placeholder.com/150x150",
-          title: "Title 1",
-          text: "This is the description for card 1.",
-          datetime: "2024-04-26T10:30:00",
-          buttonText: "알림 설정",
-        },
-      ],
-      liveItems: [
-        {
-          mainImage: "http://via.placeholder.com/90x160",
-          thumbnail: "https://via.placeholder.com/90x90",
-          mainTitle: "라이브 메인 타이틀1",
-          title: "제로스토킹 네이버 가젯의 단 상품대",
-          discount: "64% 49,000원",
-        },
-      ],
+      carousels: [],
+      cardsData: [],
+      liveItems: [],
       categoryCodes: {
         전체: null,
         뷰티: "BCT-CTG-001",
@@ -224,6 +214,7 @@ export default {
         패션: "BCT-CTG-006",
       },
       selectedCategory: "전체",
+      loadingCarousels: true, // 로딩 상태 추가
     };
   },
   methods: {
@@ -232,7 +223,8 @@ export default {
         .get("http://localhost:8090/main-carousels")
         .then((response) => {
           this.carousels = response.data;
-          console.log("Main carousels data:", this.carousels); // 로그 출력
+          this.loadingCarousels = false; // 데이터 로드 완료 후 로딩 상태 false
+          console.log("Main carousels data:", this.carousels); 
         })
         .catch((error) => {
           console.error("Failed to fetch main carousels:", error);
@@ -263,7 +255,7 @@ export default {
         params.categoryCd = categoryCode;
       }
       axios
-        .get("http://localhost:8090/live-chance", { params: params }) // params 객체를 올바르게 전달
+        .get("http://localhost:8090/live-chance", { params: params })
         .then((response) => {
           this.liveItems = response.data;
           console.log("Live chance carousels data:", this.liveItems);
@@ -288,11 +280,13 @@ export default {
   border: 1px solid rgb(224, 224, 224);
   border-top: none;
 }
+
 .main-caro .carousel-slide {
   max-width: 700px;
   height: 400px;
   overflow: hidden;
 }
+
 /* 메인 캐러셀 슬라이드 */
 .main-caro .swiper-slide {
   opacity: 0.4;
@@ -302,6 +296,7 @@ export default {
 .main-caro .swiper-slide-active {
   opacity: 1;
 }
+
 .slide-background {
   display: flex;
   width: 100%;
@@ -354,7 +349,7 @@ export default {
   background-color: #000;
   color: white;
   cursor: pointer;
-  border-radius: 20px; /* 버튼의 둥근 모서리 스타일링 */
+  border-radius: 20px;
   font-size: 0.9em;
   outline: none;
 }
@@ -364,27 +359,32 @@ export default {
   justify-content: flex-start;
   gap: 10px;
 }
+
 .main-caro .additional-image-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   width: 120px;
 }
+
 .main-caro .additional-image-price {
   padding-left: 4px;
   font-weight: bold;
 }
+
 .main-caro .additional-image-title {
   padding-left: 4px;
   text-align: start;
   font-size: 0.8em;
   margin-top: 5px;
 }
+
 .main-caro .additional-image {
   width: 100px;
   height: 100px;
   border-radius: 10px;
 }
+
 .hot-live-caro .slide-container {
   display: flex;
   flex-direction: row;
@@ -412,9 +412,11 @@ export default {
   padding: 2rem;
   margin-top: 2rem;
 }
+
 .additional-text-container {
   margin-left: 140px;
 }
+
 .hot-live-caro .additional-text-container h2,
 .hot-live-caro .additional-text-container p {
   font-size: 1.2em;
@@ -437,15 +439,18 @@ export default {
 .under-category-section::-webkit-scrollbar {
   display: none;
 }
+
 .more-link-wrapper {
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
   color: #134010;
 }
+
 .more-link {
   text-decoration: underline;
 }
+
 .live-caro .swiper-slide {
   width: auto;
 }
@@ -461,7 +466,7 @@ export default {
   object-fit: cover;
   margin-right: 10px;
   aspect-ratio: 1/1;
-} 
+}
 
 .live-caro .live-info {
   display: flex;
@@ -493,8 +498,71 @@ export default {
   font-weight: bold;
   font-size: 16px;
 }
-/* 
-.h5{
-  font-size: 1.8rem;
-} */
+
+.skeleton-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 1px solid #ccc;
+  width: 200px;
+  background-color: white;
+}
+
+.skeleton-card .skeleton {
+  background-color: #e0e0e0;
+  width: 100%;
+  height: 100px;
+  margin-bottom: 16px;
+}
+
+.skeleton-card .skeleton-title {
+  background-color: #e0e0e0;
+  width: 70%;
+  height: 20px;
+  margin-bottom: 8px;
+}
+
+.skeleton-card .skeleton-text {
+  background-color: #e0e0e0;
+  width: 90%;
+  height: 14px;
+}
+
+.skeleton-container {
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+  padding-left:32px;
+  width:100%;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.skeleton-main-carousel {
+  width: 100%;
+  height: 400px;
+  display: flex;
+  flex-direction: row;
+  padding: 16px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  background: linear-gradient(135deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 200%;
+  animation: pulse-diagonal 1.5s infinite ease-in-out;
+  align-content: center;
+  align-items: center;
+}
+
+@keyframes pulse-diagonal {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
+}
 </style>
