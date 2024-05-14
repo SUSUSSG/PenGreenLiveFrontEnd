@@ -1,5 +1,5 @@
 <template>
-  <div class="group" style="margin-top:3rem;">
+  <div class="group mt-8">
     <div class="flex-row-wrapper">
       <h6 class="live-time">{{ timeRemaining }}</h6>
       <img
@@ -45,7 +45,7 @@
         :src="'data:image/jpeg;base64,' + channelImage"
         alt="Image"
       />
-      <div class="list-one-line">{{ shopName }}</div>
+      <div class="list-one-line">{{ channelNm }}</div>
     </div>
     <div v-show="showSubscribeButton" class="subscribe-button-wrapper">
       <button
@@ -73,7 +73,7 @@ export default {
       required: true,
     },
     productImage: {
-      type: String,
+      type: Array,
       required: true,
     },
     broadcastTitle: {
@@ -97,11 +97,11 @@ export default {
       required: true,
     },
     discountRate: {
-      type: String,
+      type: Number,
       required: true,
     },
     broadcastSeq: {
-      type: String,
+      type: Number,
       required: true,
     },
     channelNm: {
@@ -109,11 +109,11 @@ export default {
       required: true,
     },
     channelImage: {
-      type: String,
+      type: Array,
       required: true,
     },
     channelSeq: {
-      type: String,
+      type: Number,
       required: true,
     },
   },

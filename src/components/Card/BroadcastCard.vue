@@ -19,7 +19,7 @@
 <script>
 export default {
   props: {
-    imageSrc: String,
+    imageSrc: Array,
     title: String,
     text: String,
     datetime: String,
