@@ -435,25 +435,13 @@ export default {
       const discount = (product.originalPrice * product.discountRate) / 100;
       product.discountPrice = product.originalPrice - discount;
     },
-
-    /**
-     * 
-     * const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    // Base64 인코딩된 이미지 데이터 저장, 접두사 제거
-                    const base64String = e.target.result.split(',')[1];
-                    this.addModalData.imageSrc = base64String;
-                };
-                reader.readAsDataURL(file);
-            } else {
-                this.addModalData.imageSrc = null;
-            }
-     */
     handleImageUpload(event) {
       const file = event.target.files[0];
       if (file) {
+        if (file.size > 1048576) {
+          alert('이미지 파일 크기는 1MB 이하여야 합니다.');
+          return;
+        }
         const reader = new FileReader();
         reader.onload = (e) => {
           this.previewImage = e.target.result;
@@ -526,15 +514,15 @@ export default {
         benefits: this.benefits, // benefits는 배열
         image: this.imageSrc
       };
-      console.log(requestData.broadcastTitle);
-      console.log(requestData.broadcastSummary);
-      console.log(requestData.broadcastScheduledTime);
-      console.log(requestData.categoryCd);
-      console.log(requestData.registeredProducts);
-      console.log(requestData.notices);
-      console.log(requestData.qa);
-      console.log(requestData.benefits);
-      console.log(requestData.image);
+      // console.log(requestData.broadcastTitle);
+      // console.log(requestData.broadcastSummary);
+      // console.log(requestData.broadcastScheduledTime);
+      // console.log(requestData.categoryCd);
+      // console.log(requestData.registeredProducts);
+      // console.log(requestData.notices);
+      // console.log(requestData.qa);
+      // console.log(requestData.benefits);
+      // console.log(requestData.image);
 
       // JSON 형식의 데이터를 백엔드로 전송
       axios.post('http://localhost:8090/live-register', requestData)
