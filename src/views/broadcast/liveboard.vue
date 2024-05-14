@@ -10,7 +10,7 @@
           </div>
         </div>
         <div class="flex-col">
-          <LiveBoardStatistics />
+          <LiveBoardStatistics :session-id="mySessionId" :start-check="readyToCheck" />
           <LiveboardProduct />
           <LiveboardPrompt />
         </div>
@@ -51,18 +51,30 @@ export default {
       publisher: undefined,
       subscribers: [],
       mySessionId: '',
-      myUserName: "Admin"
+      myUserName: "Admin",
+      isSessionActive: false,
+      totalViewers : 0,
+      readyToCheck: false,
     };
   },
   methods: {
+    //방송중인 상태에서 사용하는 카메라와 오디오 장치를 변경합니다.
     handleDeviceChange({ camera, microphone }) {
       // 카메라 변경
       if (camera) {
+        console.log("카메라");
+        console.log(camera);
         navigator.mediaDevices
-            .getUserMedia({ video: { deviceId: camera } })
+            .getUserMedia({
+              video: { deviceId: camera, width: 900, height: 1600 } // 새로운 해상도 설정
+            })
             .then((newVideoStream) => {
+              console.log(camera);
               const videoTrack = newVideoStream.getVideoTracks()[0];
               this.publisher.replaceTrack(videoTrack);
+            })
+            .catch((error) => {
+              console.error('Error accessing camera stream:', error);
             });
       }
 
@@ -73,9 +85,13 @@ export default {
             .then((newAudioStream) => {
               const audioTrack = newAudioStream.getAudioTracks()[0];
               this.publisher.replaceTrack(audioTrack);
+            })
+            .catch((error) => {
+              console.error('Error accessing microphone:', error);
             });
       }
     },
+    //Video와 Audio출력을 활성/비활성합니다.
     toggleVideo(isActive) {
       if (this.publisher) {
         console.log(!isActive);
@@ -91,7 +107,12 @@ export default {
         console.error('Publisher is not initialized');
       }
     },
+    //세션을 생성하고 publisher 입장에서 방송을 송출합니다.
     joinSession() {
+      if (this.isSessionActive) {
+        console.log("세션은 이미 활성화 상태입니다.");
+        return;
+      }
       this.OV = new OpenVidu();
       this.session = this.OV.initSession();
       this.session.on("streamCreated", ({ stream }) => {
@@ -127,9 +148,18 @@ export default {
               console.log("There was an error connecting to the session:", error.code, error.message);
             });
       });
+      this.isSessionActive = true;
+      this.readyToCheck = true;  // 방송을 시작할 때 true로 설정
+      console.log(this.readyToCheck);
       window.addEventListener("beforeunload", this.leaveSession);
     },
+    //세션을 종료합니다.
     leaveSession() {
+      if (!this.isSessionActive) {
+        console.log("세션은 이미 종료되었습니다.");
+        return;
+      }
+      console.log("세션 끝");
       // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
       if (this.session) this.session.disconnect();
 
@@ -142,7 +172,11 @@ export default {
 
       // Remove beforeunload listener
       window.removeEventListener("beforeunload", this.leaveSession);
+      this.isSessionActive = false;
+      this.readyToCheck = false;  // 방송을 중지할 때 false로 설정
+      this.$router.push('/broadcast-statistics');
     },
+    // 비동기 요청으로 세션을 만들고 세션 접속에 필요한 토큰을 가져옵니다.
     getToken(sessionId) {
       return this.createSession(sessionId).then(sessionId => this.createToken(sessionId));
     },
@@ -155,8 +189,9 @@ export default {
       return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions/${sessionId}/connections`, {}, {
         headers: { 'Content-Type': 'application/json' }
       }).then(response => response.data);
-    }
+    },
   },
+  //컴포넌트가 생성될 시 mySessionId변수에 현재 url정보(방송id)를 할당합니다.
   created() {
     this.mySessionId = this.$route.params.broadcastId || 'defaultSessionId';
   }

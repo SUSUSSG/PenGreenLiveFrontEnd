@@ -246,7 +246,6 @@ export default {
     },
     openBroadcastDeviceControl() {
       this.showLivePrepareModal = !this.showLivePrepareModal;
-      this.$refs.broadcastDeviceControl.openModal();
     },
     editBroadcastInfoModal() {
       this.isOpen = true;
