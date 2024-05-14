@@ -27,6 +27,7 @@ export default {
   },
   computed: {
     formattedDatetime() {
+      if (!this.datetime) return 'No date provided';
       const options = {
         month: 'long',
         day: 'numeric',
@@ -34,31 +35,27 @@ export default {
         minute: 'numeric',
         hour12: true,
       };
-      return new Date(this.parseDateTime(this.datetime)).toLocaleString('kr-KR', options);
+      return new Date(this.datetime).toLocaleString('kr-KR', options);
     },
     timeDifference() {
+      if (!this.datetime) return 'No date provided';
       const now = new Date();
-      const eventTime = new Date(this.parseDateTime(this.datetime));
-      const diff = Math.abs(now - eventTime) / 36e5;
-      if (diff < 1) {
-        return '';
+      const eventTime = new Date(this.datetime);
+      const diff = (eventTime - now) / 36e5; // Calculate difference in hours
+      if (diff <= 0) {
+        return null; // When event time is past or now, show live
+      } else if (diff < 1) {
+        return '방송 중'; // Less than 1 hour to start
       } else if (diff < 24) {
-        return `${Math.floor(diff)} 시간`;
+        return `${Math.floor(diff)} 시간 뒤`;
       } else {
-        return `${Math.floor(diff / 24)} 일`;
+        return `${Math.floor(diff / 24)} 일 뒤`;
       }
-    },
-  },
-  methods: {
-    parseDateTime(dateTimeString) {
-      const [date, time] = dateTimeString.split('T');
-      const [year, month, day] = date.split('-');
-      const [hours, minutes, seconds] = time.split(':');
-      return new Date(year, month - 1, day, hours, minutes, seconds);
     },
   },
 };
 </script>
+
   <style>
   .card-component {
     display: flex;
