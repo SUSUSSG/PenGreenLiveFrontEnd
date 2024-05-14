@@ -50,25 +50,30 @@
             <br>
             <Textinput label="라이브 한줄 요약" placeholder="라이브 한줄 요약을 입력하세요" name="liveSummary" v-model="liveSummary" />
             <br>
+
             <label>대표 이미지 등록</label>
             <div style="display: flex; align-items: center;">
               <div style="flex-shrink: 0;">
-                <img :src="imageSrc" alt="대표 이미지 미리보기" style="width: 100px; height: 100px" />
+                <img :src="previewImage" alt="previewImage" style="width: 180px; height: 320px" />
               </div>
               <div style="margin-left: 20px;">
                 <p>최대 용량 : 1mb</p>
-                <p>권장 사이즈 : 400 x 400</p>
+                <p>권장 사이즈 : 720 x 1280</p>
                 <input type="file" id="imageUpload" @change="handleImageUpload"
                   accept="image/jpeg, image/png, image/gif" class="mb-2" />
               </div>
             </div>
             <br>
+
             <Textinput label="라이브 예정일/시간" type="datetime-local" name="liveDateTime" v-model="liveDateTime" />
-            <div>
-              <select-component :options="categories" v-model="selectedCategoryValue" placeholder="카테고리를 선택하세요"
-                label="카테고리" class="mt-7" />
-              <div v-if="selectedCategoryLabel" class="selected-category-display">
-                선택된 카테고리: {{ selectedCategoryLabel }}
+            <div class="mt-5">
+              <label>방송 카테고리 선택</label>
+              <div class="mt-2">
+                <select v-model="selectedCategory" @change="handleCategoryChange">
+                  <option value="" disabled selected hidden>선택하기</option>
+                  <option v-for="category in categories" :key="category.value" :value="category.value">{{
+                    category.label }}</option>
+                </select>
               </div>
             </div>
           </Card>
@@ -83,11 +88,30 @@
                 <label>상품 등록</label>
               </div>
               <div class="right-content">
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="modal1">
-                  <h4 class="font-medium text-lg mb-3 text-slate-900">Lorem ipsum dolor sit.</h4>
-                  <div class="text-base text-slate-600 dark:text-slate-300">상품 검색해서 집어넣으세요</div>
+                <!-- 모달 -->
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th class="px-4">선택</th>
+                        <!-- <th class="px-3">상품 이미지</th> -->
+                        <th class="px-6">상품 이름</th>
+                        <th class="px-5">상품 코드</th>
+                        <th class="px-8 py-2">원가</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="(product, index) in channelSalesProduct" :key="index">
+                        <td class="px-6"><input type="checkbox" v-model="selectedRows" :value="product"></td>
+                        <!-- <td class="px-7"><img :src="'data:image/png;base64,' + product.productImg"></td> -->
+                        <td class="px-6">{{ product.productName }}</td>
+                        <td class="px-6">{{ product.productCode }}</td>
+                        <td class="px-6">{{ formatCurrency(product.originalPrice) }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
                   <template v-slot:footer>
-                    <Button text="등록하기" btnClass="btn-primary btn-sm" @click="$refs.modal1.closeModal()" />
+                    <Button text="상품 등록" btnClass="btn-primary btn-sm" @click="addSelectedProductsToTable" />
                   </template>
                 </Modal>
               </div>
@@ -99,59 +123,49 @@
                 <table class="min-w-full">
                   <thead>
                     <tr class="text-left">
-                      <th class="px-6 py-3">상품 이름</th>
-                      <th class="px-6 py-3">상품 코드</th>
-                      <th class="px-6 py-3">기본 가격</th>
-                      <th class="px-6 py-3">할인률 (%)</th>
-                      <th class="px-6 py-3">할인된 가격</th>
-                      <th class="px-10 py-3">작업</th>
+                      <th class="px-6">상품 이름</th>
+                      <th class="px-6">상품 코드</th>
+                      <th class="px-9">정가</th>
+                      <th class="px-20">할인율 (%)</th>
+                      <th class="px-6">할인된 가격</th>
+                      <th class="px-10 py-3">추가</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="(product, index) in productsToRegister" :key="index" class="border-b">
+                    <tr v-for="(product, index) in productsToRegister" :key="index">
                       <td class="px-6 py-4">{{ product.name }}</td>
                       <td class="px-6 py-4">{{ product.code }}</td>
-                      <td class="px-6 py-4">{{ formatCurrency(product.price) }}</td>
+                      <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
                       <td class="px-6 py-4">
-                        <input type="number" v-model.number="product.discountRate" class="input-control">
+                        <input type="number" v-model.number="product.discountRate" class="input-control" max="100">
+                        <Button @click="applyDiscount(index)"
+                          :disabled="product.discountRate > 100 || product.discountRate <= 0"
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" type="button"
+                          text="적용" />
                       </td>
-                      <td class="px-6 py-4">{{ formatCurrency(product.discountedPrice) }}</td>
+                      <td class="px-6 py-4">{{ formatCurrency(product.discountPrice) }}</td>
                       <td class="px-6 py-4">
-                        <Button @click="registerProduct(index)" :class="{ 'btn-outline-dark': !isLoading }"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="추가" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-            <br>
-            <!-- 등록된 상품 목록 -->
-            <label>상품 목록</label>
-            <div class="card rounded-md bg-white dark:bg-slate-800">
-              <div class="card-body flex flex-col p-6 overflow-auto">
-                <!-- <hr class="section-divider"> 구분선 추가 -->
-                <table class="min-w-full">
-                  <thead>
-                    <tr class="text-left">
-                      <th class="px-6 py-3">상품 이름</th>
-                      <th class="px-6 py-3">상품 코드</th>
-                      <th class="px-6 py-3">할인가</th>
-                      <th class="px-10 py-3">작업</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(registered, idx) in registeredProducts" :key="idx" class="border-b">
-                      <td class="px-6 py-4">{{ registered.name }}</td>
-                      <td class="px-6 py-4">{{ registered.code }}</td>
-                      <td class="px-6 py-4">{{ formatCurrency(registered.discountedPrice) }}</td>
-                      <td class="px-6 py-4">
-                        <Button @click="deleteRegisteredProduct(idx)" :class="{ 'btn-outline-dark': !isLoading }"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="삭제" />
+                        <Button @click="registerProduct(index)"
+                          :disabled="product.discountRate > 100 || product.discountRate <= 0"
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5  btn-outline-dark" type="button"
+                          text="등록" />
                       </td>
                     </tr>
                   </tbody>
                 </table>
+                <br>
+                <ul>
+                  <li v-for="(registered, idx) in registeredProducts" :key="idx"
+                    class="list-item flex items-center justify-between mt-1">
+                    <div class="bg-gray-100 p-2 rounded">
+                      <span class="registered-name">{{ registered.name }}</span>
+                      <span class="registered-code">({{ registered.code }})</span>
+                      방송 판매가 : <span class="registered-price"> {{ formatCurrency(registered.discountPrice) }}</span>
+                      <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" style="float: right;"
+                        class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                    </div>
+                  </li>
+                </ul>
               </div>
             </div>
           </Card>
@@ -165,9 +179,9 @@
               <div class="flex items-center justify-between">
                 <Textinput label="공지 사항" type="text" name="newNotice" v-model="newNotice" placeholder="공지사항 입력"
                   class="mb-2 flex-grow" />
-                <Button :disabled="!canAddNotice" @click="addNotice"
-                  :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
-                  btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5" text="추가"></Button>
+                <Button @click="addNotice" type="button"
+                  btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark"
+                  text="추가"></Button>
               </div>
               <ul>
                 <li v-for="(notice, index) in notices" :key="index"
@@ -185,9 +199,8 @@
               <div class="flex items-center justify-between">
                 <Textinput label="라이브 혜택" type="text" name="newBenefit" v-model="newBenefit" placeholder="라이브 혜택 입력"
                   class="mb-2 flex-grow" />
-                <Button :disabled="!canAddBenefit" @click="addBenefit"
-                  :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
-                  btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" text="추가"></Button>
+                <Button @click="addBenefit" type="button"
+                  btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" text="추가"></Button>
               </div>
               <ul>
                 <li v-for="(item, index) in benefits" :key="index"
@@ -210,9 +223,9 @@
                   <Textarea label="답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
                 </div>
                 <div class="text-center mb-2"> <!-- 추가하기 버튼을 오른쪽 중간에 위치시키기 위해 text-center 추가 -->
-                  <Button :disabled="!canAddAnswer" @click="addAnswer"
-                    :class="{ 'btn-outline-dark': !isLoading, 'loading': isLoading }"
-                    btnClass="btn inline-flex justify-center btn-sm justify-between" text="추가"></Button>
+                  <Button @click="addAnswer" type="button"
+                    btnClass="btn inline-flex justify-center btn-sm justify-between btn-outline-dark"
+                    text="추가"></Button>
                 </div>
               </div>
               <dl>
@@ -220,8 +233,8 @@
                   <div class="bg-gray-100 p-2 rounded">
                     <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" style="float: right;"
                       class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
-                    <dt class="question">{{ item.question }}</dt>
-                    <dd class="answer">{{ item.answer }}</dd>
+                    <dt class="question">{{ item.questionTitle }}</dt>
+                    <dd class="answer">{{ item.questionAnswer }}</dd>
                   </div>
                 </div>
               </dl>
@@ -241,7 +254,7 @@
             <Button @click.prevent="next()" text="다음" btnClass="btn-dark" />
           </div>
           <div v-else class="flex justify-end w-full">
-            <Button @click.prevent="save()" text="등록" btnClass="btn-dark" />
+            <Button @click="saveBroadcast()" text="등록" btnClass="btn-dark" />
           </div>
         </div>
       </form>
@@ -250,6 +263,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 import Button from "@/components/Button";
 import Icon from "@/components/Icon";
 import { ref } from "vue";
@@ -292,19 +307,6 @@ export default {
     const toast = useToast();
     let stepNumber = ref(0);
 
-    const submit = () => {
-      let totalSteps = steps.length;
-      const isLastStep = stepNumber.value === totalSteps - 1;
-      if (isLastStep) {
-        stepNumber = totalSteps - 1;
-        toast.success("Form Submitted", {
-          timeout: 2000,
-        });
-      } else {
-        stepNumber.value++;
-      }
-    };
-
     const prev = () => {
       if (stepNumber.value > 0) {
         stepNumber.value--;
@@ -316,18 +318,9 @@ export default {
         stepNumber.value++;
       }
     };
-
-    const save = () => {
-      toast.success("Form Saved", {
-        timeout: 2000,
-      });
-    };
-
     return {
-      submit,
       prev,
       next,
-      save,
       steps,
       stepNumber,
     };
@@ -339,26 +332,22 @@ export default {
       liveSummary: '',
       liveDateTime: '',
       imageFile: null,
-      imageSrc: "https://via.placeholder.com/90x160",
-      selectedCategory: '',
-      selectedCategoryValue: '',
-      categories: [
-        { value: 'beauty', label: '뷰티' },
-        { value: 'food', label: '식품' },
-        { value: 'household', label: '생활용품' },
-        { value: 'children', label: '유아동' },
-        { value: 'electronics', label: '전자제품' },
-        { value: 'fashion', label: '패션' },
-      ],
+      previewImage: "https://via.placeholder.com/90x160",
+      categories: [], // 카테고리 목록을 담을 배열
+      selectedCategory: '', //선택된 카테고리
 
       //step2
-      productIds: '',
-      productsToRegister: [
-        // Example products (this would normally come from a server)
-        { name: 'Product A', code: 'A001', price: 10000, discountRate: 0, discountedPrice: 10000 },
-        { name: 'Product B', code: 'B001', price: 20000, discountRate: 0, discountedPrice: 20000 }
-      ],
-      registeredProducts: [],
+      channelSalesProduct: [
+        {
+          productSeq: '',
+          productImg: '',
+          productName: '',
+          productCode: '', //상품번호 추가
+          originalPrice: ''
+        }],
+      selectedRows: [], //모달에서 선택된 상품
+      productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
+      registeredProducts: [], // 할인율이 적용된 상품들
 
       //step3
       notices: [],
@@ -370,90 +359,115 @@ export default {
       newBenefit: '',
     }
   },
-  computed: {
-    canSubmit() {
-      return this.liveTitle && this.liveSummary && this.liveDateTime && this.productIds && this.imageSrc;
-    },
-    canAddProduct() {
-      // Checks if all required fields are filled and products array has less than 8 entries
-      return this.newProduct.name && this.newProduct.code && this.newProduct.price && this.products.length < 8;
-    },
-    selectedCategoryLabel() {
-      const category = this.categories.find(cat => cat.value === this.selectedCategoryValue);
-      return category ? category.label : '';
-    },
-    canAddNotice() {
-      // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
-      return this.newNotice.trim() !== '';
-    },
-    canAddBenefit() {
-      // 'newNotice' 입력란이 비어있지 않으면 '추가하기' 버튼을 활성화합니다.
-      return this.newBenefit.trim() !== '';
-    },
-    canAddAnswer() {
-      return this.newQuestion.trim() !== '' && this.newAnswer.trim() != '';
-    },
-  },
-  watch: {
-    'newProduct.discountRate': function (newRate) {
-      if (newRate) {
-        const discount = (this.newProduct.price * newRate) / 100;
-        this.newProduct.discountedPrice = this.newProduct.price - discount;
-      } else {
-        this.newProduct.discountedPrice = this.newProduct.price;
-      }
-    }
+  created() {
+    this.loadCategories(); // 카테고리 목록 가져오기
+    this.loadChannelSalesProduct(); // 판매자가 판매하는 제품 목록 가져오기
   },
   methods: {
+    // 카테고리 목록을 가져오는 API
+    loadCategories() {
+      const url = `http://localhost:8090/broadcast-category`;
+
+      axios.get(url)
+        .then(response => {
+          this.categories = response.data.map(category => {
+            return {
+              value: category.categoryCd,
+              label: category.categoryNm
+            };
+          });
+        })
+        .catch(error => {
+          console.error('카테고리 목록 가져오는 동안 에러 발생 : ', error);
+        });
+    },
+    handleCategoryChange() {
+      console.log(this.selectedCategory); //확인용
+    },
+
+    // 판매자 판매 상품 목록을 가져오는 API
+    loadChannelSalesProduct() {
+      const url = `http://localhost:8090/channel-sales-product`;
+
+      axios.get(url)
+        .then(response => {
+          console.log(response.data);
+          this.channelSalesProduct = response.data.map(product => ({
+            productSeq: product.productSeq,
+            productImg: product.productImage,
+            productName: product.productNm,
+            productCode: product.productCd,
+            originalPrice: product.listPrice
+          }));
+        })
+        .catch(error => {
+          console.error('판매자 판매 상품 목록 가져올 때 에러 발생 : ', error)
+        })
+    },
+
+    // 모달에 있는 상품 등록
+    addSelectedProductsToTable() {
+      this.modalOpen = true;
+
+      this.selectedRows.forEach(product => {
+        // 이미 productsToRegister 배열에 존재하는지 확인
+        const isDuplicateInProductsToRegister = this.productsToRegister.some(item => item.code === product.productCode);
+        // 이미 registeredProducts 배열에 존재하는지 확인
+        const isDuplicateInRegisteredProducts = this.registeredProducts.some(item => item.code === product.productCode);
+        if (!isDuplicateInProductsToRegister && !isDuplicateInRegisteredProducts) {
+          // productsToRegister 배열에 추가
+          this.productsToRegister.push({
+            productSeq: product.productSeq,
+            name: product.productName,
+            code: product.productCode,
+            originalPrice: product.originalPrice
+          });
+        }
+      });
+
+      // 선택된 결과를 콘솔에 출력
+      console.log('선택된 상품 목록:', this.productsToRegister);
+
+      this.isOpen = true;
+      this.$refs.salesProductModal.openModal();
+    },
+
+    applyDiscount(index) {
+      const product = this.productsToRegister[index];
+      const discount = (product.originalPrice * product.discountRate) / 100;
+      product.discountPrice = product.originalPrice - discount;
+    },
     handleImageUpload(event) {
       const file = event.target.files[0];
-      if (!file.type.includes('image/')) {
-        alert('이미지 파일만 업로드 가능합니다.');  // Notify user if the file is not an image
-        event.target.value = '';  // Reset the file input to clear the invalid file
-        return;
+      if (file) {
+        if (file.size > 1048576) {
+          alert('이미지 파일 크기는 1MB 이하여야 합니다.');
+          return;
+        }
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.previewImage = e.target.result;
+          const base64String = e.target.result.split(',')[1];
+          this.imageSrc = base64String;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.previewImage = null;
+        this.imageSrc = null;
       }
-      this.imageFile = file;
-      const reader = new FileReader();
-      reader.onload = e => {
-        this.imageSrc = e.target.result;
-      };
-      reader.readAsDataURL(file);
     },
     formatCurrency(value) {
       if (!value) return '';
       return `${parseInt(value).toLocaleString('ko-KR')}원`;
     },
-    addProduct() {
-      if (this.canAddProduct) {
-        this.products.push({ ...this.newProduct });
-        // Reset newProduct for the next entry
-        this.newProduct = {
-          name: '',
-          code: '',
-          price: 0,
-          discountRate: 0,
-          discountedPrice: 0,
-        };
-      }
-    },
     registerProduct(index) {
       const product = this.productsToRegister[index];
-      product.discountedPrice = product.price - (product.price * product.discountRate / 100);
+      product.discountPrice = product.originalPrice - (product.originalPrice * product.discountRate / 100);
       this.registeredProducts.push(product);
       this.productsToRegister.splice(index, 1); // Optionally remove from to-register list
     },
     deleteRegisteredProduct(index) {
       this.registeredProducts.splice(index, 1);
-    },
-    submitForm() {
-      if (!this.canSubmit) return;
-      this.isLoading = true;
-      // Form submission logic would go here
-      setTimeout(() => {
-        this.isLoading = false;
-        alert('Form submitted successfully!');
-      }, 2000);
-      this.save();
     },
     addNotice() {
       if (this.newNotice.trim()) {
@@ -469,7 +483,7 @@ export default {
     },
     addAnswer() {
       if (this.newQuestion.trim() && this.newAnswer.trim()) {
-        this.qa.push({ question: this.newQuestion, answer: this.newAnswer }); // Add as an object
+        this.qa.push({ questionTitle: this.newQuestion, questionAnswer: this.newAnswer }); // Add as an object
         this.newQuestion = '';
         this.newAnswer = '';
       }
@@ -484,6 +498,51 @@ export default {
     deleteQA(index) {
       this.qa.splice(index, 1);
     },
+    deleteProduct(idx) {
+      this.registeredProducts.splice(idx, 1);
+    },
+    saveBroadcast() {
+      const toast = useToast();
+
+      // JSON 형식의 데이터 구성
+      const requestData = {
+        broadcastTitle: this.liveTitle,
+        broadcastSummary: this.liveSummary,
+        broadcastScheduledTime: this.liveDateTime,
+        categoryCd: this.selectedCategory,
+        registeredProducts: this.registeredProducts, // registeredProducts는 배열
+        notices: this.notices, // notices는 배열
+        qa: this.qa, // qa는 배열
+        benefits: this.benefits, // benefits는 배열
+        image: this.imageSrc
+      };
+      // console.log(requestData.broadcastTitle);
+      // console.log(requestData.broadcastSummary);
+      // console.log(requestData.broadcastScheduledTime);
+      // console.log(requestData.categoryCd);
+      // console.log(requestData.registeredProducts);
+      // console.log(requestData.notices);
+      // console.log(requestData.qa);
+      // console.log(requestData.benefits);
+      // console.log(requestData.image);
+
+      // JSON 형식의 데이터를 백엔드로 전송
+      axios.post('http://localhost:8090/live-register', requestData)
+        .then(response => {
+          toast.success("방송 정보가 등록되었습니다.", {
+            timeout: 2000,
+          });
+          setTimeout(() => {
+            this.$router.push({ name: '실시간 라이브 준비' });
+          }, 2000);
+        })
+        .catch(error => {
+          console.error("등록 실패 : ", error);
+          toast.error("방송 등록에 실패했습니다.", {
+            timeout: 2000,
+          });
+        });
+    }
   }
 };
 </script>
@@ -504,6 +563,26 @@ export default {
   font-weight: bold;
 }
 
-// label {
-//   font-weight: bold;
-// }</style>
+.registered-code,
+.registered-price {
+  margin-right: 30px;
+}
+
+.registered-name {
+  margin-right: 5px;
+  font-weight: bold;
+  color: #134010;
+}
+
+.registered-price {
+  font-weight: bold;
+}
+
+thead {
+  margin-bottom: 20px;
+}
+
+label {
+  color: black;
+}
+</style>
