@@ -1,20 +1,33 @@
 <template>
-  <div class="group" style="display: flex !important">
+  <div class="group mt-8">
     <div class="flex-row-wrapper">
-      <h6 class="live-time">{{ broadcastScheduledTime }}</h6>
-      <img class="live-thumbnail-image" :src="'data:image/jpeg;base64,' + broadcastImage"
-           alt="Image" />
+      <h6 class="live-time">{{ timeRemaining }}</h6>
+      <img
+        class="live-thumbnail-image"
+        :src="'data:image/jpeg;base64,' + broadcastImage"
+        alt="Image"
+      />
       <div class="content-wrapper">
         <div class="live-title">{{ broadcastTitle }}</div>
         <div class="live-benefit-title">{{ benefitContent }}</div>
         <hr class="mt-2 mb-2" />
         <div class="product-wrapper">
-          <img class="live-product-image" :src="'data:image/jpeg;base64,' + productImage" alt="Image" />
+          <img
+            class="live-product-image"
+            :src="'data:image/jpeg;base64,' + productImage"
+            alt="Image"
+          />
           <div class="product-content-wrapper">
             <div class="product-title">
               {{ productNm }}
             </div>
-            <div class="product-price">{{ discountRate }}% 할인 {{ discountPrice }}</div>
+            <div style="display: flex; flex-direction: row; align-items: center;">
+              <div class="product-price">{{ discountRate }}% 할인</div>
+              <div style="display: flex; flex-direction: column">
+                <p style="font-size:0.8rem; color:gray; text-decoration:line-through;">{{ formattedListPrice }}원</p>
+                <p style="font-weight: bold;">{{ formattedDiscountPrice }}원</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -22,10 +35,17 @@
     <div
       v-if="!showSubscribeButton"
       class="image-wrapper"
-      @click="showSubscribeButton = true; checkSubscription()"
+      @click="
+        showSubscribeButton = true;
+        checkSubscription();
+      "
     >
-      <img class="live-thumbnail-image" :src="'data:image/jpeg;base64,' + channelImage" alt="Image" />
-      <div class="list-one-line">{{ shopName }}</div>
+      <img
+        class="live-thumbnail-image"
+        :src="'data:image/jpeg;base64,' + channelImage"
+        alt="Image"
+      />
+      <div class="list-one-line">{{ channelNm }}</div>
     </div>
     <div v-show="showSubscribeButton" class="subscribe-button-wrapper">
       <button
@@ -39,9 +59,8 @@
     </div>
   </div>
 </template>
-
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
   props: {
@@ -54,7 +73,7 @@ export default {
       required: true,
     },
     productImage: {
-      type: String,
+      type: Array,
       required: true,
     },
     broadcastTitle: {
@@ -73,12 +92,16 @@ export default {
       type: Number,
       required: true,
     },
+    listPrice: {
+      type: Number,
+      required: true,
+    },
     discountRate: {
-      type: String,
+      type: Number,
       required: true,
     },
     broadcastSeq: {
-      type: String,
+      type: Number,
       required: true,
     },
     channelNm: {
@@ -86,11 +109,11 @@ export default {
       required: true,
     },
     channelImage: {
-      type: String,
+      type: Array,
       required: true,
     },
     channelSeq: {
-      type: String,
+      type: Number,
       required: true,
     },
   },
@@ -100,54 +123,71 @@ export default {
       isSubscribed: false,
     };
   },
+  computed: {
+    timeRemaining() {
+      const broadcastTime = new Date(this.broadcastScheduledTime);
+      const hours = String(broadcastTime.getHours()).padStart(2, "0");
+      const minutes = String(broadcastTime.getMinutes()).padStart(2, "0");
+      return `${hours}:${minutes}`;
+    },
+    formattedDiscountPrice() {
+      return this.discountPrice.toLocaleString();
+    },
+    formattedListPrice() {
+      return this.listPrice.toLocaleString();
+    }
+  },
   methods: {
     checkSubscription() {
-      axios.get('http://localhost:8090/notification-channel', {
-        params: {
-          channelSeq: this.channelSeq
-        }
-      })
-      .then(response => {
-        this.isSubscribed = response.data;
-      })
-      .catch(error => {
-        console.error('구독 정보 확인 실패:', error);
-      });
+      axios
+        .get("http://localhost:8090/notification-channel", {
+          params: {
+            channelSeq: this.channelSeq,
+          },
+        })
+        .then((response) => {
+          this.isSubscribed = response.data;
+        })
+        .catch((error) => {
+          console.error("구독 정보 확인 실패:", error);
+        });
     },
     handleSubscribe() {
       if (this.isSubscribed) {
         // 구독 해제
-        axios.post('http://localhost:8090/notification-channel/remove', null, {
-          params: {
-            channelSeq: this.channelSeq
-          }
-        })
-        .then(response => {
-          this.isSubscribed = false;
-          alert('구독이 취소되었습니다.');
-        })
-        .catch(error => {
-          console.error('구독 취소 실패:', error);
-          alert('구독 취소 중 오류가 발생했습니다.');
-        });
+        axios
+          .post("http://localhost:8090/notification-channel/remove", null, {
+            params: {
+              channelSeq: this.channelSeq,
+            },
+          })
+          .then((response) => {
+            this.isSubscribed = false;
+            alert("구독이 취소되었습니다.");
+          })
+          .catch((error) => {
+            console.error("구독 취소 실패:", error);
+            alert("구독 취소 중 오류가 발생했습니다.");
+          });
       } else {
         // 구독
-        axios.post('http://localhost:8090/notification-channel', null, {
-          params: {
-            channelSeq: this.channelSeq
-          }
-        })
-        .then(response => {
-          this.isSubscribed = true;
-          alert('구독이 완료되었습니다.');
-        })
-        .catch(error => {
-          console.error('구독 실패:', error);
-          alert('구독 중 오류가 발생했습니다.');
-        });
+        axios
+          .post("http://localhost:8090/notification-channel", null, {
+            params: {
+              channelSeq: this.channelSeq,
+            },
+          })
+          .then((response) => {
+            this.isSubscribed = true;
+            alert("구독이 완료되었습니다.");
+          })
+          .catch((error) => {
+            console.error("구독 실패:", error);
+            alert("구독 중 오류가 발생했습니다.");
+          });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -161,11 +201,17 @@ export default {
   justify-content: space-between;
   width: 100%;
   height: 240px;
+  transition: background-color 0.3s;
+}
+.group:hover {
+    background-color: #f4f2ea;
 }
 .image-wrapper img {
   width: 60px;
   height: 60px;
   object-fit: cover;
+  aspect-ratio: 1 / 1;
+  border-radius: 100%;
 }
 .flex-row-wrapper {
   width: 100%;
@@ -186,8 +232,10 @@ export default {
   transition: 1s ease-in-out;
 }
 .live-thumbnail-image {
-  max-height: 240px;
   border-radius: 12px;
+  height: 240px;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
 }
 .live-title {
   font-size: 20px;
@@ -197,6 +245,7 @@ export default {
   height: 60px;
   width: 60px;
   object-fit: cover;
+  border-radius:10px;
 }
 .live-benefit-title {
   color: darkgreen;
@@ -212,8 +261,14 @@ export default {
   flex-direction: column;
 }
 .product-price {
+  font-size: 0.8rem;
   font-weight: bold;
-  color: darkgreen;
+  color: white;
+  background: red;
+  height: fit-content;
+  padding: 4px 16px;
+  border-radius: 15rem;
+  margin-right: 1rem;
 }
 .subscribe-button-wrapper {
   padding: 0 40px 0 0;
@@ -258,7 +313,7 @@ export default {
 }
 
 .subscribe-button.subscribed {
-  background-color: #ECE6CC;
+  background-color: #ece6cc;
   color: gray;
   cursor: default;
 }
