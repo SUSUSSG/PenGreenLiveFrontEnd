@@ -59,7 +59,8 @@
               <div style="margin-left: 20px;">
                 <p>최대 용량 : 1mb</p>
                 <p>권장 사이즈 : 720 x 1280</p>
-                <input type="file" id="imageUpload" @change="handleImageUpload" accept="image/jpeg, image/png, image/gif" class="mb-2" />
+                <input type="file" id="imageUpload" @change="handleImageUpload"
+                  accept="image/jpeg, image/png, image/gif" class="mb-2" />
               </div>
             </div>
             <br>
@@ -137,13 +138,15 @@
                       <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
                       <td class="px-6 py-4">
                         <input type="number" v-model.number="product.discountRate" class="input-control">
-                        <Button @click="applyDiscount(index)" btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark"
-                          type="button" text="적용" />
+                        <Button @click="applyDiscount(index)"
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" type="button"
+                          text="적용" />
                       </td>
                       <td class="px-6 py-4">{{ formatCurrency(product.discountPrice) }}</td>
                       <td class="px-6 py-4">
                         <Button @click="registerProduct(index)"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5  btn-outline-dark" type="button" text="등록" />
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5  btn-outline-dark" type="button"
+                          text="등록" />
                       </td>
                     </tr>
                   </tbody>
@@ -433,34 +436,35 @@ export default {
       product.discountPrice = product.originalPrice - discount;
     },
 
-
+    /**
+     * 
+     * const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    // Base64 인코딩된 이미지 데이터 저장, 접두사 제거
+                    const base64String = e.target.result.split(',')[1];
+                    this.addModalData.imageSrc = base64String;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                this.addModalData.imageSrc = null;
+            }
+     */
     handleImageUpload(event) {
-      /**
-       *  const file = event.target.files[0];
+      const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.previewImage = e.target.result;
-          this.shopInfo.image = file;
+          const base64String = e.target.result.split(',')[1];
+          this.imageSrc = base64String;
         };
         reader.readAsDataURL(file);
       } else {
         this.previewImage = null;
+        this.imageSrc = null;
       }
-       */
-      const file = event.target.files[0];
-      if (!file.type.includes('image/')) {
-        alert('이미지 파일만 업로드 가능합니다.'); 
-        event.target.value = '';  
-        return;
-      }
-      this.imageFile = file;
-      const reader = new FileReader();
-      reader.onload = e => {
-        this.previewImage = e.target.result;
-        this.imageFile = file;
-      };
-      reader.readAsDataURL(file);
     },
     formatCurrency(value) {
       if (!value) return '';
@@ -519,7 +523,8 @@ export default {
         registeredProducts: this.registeredProducts, // registeredProducts는 배열
         notices: this.notices, // notices는 배열
         qa: this.qa, // qa는 배열
-        benefits: this.benefits // benefits는 배열
+        benefits: this.benefits, // benefits는 배열
+        image: this.imageSrc
       };
       console.log(requestData.broadcastTitle);
       console.log(requestData.broadcastSummary);
@@ -529,13 +534,7 @@ export default {
       console.log(requestData.notices);
       console.log(requestData.qa);
       console.log(requestData.benefits);
-
-      // 이미지 파일을 FormData에 추가
-      const formData = new FormData();
-      if (this.imageFile instanceof File) {
-        formData.append('image', this.imageFile);
-        console.log(formData);
-      }
+      console.log(requestData.image);
 
       // JSON 형식의 데이터를 백엔드로 전송
       axios.post('http://localhost:8090/live-register', requestData)
