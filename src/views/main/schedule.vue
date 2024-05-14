@@ -9,7 +9,7 @@
       <Categories @category-selected="handleCategorySelect" style="padding-bottom: 1rem" />
       <hr />
     </div>
-    <div class="content-wrapper">
+    <div class="content-wrapper" style="padding-top:2rem;">
       <CardSchedule
         v-for="(item, index) in liveData"
         :key="index"
