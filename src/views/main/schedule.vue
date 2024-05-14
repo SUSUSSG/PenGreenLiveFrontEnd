@@ -55,7 +55,7 @@ export default {
       selectedCategory: null,
     };
   },
-  mounted(){
+  created(){
     this.fetchLiveData();
   },
   methods: {

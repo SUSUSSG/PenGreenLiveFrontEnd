@@ -3,7 +3,7 @@
     <div class="flex-row-wrapper">
       <h6 class="live-time">{{ broadcastScheduledTime }}</h6>
       <img class="live-thumbnail-image" :src="'data:image/jpeg;base64,' + broadcastImage"
- alt="Image" />
+           alt="Image" />
       <div class="content-wrapper">
         <div class="live-title">{{ broadcastTitle }}</div>
         <div class="live-benefit-title">{{ benefitContent }}</div>
@@ -22,7 +22,7 @@
     <div
       v-if="!showSubscribeButton"
       class="image-wrapper"
-      @click="showSubscribeButton = true"
+      @click="showSubscribeButton = true; checkSubscription()"
     >
       <img class="live-thumbnail-image" :src="'data:image/jpeg;base64,' + channelImage" alt="Image" />
       <div class="list-one-line">{{ shopName }}</div>
@@ -41,6 +41,8 @@
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   props: {
     broadcastScheduledTime: {
@@ -48,11 +50,11 @@ export default {
       required: true,
     },
     broadcastImage: {
-      type: Array,
+      type: String,
       required: true,
     },
     productImage: {
-      type: Array,
+      type: String,
       required: true,
     },
     broadcastTitle: {
@@ -72,11 +74,11 @@ export default {
       required: true,
     },
     discountRate: {
-      type:String,
+      type: String,
       required: true,
     },
-    broadcastSeq:{
-      type:String,
+    broadcastSeq: {
+      type: String,
       required: true,
     },
     channelNm: {
@@ -84,7 +86,7 @@ export default {
       required: true,
     },
     channelImage: {
-      type: Array,
+      type: String,
       required: true,
     },
     channelSeq: {
@@ -99,18 +101,56 @@ export default {
     };
   },
   methods: {
+    checkSubscription() {
+      axios.get('http://localhost:8090/notification-channel', {
+        params: {
+          channelSeq: this.channelSeq
+        }
+      })
+      .then(response => {
+        this.isSubscribed = response.data;
+      })
+      .catch(error => {
+        console.error('구독 정보 확인 실패:', error);
+      });
+    },
     handleSubscribe() {
       if (this.isSubscribed) {
         // 구독 해제
-        this.isSubscribed = false;
+        axios.post('http://localhost:8090/notification-channel/remove', null, {
+          params: {
+            channelSeq: this.channelSeq
+          }
+        })
+        .then(response => {
+          this.isSubscribed = false;
+          alert('구독이 취소되었습니다.');
+        })
+        .catch(error => {
+          console.error('구독 취소 실패:', error);
+          alert('구독 취소 중 오류가 발생했습니다.');
+        });
       } else {
         // 구독
-        this.isSubscribed = true;
+        axios.post('http://localhost:8090/notification-channel', null, {
+          params: {
+            channelSeq: this.channelSeq
+          }
+        })
+        .then(response => {
+          this.isSubscribed = true;
+          alert('구독이 완료되었습니다.');
+        })
+        .catch(error => {
+          console.error('구독 실패:', error);
+          alert('구독 중 오류가 발생했습니다.');
+        });
       }
-    },
-  },
+    }
+  }
 };
 </script>
+
 <style scoped>
 .content-wrapper {
   width: 100%;
