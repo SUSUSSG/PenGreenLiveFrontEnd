@@ -527,7 +527,7 @@ export default {
       // console.log(requestData.image);
 
       // JSON 형식의 데이터를 백엔드로 전송
-      axios.post('http://localhost:8090/live-register', requestData)
+      axios.post('http://localhost:8090/register-broadcast', requestData)
         .then(response => {
           toast.success("방송 정보가 등록되었습니다.", {
             timeout: 2000,
