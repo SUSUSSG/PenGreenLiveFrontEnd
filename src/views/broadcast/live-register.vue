@@ -532,6 +532,9 @@ export default {
           toast.success("방송 정보가 등록되었습니다.", {
             timeout: 2000,
           });
+          setTimeout(() => {
+            this.$router.push({ name: '실시간 라이브 준비' });
+          }, 2000);
         })
         .catch(error => {
           console.error("등록 실패 : ", error);
