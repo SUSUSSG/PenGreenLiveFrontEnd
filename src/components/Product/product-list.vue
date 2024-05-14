@@ -2,6 +2,7 @@
     <div>
         <Card title="상품목록" noborder>
             <div class="buttons-container">
+                <!-- 상품등록 모달 -->
                 <Modal title="상품등록" label="상품등록" labelClass="btn inline-flex justify-center btn-dark btn-sm mr-3"
                        ref="modal1" @closed="resetModalData">
                     <div class="text-base text-slate-600 dark:text-slate-300">
@@ -36,11 +37,13 @@
                              style="max-width: 100px">
                     </div>
                     <template v-slot:footer>
-                        <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal()"/>
                         <Button text="등록" btnClass="btn-dark btn-sm" @click="registerProduct"/>
+                        <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal()"/>
                     </template>
                 </Modal>
+                <!-- 상품삭제 버튼 -->
                 <button class="btn inline-flex justify-center btn-outline-dark btn-sm "><span>상품삭제</span></button>
+                <!-- 상품 정보 수정 모달 -->
                 <Modal title="상품 정보 수정" ref="editModal" :showButtons="false" @closed="resetEditModalData">
                     <div class="text-base text-slate-600 dark:text-slate-300">
                         <Textinput label="상품코드" type="text" name="editproductcode" v-model="editModalData.productCd"
@@ -53,10 +56,11 @@
                         </div>
                         <Textinput label="상품명" type="text" name="editproductname" v-model="editModalData.productNm"
                                    class="mb-2"/>
-                        <select v-model="addModalData.categoryCd" class="form-control mb-2">
+                        <label type="text" class="ltr:inline-block rtl:block input-label">카테고리</label><br>
+                        <select v-model="editModalData.categoryCd" class="form-control mb-2">
                             <option disabled value="">카테고리 선택</option>
-                            <option v-for="category in categories" :key="category.id" :value="category.id">
-                                {{ category.name }}
+                            <option v-for="category in categories" :key="category.value" :value="category.value">
+                                {{ category.label }}
                             </option>
                         </select>
                         <Textinput label="정가" type="text" v-model="formattedListPrice" name="editlistprice"
@@ -73,7 +77,7 @@
                     </div>
                     <template v-slot:footer>
                         <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="closeEditModal"/>
-                        <Button text="저장" btnClass="btn-dark btn-sm" @click="saveProductDetails"/>
+                        <Button text="저장" btnClass="btn-dark btn-sm" @click="updateProductDetails"/>
                     </template>
                 </Modal>
             </div>
@@ -164,6 +168,7 @@ export default {
                 selectedCategory: ''
             },
             editModalData: {
+                productSeq: null,
                 productCd: '',
                 productNm: '',
                 categoryCd: '',
@@ -280,7 +285,7 @@ export default {
                 });
         },
         handleCategoryChange() {
-            console.log(this.selectedCategory); //확인용
+            console.log(this.selectedCategory); 
         },
         getVendorSeqFromSession() {
             // 세션에서 vendor_seq 읽어오는 로직 구현
@@ -330,6 +335,7 @@ export default {
         },
         openEditModal(row) {
             this.editModalData = {
+                productSeq: row.productSeq,
                 productCd: row.productCd,
                 greenProductCd: row.greenProductCd,
                 productNm: row.productNm,
@@ -337,9 +343,10 @@ export default {
                 listPrice: row.listPrice,
                 productStock: row.productStock,
                 brand: row.brand,
-                imageSrc: row.imageUrl,
-                previewImage: row.imageUrl ? `data:image/png;base64,${row.imageUrl}` : null,
+                imageSrc: row.productImage ? row.productImage : null,
+                previewImage: row.productImage ? `data:image/png;base64,${row.productImage}` : null,
             };
+            console.log(this.editModalData.productSeq);  
             this.$refs.editModal.openModal();
         },
         closeEditModal() {
@@ -358,56 +365,29 @@ export default {
         removeImage(index) {
             this.customer.splice(index, 1);
         },
-        saveProductDetails() {
-            const productToUpdate = this.advancedTable.find(product => product.productCode === this.productcode);
-            if (productToUpdate) {
-                productToUpdate.customer = this.customer;
-            }
-            this.$refs.editModal.closeModal();
-        },
-        openAddModal() {
-            this.addModalData = {
-                productCd: '',
-                greenProductCd: '',
-                productNm: '',
-                categoryCd: '',
-                listPrice: '',
-                brand: '',
-                productStock: '',
-                imageSrc: null,
-                previewImage: null,
-                vendorSeq: 1, // 기본값으로 초기화
-                channelSeq: 1  // 기본값으로 초기화
+        updateProductDetails() {
+            const url = `http://localhost:8090/${this.editModalData.productSeq}`;
+            const productData = {
+                productCd: this.editModalData.productCd,
+                greenProductCd: this.editModalData.greenProductCd,
+                productNm: this.editModalData.productNm,
+                categoryCd: this.editModalData.categoryCd,
+                listPrice: this.editModalData.listPrice,
+                productStock: this.editModalData.productStock,
+                brand: this.editModalData.brand,
+                base64Image: this.editModalData.imageSrc, 
             };
-            this.$refs.modal1.openModal();
-        },
-        resetModalData() {
-            this.addModalData = {
-                productCd: '',
-                greenProductCd: '',
-                productNm: '',
-                categoryCd: '',
-                listPrice: '',
-                brand: '',
-                productStock: '',
-                imageSrc: null,
-                previewImage: null,
-                vendorSeq: 1, // 기본값으로 리셋
-                channelSeq: 1  // 기본값으로 리셋
-            };
-        },
-        resetEditModalData() {
-            this.editModalData = {
-                productCd: '',
-                greenProductCd: '',
-                productNm: '',
-                categoryCd: '',
-                listPrice: '',
-                brand: '',
-                productStock: '',
-                imageSrc: null,
-                previewImage: null,
-            };
+
+            axios.put(url, productData)
+                .then(response => {
+                    alert("Product successfully updated");
+                    this.$refs.editModal.closeModal();
+                    this.fetchProductsByVendorSeq();
+                })
+                .catch(error => {
+                    console.error("Failed to update product:", error.response.data);
+                    alert("Failed to update product: " + error.response.data.message);
+                });
         },
         registerProduct() {
             const url = `http://localhost:8090/products?vendorSeq=${this.addModalData.vendorSeq}&channelSeq=${this.addModalData.channelSeq}`;
@@ -419,7 +399,7 @@ export default {
                 listPrice: this.addModalData.listPrice,
                 productStock: this.addModalData.productStock,
                 brand: this.addModalData.brand,
-                productImage: this.addModalData.imageSrc, // base64 이미지 데이터
+                productImage: this.addModalData.imageSrc, 
             };
 
             console.log("Sending product data to server:", productData);
