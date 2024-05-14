@@ -1,21 +1,19 @@
 <template>
   <div class="menu-wrapper">
     <div class="menu-item" v-for="date in dates" :key="date.date">
-      <router-link :to="`/${padZero(date.year, 4)}${padZero(date.month, 2)}${padZero(date.day, 2)}`" :class="{ 'active': isCurrentDate(date) }">
-      <span>{{ padZero(date.day, 2) }}</span>
-      <span>{{ getWeekdayName(date.weekday) }}</span>
-    </router-link>
+      <div
+        :class="{ 'active': isCurrentDate(date) }"
+        @click="selectDate(date.date)"
+      >
+        <span>{{ padZero(date.day, 2) }}</span>
+        <span>{{ getWeekdayName(date.weekday) }}</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Icon from "../Icon";
-
 export default {
-  components: {
-    Icon,
-  },
   data() {
     return {
       dates: [],
@@ -49,10 +47,14 @@ export default {
     },
     padZero(value, length) {
       return String(value).padStart(length, '0');
+    },
+    selectDate(date) {
+      this.$emit('date-selected', date);
     }
   },
 };
 </script>
+
 <style lang="scss" scoped>
 .menu-wrapper {
   display: flex;
@@ -60,7 +62,7 @@ export default {
   height: 3rem;
   justify-content: center;
   align-items: center;
-  margin : 0 auto;
+  margin: 0 auto;
 }
 
 .menu-item {
@@ -73,8 +75,9 @@ export default {
   width: 25.6%;
   height: 100%;
   position: relative;
+  cursor: pointer;
 
-  a {
+  div {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -86,7 +89,7 @@ export default {
     }
   }
 
-  a.active {
+  div.active {
     color: #1f1606;
     font-weight: 500;
     font-size: 1.1rem;
