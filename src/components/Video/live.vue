@@ -1,12 +1,9 @@
 <template>
   <div class="video-component" :style="{ width: width, height: height }">
-    <div
-      class="title-bar w-full flex items-center justify-between"
-      v-if="showTitleBar"
-    >
+    <div class="title-bar w-full flex items-center justify-between" v-if="showTitleBar">
       <div class="flex items-center">
         <img :src="announceIconSrc" class="logo" style="width: 50%" />
-        <p class=" broad-title">방송 제목</p>
+        <p class="broad-title">방송 제목</p>
       </div>
     </div>
 
@@ -16,11 +13,7 @@
       </div>
       <div class="icons-sidebar" v-if="showIconSideBar">
         <div class="icon-wrapper" @click="toggleLike">
-          <img
-            ref="heartIcon"
-            :src="isLiked ? activeHeartIconSrc : heartIconSrc"
-            class="heart-icon"
-          />
+          <img ref="heartIcon" :src="isLiked ? activeHeartIconSrc : heartIconSrc" class="heart-icon" />
           <span class="likes-count">{{ likesCount }}</span>
         </div>
         <div class="icon-wrapper" @click="toggleMute">
@@ -44,8 +37,15 @@ import muteIcon from "@/assets/images/all-img/mute.png";
 import shareIcon from "@/assets/images/all-img/share.png";
 import soundIcon from "@/assets/images/all-img/speaker.png";
 import redheart from "@/assets/images/all-img/redheart.png";
+import { onMounted } from 'vue';
+import axios from "axios";
 
 export default {
+  setup() {
+    onMounted(() => {
+
+    });
+  },
   components: {
     VideoPlayer,
   },
@@ -70,8 +70,9 @@ export default {
   },
   data() {
     return {
+      broadcastId: undefined,
       isLiked: false,
-      likesCount: 100, // Dummy data
+      likesCount: 0,  // 초기값 설정
       isMuted: false,
       announceIconSrc: announceIcon,
       heartIconSrc: heartIcon,
@@ -81,19 +82,47 @@ export default {
       shareIconSrc: shareIcon,
       OV: null,
       session: null,
+      likeQueue: [],
+      likeTimeout: null,
     };
+  },
+  async mounted() {
+    await this.updateLikes();
+    setInterval(async () => {
+      await this.updateLikes();
+    }, 15000);
   },
   methods: {
     toggleLike() {
       this.isLiked = !this.isLiked;
-      this.likesCount += this.isLiked ? 1 : -1;
+      if (this.isLiked) {
+        this.likesCount += 1;
+        this.likeQueue.push(1);
+      } else {
+        this.likesCount -= 1;
+        this.likeQueue.push(-1);
+      }
+      this.processLikeQueue();
+    },
+    processLikeQueue() {
+      if (this.likeTimeout) {
+        clearTimeout(this.likeTimeout);
+      }
+      this.likeTimeout = setTimeout(() => {
+        console.log("좋아요 수 집계 중");
+        const totalLikes = this.likeQueue.reduce((acc, val) => acc + val, 0);
+        this.likeQueue = [];
+        if (totalLikes > 0) {
+          this.incrementLike(totalLikes);
+        } else if (totalLikes < 0) {
+          this.decrementLike(-totalLikes);
+        }
+      }, 5000); // 5초 동안 클릭을 모아서 처리
     },
     toggleMute() {
       this.isMuted = !this.isMuted;
-      // Additional functionality to actually mute the video can be implemented here
     },
     share() {
-      // 현재 페이지 URL을 클립보드에 복사
       const currentUrl = window.location.href; // 현재 페이지의 URL을 가져옴
       navigator.clipboard
           .writeText(currentUrl)
@@ -104,7 +133,38 @@ export default {
             console.error("Failed to copy text: ", err); // 오류 처리
           });
     },
+    incrementLike(count) {
+      axios.patch(`http://localhost:8090/broadcasts/statistics/${this.broadcastId}/likes/increment`, { count })
+          .then(response => console.log("좋아요 수 증가"))
+          .catch(error => console.log("좋아요 증가 실패: " + error));
+    },
+    decrementLike(count) {
+      axios.patch(`http://localhost:8090/broadcasts/statistics/${this.broadcastId}/likes/decrement`, { count })
+          .then(response => console.log("좋아요 수 감소"))
+          .catch(error => console.log("좋아요 감소 실패: " + error));
+    },
+    async fetchLikes() {
+      try {
+        const response = await axios.get(`http://localhost:8090/broadcasts/statistics/${this.broadcastId}`);
+        console.log('좋아요수 들고옴:', response.data);
+        return response.data;
+      } catch (error) {
+        console.error('좋아요를 가져오지 못했습니다.', error);
+        throw error;
+      }
+    },
+    async updateLikes() {
+      try {
+        const statistics = await this.fetchLikes();
+        this.likesCount = statistics.likesCount;
+      } catch (error) {
+        console.error('업데이트 실패:', error);
+      }
+    }
   },
+  created() {
+    this.broadcastId = this.$route.params.broadcastId || 'defaultSessionId';
+  }
 };
 </script>
 
@@ -138,7 +198,7 @@ export default {
 .video-and-sidebar-wrapper {
   display: flex;
   flex-direction: row;
-  justify-content: center; 
+  justify-content: center;
   align-items: flex-end;
   width: 100%;
   height: 100%;
