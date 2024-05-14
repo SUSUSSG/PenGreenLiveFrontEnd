@@ -46,7 +46,10 @@
                   v-for="(product, subIndex) in item.products"
                   :key="'product-' + index + '-' + subIndex"
                 >
-                  <img :src="product.productImage" class="additional-image" />
+                  <img
+                    :src="'data:image/jpeg;base64,' + product.productImage"
+                    class="additional-image"
+                  />
                   <div class="additional-image-title">
                     {{ product.productNm }}
                   </div>
@@ -71,7 +74,7 @@
           background-color: white;
         "
       >
-          <Categories @category-selected="onCategorySelected" />
+        <Categories @category-selected="onCategorySelected" />
         <hr class="mt-6 mb-12" />
       </div>
 
@@ -134,7 +137,7 @@
       >
         <swiper-slide v-for="(card, index) in cardsData" :key="'card-' + index">
           <CardComponent
-            :src="'data:image/jpeg;base64,' + card.broadcastImage"
+            :imageSrc="card.broadcastImage"
             :title="card.broadcastTitle"
             :text="card.broadcastSummary"
             :datetime="card.broadcastScheduledTime"
@@ -213,13 +216,13 @@ export default {
         },
       ],
       categoryCodes: {
-        "전체": null,
-        "뷰티": "BCT-CTG-001",
-        "식품": "BCT-CTG-002",
-        "생활용품": "BCT-CTG-003",
-        "유아동": "BCT-CTG-004",
-        "테크": "BCT-CTG-005",
-        "패션": "BCT-CTG-006"
+        전체: null,
+        뷰티: "BCT-CTG-001",
+        식품: "BCT-CTG-002",
+        생활용품: "BCT-CTG-003",
+        유아동: "BCT-CTG-004",
+        테크: "BCT-CTG-005",
+        패션: "BCT-CTG-006",
       },
       selectedCategory: "전체",
     };
@@ -237,12 +240,14 @@ export default {
         });
     },
     fetchScheduledBroadcasts() {
-      const categoryCode = this.selectedCategory === '전체' ? null : this.selectedCategory;
+      const categoryCode =
+        this.selectedCategory === "전체" ? null : this.selectedCategory;
       const params = {};
       if (categoryCode) {
         params.categoryCd = categoryCode;
       }
-      axios.get("http://localhost:8090/schedule", { params:params })
+      axios
+        .get("http://localhost:8090/schedule", { params: params })
         .then((response) => {
           this.cardsData = response.data;
           console.log("Scheduled broadcasts data:", this.cardsData);
@@ -252,12 +257,14 @@ export default {
         });
     },
     fetchLiveChanceCarousels() {
-      const categoryCode = this.selectedCategory === '전체' ? null : this.selectedCategory;
+      const categoryCode =
+        this.selectedCategory === "전체" ? null : this.selectedCategory;
       const params = {};
       if (categoryCode) {
         params.categoryCd = categoryCode;
       }
-      axios.get("http://localhost:8090/live-chance", { params: params })  // params 객체를 올바르게 전달
+      axios
+        .get("http://localhost:8090/live-chance", { params: params }) // params 객체를 올바르게 전달
         .then((response) => {
           this.liveItems = response.data;
           console.log("Live chance carousels data:", this.liveItems);
@@ -267,13 +274,11 @@ export default {
         });
     },
 
-
     onCategorySelected(categoryCd) {
       this.selectedCategory = categoryCd;
       this.fetchScheduledBroadcasts();
       this.fetchLiveChanceCarousels();
-    }
-    
+    },
   },
 };
 </script>
@@ -456,7 +461,8 @@ export default {
   height: 40px;
   object-fit: cover;
   margin-right: 10px;
-}
+  aspect-ratio: 1/1;
+} 
 
 .live-caro .live-info {
   display: flex;
@@ -481,6 +487,7 @@ export default {
   width: 200px;
   height: auto;
   aspect-ratio: 3/4;
+  object-fit: cover;
 }
 
 .live-caro .live-main-title {

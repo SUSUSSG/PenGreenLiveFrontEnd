@@ -1,5 +1,5 @@
 <template>
-  <div class="group" style="display: flex !important">
+  <div class="group" style="margin-top:3rem;">
     <div class="flex-row-wrapper">
       <h6 class="live-time">{{ timeRemaining }}</h6>
       <img
@@ -201,6 +201,10 @@ export default {
   justify-content: space-between;
   width: 100%;
   height: 240px;
+  transition: background-color 0.3s;
+}
+.group:hover {
+    background-color: #f4f2ea;
 }
 .image-wrapper img {
   width: 60px;

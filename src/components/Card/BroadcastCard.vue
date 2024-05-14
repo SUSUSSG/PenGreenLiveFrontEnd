@@ -1,7 +1,7 @@
 <template>
   <div class="card-component">
     <div class="card-header">
-      <span class="remain-time" v-if="timeDifference">{{ timeDifference }} 뒤</span>
+      <span class="remain-time" v-if="timeDifference">{{ timeDifference }}</span>
       <span class="remain-time" v-else>실시간 방송중!!</span>
 
       <div class="card-time">
@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="card-body">
-      <img :src="imageSrc" alt="Card image" class="card-image" />
+      <img :src="'data:image/jpeg;base64,' + imageSrc" alt="Card image" class="card-image" />
       <h3 class="card-title">{{ title }}</h3>
       <p class="card-text">{{ text }}</p>
     </div>
@@ -86,12 +86,19 @@ export default {
   .card-body {
     display: flex;
     flex-direction: column;
-    align-items: left;
+    align-items: flex-start;
     margin-bottom: 16px;
+    width: 100%;
   }
   
   .card-image {
     margin-bottom: 16px;
+  }
+
+  .card-body img{
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
   }
   
   .card-title {

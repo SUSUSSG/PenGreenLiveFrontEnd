@@ -9,7 +9,7 @@
       <Categories @category-selected="handleCategorySelect" style="padding-bottom: 1rem" />
       <hr />
     </div>
-    <div class="content-wrapper" style="padding-top:2rem;">
+    <div class="content-wrapper">
       <CardSchedule
         v-for="(item, index) in liveData"
         :key="index"
@@ -114,7 +114,6 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap:4rem;
 }
 
 .under-category-section::-webkit-scrollbar {
