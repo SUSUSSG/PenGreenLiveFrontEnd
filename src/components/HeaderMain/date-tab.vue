@@ -2,7 +2,7 @@
   <div class="menu-wrapper">
     <div class="menu-item" v-for="date in dates" :key="date.date">
       <div
-        :class="{ 'active': isCurrentDate(date) }"
+        :class="{ 'active': isCurrentDate(date.date) }"
         @click="selectDate(date.date)"
       >
         <span>{{ padZero(date.day, 2) }}</span>
@@ -17,6 +17,7 @@ export default {
   data() {
     return {
       dates: [],
+      selectedDate: new Date().toISOString().slice(0, 10), // 현재 날짜로 초기화
     };
   },
   created() {
@@ -34,12 +35,7 @@ export default {
   },
   methods: {
     isCurrentDate(date) {
-      const today = new Date();
-      return (
-        date.year === today.getFullYear() &&
-        date.month === today.getMonth() + 1 &&
-        date.day === today.getDate()
-      );
+      return date === this.selectedDate;
     },
     getWeekdayName(weekday) {
       const weekdayNames = ["일", "월", "화", "수", "목", "금", "토"];
@@ -49,6 +45,7 @@ export default {
       return String(value).padStart(length, '0');
     },
     selectDate(date) {
+      this.selectedDate = date;
       this.$emit('date-selected', date);
     }
   },
