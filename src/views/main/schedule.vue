@@ -13,17 +13,18 @@
       <CardSchedule
         v-for="(item, index) in liveData"
         :key="index"
-        :liveTime="item.liveTime"
-        :thumbnailUrl="item.thumbnailUrl"
-        :liveTitle="item.broadcastTitle"
-        :liveBenefitTitle="item.benefitContent"
-        :productName="item.broadcastTitle"
-        :productImgUrl="item.productImgUrl"
-        :productDescription="item.productDescription"
-        :productPrice="item.discountPrice"
-        :shopName="item.channelNm"
-        :shopThumbnailUrl="item.shopThumbnailUrl"
+        :broadcastScheduledTime="item.broadcastScheduledTime"
+        :broadcastImage="item.broadcastImage"
+        :broadcastTitle="item.broadcastTitle"
+        :benefitContent="item.benefitContent"
+        :productNm="item.productNm"
+        :productImage="item.productImage"
+        :discountRate ="item.discountRate"
+        :discountPrice="item.discountPrice"
+        :channelNm="item.channelNm"
+        :channelImage="item.channelImage"
         :channelSeq="item.channelSeq"
+        :broadcastSeq="item.broadcastSeq"
       />
       <hr class="mt-6" />
       <hr />
@@ -54,7 +55,11 @@ export default {
       selectedCategory: null,
     };
   },
+  mounted(){
+    this.fetchLiveData();
+  },
   methods: {
+
     handleDateSelect(date) {
       this.selectedDate = date;
       this.fetchLiveData();
@@ -75,9 +80,6 @@ export default {
           if (Array.isArray(response.data)) {
             this.liveData = response.data.map(item => ({
               ...item,
-              thumbnailUrl: `data:image/jpeg;base64,${this.arrayBufferToBase64(item.broadcastImage)}`,
-              productImgUrl: `data:image/jpeg;base64,${this.arrayBufferToBase64(item.broadcastImage)}`,
-              shopThumbnailUrl: `data:image/jpeg;base64,${this.arrayBufferToBase64(item.channelImage)}`
             }));
           } else {
             console.error("Expected an array but got", typeof response.data);

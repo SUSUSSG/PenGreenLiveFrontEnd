@@ -1,19 +1,20 @@
 <template>
   <div class="group" style="display: flex !important">
     <div class="flex-row-wrapper">
-      <h6 class="live-time">{{ liveTime }}</h6>
-      <img class="live-thumbnail-image" :src="thumbnailUrl" alt="Image" />
+      <h6 class="live-time">{{ broadcastScheduledTime }}</h6>
+      <img class="live-thumbnail-image" :src="'data:image/jpeg;base64,' + broadcastImage"
+ alt="Image" />
       <div class="content-wrapper">
-        <div class="live-title">{{ liveTitle }}</div>
-        <div class="live-benefit-title">{{ liveBenefitTitle }}</div>
+        <div class="live-title">{{ broadcastTitle }}</div>
+        <div class="live-benefit-title">{{ benefitContent }}</div>
         <hr class="mt-2 mb-2" />
         <div class="product-wrapper">
-          <img class="live-product-image" :src="productImgUrl" alt="Image" />
+          <img class="live-product-image" :src="'data:image/jpeg;base64,' + productImage" alt="Image" />
           <div class="product-content-wrapper">
             <div class="product-title">
-              {{ productName }} - {{ productDescription }}
+              {{ productNm }}
             </div>
-            <div class="product-price">60% 할인 {{ productPrice }}</div>
+            <div class="product-price">{{ discountRate }}% 할인 {{ discountPrice }}</div>
           </div>
         </div>
       </div>
@@ -23,7 +24,7 @@
       class="image-wrapper"
       @click="showSubscribeButton = true"
     >
-      <img class="live-thumbnail-image" :src="shopThumbnailUrl" alt="Image" />
+      <img class="live-thumbnail-image" :src="'data:image/jpeg;base64,' + channelImage" alt="Image" />
       <div class="list-one-line">{{ shopName }}</div>
     </div>
     <div v-show="showSubscribeButton" class="subscribe-button-wrapper">
@@ -42,43 +43,51 @@
 <script>
 export default {
   props: {
-    liveTime: {
+    broadcastScheduledTime: {
       type: String,
       required: true,
     },
-    thumbnailUrl: {
+    broadcastImage: {
+      type: Array,
+      required: true,
+    },
+    productImage: {
+      type: Array,
+      required: true,
+    },
+    broadcastTitle: {
       type: String,
       required: true,
     },
-    productImgUrl: {
+    benefitContent: {
       type: String,
       required: true,
     },
-    liveTitle: {
+    productNm: {
       type: String,
       required: true,
     },
-    liveBenefitTitle: {
+    discountPrice: {
+      type: Number,
+      required: true,
+    },
+    discountRate: {
+      type:String,
+      required: true,
+    },
+    broadcastSeq:{
+      type:String,
+      required: true,
+    },
+    channelNm: {
       type: String,
       required: true,
     },
-    productName: {
-      type: String,
+    channelImage: {
+      type: Array,
       required: true,
     },
-    productDescription: {
-      type: String,
-      required: true,
-    },
-    productPrice: {
-      type: String,
-      required: true,
-    },
-    shopName: {
-      type: String,
-      required: true,
-    },
-    shopThumbnailUrl: {
+    channelSeq: {
       type: String,
       required: true,
     },
