@@ -1,20 +1,12 @@
 <template>
   <ScrollTopButton />
-
   <div class="border-container">
     <MenuHeaderNav />
     <hr />
-    <DataTab />
+    <DataTab @date-selected="handleDateSelect" />
     <hr />
-    <div
-      style="
-        position: sticky;
-        top: 5.5rem;
-        z-index: 10;
-        background-color: white;
-      "
-    >
-      <Categories style="padding-bottom: 1rem" />
+    <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
+      <Categories @category-selected="handleCategorySelect" style="padding-bottom: 1rem" />
       <hr />
     </div>
     <div class="content-wrapper">
@@ -23,15 +15,15 @@
         :key="index"
         :liveTime="item.liveTime"
         :thumbnailUrl="item.thumbnailUrl"
-        :liveTitle="item.liveTitle"
-        :liveBenefitTitle="item.liveBenefitTitle"
-        :productName="item.productName"
+        :liveTitle="item.broadcastTitle"
+        :liveBenefitTitle="item.benefitContent"
+        :productName="item.broadcastTitle"
         :productImgUrl="item.productImgUrl"
         :productDescription="item.productDescription"
-        :productPrice="item.productPrice"
-        :shopName="item.shopName"
+        :productPrice="item.discountPrice"
+        :shopName="item.channelNm"
         :shopThumbnailUrl="item.shopThumbnailUrl"
-        class="mt-8"
+        :channelSeq="item.channelSeq"
       />
       <hr class="mt-6" />
       <hr />
@@ -40,6 +32,7 @@
 </template>
 
 <script>
+import axios from 'axios';
 import Categories from "@/components/Category/Categories.vue";
 import CardSchedule from "@/components/Card/schedule-card.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
@@ -56,87 +49,56 @@ export default {
   },
   data() {
     return {
-      liveData: [
-        {
-          liveTime: "09:10",
-          thumbnailUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          liveTitle: "live title test",
-          liveBenefitTitle: "라이브 한정 추가 쿠폰 제공",
-          productName: "상품 이름",
-          productImgUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          productDescription: "상품 설명이 위치하는 영역입니다.",
-          productPrice: "60% 할인 123,450원",
-          shopName: "testshop",
-          shopThumbnailUrl:
-            "https://phinf.pstatic.net/dthumb/?src=%22http%3A%2F%2Fshop1.phinf.naver.net%2F20220412_182%2F1649725677134MWG9L_PNG%2F50861519847511263_1050462988.png%22&service=selective&type=f180_180_q90",
-        },
-        {
-          liveTime: "09:10",
-          thumbnailUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          liveTitle: "live title test",
-          liveBenefitTitle: "라이브 한정 추가 쿠폰 제공",
-          productName: "상품 이름",
-          productImgUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          productDescription: "상품 설명이 위치하는 영역입니다.",
-          productPrice: "60% 할인 123,450원",
-          shopName: "testshop",
-          shopThumbnailUrl:
-            "https://phinf.pstatic.net/dthumb/?src=%22http%3A%2F%2Fshop1.phinf.naver.net%2F20220412_182%2F1649725677134MWG9L_PNG%2F50861519847511263_1050462988.png%22&service=selective&type=f180_180_q90",
-        },
-        {
-          liveTime: "09:10",
-          thumbnailUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          liveTitle: "live title test",
-          liveBenefitTitle: "라이브 한정 추가 쿠폰 제공",
-          productName: "상품 이름",
-          productImgUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          productDescription: "상품 설명이 위치하는 영역입니다.",
-          productPrice: "60% 할인 123,450원",
-          shopName: "testshop",
-          shopThumbnailUrl:
-            "https://phinf.pstatic.net/dthumb/?src=%22http%3A%2F%2Fshop1.phinf.naver.net%2F20220412_182%2F1649725677134MWG9L_PNG%2F50861519847511263_1050462988.png%22&service=selective&type=f180_180_q90",
-        },
-        {
-          liveTime: "09:10",
-          thumbnailUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          liveTitle: "live title test",
-          liveBenefitTitle: "라이브 한정 추가 쿠폰 제공",
-          productName: "상품 이름",
-          productImgUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          productDescription: "상품 설명이 위치하는 영역입니다.",
-          productPrice: "60% 할인 123,450원",
-          shopName: "testshop",
-          shopThumbnailUrl:
-            "https://phinf.pstatic.net/dthumb/?src=%22http%3A%2F%2Fshop1.phinf.naver.net%2F20220412_182%2F1649725677134MWG9L_PNG%2F50861519847511263_1050462988.png%22&service=selective&type=f180_180_q90",
-        },
-        {
-          liveTime: "09:10",
-          thumbnailUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          liveTitle: "live title test",
-          liveBenefitTitle: "라이브 한정 추가 쿠폰 제공",
-          productName: "상품 이름",
-          productImgUrl:
-            "https://g-selected.pstatic.net/MjAyNDA0MjJfNjMg/MDAxNzEzNzQyMDA2NjEx.UWvsFEHFzOoSUWwKGXJIl3T7tJrNRte4Bc39WLbc0gEg.5EipWVepAxebwdX8HRURM4kiI0phN1juuk3IkQVvyycg.JPEG/image.jpg?type=f320_480_q90",
-          productDescription: "상품 설명이 위치하는 영역입니다.",
-          productPrice: "60% 할인 123,450원",
-          shopName: "testshop",
-          shopThumbnailUrl:
-            "https://phinf.pstatic.net/dthumb/?src=%22http%3A%2F%2Fshop1.phinf.naver.net%2F20220412_182%2F1649725677134MWG9L_PNG%2F50861519847511263_1050462988.png%22&service=selective&type=f180_180_q90",
-        },
-      ],
+      liveData: [],
+      selectedDate: null,
+      selectedCategory: null,
     };
+  },
+  methods: {
+    handleDateSelect(date) {
+      this.selectedDate = date;
+      this.fetchLiveData();
+    },
+    handleCategorySelect(categoryCd) {
+      this.selectedCategory = categoryCd;
+      this.fetchLiveData();
+    },
+    async fetchLiveData() {
+        try {
+          const response = await axios.get("http://localhost:8090/schedule", {
+            params: {
+              scheduledDate: this.selectedDate,
+              categoryCd: this.selectedCategory,
+            },
+          });
+          console.log(response.data);  // 응답 데이터 출력
+          if (Array.isArray(response.data)) {
+            this.liveData = response.data.map(item => ({
+              ...item,
+              thumbnailUrl: `data:image/jpeg;base64,${this.arrayBufferToBase64(item.broadcastImage)}`,
+              productImgUrl: `data:image/jpeg;base64,${this.arrayBufferToBase64(item.broadcastImage)}`,
+              shopThumbnailUrl: `data:image/jpeg;base64,${this.arrayBufferToBase64(item.channelImage)}`
+            }));
+          } else {
+            console.error("Expected an array but got", typeof response.data);
+          }
+        } catch (error) {
+          console.error("Error fetching live data:", error);
+        }
+      
+    },
+    arrayBufferToBase64(buffer) {
+      let binary = '';
+      const bytes = new Uint8Array(buffer);
+      for (let i = 0; i < bytes.byteLength; i++) {
+        binary += String.fromCharCode(bytes[i]);
+      }
+      return btoa(binary);
+    },
   },
 };
 </script>
+
 <style scoped>
 .border-container {
   width: 74%;
