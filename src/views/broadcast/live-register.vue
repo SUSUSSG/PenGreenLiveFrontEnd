@@ -50,19 +50,20 @@
             <br>
             <Textinput label="라이브 한줄 요약" placeholder="라이브 한줄 요약을 입력하세요" name="liveSummary" v-model="liveSummary" />
             <br>
+
             <label>대표 이미지 등록</label>
             <div style="display: flex; align-items: center;">
               <div style="flex-shrink: 0;">
-                <img :src="imageSrc" alt="대표 이미지 미리보기" style="width: 180px; height: 320px" />
+                <img :src="previewImage" alt="previewImage" style="width: 180px; height: 320px" />
               </div>
               <div style="margin-left: 20px;">
                 <p>최대 용량 : 1mb</p>
                 <p>권장 사이즈 : 720 x 1280</p>
-                <input type="file" id="imageUpload" @change="handleImageUpload"
-                  accept="image/jpeg, image/png, image/gif" class="mb-2" />
+                <input type="file" id="imageUpload" @change="handleImageUpload" accept="image/jpeg, image/png, image/gif" class="mb-2" />
               </div>
             </div>
             <br>
+
             <Textinput label="라이브 예정일/시간" type="datetime-local" name="liveDateTime" v-model="liveDateTime" />
             <div class="mt-5">
               <label>방송 카테고리 선택</label>
@@ -136,13 +137,13 @@
                       <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
                       <td class="px-6 py-4">
                         <input type="number" v-model.number="product.discountRate" class="input-control">
-                        <Button @click="applyDiscount(index)" btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5"
+                        <Button @click="applyDiscount(index)" btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark"
                           type="button" text="적용" />
                       </td>
                       <td class="px-6 py-4">{{ formatCurrency(product.discountPrice) }}</td>
                       <td class="px-6 py-4">
                         <Button @click="registerProduct(index)"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5" type="button" text="등록" />
+                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5  btn-outline-dark" type="button" text="등록" />
                       </td>
                     </tr>
                   </tbody>
@@ -301,19 +302,6 @@ export default {
     const toast = useToast();
     let stepNumber = ref(0);
 
-    // const submit = () => {
-    //   let totalSteps = steps.length;
-    //   const isLastStep = stepNumber.value === totalSteps - 1;
-    //   if (isLastStep) {
-    //     stepNumber = totalSteps - 1;
-    //     toast.success("Form Submitted", {
-    //       timeout: 2000,
-    //     });
-    //   } else {
-    //     stepNumber.value++;
-    //   }
-    // };
-
     const prev = () => {
       if (stepNumber.value > 0) {
         stepNumber.value--;
@@ -325,18 +313,9 @@ export default {
         stepNumber.value++;
       }
     };
-
-    const save = () => {
-      toast.success("Form Saved", {
-        timeout: 2000,
-      });
-    };
-
     return {
-      // submit,
       prev,
       next,
-      save,
       steps,
       stepNumber,
     };
@@ -348,7 +327,7 @@ export default {
       liveSummary: '',
       liveDateTime: '',
       imageFile: null,
-      imageSrc: "https://via.placeholder.com/90x160",
+      previewImage: "https://via.placeholder.com/90x160",
       categories: [], // 카테고리 목록을 담을 배열
       selectedCategory: '', //선택된 카테고리
 
@@ -456,16 +435,30 @@ export default {
 
 
     handleImageUpload(event) {
+      /**
+       *  const file = event.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.previewImage = e.target.result;
+          this.shopInfo.image = file;
+        };
+        reader.readAsDataURL(file);
+      } else {
+        this.previewImage = null;
+      }
+       */
       const file = event.target.files[0];
       if (!file.type.includes('image/')) {
-        alert('이미지 파일만 업로드 가능합니다.');  // Notify user if the file is not an image
-        event.target.value = '';  // Reset the file input to clear the invalid file
+        alert('이미지 파일만 업로드 가능합니다.'); 
+        event.target.value = '';  
         return;
       }
       this.imageFile = file;
       const reader = new FileReader();
       reader.onload = e => {
-        this.imageSrc = e.target.result;
+        this.previewImage = e.target.result;
+        this.imageFile = file;
       };
       reader.readAsDataURL(file);
     },
@@ -539,7 +532,7 @@ export default {
 
       // 이미지 파일을 FormData에 추가
       const formData = new FormData();
-      if (this.imageFile) {
+      if (this.imageFile instanceof File) {
         formData.append('image', this.imageFile);
         console.log(formData);
       }
