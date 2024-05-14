@@ -137,14 +137,16 @@
                       <td class="px-6 py-4">{{ product.code }}</td>
                       <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
                       <td class="px-6 py-4">
-                        <input type="number" v-model.number="product.discountRate" class="input-control">
+                        <input type="number" v-model.number="product.discountRate" class="input-control" max="100">
                         <Button @click="applyDiscount(index)"
+                          :disabled="product.discountRate > 100 || product.discountRate <= 0"
                           btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" type="button"
                           text="적용" />
                       </td>
                       <td class="px-6 py-4">{{ formatCurrency(product.discountPrice) }}</td>
                       <td class="px-6 py-4">
                         <Button @click="registerProduct(index)"
+                          :disabled="product.discountRate > 100 || product.discountRate <= 0"
                           btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5  btn-outline-dark" type="button"
                           text="등록" />
                       </td>
