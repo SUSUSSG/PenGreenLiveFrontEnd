@@ -21,6 +21,7 @@
         :productImage="item.productImage"
         :discountRate ="item.discountRate"
         :discountPrice="item.discountPrice"
+        :listPrice="item.listPrice"
         :channelNm="item.channelNm"
         :channelImage="item.channelImage"
         :channelSeq="item.channelSeq"
@@ -113,6 +114,7 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap:4rem;
 }
 
 .under-category-section::-webkit-scrollbar {
