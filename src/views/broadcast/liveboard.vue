@@ -1,6 +1,6 @@
 <template>
   <div class="main-wrapper">
-    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="leaveSession"/>
+    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast"/>
     <div class="content-wrapper">
       <div class="flex-row">
         <div class="flex-col">
@@ -10,9 +10,9 @@
           </div>
         </div>
         <div class="flex-col">
-          <LiveBoardStatistics :session-id="mySessionId" :start-check="readyToCheck" />
-          <LiveboardProduct />
-          <LiveboardPrompt />
+          <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck" @update-statistics="updateStatistics"/>
+          <LiveboardProduct/>
+          <LiveboardPrompt/>
         </div>
         <div class="flex-col">
           <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호" @broadcast-device-selected="handleDeviceChange"/>
@@ -53,8 +53,10 @@ export default {
       mySessionId: '',
       myUserName: "Admin",
       isSessionActive: false,
-      totalViewers : 0,
+      totalViewers: 0,
       readyToCheck: false,
+      maxViewers: 0,
+      averageViewers: 0,
     };
   },
   methods: {
@@ -154,6 +156,22 @@ export default {
       window.addEventListener("beforeunload", this.leaveSession);
     },
     //세션을 종료합니다.
+    async handleStopBroadcast(elapsedTime) {
+      const maxViewerCount = this.maxViewers;
+      const avgViewerCount = Math.round(this.averageViewers);
+
+      console.log('Final statistics before axios request:', {
+        maxViewerCount,
+        avgViewerCount,
+        elapsedTime,
+      });
+
+      // 평균 시청자수와 최대 시청자수, 방송 진행시간을 db에 반영하는 axios 요청
+      await this.updateBroadcastStatistics({ maxViewerCount, avgViewerCount, broadcastDuration: elapsedTime });
+
+      // 방송 종료 로직
+      this.leaveSession();
+    },
     leaveSession() {
       if (!this.isSessionActive) {
         console.log("세션은 이미 종료되었습니다.");
@@ -190,6 +208,33 @@ export default {
         headers: { 'Content-Type': 'application/json' }
       }).then(response => response.data);
     },
+    async updateBroadcastStatistics({ maxViewerCount, avgViewerCount, broadcastDuration }) {
+      console.log('Updating broadcast statistics:', {
+        maxViewerCount,
+        avgViewerCount,
+        broadcastDuration,
+        mySessionId: this.mySessionId
+      });
+
+      try {
+        const response = await axios.patch(`http://localhost:8090/broadcasts/statistics/${this.mySessionId}`, {
+          maxViewerCount,
+          avgViewerCount,
+          broadcastDuration
+        });
+        console.log('Statistics updated:', response.data);
+      } catch (error) {
+        console.error('Error updating statistics:', error.response ? error.response.data : error.message);
+      }
+    },
+    updateStatistics({ maxViewers, averageViewers }) {
+      console.log('Updating parent statistics:', {
+        maxViewers,
+        averageViewers,
+      });
+      this.maxViewers = maxViewers;
+      this.averageViewers = averageViewers;
+    }
   },
   //컴포넌트가 생성될 시 mySessionId변수에 현재 url정보(방송id)를 할당합니다.
   created() {
