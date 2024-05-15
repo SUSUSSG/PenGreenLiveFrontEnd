@@ -2,11 +2,10 @@
   <div class="inline-flex pt-5 ml-5" id="header">
     <img src="/src/assets/images/logo/pengreenlive-logo-white.png" id="logo">
 
-    <div id="resultDisplay" :class="[isBroadcasting ? 'red-style' : 'black-style']" class="mr-4"> {{ resultDispalyText }}
-    </div>
+    <div id="resultDisplay" :class="[isBroadcasting ? 'red-style' : 'black-style']" class="mr-4">{{ resultDispalyText }}</div>
     <div class="row">
-      <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"> {{ boradcastTitle }}</div>
-      <div> {{ "라이브 일시 " + boradcastDate }}</div>
+      <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ boradcastTitle }}</div>
+      <div>{{ "라이브 일시 " + boradcastDate }}</div>
     </div>
 
     <div class="inline-flex flex-grow items-center justify-end">
@@ -31,7 +30,7 @@
       </div>
       <div class="inline-flex flex-grow items-center justify-end mr-8">
         <Button v-on:click="toggleBroadcast()" :text="isBroadcasting ? '라이브 종료' : '라이브 시작'"
-          :btnClass="isBroadcasting ? 'btn-green h-12' : 'btn-light h-12'" id="broadcastControllButton" />
+                :btnClass="isBroadcasting ? 'btn-green h-12' : 'btn-light h-12'" id="broadcastControllButton" />
       </div>
     </div>
   </div>
@@ -84,7 +83,7 @@ export default {
   methods: {
     toggleBroadcast() {
       if (this.isBroadcasting) {
-        this.$emit('stop-broadcast');
+        this.$emit('stop-broadcast', this.elapsedTime);
       } else {
         this.$emit('start-broadcast');
       }
