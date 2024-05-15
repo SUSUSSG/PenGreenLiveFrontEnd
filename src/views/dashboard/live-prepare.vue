@@ -7,7 +7,7 @@
         :thumbimage-src="item.thumbimageSrc"
     :product-image-src="item.productimageSrc"
     :product-name="item.productName"
-    :product-price="item.originalPrice"
+    :product-price="item.productPrice"
     :discount-rate="item.discountRate"
     :live-date-time="item.liveDateTime"
     />
@@ -34,7 +34,7 @@ export default {
           thumbimageSrc: '',
           productImageSrc: '',
           productName: '',
-          originalPrice: '',
+          productPrice: '',
           discountRate: '',
           liveDateTime: '',
         }
@@ -57,7 +57,7 @@ export default {
               thumbimageSrc: item.broadcastImage,
               productImageSrc: item.productImage,
               productName: item.productNm,
-              originalPrice: item.listPrice,
+              productPrice: item.listPrice,
               discountRate: item.discountRate,
               liveDateTime: item.broadcastScheduledTime,
             }

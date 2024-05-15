@@ -3,14 +3,14 @@
     <p>라이브 일시: {{ formattedLiveDateTime }}</p>
     <h1 class="broadcast-title">{{ broadcastTitle }}</h1>
     <div class="broadcast-image" :style="{ backgroundImage: 'url(' + thumbimageSrc + ')' }">
-      <!-- Empty div for the background image -->
     </div>
   
     <div class="product-card-container">
-      <ProductCard
+      <ProductCard 
           :product-name="productName"
           :original-price="productPrice"
-          :discount-rate="discountRate"/>
+          :discount-rate="discountRate"
+          :productImg="productimageSrc"/>
     </div>
 
     <div>
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import noImage from "@/assets/images/all-img/no-image.png"
 import ProductCard from "@/components/Card/product-card.vue";
 
 export default {
@@ -38,19 +37,11 @@ export default {
   props: {
     broadcastTitle: String,
     thumbimageSrc: String,
-    productimageSrc: {
-      type: String,
-      default: noImage
-    },
+    productimageSrc: String,
     productName: String,
     productPrice: Number,
     discountRate: Number,
     liveDateTime: String
-  },
-  data() {
-    return {
-      noImageSrc: noImage
-    };
   },
   computed: {
     formattedLiveDateTime() {
@@ -82,7 +73,7 @@ export default {
   },
   methods: {
     onClickRedirect() {
-      this.$router.push({name: '라이브보드'}) // About 페이지로 이동}
+      this.$router.push({name: '라이브보드'}) 
     }
   }
 }

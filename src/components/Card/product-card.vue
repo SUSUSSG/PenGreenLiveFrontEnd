@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import noImage from "@/assets/images/all-img/no-image.png";
 
 export default {
   name: 'ProductCard',
