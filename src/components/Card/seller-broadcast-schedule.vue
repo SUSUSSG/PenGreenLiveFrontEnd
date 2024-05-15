@@ -1,6 +1,6 @@
 <template>
   <div class="broadcast-card">
-    <p>라이브 일시: {{ formattedLiveDateTime }}</p>
+    <p class="broadcast-time"> {{ formattedLiveDateTime }}</p>
     <h1 class="broadcast-title">{{ broadcastTitle }}</h1>
     <div class="broadcast-image" :style="{ backgroundImage: 'url(' + thumbimageSrc + ')' }">
     </div>
@@ -86,12 +86,18 @@ export default {
   height: 300px;
   background-size: cover;
   background-position: center;
+  border-radius: 5px;
 }
 .broadcast-title {
-  font-size: 18px;
+  font-size: 15px;
   color: #111111;
   padding-top: 10px;
   padding-bottom: 15px;
+}
+.broadcast-time {
+  color: #134010;
+  font-size: 18px;
+  font-weight: bold;
 }
 .broadcast-card {
   border: 2px;

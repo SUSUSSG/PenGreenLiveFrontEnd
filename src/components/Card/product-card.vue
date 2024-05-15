@@ -103,4 +103,9 @@ export default {
     color: #e02020;
     font-weight: 500;
 }
+
+.product-image {
+  margin: 10px;
+  border-radius: 5px;
+}
 </style>
