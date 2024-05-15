@@ -12,9 +12,9 @@
                 <div class="price">{{ formatNumber(orderProductPrice) }}</div>
               </div>
               <div class="ml-auto">
-                <Modal title="리뷰작성" label="리뷰작성"
-                       labelClass="btn inline-flex justify-center btn-outline-dark btn-sm"
-                       ref="modal1">
+                <Modal v-if="deliveryStatus === '배송완료'" title="리뷰작성" label="리뷰작성"
+                     labelClass="btn inline-flex justify-center btn-outline-dark btn-sm"
+                     ref="modal1">
                   <div class="text-base text-slate-600 dark:text-slate-300">
                     <div class="content-wrapper flex w-full mb-3">
                       <img class="productImgUrl" :src="productImgUrl" alt="Image" />
