@@ -25,8 +25,8 @@ export default {
     SellerBroadcastSchedule
   },
   data() {
-    let liveTime = new Date();
-    liveTime.setMinutes(liveTime.getMinutes() + 15);  // 현재 시간으로부터 15분 후
+    // let liveTime = new Date();
+    // liveTime.setMinutes(liveTime.getMinutes() + 15);  // 현재 시간으로부터 15분 후
     return {
       // items: [
       //   {
