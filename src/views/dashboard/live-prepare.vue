@@ -1,22 +1,18 @@
 <template>
   <div class="grid-container" v-if="!loading">
-    <SellerBroadcastSchedule
-      v-for="(item, index) in broadcastInfo"
-      :key="index"
-      :broadcastId="item.broadcastSeq"
-      :broadcast-title="item.broadcastTitle"
-      :thumbimage-src="'data:image/jpeg;base64,' + item.broadcastImage"
-      :productImg="'data:image/jpeg;base64,' + item.productImage"
-      :product-name="item.productNm"
-      :product-price="item.listPrice"
-      :discount-rate="item.discountRate"
-      :live-date-time="item.broadcastScheduledTime"
-    />
+    <SellerBroadcastSchedule v-for="(item, index) in broadcastInfo" :key="index" :broadcastId="item.broadcastSeq"
+      :broadcast-title="item.broadcastTitle" :thumbimage-src="'data:image/jpeg;base64,' + item.broadcastImage"
+      :productImg="'data:image/jpeg;base64,' + item.productImage" :product-name="item.productNm"
+      :product-price="item.listPrice" :discount-rate="item.discountRate"
+      :live-date-time="item.broadcastScheduledTime" />
   </div>
   <div v-else class="loading-container">
-      <!-- 로딩 중인 동안 보여줄 메시지 또는 로딩 화면 -->
-      <p>Loading...</p>
+    <div class="spinner-container">
+      <div class="spinner"></div>
     </div>
+    <p>정보를 불러오고 있습니다....</p>
+  </div>
+
 </template>
 
 <script>
@@ -25,7 +21,7 @@ import axios from "axios";
 
 export default {
   name: "live-prepare",
-  components:{
+  components: {
     SellerBroadcastSchedule
   },
   data() {
@@ -57,15 +53,35 @@ export default {
 <style scoped>
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Creates four columns */
+  grid-template-columns: repeat(5, 1fr);
+  /* Creates four columns */
   grid-gap: 20px;
   overflow: auto;
 }
 
 .loading-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
+  margin-top: 350px
+}
+
+.spinner-container {
+  margin-bottom: 10px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #ccc;
+  border-top-color: #134010;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
