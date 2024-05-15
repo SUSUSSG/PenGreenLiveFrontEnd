@@ -1,15 +1,16 @@
 <template>
   <div class="grid-container">
     <SellerBroadcastSchedule
-        v-for="item in items"
-        :key="item.id"
-        :broadcast-title="item.broadcastTitle"
-        :thumbimage-src="item.thumbimageSrc"
-    :product-image-src="item.productimageSrc"
-    :product-name="item.productName"
-    :product-price="item.productPrice"
-    :discount-rate="item.discountRate"
-    :live-date-time="item.liveDateTime"
+      v-for="(item, index) in broadcastInfo"
+      :key="index"
+      :broadcastId="item.broadcastSeq"
+      :broadcast-title="item.broadcastTitle"
+      :thumbimage-src="'data:image/jpeg;base64,' + item.broadcastImage"
+      :product-image-src="'data:image/jpeg;base64,' + item.productImage"
+      :product-name="item.productNm"
+      :product-price="item.listPrice"
+      :discount-rate="item.discountRate"
+      :live-date-time="item.broadcastScheduledTime"
     />
   </div>
 </template>
@@ -27,18 +28,19 @@ export default {
     let liveTime = new Date();
     liveTime.setMinutes(liveTime.getMinutes() + 15);  // 현재 시간으로부터 15분 후
     return {
-      boradcastSeq: '',
-      items: [
-        {
-          broadcastTitle: '',
-          thumbimageSrc: '',
-          productImageSrc: '',
-          productName: '',
-          productPrice: '',
-          discountRate: '',
-          liveDateTime: '',
-        }
-      ]
+      // items: [
+      //   {
+      //     broadcastTitle: '',
+      //     thumbimageSrc: '',
+      //     productImageSrc: '',
+      //     productName: '',
+      //     productPrice: '',
+      //     discountRate: '',
+      //     liveDateTime: '',
+      //   }
+      // ],
+      broadcastInfo: [],
+      // loadingCarousels: true,
     };
   },
   created() {
@@ -46,22 +48,11 @@ export default {
   },
   methods: {
     loadUpcomingBroadcastInfo() {
-      const url = `http://localhost:8090/upcoming-broadcasts`;
-
-      axios.get(url)
-        .then(response => {
-          console.log(response.data),
-          this.items = response.data.map (item => {
-            return {
-              broadcastTitle: item.broadcastTitle,
-              thumbimageSrc: item.broadcastImage,
-              productImageSrc: item.productImage,
-              productName: item.productNm,
-              productPrice: item.listPrice,
-              discountRate: item.discountRate,
-              liveDateTime: item.broadcastScheduledTime,
-            }
-          });
+      axios.get("http://localhost:8090/upcoming-broadcasts")
+        .then((response) => {
+          this.broadcastInfo = response.data;
+          // this.loadingCarousels = false;
+          console.log("broadcast info data : ", this.broadcastInfo);
         })
         .catch(error => {
           console.error('방송 예정 목록 load 실패 : ', error);

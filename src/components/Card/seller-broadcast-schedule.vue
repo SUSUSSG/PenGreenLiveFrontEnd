@@ -35,6 +35,7 @@ export default {
   },
   name: 'BroadcastCard',
   props: {
+    broadcastId: Number,
     broadcastTitle: String,
     thumbimageSrc: String,
     productimageSrc: String,
