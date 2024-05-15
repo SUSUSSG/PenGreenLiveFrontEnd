@@ -118,7 +118,7 @@
           </swiper-slide>
         </swiper>
         <div v-else class="skeleton-container">
-          <SkeletonChance v-for="n in 4" :key="n" />
+          <SkeletonChance v-for="n in 3" :key="n" />
         </div>
       </div>
       <hr class="mt-6 mb-12" />
@@ -155,7 +155,7 @@
         </swiper-slide>
       </swiper>
       <div v-else class="skeleton-container">
-        <SkeletonChance v-for="n in 5" :key="n" />
+        <SkeletonChance v-for="n in 4" :key="n" />
       </div>
       <div class="pb-20" />
     </section>

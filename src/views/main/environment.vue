@@ -1,6 +1,6 @@
 <template>
   <ScrollTopButton />
-  <MenuHeaderNav style="width: 77%; margin: auto; border: 1px solid #e6e7eb" />
+  <MenuHeaderNav style="width: 74%; margin: auto; border: 1px solid #e6e7eb" />
   <div class="content-wrapper">
     <div style="display:flex; flex-direction:column; align-items: center;">
       <img
@@ -31,7 +31,7 @@ export default {
 </script>
 <style scoped>
 .content-wrapper {
-  width: 77%;
+  width: 74%;
   margin: auto;
   display: flex !important;
   flex-direction: column;
