@@ -1,68 +1,62 @@
 <template>
-  <div class="bg-white rounded classNamept-4 pb-4" id="statisticsCard">
+  <div class="bg-white rounded pt-4 pb-4" id="statisticsCard">
     <div class="text-base">
       실시간 통계
     </div>
-    <div
-        style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px; padding: 0 10px;">
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px; padding: 0 10px;">
       <!-- Individual cards for each statistic -->
-      <div class="inline-flex bg-whclassNameounded pt-3 px-4 mt-4 pl-5" id="basicCard">
-        <div class="h-12 w-12 roundedclassName flex flex-col items-center justify-center text-3xl pr-3">
+      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
+        <div class="h-12 w-12 rounded flex flex-col items-center justify-center text-3xl pr-3">
           <Icon icon="heroicons:user-16-solid" class="text-primary"/>
         </div>
         <div>
-          <div class="text-sm text-slatclassName dark:text-slate-300 mb-[6px]">실시간 접속자</div>
-          <div class="text-lg text-slatclassName dark:text-white font-medium mb-[6px]">{{ liveViewers }}</div>
+          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">실시간 접속자</div>
+          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ liveViewers }}</div>
         </div>
       </div>
-
-      <div class="inline-flex bg-whclassNameounded pt-3 px-4 mt-4 pl-5" id="basicCard">
-        <div class="h-12 w-12 roundedclassName flex flex-col items-center justify-center text-3xl pr-3">
+      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
+        <div class="h-12 w-12 rounded flex flex-col items-center justify-center text-3xl pr-3">
           <Icon icon="heroicons:users-16-solid" class="text-primary"/>
         </div>
         <div>
-          <div class="text-sm text-slatclassName dark:text-slate-300 mb-[6px]">누적 접속자</div>
-          <div class="text-lg text-slatclassName dark:text-white font-medium mb-[6px]">{{ totalViewers }}</div>
+          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">누적 접속자</div>
+          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ totalViewers }}</div>
         </div>
       </div>
-
-      <div class="inline-flex bg-whclassNameounded pt-3 px-4 mt-4 pl-5" id="basicCard">
-        <div class="h-12 w-12 roundedclassName flex flex-col items-center justify-center text-3xl pr-3">
+      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
+        <div class="h-12 w-12 rounded flex flex-col items-center justify-center text-3xl pr-3">
           <Icon icon="heroicons:hand-thumb-up-solid" class="text-primary"/>
         </div>
         <div>
-          <div class="text-sm text-slatclassName dark:text-slate-300 mb-[6px]">좋아요</div>
-          <div class="text-lg text-slatclassName dark:text-white font-medium mb-[6px]">{{ totalLikes }}</div>
+          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">좋아요</div>
+          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ totalLikes }}</div>
         </div>
       </div>
-
-      <div class="inline-flex bg-whclassNameounded pt-3 px-4 mt-4 pl-5" id="basicCard">
-        <div class="h-12 w-12 roundedclassName flex flex-col items-center justify-center text-3xl pr-3">
+      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
+        <div class="h-12 w-12 rounded flex flex-col items-center justify-center text-3xl pr-3">
           <Icon icon="heroicons:chart-bar-square-16-solid" class="text-primary"/>
         </div>
         <div>
-          <div class="text-sm text-slatclassName dark:text-slate-300 mb-[6px]">누적 주문 건수</div>
-          <div class="text-lg text-slatclassName dark:text-white font-medium mb-[6px]">{{ totalOrders }}</div>
+          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">누적 주문 건수</div>
+          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ totalOrders }}</div>
         </div>
       </div>
-
-      <div class="inline-flex bg-whclassNameounded pt-3 px-4 mt-4 pl-5" id="basicCard">
-        <div class="h-12 w-12 roundedclassName flex flex-col items-center justify-center text-3xl pr-3">
+      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
+        <div class="h-12 w-12 rounded flex flex-col items-center justify-center text-3xl pr-3">
           <Icon icon="heroicons:currency-dollar-20-solid" class="text-primary"/>
         </div>
         <div>
-          <div class="text-sm text-slatclassName dark:text-slate-300 mb-[6px]">누적 주문 금액</div>
-          <div class="text-lg text-slatclassName dark:text-white font-medium mb-[6px]">{{ totalOrderAmount }}</div>
+          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">누적 주문 금액</div>
+          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ totalOrderAmount }}</div>
         </div>
       </div>
-
-      <div class="inline-flex bg-whclassNameounded pt-3 px-4 mt-4 pl-5" id="basicCard">
-        <div class="h-12 w-12 roundedclassName flex flex-col items-center justify-center text-3xl pr-3">
+      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
+        <div class="h-12 w-12 rounded flex flex-col items-center justify-center text-3xl pr-3">
           <Icon icon="heroicons:building-storefront-16-solid" class="text-primary"/>
         </div>
         <div>
-          <div class="text-sm text-slatclassName dark:text-slate-300 mb-[6px]">카테고리</div>
-          <div class="text-lg text-slatclassName dark:text-white font-medium mb-[6px]">{{ category }}</div>
+          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">카테고리</div>
+          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ category }}</div>
         </div>
       </div>
     </div>
@@ -96,6 +90,9 @@ export default {
       totalOrders: null,
       totalOrderAmount: null,
       category: "채널이름",
+      viewersHistory: [],
+      maxViewers: 0,
+      averageViewers: 0,
     }
   },
   watch: {
@@ -115,7 +112,7 @@ export default {
     }
   },
   methods: {
-    // 현재 시청자 수를 가져오는 기존 메서드 유지
+    // 현재 시청자 수를 가져옴
     getViewers(sessionId) {
       console.log(sessionId);
       return axios.get(`http://localhost:8090/api/sessions/${sessionId}/connections/count`)
@@ -143,7 +140,16 @@ export default {
     async updateViewer() {
       try {
         const viewerCount = await this.getViewers(this.sessionId);
-        this.liveViewers = viewerCount-1;
+        this.liveViewers = viewerCount - 1;
+        this.viewersHistory.push(this.liveViewers);
+        this.maxViewers = Math.max(...this.viewersHistory);
+        this.averageViewers = (this.viewersHistory.reduce((a, b) => a + b, 0) / this.viewersHistory.length).toFixed(2);
+        console.log('Updated viewers:', {
+          liveViewers: this.liveViewers,
+          maxViewers: this.maxViewers,
+          averageViewers: this.averageViewers,
+        });
+        this.emitStatistics(); // Call emitStatistics here to ensure data is up-to-date
       } catch (error) {
         console.error("Error updating viewers:", error);
       }
@@ -155,9 +161,22 @@ export default {
         this.totalLikes = statistics.likesCount;
         this.totalOrders = statistics.totalSalesQty;
         this.totalOrderAmount = statistics.totalSalesAmount;
+        console.log('Updated statistics:', {
+          totalViewers: this.totalViewers,
+          totalLikes: this.totalLikes,
+          totalOrders: this.totalOrders,
+          totalOrderAmount: this.totalOrderAmount,
+        });
       } catch (error) {
         console.error("Error updating statistics:", error);
       }
+    },
+    emitStatistics() {
+      console.log('Emitting statistics:', {
+        maxViewers: this.maxViewers,
+        averageViewers: this.averageViewers,
+      });
+      this.$emit('update-statistics', { maxViewers: this.maxViewers, averageViewers: this.averageViewers });
     }
   }
 };
