@@ -1,5 +1,5 @@
 <template>
-  <div class="grid-container">
+  <div class="grid-container" v-if="!loading">
     <SellerBroadcastSchedule
       v-for="(item, index) in broadcastInfo"
       :key="index"
@@ -13,6 +13,10 @@
       :live-date-time="item.broadcastScheduledTime"
     />
   </div>
+  <div v-else class="loading-container">
+      <!-- 로딩 중인 동안 보여줄 메시지 또는 로딩 화면 -->
+      <p>Loading...</p>
+    </div>
 </template>
 
 <script>
@@ -25,22 +29,9 @@ export default {
     SellerBroadcastSchedule
   },
   data() {
-    // let liveTime = new Date();
-    // liveTime.setMinutes(liveTime.getMinutes() + 15);  // 현재 시간으로부터 15분 후
     return {
-      // items: [
-      //   {
-      //     broadcastTitle: '',
-      //     thumbimageSrc: '',
-      //     productImageSrc: '',
-      //     productName: '',
-      //     productPrice: '',
-      //     discountRate: '',
-      //     liveDateTime: '',
-      //   }
-      // ],
       broadcastInfo: [],
-      // loadingCarousels: true,
+      loading: true
     };
   },
   created() {
@@ -51,11 +42,12 @@ export default {
       axios.get("http://localhost:8090/upcoming-broadcasts")
         .then((response) => {
           this.broadcastInfo = response.data;
-          // this.loadingCarousels = false;
+          this.loading = false;
           console.log("broadcast info data : ", this.broadcastInfo);
         })
         .catch(error => {
           console.error('방송 예정 목록 load 실패 : ', error);
+          this.loading = false;
         })
     }
   }
@@ -68,5 +60,12 @@ export default {
   grid-template-columns: repeat(5, 1fr); /* Creates four columns */
   grid-gap: 20px;
   overflow: auto;
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
 }
 </style>
