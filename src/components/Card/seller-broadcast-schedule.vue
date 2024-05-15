@@ -58,16 +58,17 @@ export default {
 
       return `${year}-${month}-${day} ${hours}:${minutes}`;
     },
-
     isPrepareTime() {
       const now = new Date();
       // 서버에서 받아온 방송 시작 시간을 클라이언트의 시간대에 맞게 조정
       const serverLiveTime = new Date(this.liveDateTime);
-      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000; 
-      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds); 
+      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000;
+      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds);
       const prepareTime = new Date(adjustedServerLiveTime.getTime() - 15 * 60000); // 15분 전
-      // 현재 시간이 방송 시작 15분 전부터 방송 시작까지인지 확인
-      return now >= prepareTime && now <= adjustedServerLiveTime;
+      const endTime = new Date(adjustedServerLiveTime.getTime() + 15 * 60000); // 방송 시작 후 15분 후
+      // 현재 시간이 방송 시작 15분 전부터 방송 시작 후 15분까지인지 확인
+      return now >= prepareTime && now <= endTime;
+
     },
     discountedPrice() {
       return this.productPrice - (this.productPrice * (this.discountRate / 100));
@@ -81,7 +82,7 @@ export default {
   },
   methods: {
     onClickRedirect() {
-      this.$router.push({ name: '라이브보드' })
+      this.$router.push({ name: '라이브보드', params: { broadcastId: this.broadcastId } });
     }
   }
 }
