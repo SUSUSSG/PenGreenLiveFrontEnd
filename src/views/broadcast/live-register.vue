@@ -507,9 +507,9 @@ export default {
     saveBroadcast() {
       const toast = useToast();
 
-      if (this.loading) {
-        toast.info("방송 정보를 저장 중입니다");
-      }
+      toast.clear();
+      this.loading = true;
+      toast.info("방송 정보를 저장 중입니다");
 
       // JSON 형식의 데이터 구성
       const requestData = {
@@ -529,7 +529,7 @@ export default {
         .then(response => {
           this.loading = false;
           toast.success("방송 정보가 등록되었습니다.", {
-            timeout: 2000,
+            timeout: 1000,
           });
           setTimeout(() => {
             this.$router.push({ name: '실시간 라이브 준비' });
