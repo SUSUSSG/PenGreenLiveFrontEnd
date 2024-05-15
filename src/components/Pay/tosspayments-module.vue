@@ -249,6 +249,10 @@ const props = defineProps({
     totalPrice: String,
 });
 
+function generateOrderId() {
+    return nanoid();
+}
+
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
 const selectedPayment = ref({ key: 'credit', method:'카드', flowMode: 'DIRECT', label: '신용·체크카드' });
 const selectedCardCompany = ref(null);
@@ -338,10 +342,10 @@ function loadTossPaymentsSDK() {
 
 const submittedData = ref(null);
 
-async function postPaymentInfo() {
-    const formData = {"orderId": orderId, "amount": totalPrice};
+async function postPaymentInfo(orderId, amount) {
+    const formData = {orderId, amount};
     try {
-        const response = await axios.post("http://localhost:8090" +'/api/payments/verify', formData);
+        const response = await axios.post("/api/payments/hold-for-checkout", formData);
         submittedData.value = response.data;
     } catch (error) {
         console.error('Error submitting form:', error);
@@ -354,34 +358,36 @@ async function postPaymentInfo() {
 
 // 결제 요청 
 async function requestPayment() {
-    postPaymentInfo();
+    const orderId = generateOrderId();
+    const totalAmount = props.totalPrice;
+    postPaymentInfo(orderId, totalAmount);
 
-  try {
-    const defaultRequestPaymentData = ref({
-        amount: props.totalPrice,
-        orderId: nanoid(),
-        orderName: props.productName,
-        customerName: "김토스",
-        successUrl: `${window.location.origin}/success`,
-        failUrl: `${window.location.origin}/fail`,
-        flowMode: selectedPayment.value.flowMode,
-    })
+    try {
+        const defaultRequestPaymentData = ref({
+            amount: totalAmount,
+            orderId: orderId,
+            orderName: props.productName,
+            customerName: "김토스",
+            successUrl: `${window.location.origin}/success`,
+            failUrl: `${window.location.origin}/fail`,
+            flowMode: selectedPayment.value.flowMode,
+        })
 
-    if (selectedPayment.value.method === '간편결제') {
-      defaultRequestPaymentData.value.easyPay = selectedPayment.value.easyPay;
+        if (selectedPayment.value.method === '간편결제') {
+        defaultRequestPaymentData.value.easyPay = selectedPayment.value.easyPay;
+        }
+
+        else if (selectedPayment.value.method === '카드') {
+        defaultRequestPaymentData.value.cardCompany = selectedCardCompany.value;
+        }
+
+        await tossPayments.value.requestPayment('카드', {
+            ...defaultRequestPaymentData.value,
+        });
+
+    } catch (error) {
+        console.error('Payment request failed:', error);
     }
-
-    else if (selectedPayment.value.method === '카드') {
-      defaultRequestPaymentData.value.cardCompany = selectedCardCompany.value;
-    }
-
-    await tossPayments.value.requestPayment('카드', {
-        ...defaultRequestPaymentData.value,
-    });
-
-  } catch (error) {
-    console.error('Payment request failed:', error);
-  }
 }
 
 function showInterestFreeInstallmentInfo() {
