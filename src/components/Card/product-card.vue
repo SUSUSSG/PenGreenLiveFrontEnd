@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import noImage from "@/assets/images/all-img/no-image.png";
 
 export default {
   name: 'ProductCard',
@@ -103,5 +102,10 @@ export default {
 .product-card .info .price strong {
     color: #e02020;
     font-weight: 500;
+}
+
+.product-image {
+  margin: 10px;
+  border-radius: 5px;
 }
 </style>

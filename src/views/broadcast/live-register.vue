@@ -290,6 +290,8 @@ export default {
   },
 
   setup() {
+    const loading = ref(false);
+
     let steps = [
       {
         id: 1,
@@ -323,6 +325,7 @@ export default {
       next,
       steps,
       stepNumber,
+      loading
     };
   },
   data() {
@@ -504,6 +507,10 @@ export default {
     saveBroadcast() {
       const toast = useToast();
 
+      if (this.loading) {
+        toast.info("방송 정보를 저장 중입니다");
+      }
+
       // JSON 형식의 데이터 구성
       const requestData = {
         broadcastTitle: this.liveTitle,
@@ -516,19 +523,11 @@ export default {
         benefits: this.benefits, // benefits는 배열
         image: this.imageSrc
       };
-      // console.log(requestData.broadcastTitle);
-      // console.log(requestData.broadcastSummary);
-      // console.log(requestData.broadcastScheduledTime);
-      // console.log(requestData.categoryCd);
-      // console.log(requestData.registeredProducts);
-      // console.log(requestData.notices);
-      // console.log(requestData.qa);
-      // console.log(requestData.benefits);
-      // console.log(requestData.image);
 
       // JSON 형식의 데이터를 백엔드로 전송
-      axios.post('http://localhost:8090/live-register', requestData)
+      axios.post('http://localhost:8090/register-broadcast', requestData)
         .then(response => {
+          this.loading = false;
           toast.success("방송 정보가 등록되었습니다.", {
             timeout: 2000,
           });

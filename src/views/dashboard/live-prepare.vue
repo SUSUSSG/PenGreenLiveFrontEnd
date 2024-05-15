@@ -1,98 +1,51 @@
 <template>
-  <div class="grid-container">
-    <SellerBroadcastSchedule
-        v-for="item in items"
-        :key="item.id"
-        :broadcast-title="item.broadcastTitle"
-        :thumbimage-src="item.thumbimageSrc"
-    :product-image-src="item.productimageSrc"
-    :product-name="item.productName"
-    :product-price="item.productPrice"
-    :discount-rate="item.discountRate"
-    :live-date-time="item.liveDateTime"
-    />
+  <div class="grid-container" v-if="!loading">
+    <SellerBroadcastSchedule v-for="(item, index) in broadcastInfo" :key="index" :broadcastId="item.broadcastSeq"
+      :broadcast-title="item.broadcastTitle" :thumbimage-src="'data:image/jpeg;base64,' + item.broadcastImage"
+      :productImg="'data:image/jpeg;base64,' + item.productImage" :product-name="item.productNm"
+      :product-price="item.listPrice" :discount-rate="item.discountRate"
+      :live-date-time="item.broadcastScheduledTime" />
   </div>
+  <div v-else class="loading-container">
+    <div class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+    <p>정보를 불러오고 있습니다....</p>
+  </div>
+
 </template>
 
 <script>
 import SellerBroadcastSchedule from "@/components/Card/seller-broadcast-schedule.vue";
-import noImage from "@/assets/images/all-img/no-image.png" // Verify this path is correct
+import axios from "axios";
 
 export default {
   name: "live-prepare",
-  components:{
+  components: {
     SellerBroadcastSchedule
   },
   data() {
-    let liveTime = new Date();
-    liveTime.setMinutes(liveTime.getMinutes() + 15);  // 현재 시간으로부터 15분 후
     return {
-      items: [
-        {
-          "id": 1,
-          "broadcastTitle": "맛있는 사과를 팔아요",
-          "thumbimageSrc": "http://via.placeholder.com/200x200",
-          "productimageSrc": "http://via.placeholder.com/100x130",
-          "productName": "충주 사과",
-          "productPrice": 42000,
-          "discountRate": 30,
-          "liveDateTime": liveTime.toISOString()
-        },
-        {
-          "id": 2,
-          "broadcastTitle": "신선한 오렌지 판매중",
-          "thumbimageSrc": "http://via.placeholder.com/200x200",
-          "productimageSrc": "http://via.placeholder.com/100x130",
-          "productName": "제주 오렌지",
-          "productPrice": 35000,
-          "discountRate": 20,
-          "liveDateTime": "2024-03-22-20:00"
-        },
-        {
-          "id": 3,
-          "broadcastTitle": "고소한 피칸 구매하세요",
-          "thumbimageSrc": "http://via.placeholder.com/200x200",
-          "productimageSrc": "http://via.placeholder.com/100x130",
-          "productName": "미국 피칸",
-          "productPrice": 50000,
-          "discountRate": 25,
-          "liveDateTime": "2024-03-23-19:30"
-        },
-        {
-          "id": 4,
-          "broadcastTitle": "달콤한 체리, 지금 할인 중",
-          "thumbimageSrc": "http://via.placeholder.com/200x200",
-          "productimageSrc": "http://via.placeholder.com/100x130",
-          "productName": "워싱턴 체리",
-          "productPrice": 60000,
-          "discountRate": 15,
-          "liveDateTime": "2024-03-24-18:00"
-        },
-        {
-          "id": 4,
-          "broadcastTitle": "달콤한 체리, 지금 할인 중",
-          "thumbimageSrc": "http://via.placeholder.com/200x200",
-          "productimageSrc": "http://via.placeholder.com/100x130",
-          "productName": "워싱턴 체리",
-          "productPrice": 60000,
-          "discountRate": 15,
-          "liveDateTime": "2024-03-24-18:00"
-        },
-        {
-          "id": 4,
-          "broadcastTitle": "달콤한 체리, 지금 할인 중",
-          "thumbimageSrc": "http://via.placeholder.com/200x200",
-          "productimageSrc": "http://via.placeholder.com/100x130",
-          "productName": "워싱턴 체리",
-          "productPrice": 60000,
-          "discountRate": 15,
-          "liveDateTime": "2024-03-24-18:00"
-        },
-
-
-      ]
-
+      broadcastInfo: [],
+      loading: true
     };
+  },
+  created() {
+    this.loadUpcomingBroadcastInfo();
+  },
+  methods: {
+    loadUpcomingBroadcastInfo() {
+      axios.get("http://localhost:8090/upcoming-broadcasts")
+        .then((response) => {
+          this.broadcastInfo = response.data;
+          this.loading = false;
+          console.log("broadcast info data : ", this.broadcastInfo);
+        })
+        .catch(error => {
+          console.error('방송 예정 목록 load 실패 : ', error);
+          this.loading = false;
+        })
+    }
   }
 }
 </script>
@@ -100,8 +53,35 @@ export default {
 <style scoped>
 .grid-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr); /* Creates four columns */
+  grid-template-columns: repeat(5, 1fr);
+  /* Creates four columns */
   grid-gap: 20px;
   overflow: auto;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 350px
+}
+
+.spinner-container {
+  margin-bottom: 10px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 4px solid #ccc;
+  border-top-color: #134010;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
