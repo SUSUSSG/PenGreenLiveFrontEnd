@@ -6,7 +6,7 @@
       :broadcastId="item.broadcastSeq"
       :broadcast-title="item.broadcastTitle"
       :thumbimage-src="'data:image/jpeg;base64,' + item.broadcastImage"
-      :product-image-src="'data:image/jpeg;base64,' + item.productImage"
+      :productImg="'data:image/jpeg;base64,' + item.productImage"
       :product-name="item.productNm"
       :product-price="item.listPrice"
       :discount-rate="item.discountRate"

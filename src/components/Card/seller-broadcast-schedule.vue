@@ -10,7 +10,7 @@
           :product-name="productName"
           :original-price="productPrice"
           :discount-rate="discountRate"
-          :productImg="productimageSrc"/>
+          :product-img="productImg"/>
     </div>
 
     <div>
@@ -38,7 +38,7 @@ export default {
     broadcastId: Number,
     broadcastTitle: String,
     thumbimageSrc: String,
-    productimageSrc: String,
+    productImg: String,
     productName: String,
     productPrice: Number,
     discountRate: Number,
