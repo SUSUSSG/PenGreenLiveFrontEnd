@@ -22,7 +22,7 @@
         >
           <div class="slide-background">
             <img
-              :src="'data:image/jpeg;base64,' + item.broadcastImage"
+              :src="item.broadcastImage"
               :style="{
                 filter:
                   'blur(30px) brightness(110%) saturate(110%) contrast(90%)',
@@ -33,7 +33,7 @@
               }"
             />
             <img
-              :src="'data:image/jpeg;base64,' + item.broadcastImage"
+              :src="item.broadcastImage"
               alt="Carousel Image"
               class="background-image"
             />
@@ -48,7 +48,7 @@
                   :key="'product-' + index + '-' + subIndex"
                 >
                   <img
-                    :src="'data:image/jpeg;base64,' + product.productImage"
+                    :src="product.productImage"
                     class="additional-image"
                   />
                   <div class="additional-image-title">
@@ -99,14 +99,14 @@
         >
           <swiper-slide v-for="(item, index) in liveItems" :key="index">
             <img
-              :src="'data:image/jpeg;base64,' + item.broadcastImage"
+              :src="item.broadcastImage"
               alt="Main Image"
               class="main-image"
             />
             <p class="live-main-title">{{ item.broadcastTitle }}</p>
             <div class="live-item">
               <img
-                :src="'data:image/jpeg;base64,' + item.productImage"
+                :src="item.productImage"
                 alt="Live Thumbnail"
                 class="live-thumbnail"
               />
