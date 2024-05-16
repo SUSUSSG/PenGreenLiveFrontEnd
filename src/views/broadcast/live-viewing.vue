@@ -233,6 +233,13 @@ const closePurchaseModal = () => {
 const handleDiscountedPrice = (discountedPrice, product) => {
   product.discountedPrice = discountedPrice;
 };
+const incrementViewsCount = async (sessionId) => {
+  console.log("세션 id", sessionId);
+  // await axios.patch(`http://localhost:8090/broadcasts/statistics/${sessionId}/viewsCount`, {}, {
+  //   withCredentials: true
+  // });
+  await axios.patch(`http://localhost:8090/broadcasts/statistics/${sessionId}/viewsCount`);
+}
 
 // 나가기 버튼 동작
 const onClickRedirect = () => {
@@ -244,6 +251,7 @@ onMounted(() => {
   mySessionId.value = route.params.broadcastId;
   joinSession();
   calculateHeight();
+  incrementViewsCount(mySessionId.value);
   window.addEventListener('resize', calculateHeight);
 });
 
