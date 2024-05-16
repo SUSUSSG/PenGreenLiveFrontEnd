@@ -48,8 +48,8 @@ const routes = [
       { path: 'broadcast-history', name: '방송시청기록', component: () => import('@/views/mypage/broadcast-history.vue') },
       { path: 'member/edit-profile', name: '정보수정', component: () => import('@/views/mypage/edit-profile.vue') },
       { path: 'payment-register', name: '결제수단 등록', component: () => import('@/components/Pay/brandpay-register.vue') },
-
-    ],
+      { path: 'callback-auth', name: '결제수단 등록 성공', component: () => import('@/components/Pay/callback-auth.vue') }
+    ]
   },
   { path: '/liveboard/:broadcastId', name: '라이브보드', component: () => import('@/views/broadcast/liveboard.vue') },
   { path: '/chat', name: 'chat', component: () => import('@/views/chat-view.vue') },
