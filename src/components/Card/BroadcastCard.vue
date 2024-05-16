@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="card-body">
-      <img :src="'data:image/jpeg;base64,' + imageSrc" alt="Card image" class="card-image" />
+      <img :src="imageSrc" alt="Card image" class="card-image" />
       <h3 class="card-title">{{ title }}</h3>
       <p class="card-text">{{ text }}</p>
     </div>
@@ -18,7 +18,7 @@
 <script>
 export default {
   props: {
-    imageSrc: Array,
+    imageSrc: String,
     title: String,
     text: String,
     datetime: String,

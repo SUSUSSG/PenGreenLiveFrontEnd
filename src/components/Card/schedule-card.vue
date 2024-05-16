@@ -4,7 +4,7 @@
       <h6 class="live-time">{{ timeRemaining }}</h6>
       <img
         class="live-thumbnail-image"
-        :src="'data:image/jpeg;base64,' + broadcastImage"
+        :src="broadcastImage"
         alt="Image"
       />
       <div class="content-wrapper">
@@ -14,7 +14,7 @@
         <div class="product-wrapper">
           <img
             class="live-product-image"
-            :src="'data:image/jpeg;base64,' + productImage"
+            :src="productImage"
             alt="Image"
           />
           <div class="product-content-wrapper">
@@ -42,7 +42,7 @@
     >
       <img
         class="live-thumbnail-image"
-        :src="'data:image/jpeg;base64,' + channelImage"
+        :src="channelImage"
         alt="Image"
       />
       <div class="list-one-line">{{ channelNm }}</div>
@@ -73,7 +73,7 @@ export default {
       required: true,
     },
     productImage: {
-      type: Array,
+      type: String,
       required: true,
     },
     broadcastTitle: {
@@ -109,7 +109,7 @@ export default {
       required: true,
     },
     channelImage: {
-      type: Array,
+      type: String,
       required: true,
     },
     channelSeq: {
