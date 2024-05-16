@@ -1,16 +1,6 @@
 <template>
   <div class="payment-widget-cache-1dqiwch">
     <div class="payment-widget-cache-154m2av">
-      <div class="payment-widget-cache-epkrmh">
-        <label for=":ri:" class="payment-widget-cache-1g4uhrk">
-          <input id=":ri:" type="radio" readonly="" class="payment-widget-cache-hp7hyj" checked="">
-          <div class="payment-widget-cache-10vnukf">
-            <div class="payment-widget-cache-18j9daq">
-              <span class="payment-widget-cache-kq1vju" style="--tds-desktop-font-weight: normal; --tds-desktop-foreground-color: #4e5968; --tds-desktop-line-height: 1.6; --tds-desktop-font-size: 15px;">브랜드페이</span>
-            </div>
-          </div>
-        </label>
-      </div>
       <button class="reset-button radius--s typography--p typography--medium p-text-button p-text-button--grey p-text-button--normal payment-widget-cache-128nlh6" type="button">설정</button>
     </div>
     <div class="payment-widget-cache-1fzox64">
@@ -63,7 +53,7 @@ onMounted(() => {
 
 function registerBrandpay() {
   brandpay
-  .addPaymentMethod('카드')
+  .addPaymentMethod()
   .then(function (methods) {
     // 성공 처리
   })
@@ -284,52 +274,14 @@ input[type=checkbox], input[type=radio] {
     background-color: #f2f4f6;
 }
 
-.svg-icon-wrapper {
-    position: relative;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-}
-
-.svg-icon-wrapper>.svg-icon, .svg-icon-wrapper>.svg-icon-fallback {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
-.svg-icon-wrapper>.svg-icon, .svg-icon-wrapper>.svg-icon-fallback {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-.svg-icon-fallback {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: -9999;
-    visibility: hidden;
-}
-
-.svg-icon img, .svg-icon svg {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
-
 .svg-icon.m-icon__inner--colored svg [fill]:not([fill=none]), .svg-icon.m-icon__inner--legacy-colored .line-icon [fill]:not([fill=none]) {
     fill: currentColor;
 }
 
-.text--word-break.text--display-block, .text--word-break.text--display-inline-block {
-    max-width: 100%;
-}
 .payment-widget-cache-z6jgjv > :not(style) ~ :not(style) {
     margin-top: 12px;
 }
-.text--display-inline-block {
-    display: inline-block;
-}
+
 .text--font-weight-medium {
     font-weight: 500;
 }
@@ -356,27 +308,6 @@ input[type=checkbox], input[type=radio] {
     margin-bottom: 12px;
 }
 
-.payment-widget-cache-4vurri > :not(style) ~ :not(style) {
-    margin-top: 0px;
-}
-
-.payment-widget-cache-p45lcn {
-    -webkit-box-align: start;
-    align-items: start;
-    display: flex;
-    flex-direction: row;
-    -webkit-box-pack: start;
-    justify-content: flex-start;
-}
-
-.badge--size-small {
-    font-size: 12px;
-    line-height: 1.333;
-    padding: 4px 8px;
-}
-.badge--type-blue {
-    background-color: #3182f6;
-}
 .badge {
     font-weight: 700;
     border-radius: 10px;
@@ -389,81 +320,27 @@ input[type=checkbox], input[type=radio] {
     justify-content: center;
 }
 
-.payment-widget-cache-p45lcn > :not(style) ~ :not(style) {
-    margin-left: 8px;
-}
-.payment-widget-cache-1kxrhf3 {
-    white-space: pre-wrap;
-}
-.text--display-inline-block {
-    display: inline-block;
-}
-.text--font-weight-regular {
-    font-weight: 400;
-}
 .text {
     color: #191f28;
-}
-.font-size--13, .typography-t7 {
-    font-size: 13px;
-    line-height: 1.5;
 }
 
 .payment-widget-cache-4vurri > :not(style) ~ :not(style) {
     margin-top: 0px;
 }
-.payment-widget-cache-w8ekyv {
-    width: 260px;
-    margin: 0px auto;
-    line-height: 20px;
-    padding: 0px 0px 32px;
-}
-.board-row {
-    list-style: none;
-}
 
-.payment-widget-cache-w8ekyv #promotion-disclaimers-header, .payment-widget-cache-w8ekyv #promotion-disclaimers-content {
-    background-color: transparent;
-    padding: 0px;
-}
-.board-row__header {
-    position: relative;
-    display: -webkit-box;
-    display: flex;
-    -webkit-box-align: center;
-    align-items: center;
-    min-height: 56px;
-    padding: 16px 16px 16px 24px;
-    background-color: #fff;
-    outline: 0;
-    cursor: pointer;
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-}
 .font-size--17, .typography-t5 {
     font-size: 17px;
     line-height: 1.5;
 }
 
-.board-row__title {
-    -webkit-box-flex: 1;
-    flex: 1 1 auto;
-    font-weight: 400;
-    color: #4e5968;
-    white-space: pre-wrap;
-}
-
 .text--word-break.text--display-block, .text--word-break.text--display-inline-block {
     max-width: 100%;
 }
+
 .text--display-inline-block {
     display: inline-block;
 }
-.text--font-weight-semibold {
-    font-weight: 600;
-}
+
 .text {
     color: #191f28;
 }
@@ -475,21 +352,6 @@ input[type=checkbox], input[type=radio] {
     color: #333d4b;
 }
 
-.svg-icon-wrapper {
-    position: relative;
-    display: inline-block;
-    width: 24px;
-    height: 24px;
-}
-.board-row__indicator {
-    color: #6b7684;
-}
-
-.svg-icon-wrapper>.svg-icon, .svg-icon-wrapper>.svg-icon-fallback {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
 .svg-icon {
     color: #191f28;
     display: inline-block;
@@ -507,11 +369,7 @@ img, svg {
     vertical-align: middle;
 }
 
-.svg-icon-wrapper>.svg-icon, .svg-icon-wrapper>.svg-icon-fallback {
-    display: block;
-    width: 100%;
-    height: 100%;
-}
+
 .svg-icon-fallback {
     position: absolute;
     left: 0;
@@ -521,43 +379,12 @@ img, svg {
     visibility: hidden;
 }
 
-.payment-widget-cache-w8ekyv #promotion-disclaimers-header, .payment-widget-cache-w8ekyv #promotion-disclaimers-content {
-    background-color: transparent;
-    padding: 0px;
-}
-.board-row__content {
-    display: none;
-    padding: 16px 24px;
-    background-color: #f2f4f6;
-    font-weight: 400;
-    color: #4e5968;
-}
 .font-size--17, .typography-t5 {
     font-size: 17px;
     line-height: 1.5;
 }
 
-.board-row__content>:not(.post-paragraph) {
-    font-size: inherit;
-    line-height: inherit;
-}
 
-.payment-widget-cache-17dl4e7 {
-    padding: 0px;
-}
-.post-list {
-    color: #4e5968;
-    margin: 0;
-    padding: 0 24px 24px;
-    list-style: none;
-    counter-reset: post-list;
-}
-.board-row__content>* {
-    display: block;
-    margin: 0;
-    font-weight: inherit;
-    color: inherit;
-}
 .font-size--16, .typography-st10 {
     font-size: 16px;
     line-height: 1.5;
