@@ -7,7 +7,7 @@
             <div class="text-base text-slate-600 dark:text-slate-300">
               <Textinput label="상품코드" type="text" name="productCd" v-model="addModalData.productCd" placeholder="P001" class="mb-2" />
               <div class="flex items-center">
-                <Textinput label="녹색제품 통합ID" type="text" name="greenProductCd" v-model="addModalData.greenProductCd" placeholder="KR232148" class="mb-2 flex-grow" />
+                <Textinput label="녹색제품 통합ID" type="text" name="greenProductId" v-model="addModalData.greenProductId" placeholder="KR232148" class="mb-2 flex-grow" />
                 <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5"><span>인증하기</span></button>
               </div>
               <Textinput label="상품명" type="text" name="productNm" v-model="addModalData.productNm" placeholder="상품명을 입력하세요" class="mb-2" />
@@ -39,7 +39,7 @@
             <div class="text-base text-slate-600 dark:text-slate-300">
               <Textinput label="상품코드" type="text" name="editproductcode" v-model="editModalData.productCd" class="mb-2" />
               <div class="flex items-center">
-                <Textinput label="녹색제품 통합ID" type="text" name="greenProductCd" v-model="editModalData.greenProductCd" class="mb-2 flex-grow" />
+                <Textinput label="녹색제품 통합ID" type="text" name="greenProductId" v-model="editModalData.greenProductId" class="mb-2 flex-grow" />
                 <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5">
                   <span>인증하기</span></button>
               </div>
@@ -73,8 +73,8 @@
               <span v-if="props.column.field === 'productCd'" @click="openEditModal(props.row)" class="cursor-pointer">
                 {{ props.row.productCd }}
               </span>
-              <span v-if="props.column.field === 'greenProductCd'">
-                {{ props.row.greenProductCd }}
+              <span v-if="props.column.field === 'greenProductId'">
+                {{ props.row.greenProductId }}
               </span>
               <span v-if="props.column.field === 'productNm'">
                 {{ props.row.productNm }}
@@ -133,7 +133,7 @@
         products: [],
         addModalData: {
           productCd: '',
-          greenProductCd: '',
+          greenProductId: '',
           productNm: '',
           categoryCd: '',
           listPrice: null,
@@ -154,7 +154,7 @@
           listPrice: 0,
           productStock: '',
           brand: '',
-          greenProductCd: '',
+          greenProductId: '',
           imageSrc: null,
           previewImage: null,
         },
@@ -191,7 +191,7 @@
           },
           {
             label: "녹색제품 통합ID",
-            field: "greenProductCd",
+            field: "greenProductId",
           },
           {
             label: "상품명",
@@ -247,6 +247,7 @@
       fetchProducts(vendorSeq) {
         axios.get(`http://localhost:8090/product-list/${vendorSeq}`)
           .then(response => {
+            console.log(response.data);
             this.products = response.data;
             console.log("Vendor-specific products loaded", this.products);
           })
@@ -321,7 +322,7 @@
         this.editModalData = {
           productSeq: row.productSeq,
           productCd: row.productCd,
-          greenProductCd: row.greenProductCd,
+          greenProductId: row.greenProductId,
           productNm: row.productNm,
           categoryCd: row.categoryCd,
           listPrice: row.listPrice,
@@ -353,7 +354,7 @@
         const url = `http://localhost:8090/${this.editModalData.productSeq}`;
         const productData = {
           productCd: this.editModalData.productCd,
-          greenProductCd: this.editModalData.greenProductCd,
+          greenProductId: this.editModalData.greenProductId,
           productNm: this.editModalData.productNm,
           categoryCd: this.editModalData.categoryCd,
           listPrice: this.editModalData.listPrice,
@@ -391,7 +392,7 @@
         const url = `http://localhost:8090/products?vendorSeq=${this.addModalData.vendorSeq}&channelSeq=${this.addModalData.channelSeq}`;
         const productData = {
           productCd: this.addModalData.productCd,
-          greenProductCd: this.addModalData.greenProductCd,
+          greenProductId: this.addModalData.greenProductId,
           productNm: this.addModalData.productNm,
           categoryCd: this.addModalData.categoryCd,
           listPrice: this.addModalData.listPrice,
