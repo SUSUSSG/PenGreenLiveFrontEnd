@@ -52,7 +52,7 @@
                     :src="product.productImage"
                     class="additional-image"
                   />
-                  <div class="additional-image-title">
+                  <div class="additional-image-title" style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
                     {{ product.productNm }}
                   </div>
                   <div class="additional-image-price">
@@ -98,13 +98,13 @@
           :autoplay="{ delay: 3000, disableOnInteraction: false }"
           style="padding-left: 32px"
         >
-          <swiper-slide v-for="(item, index) in liveItems" :key="index">
+          <swiper-slide v-for="(item, index) in liveItems" :key="index" @click="navigateToBroadcast(item.broadcastSeq)">
             <img
               :src="item.broadcastImage"
               alt="Main Image"
               class="main-image"
             />
-            <p class="live-main-title">{{ item.broadcastTitle }}</p>
+            <p class="live-main-title" style=" width:200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.broadcastTitle }}</p>
             <div class="live-item">
               <img
                 :src="item.productImage"
