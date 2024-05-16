@@ -1,8 +1,8 @@
 <template>
   <div class="grid-container" v-if="!loading">
     <SellerBroadcastSchedule v-for="(item, index) in broadcastInfo" :key="index" :broadcastId="item.broadcastSeq"
-      :broadcast-title="item.broadcastTitle" :thumbimage-src="'data:image/jpeg;base64,' + item.broadcastImage"
-      :productImg="'data:image/jpeg;base64,' + item.productImage" :product-name="item.productNm"
+      :broadcast-title="item.broadcastTitle" :thumbimage-src="item.broadcastImage"
+      :productImg="item.productImage" :product-name="item.productNm"
       :product-price="item.listPrice" :discount-rate="item.discountRate"
       :live-date-time="item.broadcastScheduledTime" />
   </div>
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     loadUpcomingBroadcastInfo() {
-      axios.get("http://localhost:8090/upcoming-broadcasts")
+      axios.get("http://localhost:8090/prepare-broadcasts")
         .then((response) => {
           this.broadcastInfo = response.data;
           this.loading = false;
