@@ -86,7 +86,7 @@ export const userMenuItems = [
   {
     title: "결제수단 등록",
     icon: "heroicons-outline:credit-card", // 결제수단 등록 관련 아이콘
-    link: "payment-methods",
+    link: "/payment-register",
   },
 ];
 
