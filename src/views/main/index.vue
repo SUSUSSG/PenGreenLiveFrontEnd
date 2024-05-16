@@ -19,6 +19,7 @@
           v-for="(item, index) in carousels"
           :key="index"
           class="carousel-slide"
+          @click="navigateToBroadcast(item.broadcastSeq)"
         >
           <div class="slide-background">
             <img
@@ -264,7 +265,9 @@ export default {
           console.error("Failed to fetch live chance carousels:", error);
         });
     },
-
+    navigateToBroadcast(broadcastSeq) {
+      this.$router.push(`/live-viewing/${broadcastSeq}`);
+    },
     onCategorySelected(categoryCd) {
       this.selectedCategory = categoryCd;
       this.fetchScheduledBroadcasts();
