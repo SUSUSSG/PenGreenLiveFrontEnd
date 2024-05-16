@@ -397,7 +397,7 @@
           listPrice: this.addModalData.listPrice,
           productStock: this.addModalData.productStock,
           brand: this.addModalData.brand,
-          productImage: this.addModalData.imageSrc,
+          base64Image: this.addModalData.imageSrc,
         };
   
         console.log("Sending product data to server:", productData);
