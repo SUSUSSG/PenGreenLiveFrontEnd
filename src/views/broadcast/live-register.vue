@@ -89,7 +89,8 @@
               </div>
               <div class="right-content">
                 <!-- 모달 -->
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal">
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal"
+                  :sizeClass="'max-w-4xl'">
                   <table>
                     <thead>
                       <tr>
@@ -254,7 +255,7 @@
             <Button @click.prevent="next()" text="다음" btnClass="btn-dark" />
           </div>
           <div v-else class="flex justify-end w-full">
-            <Button @click="saveBroadcast()" text="등록" btnClass="btn-dark" />
+            <Button @click="registerBroadcast()" text="등록" btnClass="btn-dark" />
           </div>
         </div>
       </form>
@@ -438,7 +439,7 @@ export default {
     applyDiscount(index) {
       const product = this.productsToRegister[index];
       const discount = (product.originalPrice * product.discountRate) / 100;
-      product.discountPrice = product.originalPrice - discount;
+      product.discountPrice = Math.round((product.originalPrice - discount) / 10) * 10;
     },
     handleImageUpload(event) {
       const file = event.target.files[0];
@@ -450,7 +451,7 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.previewImage = e.target.result;
-          const base64String = e.target.result.split(',')[1];
+          const base64String = e.target.result.split(',')[1]; // MIME 타입 정보 제거
           this.imageSrc = base64String;
         };
         reader.readAsDataURL(file);
@@ -465,9 +466,15 @@ export default {
     },
     registerProduct(index) {
       const product = this.productsToRegister[index];
-      product.discountPrice = product.originalPrice - (product.originalPrice * product.discountRate / 100);
+      const discount = (product.originalPrice * product.discountRate) / 100;
+      let discountPrice = product.originalPrice - discount;
+
+      // 10원 단위로 반올림
+      discountPrice = Math.round(discountPrice / 10) * 10;
+
+      product.discountPrice = discountPrice;
       this.registeredProducts.push(product);
-      this.productsToRegister.splice(index, 1); // Optionally remove from to-register list
+      this.productsToRegister.splice(index, 1);
     },
     deleteRegisteredProduct(index) {
       this.registeredProducts.splice(index, 1);
@@ -504,12 +511,12 @@ export default {
     deleteProduct(idx) {
       this.registeredProducts.splice(idx, 1);
     },
-    saveBroadcast() {
+    registerBroadcast() {
       const toast = useToast();
 
-      if (this.loading) {
-        toast.info("방송 정보를 저장 중입니다");
-      }
+      toast.clear();
+      this.loading = true;
+      toast.info("방송 정보를 저장 중입니다");
 
       // JSON 형식의 데이터 구성
       const requestData = {
@@ -517,25 +524,28 @@ export default {
         broadcastSummary: this.liveSummary,
         broadcastScheduledTime: this.liveDateTime,
         categoryCd: this.selectedCategory,
-        registeredProducts: this.registeredProducts, // registeredProducts는 배열
-        notices: this.notices, // notices는 배열
-        qa: this.qa, // qa는 배열
-        benefits: this.benefits, // benefits는 배열
+        registeredProducts: this.registeredProducts,
+        notices: this.notices,
+        qa: this.qa,
+        benefits: this.benefits,
         image: this.imageSrc
       };
+
+      console.log(requestData);
 
       // JSON 형식의 데이터를 백엔드로 전송
       axios.post('http://localhost:8090/register-broadcast', requestData)
         .then(response => {
           this.loading = false;
           toast.success("방송 정보가 등록되었습니다.", {
-            timeout: 2000,
+            timeout: 1000,
           });
           setTimeout(() => {
             this.$router.push({ name: '실시간 라이브 준비' });
           }, 2000);
         })
         .catch(error => {
+          this.loading = false;
           console.error("등록 실패 : ", error);
           toast.error("방송 등록에 실패했습니다.", {
             timeout: 2000,
