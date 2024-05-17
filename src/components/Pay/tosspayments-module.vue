@@ -2,23 +2,23 @@
     <div class="consumer-cache-1cchlll">
     <div class="consumer-cache-8z48kx">
         <section class="consumer-cache-bd75t9">
-            <div class="p-grid consumer-cache-67e79o">
+            <div class="p-grid consumer-cache-67e79o payment-method-title">
                 <div class="p-grid-col p-grid-col12">
                     <h4 class="typography typography--h6 typography--bold color--grey700 consumer-cache-1cmoblx">결제 방법</h4>
                 </div>
             </div>
-            <div>
+            <div :class="selectedPaymentMethod === 'SUSUSSGPAY' ? 'selected' : 'unselected'"  class="radio-group">
                 <input type="radio" id="susussgpay" value="SUSUSSGPAY" v-model="selectedPaymentMethod">
-                <label for="susussgpay">SUSUSSG PAY</label>
+                <label class="susussgpay-label" for="susussgpay">SUSUSSG PAY</label>
             </div>
             <div v-show="selectedPaymentMethod === 'SUSUSSGPAY'">
                 <div class="w-full h-full">
                     <BrandPay></BrandPay>
                 </div>
             </div>
-            <div>
+            <div :class="selectedPaymentMethod === 'GENERALPAY' ? 'selected' : 'unselected'" class="radio-group">
                 <input type="radio" id="generalPay" value="GENERALPAY" v-model="selectedPaymentMethod">
-                <label for="susussgpay">일반결제</label>
+                <label class="generalpay-label" for="susussgpay">일반결제</label>
             </div>
             <div v-show="selectedPaymentMethod === 'GENERALPAY'">
                 <div class="p-grid consumer-cache-67e79o">
@@ -243,7 +243,7 @@
                 </div>
             </div>
 
-            <div class="w-full flex items-center justify-center">
+            <div class="w-full flex items-center justify-center payment-button pt-[1rem]">
                 <button @click="requestPayment" class="button w-full" id="payment-button">결제하기</button>
             </div>
         </section>
@@ -1002,6 +1002,36 @@ button, input, optgroup, select, textarea {
     width: 24px;
     height: 24px;
     margin-top: 5px;
+}
+
+.susussgpay-label, .generalpay-label {
+    --tds-desktop-font-weight: normal;
+    --tds-desktop-foreground-color: #4e5968;
+    --tds-desktop-line-height: 1.4;
+    --tds-desktop-font-size: 15px;
+}
+
+.selected {
+    font-size: 16px;
+    line-height: 1.5;
+    font-weight: 600;
+    color: rgb(51, 61, 75);
+}
+
+.payment-method-title {
+    margin-bottom: 1rem;
+}
+
+input[type="radio"] {
+    min-width: 20px;
+    width: 20px;
+    height: 20px;
+    margin-right: 8px;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
 }
 
 </style>
