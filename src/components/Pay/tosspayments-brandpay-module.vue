@@ -17,9 +17,7 @@
   }
 
   const clientKey = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
-  const customerKey = 'yC2usGxaW_3-Yk3ber5Wk2';
-  
-  const couponChecked = ref(false);
+  const customerKey = 'CUSTOMER_KEY';
   const amount = ref(50000);
   
   let paymentWidget = ref(null);
@@ -30,15 +28,14 @@
     
     PaymentWidget(clientKey, customerKey, {
       brandpay: {
-        redirectUrl: window.location.origin + '/callback-auth',
+        redirectUrl: 'http://localhost:8090/api/brandpay/callback-auth',
       },
     });
-  
+
     paymentMethodWidget = paymentWidget.renderPaymentMethods('#payment-method', { value: amount.value }, { variantKey: 'BRANDPAY' });
     paymentWidget.renderAgreement('#agreement', { variantKey: 'AGREEMENT' });
   });
   
-//       paymentWidget.updateAmount(amount.value - 5000);
   
   const handlePayment = () => {
     paymentWidget.requestPayment({
