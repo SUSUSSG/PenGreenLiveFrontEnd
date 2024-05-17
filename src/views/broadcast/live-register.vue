@@ -449,7 +449,7 @@ export default {
           return;
         }
         const reader = new FileReader();
-        reader.onload = (e) => { 
+        reader.onload = (e) => {
           this.previewImage = e.target.result;
           const base64String = e.target.result.split(',')[1]; // MIME 타입 정보 제거
           this.imageSrc = base64String;
@@ -466,9 +466,15 @@ export default {
     },
     registerProduct(index) {
       const product = this.productsToRegister[index];
-      product.discountPrice =  Math.round(product.originalPrice - (product.originalPrice * product.discountRate / 100) / 10) * 10;
+      const discount = (product.originalPrice * product.discountRate) / 100;
+      let discountPrice = product.originalPrice - discount;
+
+      // 10원 단위로 반올림
+      discountPrice = Math.round(discountPrice / 10) * 10;
+
+      product.discountPrice = discountPrice;
       this.registeredProducts.push(product);
-      this.productsToRegister.splice(index, 1); // Optionally remove from to-register list
+      this.productsToRegister.splice(index, 1);
     },
     deleteRegisteredProduct(index) {
       this.registeredProducts.splice(index, 1);
