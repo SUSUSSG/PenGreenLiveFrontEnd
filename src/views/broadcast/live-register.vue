@@ -439,11 +439,7 @@ export default {
     applyDiscount(index) {
       const product = this.productsToRegister[index];
       const discount = (product.originalPrice * product.discountRate) / 100;
-      product.discountPrice = product.originalPrice - discount;
-
-      // 10원 단위로 반올림
-      discountPrice = Math.round(discountPrice / 10) * 10;
-      product.discountPrice = discountPrice;
+      product.discountPrice = Math.round((product.originalPrice - discount) / 10) * 10;
     },
     handleImageUpload(event) {
       const file = event.target.files[0];
@@ -453,9 +449,9 @@ export default {
           return;
         }
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = (e) => { 
           this.previewImage = e.target.result;
-          const base64String = e.target.result.split(',')[1];
+          const base64String = e.target.result.split(',')[1]; // MIME 타입 정보 제거
           this.imageSrc = base64String;
         };
         reader.readAsDataURL(file);
@@ -470,7 +466,7 @@ export default {
     },
     registerProduct(index) {
       const product = this.productsToRegister[index];
-      product.discountPrice = product.originalPrice - (product.originalPrice * product.discountRate / 100);
+      product.discountPrice =  Math.round(product.originalPrice - (product.originalPrice * product.discountRate / 100) / 10) * 10;
       this.registeredProducts.push(product);
       this.productsToRegister.splice(index, 1); // Optionally remove from to-register list
     },
@@ -528,6 +524,8 @@ export default {
         benefits: this.benefits,
         image: this.imageSrc
       };
+
+      console.log(requestData);
 
       // JSON 형식의 데이터를 백엔드로 전송
       axios.post('http://localhost:8090/register-broadcast', requestData)
