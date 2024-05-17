@@ -1,6 +1,6 @@
 <template>
     <div class="brandpay-wrap">
-        <button @click="getBrandPayMethods" class="" style="color: rgb(107, 118, 132);">결제수단 관리</button>
+        <!-- <button @click="getBrandPayMethods" class="" style="color: rgb(107, 118, 132);">결제수단 관리</button> -->
         <div id="payment-methods-widget"></div>
     </div>
 </template>
@@ -34,6 +34,9 @@ onMounted(async () => {
             defaultOpen: true,
           },
         },
+        installmentMinimumAmount: {
+            visible: false,
+        }
       },
     });
   } catch (error) {
@@ -43,7 +46,9 @@ onMounted(async () => {
 
 async function getBrandPayMethods() {
   const submittedData = ref(null);
+  const ls = brandpay.value.BrandPayMethod(cards);
 
+  console.log(ls);
 
   try {
     const response = await axios.get('/api/brandpay/access-token', {
