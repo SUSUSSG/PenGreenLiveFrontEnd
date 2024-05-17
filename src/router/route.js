@@ -35,7 +35,7 @@ const routes = [
       { path: 'product-statistics', name: '상품통계', component: () => import('@/views/dashboard/product-statistics.vue') },
       { path: 'broadcast-statistics', name: '방송통계', component: () => import('@/views/dashboard/broadcast-statistics.vue') },
       { path: 'review-statistics', name: '리뷰통계', component: () => import('@/views/dashboard/review-statistics.vue') },
-      { path: 'live-prepare', name: '실시간 라이브 준비', component: () => import('@/views/dashboard/live-prepare.vue')},
+      { path: 'live-prepare', name: '실시간 라이브 준비', component: () => import('@/views/broadcast/live-prepare.vue')},
       { path: 'user-info', name: '계정 정보 관리', component: () => import('@/views/dashboard/user-info.vue')},
     ],
   },
