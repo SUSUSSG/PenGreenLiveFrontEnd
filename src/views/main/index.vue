@@ -159,7 +159,9 @@
       </div>
       <div class="pb-20" />
     </section>
-    <hr />
+    <CustomFooter/>
+    <LottieAnimation animationPath="src/assets/images/all-img/penguinLottie.json" />
+
   </section>
 </template>
 
@@ -175,6 +177,8 @@ import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
 import SkeletonCarousel from "@/components/Skeleton/Schedule-skeleton.vue"; 
 import SkeletonChance from "@/components/Skeleton/Main-chance-skeleton.vue"; 
+import CustomFooter from "@/components/footer/CustomFooter.vue";
+import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 
 import SkeletonMainCarousel from "@/components/Skeleton/Main-Carou-skeleton.vue"; 
 import axios from "axios";
@@ -191,7 +195,9 @@ export default {
     ScrollTopButton,
     SkeletonCarousel,
     SkeletonChance,
-    SkeletonMainCarousel, // SkeletonCarousel 컴포넌트 등록
+    CustomFooter,
+    SkeletonMainCarousel,
+    LottieAnimation,
   },
   mounted() {
     this.fetchMainCarousels();

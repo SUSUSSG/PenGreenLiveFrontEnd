@@ -6,8 +6,18 @@
       <hr />
       <DataTab @date-selected="handleDateSelect" />
       <hr />
-      <div style="position: sticky; top: 5.5rem; z-index: 10; background-color: white;">
-        <Categories @category-selected="handleCategorySelect" style="padding-bottom: 1rem" />
+      <div
+        style="
+          position: sticky;
+          top: 5.5rem;
+          z-index: 10;
+          background-color: white;
+        "
+      >
+        <Categories
+          @category-selected="handleCategorySelect"
+          style="padding-bottom: 1rem"
+        />
         <hr />
       </div>
       <div class="content-wrapper">
@@ -41,18 +51,20 @@
         <hr class="mt-6" />
         <hr />
       </div>
+      <CustomFooter />
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 import Categories from "@/components/Category/Categories.vue";
 import CardSchedule from "@/components/Card/schedule-card.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import DataTab from "@/components/HeaderMain/date-tab.vue";
 import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
 import SkeletonCard from "@/components/Skeleton/Schedule-skeleton.vue";
+import CustomFooter from "@/components/footer/CustomFooter.vue";
 
 export default {
   components: {
@@ -62,6 +74,7 @@ export default {
     DataTab,
     ScrollTopButton,
     SkeletonCard,
+    CustomFooter,
   },
   data() {
     return {
@@ -80,7 +93,7 @@ export default {
     },
     selectedCategory() {
       this.fetchLiveData();
-    }
+    },
   },
   methods: {
     handleDateSelect(date) {
@@ -100,7 +113,7 @@ export default {
           },
         });
         if (Array.isArray(response.data)) {
-          this.liveData = response.data.map(item => ({
+          this.liveData = response.data.map((item) => ({
             ...item,
           }));
         }
@@ -111,7 +124,7 @@ export default {
       }
     },
     arrayBufferToBase64(buffer) {
-      let binary = '';
+      let binary = "";
       const bytes = new Uint8Array(buffer);
       for (let i = 0; i < bytes.byteLength; i++) {
         binary += String.fromCharCode(bytes[i]);
