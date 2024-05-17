@@ -103,8 +103,8 @@ export default {
   overflow: hidden; /* 넘치는 텍스트를 숨김 */
   text-overflow: ellipsis; /* 넘치는 텍스트를 ...로 표시 */
   width: 90%;
-  font-size: 20px;
-  margin-bottom: 8px;
+  font-size: 18px;
+  margin-bottom: 6px;
   margin-left: 0.5rem;
 }
 

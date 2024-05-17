@@ -19,7 +19,6 @@
           v-for="(item, index) in carousels"
           :key="index"
           class="carousel-slide"
-          @click="navigateToBroadcast(item.broadcastSeq)"
         >
           <div class="slide-background">
             <img
