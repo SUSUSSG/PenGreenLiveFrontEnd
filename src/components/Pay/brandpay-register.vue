@@ -1,5 +1,5 @@
 <template>
-    <div class="brandpay-wrap">
+    <div class="brandpay-wrap w-full h-full">
         <!-- <button @click="getBrandPayMethods" class="" style="color: rgb(107, 118, 132);">결제수단 관리</button> -->
         <div id="payment-methods-widget"></div>
     </div>

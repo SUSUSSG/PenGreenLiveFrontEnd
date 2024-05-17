@@ -1,5 +1,5 @@
 <template>
-    <div class="consumer-cache-1cchlll w-full">
+    <div class="consumer-cache-1cchlll">
     <div class="consumer-cache-8z48kx">
         <section class="consumer-cache-bd75t9">
             <div class="p-grid consumer-cache-67e79o">
