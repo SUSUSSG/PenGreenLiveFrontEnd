@@ -338,8 +338,6 @@ export default {
       }
     },
     openEditModal(row) {
-      console.log("여기야!!!!!!!!");
-      console.log(row);
       this.editModalData = {
         productSeq: row.productSeq,
         productCd: row.productCd,
@@ -400,7 +398,7 @@ export default {
     deleteSelectedProducts() {
       const vendorSeq = 1;
       this.selectedProducts.forEach(productSeq => {
-        axios.delete(`http://localhost:8090/${vendorSeq}/${productSeq}`)
+        axios.delete(`http://localhost:8090/product/${vendorSeq}/${productSeq}`)
           .then(response => {
             alert("Product successfully deleted");
             this.fetchProductsByVendorSeq();
