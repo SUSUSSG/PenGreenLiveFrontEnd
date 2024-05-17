@@ -89,7 +89,8 @@
               </div>
               <div class="right-content">
                 <!-- 모달 -->
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal">
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal"
+                  :sizeClass="'max-w-4xl'">
                   <table>
                     <thead>
                       <tr>
@@ -254,7 +255,7 @@
             <Button @click.prevent="next()" text="다음" btnClass="btn-dark" />
           </div>
           <div v-else class="flex justify-end w-full">
-            <Button @click="saveBroadcast()" text="등록" btnClass="btn-dark" />
+            <Button @click="registerBroadcast()" text="등록" btnClass="btn-dark" />
           </div>
         </div>
       </form>
@@ -439,6 +440,10 @@ export default {
       const product = this.productsToRegister[index];
       const discount = (product.originalPrice * product.discountRate) / 100;
       product.discountPrice = product.originalPrice - discount;
+
+      // 10원 단위로 반올림
+      discountPrice = Math.round(discountPrice / 10) * 10;
+      product.discountPrice = discountPrice;
     },
     handleImageUpload(event) {
       const file = event.target.files[0];
@@ -504,7 +509,7 @@ export default {
     deleteProduct(idx) {
       this.registeredProducts.splice(idx, 1);
     },
-    saveBroadcast() {
+    registerBroadcast() {
       const toast = useToast();
 
       toast.clear();
@@ -517,10 +522,10 @@ export default {
         broadcastSummary: this.liveSummary,
         broadcastScheduledTime: this.liveDateTime,
         categoryCd: this.selectedCategory,
-        registeredProducts: this.registeredProducts, // registeredProducts는 배열
-        notices: this.notices, // notices는 배열
-        qa: this.qa, // qa는 배열
-        benefits: this.benefits, // benefits는 배열
+        registeredProducts: this.registeredProducts,
+        notices: this.notices,
+        qa: this.qa,
+        benefits: this.benefits,
         image: this.imageSrc
       };
 
@@ -536,6 +541,7 @@ export default {
           }, 2000);
         })
         .catch(error => {
+          this.loading = false;
           console.error("등록 실패 : ", error);
           toast.error("방송 등록에 실패했습니다.", {
             timeout: 2000,
