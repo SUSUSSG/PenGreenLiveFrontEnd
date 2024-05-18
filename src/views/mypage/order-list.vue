@@ -14,13 +14,13 @@
 
       <TabPanel>
         <orderlist v-for="(item, index) in unreviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
-                   :productImgUrl="item.productImgUrl" :orderDate="item.orderDate" :productNm="item.productNm"
+                   :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
                    :orderProductPrice="item.orderProductPrice" @review-submitted="handleReviewSubmitted" />
       </TabPanel>
 
       <TabPanel>
         <reviewlist v-for="(item, index) in reviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
-                    :productImgUrl="item.productImgUrl" :orderDate="item.orderDate" :productNm="item.productNm"
+                    :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
                     :orderProductPrice="item.orderProductPrice" :reviewContent="item.reviewContent"/>
       </TabPanel>
     </TabGroup>
@@ -65,7 +65,7 @@ const handleReviewSubmitted = (productSeq) => {
 };
 
 onMounted(() => {
-  const userUuid = 'a1b2c3d4-e5f6-g7h8-i9j0-k1l2m3n4o5p6'; // 실제 사용자 UUID로 대체
+  const userUuid = 'f23a72e0-1347-11ef-b085-f220affc9a21'; // 실제 사용자 UUID로 대체
   fetchOrders(userUuid);
 });
 </script>

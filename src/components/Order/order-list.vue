@@ -5,18 +5,18 @@
         <div class="flex-row-wrapper w-full pl-6 pr-6 pt-3 pb-3">
           <h6 class="deliveryStatus mb-2">{{ deliveryStatus }}</h6>
           <div class="content-wrapper flex w-full justify-end">
-            <img class="productImgUrl" :src="productImg" alt="Image" />
+            <img class="productImgUrl" :src="productImage" alt="Image" />
             <div class="ml-4 product-wrapper flex-shrink">
               <div class="orderdate">{{ formatDate(orderDate) }}</div>
               <div class="productname mb-2">{{ productNm }}</div>
               <div class="price">{{ formatNumber(orderProductPrice) }}</div>
             </div>
             <div class="ml-auto">
-              <Modal v-if="deliveryStatus === '배송완료'" title="리뷰작성" label="리뷰작성"
+              <Modal title="리뷰작성" label="리뷰작성"
                 labelClass="btn inline-flex justify-center btn-outline-dark btn-sm" ref="modal1">
                 <div class="text-base text-slate-600 dark:text-slate-300">
                   <div class="content-wrapper flex w-full mb-3">
-                    <img class="productImgUrl" :src="productImg" alt="Image" />
+                    <img class="productImgUrl" :src="productImage" alt="Image" />
                     <div class="ml-4 product-wrapper flex-shrink">
                       <div class="orderdate">{{ formatDate(orderDate) }}</div>
                       <div class="productname mb-2">{{ productNm }}</div>
@@ -60,7 +60,7 @@ import Button from "@/components/Button/index.vue";
 
 const props = withDefaults(defineProps<{
   deliveryStatus: string;
-  productImg: string;
+  productImage: string;
   orderDate: string;
   productNm: string;
   orderProductPrice: number;
@@ -68,7 +68,7 @@ const props = withDefaults(defineProps<{
   productSeq: number;
 }>(), {
   deliveryStatus: 'default-status',
-  productImg: 'default-img-url',
+  productImage: 'default-img-url',
   orderDate: new Date().toISOString(),
   productNm: 'default-product',
   orderProductPrice: 0,
