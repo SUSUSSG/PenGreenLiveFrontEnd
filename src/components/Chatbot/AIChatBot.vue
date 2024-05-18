@@ -32,6 +32,7 @@
     <div class="chatbot-input">
       <input
         v-model="inputMessage"
+        @keyup.enter.prevent="sendMessage"
         type="text"
         placeholder="메시지를 입력하세요..."
       />
@@ -40,7 +41,7 @@
       </button>
       <button
         @click="startVoiceRecognition"
-        style="position: absolute; color: black; background: none"
+        style="position: absolute; color: gray; background: none"
       >
         <Icon icon="mdi:microphone" class="chat-icon" />
       </button>
@@ -62,6 +63,7 @@ export default {
     return {
       isOpen: false,
       inputMessage: "",
+      isSending: false, // 메시지 전송 상태 추가
       messages: [
         { id: 1, text: "안녕하세요! 펭귄 슈슈슉이에요!", type: "bot" },
         {
@@ -77,7 +79,8 @@ export default {
       this.isOpen = !this.isOpen;
     },
     async sendMessage() {
-      if (this.inputMessage.trim() !== "") {
+      if (this.inputMessage.trim() !== "" && !this.isSending) {
+        this.isSending = true; // 전송 상태 설정
         const userMessage = {
           id: this.messages.length + 1,
           text: this.inputMessage,
@@ -109,6 +112,7 @@ export default {
         }
 
         this.inputMessage = "";
+        this.isSending = false; // 전송 상태 해제
       }
     },
     startVoiceRecognition() {
@@ -163,7 +167,7 @@ export default {
 .chatbot-input input {
   flex: 1;
   margin-right: 5px;
-  border: 1px solid black;
+  border: 1px solid gray;
   border-radius: 10rem;
   padding-left: 3rem;
   height: 3rem;
