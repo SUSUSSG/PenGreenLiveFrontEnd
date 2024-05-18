@@ -183,7 +183,7 @@
       <div class="pb-20" />
     </section>
     <CustomFooter />
-    <AIChatBot ref="chatbot" style="border-radius: 16px" />
+    <AIChatBot ref="chatbot" style="border-radius: 2rem 2rem 0 0" />
     <div class="chatbot-wrapper">
       <LottieAnimation
         @click="toggleChatbot"

@@ -63,13 +63,12 @@ export default {
       isOpen: false,
       inputMessage: "",
       messages: [
-        { id: 1, text: "안녕하세요! 무엇을 도와드릴까요?", type: "bot" },
+        { id: 1, text: "안녕하세요! 펭귄 슈슈슉이에요!", type: "bot" },
         {
           id: 2,
-          text: "안녕하세요! 주문 상태를 확인하고 싶어요.",
-          type: "user",
+          text: "배송 조회, 설정, 방송 등 궁금한 것이 있다면 무엇이든 물어봐주세요!!",
+          type: "bot",
         },
-        { id: 3, text: "주문 번호를 입력해 주세요.", type: "bot" },
       ],
     };
   },
@@ -142,7 +141,7 @@ export default {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px 30px;
+  padding: 30px 30px;
 }
 .chatbot-content {
   display: flex;
@@ -154,12 +153,12 @@ export default {
 .chatbot-input {
   display: flex;
   background-color: white;
-  border-radius: 0rem 0rem 1rem 1rem;
-  height: 5rem;
+  border-radius: 0rem 0rem 2rem 2rem;
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   align-items: center;
-  padding: 0 1rem;
+  padding: 0 30px;
+  padding-bottom: 30px;
 }
 .chatbot-input input {
   flex: 1;
