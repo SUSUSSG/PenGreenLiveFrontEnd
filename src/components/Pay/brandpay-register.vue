@@ -6,13 +6,28 @@
 </template>
   
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, defineProps, defineEmits} from 'vue';
 import axios from 'axios';
+import { nanoid } from "nanoid"; 
 import "@/components/Pay/style.css";
 
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
 const customerKey = 'CUSTOMER_KEY';
 let brandpay = ref(null);
+let paymentMethodsWidget;
+let orderId=ref(null);
+
+const props = defineProps({
+    totalPrice: Number,
+    productName: String, 
+});
+
+function generateOrderId() {
+    return nanoid();
+}
+
+const emit = defineEmits(['paymentRequested']);
+
 
 onMounted(async () => {
   try {
@@ -21,8 +36,7 @@ onMounted(async () => {
       redirectUrl: 'http://localhost:8090/api/brandpay/callback-auth',
     });
 
-    const paymentMethodsWidget = brandpay.value.createPaymentMethodsWidget({ amount: 1 });
-
+    paymentMethodsWidget = brandpay.value.createPaymentMethodsWidget({ amount: props.totalPrice});
     paymentMethodsWidget.render('#payment-methods-widget', {
       ui: {
         promotionSection: {
@@ -34,9 +48,6 @@ onMounted(async () => {
             defaultOpen: true,
           },
         },
-        installmentMinimumAmount: {
-            visible: false,
-        }
       },
     });
   } catch (error) {
@@ -70,5 +81,23 @@ function loadTossPaymentsSDK() {
     document.head.appendChild(script);
   });
 }
+
+
+// 결제 하기
+async function handleSubmit(orderId) {
+    const widgetPaymentParams = paymentMethodsWidget.getPaymentParams();
+    await brandpay.value.requestPayment({
+        orderId: orderId,
+        orderName: props.productName,
+        successUrl: window.location.origin + '/brandpay/success',
+        failUrl: window.location.origin + '/brandpay/fail',
+        ...widgetPaymentParams,
+    });
+    emit('paymentRequested');
+}
+
+defineExpose({
+    handleSubmit
+});
 
 </script>
