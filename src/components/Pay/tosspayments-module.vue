@@ -13,7 +13,12 @@
             </div>
             <div v-show="selectedPaymentMethod === 'SUSUSSGPAY'">
                 <div class="w-full h-full">
-                    <BrandPay></BrandPay>
+                    <BrandPay 
+                        ref="brandPayComponent" 
+                        :totalPrice="totalPrice" 
+                        :productName="productName" 
+                        @paymentRequested="handleBrandPayPayment">
+                    </BrandPay>
                 </div>
             </div>
             <div :class="selectedPaymentMethod === 'GENERALPAY' ? 'selected' : 'unselected'" class="radio-group">
@@ -366,50 +371,58 @@ async function postPaymentInfo(orderId, amount) {
         console.error('Error submitting form:', error);
         submittedData.value = `Error: ${error.message}`;
     }
-
-    console.log("결제 요청전 검증", submittedData.value);
 }
 
+const brandPayComponent = ref(null);
 
 // 결제 요청 
 async function requestPayment() {
-    const orderId = generateOrderId();
     const totalAmount = props.totalPrice;
-    postPaymentInfo(orderId, totalAmount);
+    const orderId = generateOrderId();
 
-    try {
-        const defaultRequestPaymentData = ref({
-            amount: totalAmount,
-            orderId: orderId,
-            orderName: props.productName,
-            customerName: "김토스",
-            successUrl: `${window.location.origin}/success`,
-            failUrl: `${window.location.origin}/fail`,
-            flowMode: selectedPayment.value.flowMode,
-        })
+    if (brandPayComponent.value && selectedPaymentMethod.value==="SUSUSSGPAY") {
+        postPaymentInfo(orderId, totalAmount);
+        await brandPayComponent.value.handleSubmit(orderId);
+    }
+    else {
+        postPaymentInfo(orderId, totalAmount);
 
-        if (selectedPayment.value.method === '간편결제') {
-        defaultRequestPaymentData.value.easyPay = selectedPayment.value.easyPay;
+        try {
+            const defaultRequestPaymentData = ref({
+                amount: totalAmount,
+                orderId: orderId,
+                orderName: props.productName,
+                customerName: "김토스",
+                successUrl: `${window.location.origin}/success`,
+                failUrl: `${window.location.origin}/fail`,
+                flowMode: selectedPayment.value.flowMode,
+            })
+
+            if (selectedPayment.value.method === '간편결제') {
+            defaultRequestPaymentData.value.easyPay = selectedPayment.value.easyPay;
+            }
+
+            else if (selectedPayment.value.method === '카드') {
+            defaultRequestPaymentData.value.cardCompany = selectedCardCompany.value;
+            }
+
+            await tossPayments.value.requestPayment('카드', {
+                ...defaultRequestPaymentData.value,
+            });
+
+        } catch (error) {
+            console.error('Payment request failed:', error);
         }
-
-        else if (selectedPayment.value.method === '카드') {
-        defaultRequestPaymentData.value.cardCompany = selectedCardCompany.value;
-        }
-
-        await tossPayments.value.requestPayment('카드', {
-            ...defaultRequestPaymentData.value,
-        });
-
-    } catch (error) {
-        console.error('Payment request failed:', error);
     }
 }
+
 
 function showInterestFreeInstallmentInfo() {
   const url = "https://pgweb.tosspayments.com/tosspayments/MainPopUp.do";
   const windowFeatures = "width=600,height=600,scrollbars=yes,resizable=yes";
   window.open(url, "_blank", windowFeatures);
 }
+
 </script>
 
 
