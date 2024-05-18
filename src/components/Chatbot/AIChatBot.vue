@@ -36,16 +36,20 @@
         placeholder="메시지를 입력하세요..."
       />
       <button @click="sendMessage">
-        <Icon icon="mdi:send" class="chat-icon"/>
+        <Icon icon="mdi:send" class="chat-icon" />
       </button>
-      <button @click="startVoiceRecognition" style="position:absolute; color: black; background:none;">
-        <Icon icon="mdi:microphone" class="chat-icon"/>
+      <button
+        @click="startVoiceRecognition"
+        style="position: absolute; color: black; background: none"
+      >
+        <Icon icon="mdi:microphone" class="chat-icon" />
       </button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from "axios";
 import Icon from "@/components/icon";
 import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 
@@ -73,15 +77,39 @@ export default {
     toggleChatbot() {
       this.isOpen = !this.isOpen;
     },
-    sendMessage() {
+    async sendMessage() {
       if (this.inputMessage.trim() !== "") {
-        this.messages.push({
+        const userMessage = {
           id: this.messages.length + 1,
           text: this.inputMessage,
           type: "user",
-        });
+        };
+        this.messages.push(userMessage);
+
+        try {
+          const response = await axios.post(
+            "http://localhost:8090/openai/message",
+            {
+              message: this.inputMessage,
+            }
+          );
+          const botMessage = {
+            id: this.messages.length + 1,
+            text: response.data.response,
+            type: "bot",
+          };
+          this.messages.push(botMessage);
+        } catch (error) {
+          console.error("Error:", error);
+          const errorMessage = {
+            id: this.messages.length + 1,
+            text: "응답을 받지 못했습니다. 다시 시도해 주세요.",
+            type: "bot",
+          };
+          this.messages.push(errorMessage);
+        }
+
         this.inputMessage = "";
-        // 여기에 실제 메시지를 처리하는 로직 추가
       }
     },
     startVoiceRecognition() {
@@ -182,12 +210,12 @@ export default {
 svg.iconify.iconify--mdi {
   display: none;
 }
-.chat-icon{
-    font-size: 1.6rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+.chat-icon {
+  font-size: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .lottie-container.fixed-lottie {
