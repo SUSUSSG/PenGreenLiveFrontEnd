@@ -1,6 +1,8 @@
 <template>
   <div class="main-wrapper">
-    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast" />
+    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast" 
+      :boradcast-title="liveBroadcastInfo.broadcast.broadcastTitle" 
+      :live-date-time="liveBroadcastInfo.broadcast.broadcastScheduledTime"/>
     <div class="content-wrapper">
       <div class="flex-row">
         <div class="flex-col">
@@ -59,6 +61,9 @@ export default {
       readyToCheck: false,
       maxViewers: 0,
       averageViewers: 0,
+
+      // 실시간 방송 정보
+      liveBroadcastInfo: []
     };
   },
   methods: {
@@ -237,15 +242,15 @@ export default {
       this.maxViewers = maxViewers;
       this.averageViewers = averageViewers;
     },
-    loadBroadcastInfo() {
+    loadLiveBroadcastInfo() {
       const broadcastId = this.$route.params.broadcastId;
       console.log("해당 방송 id : " + broadcastId);
       axios.get(`http://localhost:8090/basic-broadcast-info/${broadcastId}`)
         .then((response) => {
           console.log(response.data);
-          this.broadcastInfo = response.data;
+          this.liveBroadcastInfo = response.data;
           this.loading = false;
-          console.log("broadcast info data : ", this.broadcastInfo);
+          console.log("broadcast info data : ", this.liveBroadcastInfo);
         })
         .catch(error => {
           console.error('방송 예정 목록 load 실패 : ', error);
@@ -256,7 +261,7 @@ export default {
   //컴포넌트가 생성될 시 mySessionId변수에 현재 url정보(방송id)를 할당합니다.
   created() {
     this.mySessionId = this.$route.params.broadcastId || 'defaultSessionId';
-    this.loadBroadcastInfo()
+    this.loadLiveBroadcastInfo()
   }
 };
 </script>
