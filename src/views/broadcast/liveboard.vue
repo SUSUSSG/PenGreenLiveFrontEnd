@@ -1,21 +1,23 @@
 <template>
   <div class="main-wrapper">
-    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast"/>
+    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast" />
     <div class="content-wrapper">
       <div class="flex-row">
         <div class="flex-col">
           <div class="flex-row">
-            <LiveboardBroad :stream-manager="mainStreamManager"/>
-            <LiveBoardChat :current-room="{ id: 1 }" :current-writer="'판매자'"/>
+            <LiveboardBroad :stream-manager="mainStreamManager" />
+            <LiveBoardChat :current-room="{ id: 1 }" :current-writer="'판매자'" />
           </div>
         </div>
         <div class="flex-col">
-          <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck" @update-statistics="updateStatistics"/>
-          <LiveboardProduct/>
-          <LiveboardPrompt/>
+          <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck"
+            @update-statistics="updateStatistics" />
+          <LiveboardProduct />
+          <LiveboardPrompt />
         </div>
         <div class="flex-col">
-          <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호" @broadcast-device-selected="handleDeviceChange"/>
+          <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호"
+            @broadcast-device-selected="handleDeviceChange" />
         </div>
       </div>
     </div>
@@ -67,30 +69,30 @@ export default {
         console.log("카메라");
         console.log(camera);
         navigator.mediaDevices
-            .getUserMedia({
-              video: { deviceId: camera, width: 900, height: 1600 } // 새로운 해상도 설정
-            })
-            .then((newVideoStream) => {
-              console.log(camera);
-              const videoTrack = newVideoStream.getVideoTracks()[0];
-              this.publisher.replaceTrack(videoTrack);
-            })
-            .catch((error) => {
-              console.error('Error accessing camera stream:', error);
-            });
+          .getUserMedia({
+            video: { deviceId: camera, width: 900, height: 1600 } // 새로운 해상도 설정
+          })
+          .then((newVideoStream) => {
+            console.log(camera);
+            const videoTrack = newVideoStream.getVideoTracks()[0];
+            this.publisher.replaceTrack(videoTrack);
+          })
+          .catch((error) => {
+            console.error('Error accessing camera stream:', error);
+          });
       }
 
       // 마이크 변경
       if (microphone) {
         navigator.mediaDevices
-            .getUserMedia({ audio: { deviceId: microphone } })
-            .then((newAudioStream) => {
-              const audioTrack = newAudioStream.getAudioTracks()[0];
-              this.publisher.replaceTrack(audioTrack);
-            })
-            .catch((error) => {
-              console.error('Error accessing microphone:', error);
-            });
+          .getUserMedia({ audio: { deviceId: microphone } })
+          .then((newAudioStream) => {
+            const audioTrack = newAudioStream.getAudioTracks()[0];
+            this.publisher.replaceTrack(audioTrack);
+          })
+          .catch((error) => {
+            console.error('Error accessing microphone:', error);
+          });
       }
     },
     //Video와 Audio출력을 활성/비활성합니다.
@@ -132,23 +134,23 @@ export default {
       });
       this.getToken(this.mySessionId).then(token => {
         this.session.connect(token, { clientData: this.myUserName })
-            .then(() => {
-              this.publisher = this.OV.initPublisher(undefined, {
-                audioSource: undefined,
-                videoSource: undefined,
-                publishAudio: true,
-                publishVideo: true,
-                resolution: "900x1600",
-                frameRate: 30,
-                insertMode: "APPEND",
-                mirror: false,
-              });
-              this.mainStreamManager = this.publisher;
-              this.session.publish(this.publisher);
-            })
-            .catch(error => {
-              console.log("There was an error connecting to the session:", error.code, error.message);
+          .then(() => {
+            this.publisher = this.OV.initPublisher(undefined, {
+              audioSource: undefined,
+              videoSource: undefined,
+              publishAudio: true,
+              publishVideo: true,
+              resolution: "900x1600",
+              frameRate: 30,
+              insertMode: "APPEND",
+              mirror: false,
             });
+            this.mainStreamManager = this.publisher;
+            this.session.publish(this.publisher);
+          })
+          .catch(error => {
+            console.log("There was an error connecting to the session:", error.code, error.message);
+          });
       });
       this.isSessionActive = true;
       this.readyToCheck = true;  // 방송을 시작할 때 true로 설정
@@ -234,11 +236,27 @@ export default {
       });
       this.maxViewers = maxViewers;
       this.averageViewers = averageViewers;
+    },
+    loadBroadcastInfo() {
+      const broadcastId = this.$route.params.broadcastId;
+      console.log("해당 방송 id : " + broadcastId);
+      axios.get(`http://localhost:8090/basic-broadcast-info/${broadcastId}`)
+        .then((response) => {
+          console.log(response.data);
+          this.broadcastInfo = response.data;
+          this.loading = false;
+          console.log("broadcast info data : ", this.broadcastInfo);
+        })
+        .catch(error => {
+          console.error('방송 예정 목록 load 실패 : ', error);
+          this.loading = false;
+        })
     }
   },
   //컴포넌트가 생성될 시 mySessionId변수에 현재 url정보(방송id)를 할당합니다.
   created() {
     this.mySessionId = this.$route.params.broadcastId || 'defaultSessionId';
+    this.loadBroadcastInfo()
   }
 };
 </script>
@@ -251,12 +269,14 @@ export default {
   display: flex;
   flex-direction: column;
 }
+
 .content-wrapper {
   width: 100%;
   height: 100%;
   padding: 1rem;
   overflow: hidden;
 }
+
 .flex-row {
   display: flex !important;
   flex-direction: row;
@@ -265,6 +285,7 @@ export default {
   align-items: flex-start;
   gap: 1rem;
 }
+
 .flex-col {
   display: flex !important;
   flex-direction: column;
