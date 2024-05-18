@@ -118,4 +118,8 @@ const submitReview = async () => {
 .orderdate {
   margin-bottom: 0.5rem;
 }
+
+.productImgUrl{
+  width: 150px;
+}
 </style>
