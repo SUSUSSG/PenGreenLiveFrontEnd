@@ -26,7 +26,9 @@
         :key="message.id"
         :class="['chat-message', message.type]"
       >
-        <p style="overflow-wrap: break-word">{{ message.text }}</p>
+        <p style="overflow-wrap: break-word">
+          {{ message.text }}
+        </p>
       </div>
     </div>
     <div class="chatbot-input">
@@ -72,11 +74,43 @@ export default {
           type: "bot",
         },
       ],
+      recognition: null, // 음성 인식 객체 추가
     };
+  },
+  mounted() {
+    if ("webkitSpeechRecognition" in window) {
+      this.recognition = new webkitSpeechRecognition();
+      this.recognition.lang = "ko-KR";
+      this.recognition.continuous = false;
+      this.recognition.interimResults = false;
+
+      this.recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        this.inputMessage = transcript;
+        this.sendMessage();
+      };
+
+      this.recognition.onerror = (event) => {
+        console.error("Speech recognition error", event);
+      };
+
+      this.recognition.onend = () => {
+        if (this.isOpen) {
+          this.recognition.start();
+        }
+      };
+    } else {
+      console.error(
+        "webkitSpeechRecognition is not supported in this browser."
+      );
+    }
   },
   methods: {
     toggleChatbot() {
       this.isOpen = !this.isOpen;
+      if (!this.isOpen && this.recognition) {
+        this.recognition.stop();
+      }
     },
     async sendMessage() {
       if (this.inputMessage.trim() !== "" && !this.isSending) {
@@ -119,7 +153,11 @@ export default {
       }
     },
     startVoiceRecognition() {
-      // 음성 인식 기능 구현
+      if (this.recognition) {
+        this.recognition.start();
+      } else {
+        console.error("Speech recognition not initialized.");
+      }
     },
     scrollToBottom() {
       this.$nextTick(() => {

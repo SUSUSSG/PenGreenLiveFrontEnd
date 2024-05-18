@@ -289,19 +289,31 @@ export default {
         });
     },
     startHideTitleTimer() {
-      setTimeout(() => {
+      setInterval(() => {
         const lottieTitle = document.querySelector(".lottie-title");
         const chatbotWrapper = document.querySelector(".chatbot-wrapper");
         if (lottieTitle) {
-          lottieTitle.classList.add("opacity")
+          lottieTitle.classList.add("opacity");
           setTimeout(() => {
-            lottieTitle.style.display="none"
-          },500);
+            lottieTitle.style.display = "none";
+          }, 500);
         }
         if (chatbotWrapper) {
           chatbotWrapper.classList.add("collapsed");
+          setTimeout(() => {
+            chatbotWrapper.classList.remove("collapsed");
+            if (lottieTitle) {
+              setTimeout(() => {
+
+              lottieTitle.style.display = "block";
+              },1500);
+              setTimeout(() => {
+                lottieTitle.classList.remove("opacity");
+              }, 1500); // 1.5초 뒤에 천천히 나타나도록 함
+            }
+          }, 7500);
         }
-      }, 5000);
+      }, 15000); // 5초 후에 3초 간격으로 반복
     },
     fetchLiveChanceCarousels() {
       const categoryCode =
@@ -655,7 +667,7 @@ export default {
   height: fit-content;
   text-align: center;
   font-weight: bold;
-  transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease 1.5s; /* 1.5초 후에 나타나도록 트랜지션 추가 */
 }
 .opacity {
   opacity: 0;
