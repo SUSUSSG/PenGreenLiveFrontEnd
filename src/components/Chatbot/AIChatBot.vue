@@ -20,7 +20,7 @@
         <Icon icon="mdi:close" />
       </button>
     </div>
-    <div class="chatbot-content">
+    <div class="chatbot-content" ref="chatContent">
       <div
         v-for="message in messages"
         :key="message.id"
@@ -87,6 +87,7 @@ export default {
           type: "user",
         };
         this.messages.push(userMessage);
+        this.scrollToBottom(); // 메시지 추가 후 스크롤 이동
 
         try {
           const response = await axios.post(
@@ -101,6 +102,7 @@ export default {
             type: "bot",
           };
           this.messages.push(botMessage);
+          this.scrollToBottom(); // 메시지 추가 후 스크롤 이동
         } catch (error) {
           console.error("Error:", error);
           const errorMessage = {
@@ -109,6 +111,7 @@ export default {
             type: "bot",
           };
           this.messages.push(errorMessage);
+          this.scrollToBottom(); // 메시지 추가 후 스크롤 이동
         }
 
         this.inputMessage = "";
@@ -117,6 +120,12 @@ export default {
     },
     startVoiceRecognition() {
       // 음성 인식 기능 구현
+    },
+    scrollToBottom() {
+      this.$nextTick(() => {
+        const chatContent = this.$refs.chatContent;
+        chatContent.scrollTop = chatContent.scrollHeight;
+      });
     },
   },
 };
