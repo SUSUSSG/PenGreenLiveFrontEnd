@@ -4,7 +4,7 @@
       <div id="search" class="inline-flex items-center gap-4">
         <div v-if="!totalStats" class="card-title mr-7 p-2">
           <div class="flex gap-4 ml-5 w-full ">
-            {{ selectedBoradcastTitle }}
+            {{ selectedBroadcastTitle }}
           </div>
         </div>
         <div v-else class="card-title mr-7 p-2">
@@ -18,7 +18,7 @@
               <span for="endDate">종료일:</span>
               <input type="date" id="endDate" v-model="endDate" />
             </div>
-            <Button btnClass="btn-primary btn-sm">검색</Button>
+            <Button btnClass="btn-primary btn-sm" @click="fetchStatisticsByDateRange">검색</Button>
           </div>
         </div>
       </div>
@@ -27,55 +27,34 @@
       <div>
         <div :id="resultId" class="mt-3">{{ resultTitle }}</div>
         <div id="result" class="grid mt-7">
-          <div
-            v-for="(cardData, index) in displayedCardData"
-            :key="'title_' + index"
-          >
+          <div v-for="(cardData, index) in displayedCardData" :key="'title_' + index">
             <div v-if="index < 4">
               <div class="card-title mb-5">{{ cardData.cardTitle }}</div>
             </div>
-            <Card
-              :icon="cardData.icon"
-              :analyticsTitle="cardData.analyticsTitle"
-              :analyticsResult="cardData.analyticsResult"
-            />
+            <Card :icon="cardData.icon" :analyticsTitle="cardData.analyticsTitle" :analyticsResult="cardData.analyticsResult" />
           </div>
         </div>
-      </div>
       </div>
     </div>
     <!-- 방송 이름별 상세 통계 -->
-    <div id="detail-result-container" class="w-full p-5 flex flex-col items-center">
-      <div v-if="!totalStats">
-        <div id="detailResultName" class="ml-3">판매 상품</div>
-        <div class="row inline-flex mt-5" id="product">
-          <div
-            v-for="(product, i) in products"
-            :key="i"
-            class="inline-flex ml-3"
-          >
-            <div class="inline-flex rounded pt-3 px-4 pl-0" id="productCard">
-              <div class="flex items-center justify-center">
-                <img :src="product.img" alt="Product Image" />
-              </div>
-              <div class="ml-3 flex flex-col justify-center">
-                <div
-                  class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]"
-                >
-                  {{ product.name }}
-                </div>
-                <div
-                  class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]"
-                >
-                  {{ product.price }} ({{ product.discountRate }})
-                </div>
-              </div>
+    <div id="detail-result-container" class="w-full p-5 flex flex-col items-center" v-if="!totalStats">
+      <div id="detailResultName" class="ml-3">판매 상품</div>
+      <div class="row inline-flex mt-5" id="product">
+        <div v-for="(product, i) in products" :key="i" class="inline-flex ml-3">
+          <div class="inline-flex rounded pt-3 px-4 pl-0" id="productCard">
+            <div class="flex items-center justify-center">
+              <img :src="product.img" alt="Product Image" />
+            </div>
+            <div class="ml-3 flex flex-col justify-center">
+              <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ product.name }}</div>
+              <div class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]">{{ product.price }} ({{ product.discountRate }})</div>
             </div>
           </div>
         </div>
-        <div class="mt-7 text-center">
-          <Button btnClass="btn-primary btn-sm" @click="toggleResult">확인</Button>
-        </div>
+      </div>
+      <div class="mt-7 text-center">
+        <Button btnClass="btn-primary btn-sm" @click="toggleResult">확인</Button>
+      </div>
     </div>
     <!-- 방송 이름 선택 -->
     <div v-else>
@@ -83,21 +62,16 @@
         <div id="searchTitle" class="mr-5">방송 목록</div>
         <select v-model="selectedBroadcastTitleOption">
           <option :value="null">제목</option>
-          <option
-            v-for="option in broadcastOptions"
-            :key="option.value"
-            :value="option.value"
-          >
-            {{ option.label }}
-          </option>
+          <option v-for="option in broadcastOptions" :key="option.value" :value="option.value">{{ option.label }}</option>
         </select>
-        <Button btnClass="btn-primary btn-sm" @click="toggleResult" :disabled="!selectedBroadcastTitleOption">상세조회</Button>
+        <Button btnClass="btn-primary btn-sm" @click="fetchBroadcastDetails" :disabled="!selectedBroadcastTitleOption">상세조회</Button>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
 import Card from "@/components/Card/analytics-card.vue";
 import Button from "@/components/Button";
 
@@ -108,106 +82,16 @@ export default {
   },
   data() {
     return {
-      broadcastOptions: [
-        { value: "1번", label: "방송제목1" },
-        { value: "2번", label: "방송제목2" },
-      ],
+      broadcastOptions: [],
       selectedBroadcastTitleOption: null,
       startDate: "",
       endDate: "",
-      selectedBoradcastTitle: "",
-      cardDataList: [
-        {
-          icon: "heroicons:clock",
-          analyticsTitle: "평균 방송 진행 시간",
-          analyticsResult: "01시간 42분 36초",
-          cardTitle: "시간",
-        },
-        {
-          icon: "heroicons:user-group",
-          analyticsTitle: "평균 시청자 수",
-          analyticsResult: "233명",
-          cardTitle: "고객",
-        },
-        {
-          icon: "heroicons:archive-box",
-          analyticsTitle: "평균 구매 개수",
-          analyticsResult: "1.3개",
-          cardTitle: "구매",
-        },
-        {
-          icon: "heroicons:cursor-arrow-rays",
-          analyticsTitle: "평균 상품 클릭수",
-          analyticsResult: "2.7번",
-          cardTitle: "상품",
-        },
-        {
-          icon: "heroicons:clock",
-          analyticsTitle: "평균 방송 시청 시간",
-          analyticsResult: "00시간 28분 12초",
-          fontSize: "27px",
-        },
-        {
-          icon: "heroicons:hand-thumb-up",
-          analyticsTitle: "평균 좋아요 수",
-          analyticsResult: "5603명",
-        },
-        {
-          icon: "heroicons:circle-stack",
-          analyticsTitle: "평균 구매 금액",
-          analyticsResult: "13,200개",
-        },
-      ],
+      selectedBroadcastTitle: "",
+      cardDataList: [],
       totalStats: true,
       resultId: "resultName",
       resultTitle: "전체 통계",
-      selectedBroadcastOption: null,
-      searchResultCardDataList: [
-        {
-          icon: "heroicons:user-group",
-          analyticsTitle: "평균 시청자 수",
-          analyticsResult: "355명",
-          cardTitle: "시청자",
-        },
-        {
-          icon: "heroicons:clock",
-          analyticsTitle: "평균 시청 시간",
-          analyticsResult: "0.5시간",
-          cardTitle: "시간",
-        },
-        {
-          icon: "heroicons:circle-stack",
-          analyticsTitle: "평균 구매 금액",
-          analyticsResult: "1.3만원",
-          cardTitle: "금액",
-        },
-        {
-          icon: "heroicons:cursor-arrow-rays",
-          analyticsTitle: "평균 상품 클릭수",
-          analyticsResult: "2.7번",
-          cardTitle: "기타",
-        },
-        {
-          icon: "heroicons:user-group",
-          analyticsTitle: "최고 시청자 수",
-          analyticsResult: "500명",
-        },
-        {
-          icon: "heroicons:clock",
-          analyticsTitle: "방송 진행 시간",
-          analyticsResult: "2시간",
-        },
-        {
-          icon: "heroicons:circle-stack",
-          analyticsTitle: "총 판매 금액/수량",
-          analyticsResult: "3,333,000/15",
-        },
-        {
-          icon: "heroicons:hand-thumb-up",
-          analyticsTitle: "좋아요 수",
-          analyticsResult: "90 개",
-        },
-      ],
+      searchResultCardDataList: [],
       products: [
         {
           img: "https://via.placeholder.com/50x50",
@@ -232,9 +116,7 @@ export default {
   },
   computed: {
     displayedCardData() {
-      return this.totalStats
-        ? this.cardDataList
-        : this.searchResultCardDataList;
+      return this.totalStats ? this.cardDataList : this.searchResultCardDataList;
     },
   },
   methods: {
@@ -243,17 +125,184 @@ export default {
       this.resultId = this.totalStats ? "resultName" : "detailResultName";
       this.resultTitle = this.totalStats ? "전체 통계" : "상세 통계";
     },
-    onBroadcastOptionSelect(option) {
-      this.selectedBroadcastOption = option;
+    async fetchStatisticsByDateRange() {
+      try {
+        const vendorSeq = 3; // Replace with actual vendorSeq
+        const startDate = this.startDate || "2000-01-01";
+        const endDate = this.endDate || "2099-12-31";
+
+        const avgBroadcastDurationResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-broadcast-duration`, {
+          params: { vendorSeq, startDate, endDate }
+        });
+        const avgViewerCountResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-viewer-count`, {
+          params: { vendorSeq, startDate, endDate }
+        });
+        const avgPurchaseQuantityResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-purchase-quantity`, {
+          params: { vendorSeq, startDate, endDate }
+        });
+        const avgProductClicksResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-product-clicks`, {
+          params: { vendorSeq, startDate, endDate }
+        });
+        const avgViewingTimeResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-viewing-time`, {
+          params: { vendorSeq, startDate, endDate }
+        });
+        const avgLikesCountResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-likes-count`, {
+          params: { vendorSeq, startDate, endDate }
+        });
+        const avgPurchaseAmountResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-purchase-amount`, {
+          params: { vendorSeq, startDate, endDate }
+        });
+
+        this.cardDataList = [
+          {
+            icon: "heroicons:clock",
+            analyticsTitle: "평균 방송 진행 시간",
+            analyticsResult: this.formatDuration(avgBroadcastDurationResponse.data),
+            cardTitle: "시간",
+          },
+          {
+            icon: "heroicons:user-group",
+            analyticsTitle: "평균 시청자 수",
+            analyticsResult: `${avgViewerCountResponse.data}명`,
+            cardTitle: "고객",
+          },
+          {
+            icon: "heroicons:archive-box",
+            analyticsTitle: "평균 구매 개수",
+            analyticsResult: `${avgPurchaseQuantityResponse.data}개`,
+            cardTitle: "구매",
+          },
+          {
+            icon: "heroicons:cursor-arrow-rays",
+            analyticsTitle: "평균 상품 클릭수",
+            analyticsResult: `${avgProductClicksResponse.data}번`,
+            cardTitle: "상품",
+          },
+          {
+            icon: "heroicons:clock",
+            analyticsTitle: "평균 방송 시청 시간",
+            analyticsResult: this.formatDuration(avgViewingTimeResponse.data),
+            cardTitle: "시청 시간",
+          },
+          {
+            icon: "heroicons:hand-thumb-up",
+            analyticsTitle: "평균 좋아요 수",
+            analyticsResult: `${avgLikesCountResponse.data}명`,
+            cardTitle: "좋아요",
+          },
+          {
+            icon: "heroicons:circle-stack",
+            analyticsTitle: "평균 구매 금액",
+            analyticsResult: `${avgPurchaseAmountResponse.data}원`,
+            cardTitle: "구매 금액",
+          },
+        ];
+      } catch (error) {
+        console.error("Error fetching statistics by vendor and date range:", error);
+      }
     },
+    async fetchBroadcastOptions() {
+      try {
+        const vendorSeq = 3; // Replace with actual vendorSeq
+        const startDate = this.startDate || "2000-01-01";
+        const endDate = this.endDate || "2099-12-31";
+
+        const response = await axios.get(`http://localhost:8090/vendor/${vendorSeq}/broadcasts`, {
+          params: { startDate, endDate }
+        });
+
+        if (response.data.length === 0) {
+          alert("해당 기간에 조회된 방송이 없습니다!");
+          return;
+        }
+
+        this.broadcastOptions = response.data.map(broadcast => ({
+          value: broadcast.broadcastSeq,
+          label: broadcast.broadcastTitle,
+        }));
+      } catch (error) {
+        console.error("Error fetching broadcast options:", error);
+      }
+    },
+    async fetchBroadcastDetails() {
+      if (!this.selectedBroadcastTitleOption) return;
+
+      try {
+        const broadcastSeq = this.selectedBroadcastTitleOption;
+
+        const response = await axios.get(`http://localhost:8090/broadcasts/statistics/${broadcastSeq}`);
+        const broadcastStatistics = response.data;
+
+        this.searchResultCardDataList = [
+          {
+            icon: "heroicons:user-group",
+            analyticsTitle: "평균 시청자 수",
+            analyticsResult: `${broadcastStatistics.avgViewerCount}명`,
+            cardTitle: "시청자",
+          },
+          {
+            icon: "heroicons:clock",
+            analyticsTitle: "평균 시청 시간",
+            analyticsResult: this.formatDuration(broadcastStatistics.avgViewingTime),
+            cardTitle: "시간",
+          },
+          {
+            icon: "heroicons:circle-stack",
+            analyticsTitle: "평균 구매 금액",
+            analyticsResult: `${broadcastStatistics.avgPurchaseAmount}원`,
+            cardTitle: "금액",
+          },
+          {
+            icon: "heroicons:cursor-arrow-rays",
+            analyticsTitle: "평균 상품 클릭수",
+            analyticsResult: `${broadcastStatistics.avgProductClicks}번`,
+            cardTitle: "기타",
+          },
+          {
+            icon: "heroicons:user-group",
+            analyticsTitle: "최고 시청자 수",
+            analyticsResult: `${broadcastStatistics.maxViewerCount}명`,
+          },
+          {
+            icon: "heroicons:clock",
+            analyticsTitle: "방송 진행 시간",
+            analyticsResult: this.formatDuration(broadcastStatistics.broadcastDuration),
+          },
+          {
+            icon: "heroicons:circle-stack",
+            analyticsTitle: "총 판매 금액/수량",
+            analyticsResult: `${broadcastStatistics.totalSalesAmount}/${broadcastStatistics.totalSalesQty}`,
+          },
+          {
+            icon: "heroicons:hand-thumb-up",
+            analyticsTitle: "좋아요 수",
+            analyticsResult: `${broadcastStatistics.likesCount} 개`,
+          },
+        ];
+
+        this.toggleResult();
+      } catch (error) {
+        console.error("Error fetching broadcast details:", error);
+      }
+    },
+    formatDuration(seconds) {
+      const hours = Math.floor(seconds / 3600);
+      const minutes = Math.floor((seconds % 3600) / 60);
+      const secs = seconds % 60;
+      return `${hours}시간 ${minutes}분 ${secs}초`;
+    },
+  },
+  mounted() {
+    this.fetchStatisticsByDateRange();
+    this.fetchBroadcastOptions();
   },
   watch: {
     selectedBroadcastTitleOption(newValue) {
       const selectedOption = this.broadcastOptions.find(
-        option => option.value === newValue
+          option => option.value === newValue
       );
       if (selectedOption) {
-        this.selectedBoradcastTitle = selectedOption.label;
+        this.selectedBroadcastTitle = selectedOption.label;
       }
     },
   },
@@ -304,7 +353,6 @@ export default {
 #resultName,
 #detailResultName {
   font-size: 20px;
-  /* margin-bottom: 30px;  */
   color: #111111;
 }
 
