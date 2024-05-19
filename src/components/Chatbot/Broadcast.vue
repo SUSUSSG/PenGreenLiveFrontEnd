@@ -6,6 +6,8 @@
         class="broadcast-card"
         v-for="broadcast in broadcasts"
         :key="broadcast.broadcastSeq"
+        @click="navigateToBroadcast(broadcast.broadcastSeq)"
+
       >
         <img
           :src="broadcast.broadcastImage"
@@ -90,6 +92,9 @@ export default {
       setTimeout(() => {
         this.$router.push("/schedule");
       }, 150);
+    },
+    navigateToBroadcast(broadcastSeq) {
+      this.$router.push(`/live-viewing/${broadcastSeq}`);
     },
   },
 };
