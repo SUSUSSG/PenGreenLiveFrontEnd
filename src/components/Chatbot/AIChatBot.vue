@@ -56,7 +56,7 @@
 </template>
 <script>
 import axios from "axios";
-import { markRaw } from 'vue'; // markRaw 가져오기
+import { markRaw } from "vue"; // markRaw 가져오기
 import Icon from "@/components/icon";
 import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import OrderHistory from "@/components/Chatbot/OrderHistory.vue";
@@ -250,6 +250,105 @@ export default {
               this.scrollToBottom();
             }, 100);
           } else if (botMessageText.includes("@환경이야기")) {
+            setTimeout(() => {
+              const botMessage = {
+                id: this.messages.length + 1,
+                text: "환경과 관련된 이야기를 원하시는군요! 어느 펭귄 한 마리의 이야기를 들려드릴게요...",
+                type: "bot",
+              };
+              this.messages.push(botMessage);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            }, 100);
+            setTimeout(() => {
+              const botMessage = {
+                id: this.messages.length + 1,
+                text: "어느 날, 남극 대륙의 하얀 눈밭에서 평화롭게 생활하던 펭귄들이 큰 변화를 맞이하게 되었습니다. 이상하게도, 날씨가 점점 따뜻해지더니 펭귄들이 사랑하는 얼음과 눈이 서서히 녹아내리기 시작했습니다. 처음엔 그저 일시적인 현상이라 생각했지만, 점점 빙하가 녹아내리는 속도는 빨라졌습니다. 펭귄들의 집이 점점 사라져갔습니다.",
+                type: "bot",
+              };
+              this.messages.push(botMessage);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            }, 3000);
+            setTimeout(() => {
+              const botMessage = {
+                id: this.messages.length + 1,
+                text: "펭귄들은 새로운 집을 찾아 헤매야 했습니다. 매일같이 조금씩 줄어드는 얼음과 눈을 보며 그들의 마음은 무거워졌습니다. 빙하가 녹으면 바다도 따뜻해지고, 그로 인해 물고기들도 서식지를 옮기게 되어 펭귄들의 식량도 점점 부족해졌습니다. 펭귄들은 더 이상 이대로 있을 수 없었습니다.",
+                type: "bot",
+              };
+              this.messages.push(botMessage);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            }, 8000);
+            setTimeout(() => {
+              const botMessage = {
+                id: this.messages.length + 1,
+                text: "한편, 지구 반대편에서는 지구 온난화에 대해 심각하게 고민하던 사람들이 있었습니다. 이들은 지구의 환경을 보호하고자 친환경 제품을 개발하기 시작했습니다. 재생 가능 에너지를 사용하고, 일회용 플라스틱 대신 지속 가능한 소재를 사용하며, 에너지 절약을 실천하는 다양한 방법들을 고안해냈습니다. 사람들은 이러한 노력을 통해 환경 파괴 요소를 줄여나가고 있었습니다.",
+                type: "bot",
+              };
+              this.messages.push(botMessage);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            }, 16000);
+            setTimeout(() => {
+              const botMessage = {
+                id: this.messages.length + 1,
+                text: "이러한 변화는 서서히 효과를 보기 시작했습니다. 사람들의 노력 덕분에 탄소 배출량이 줄어들었고, 지구의 온도가 서서히 안정화되었습니다. 남극의 빙하가 더 이상 녹지 않게 되자 펭귄들은 서서히 자신들의 집을 되찾아갔습니다. 여전히 어려움은 많았지만, 희망을 잃지 않고 서로 도우며 살아갔습니다.",
+                type: "bot",
+              };
+              this.messages.push(botMessage);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            }, 24000);
+            setTimeout(() => {
+              const botMessage = {
+                id: this.messages.length + 1,
+                text: "그리고 어느 날, 펭귄들에게 새로운 소식이 전해졌습니다. 인간들이 지구 온난화를 막기 위해 열심히 노력하고 있다는 것이었습니다. 펭귄들은 이제 자신들의 미래가 더 밝아졌음을 알게 되었습니다. 다시 말해, 더 오랜 시간 동안 이 아름다운 남극에서 행복하게 살 수 있다는 뜻이었습니다.",
+                type: "bot",
+              };
+              this.messages.push(botMessage);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            }, 32000);
+            setTimeout(() => {
+              const botMessage = {
+                id: this.messages.length + 1,
+                text: "펭귄들은 다시 평화를 찾았습니다. 깨끗한 얼음 위에서 미끄럼을 타고, 차가운 바닷물에서 수영을 즐기며, 무리를 지어 함께 살아가는 그들의 일상은 다시금 즐거움으로 가득 차게 되었습니다. 인간들의 노력 덕분에 펭귄들은 행복한 날들을 맞이할 수 있었습니다.",
+                type: "bot",
+              };
+              this.messages.push(botMessage);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            }, 40000);
+            setTimeout(() => {
+              const botMessage = {
+                id: this.messages.length + 1,
+                text: "이제 펭귄들은 더 이상 두려워하지 않았습니다. 지구의 환경을 지키려는 인간들의 노력이 계속된다면, 그들의 행복한 날들도 영원히 이어질 것이라는 희망을 품고 있었습니다. 이렇게 펭귄들은 다시 한번 희망과 행복을 찾으며 남극의 평화로운 일상을 이어나갔습니다. -끝-",
+                type: "bot",
+              };
+              this.messages.push(botMessage);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            }, 48000);
+            setTimeout(() => {
+              const botMessage = {
+                id: this.messages.length + 1,
+                text: "제 이야기를 들어주셔서 감사합니다~! 다른 도움이 필요하신게 있다면 말씀해주세요!!",
+                type: "bot",
+              };
+              this.messages.push(botMessage);
+              setTimeout(() => {
+                this.scrollToBottom();
+              }, 100);
+            }, 53000);
           } else if (botMessageText.includes("@시청기록")) {
           } else if (botMessageText.includes("@결제수단")) {
           } else {
