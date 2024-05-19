@@ -49,7 +49,7 @@ export default {
 .order-history {
   background-color: #fff;
   padding: 20px;
-  border-radius: 20px;
+  border-radius: 30px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -115,10 +115,9 @@ export default {
   margin-left: 10px;
 }
 
-/* 긴 텍스트 줄바꿈 추가 */
 .text-order-product-name {
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* 두 줄을 넘으면 ... 표시 */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   width: 290px;
   word-wrap: break-word;

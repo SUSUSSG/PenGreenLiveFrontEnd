@@ -1,34 +1,33 @@
 <template>
   <div>
     <div class="order-history">
-      <p class="ai-card-title">나의 주문 내역</p>
+      <p class="ai-card-title">주문 상품 채널 정보</p>
       <ul>
         <li v-for="(order, index) in orders" :key="order.orderSeq">
-          <div class="row">
-            <div class="img-wrapper">
-              <img :src="order.productImage" alt="productImage" />
+          <div class="col">
+            <p class="text-order-date">{{ formatDate(order.orderDate) }}</p>
+            <div class="row" style="margin-bottom: 1rem;">
+              <img
+                :src="order.productImage"
+                alt="productImage"
+                class="img-product"
+              />
+              <p class="text-product-name" >{{ order.productName }}</p>
             </div>
-            <div class="col">
-              <div
-                class="row"
-                style="
-                  justify-content: space-between;
-                  margin-left: 1rem;
-                  width: 270px;
+            <div class="row">
+              <img
+                :src="
+                  order.channelImage
+                    ? order.channelImage
+                    : 'https://placehold.co/80x80'
                 "
-              >
-                <div class="row">
-                  <p class="text-order-date">
-                    {{ formatDate(order.orderDate) }}
-                  </p>
-                </div>
-                <p class="text-order-delivery-status">
-                  {{ order.deliveryStatus }}
-                </p>
+                alt="channelImage"
+                class="img-channel"
+              />
+              <div class="col">
+                <p class="text-channel-name" style="font-size: 1.2rem;">{{ order.channelName }}</p>
               </div>
-              <div class="col name-wrapper">
-                <p class="text-order-product-name">{{ order.productNm }}</p>
-              </div>
+              <div class="channel-move-button"><a :href= "order.channelUrl" class="text-move">바로가기</a></div>
             </div>
           </div>
           <hr v-if="index < orders.length - 1" class="divider" />
@@ -56,9 +55,8 @@ export default {
   },
   methods: {
     fetchOrders() {
-      const userUuid = "f23a72e0-1347-11ef-b085-f220affc9a21";
       axios
-        .get(`http://localhost:8090/unreviewed-orders/${userUuid}`)
+        .get(`http://localhost:8090/openai/recent-orders`)
         .then((response) => {
           this.orders = response.data;
         })
@@ -81,6 +79,11 @@ export default {
 </script>
 
 <style scoped>
+.text-move{
+  word-wrap: break-word;
+  white-space: normal;
+  min-width:fit-content;
+}
 .order-history {
   background-color: #fff;
   padding: 20px;
@@ -105,6 +108,12 @@ export default {
   transition: transform 0.1s ease;
 }
 
+.img-product {
+  width: 40px;
+  height: 40px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
 .card-button:hover {
   transform: scale(1.02);
 }
@@ -121,7 +130,7 @@ export default {
 }
 
 .col {
-  width: 290px;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -136,31 +145,13 @@ export default {
   align-items: center;
 }
 
-.name-wrapper {
-  width: 290px;
-}
-
-.img-wrapper {
-  width: 90px;
-  height: 90px;
-  margin-right: 1rem;
-}
-
-.img-wrapper img {
-  aspect-ratio: 1/1;
-  object-fit: cover;
-}
-
-.text-wrapper {
-  margin-left: 10px;
-}
-
 /* 긴 텍스트 줄바꿈 추가 */
-.text-order-product-name {
+.text-product-name {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
-  width: 280px;
+  overflow: hidden;
+  width: 310px;
   word-wrap: break-word;
   white-space: normal;
   text-overflow: ellipsis;
@@ -168,18 +159,14 @@ export default {
   margin-left: 1rem;
 }
 
-.text-order-delivery-status {
-  font-weight: bold;
-  color: darkgreen;
-  white-space: pre;
-}
-
-.text-order-price {
-  font-weight: bold;
-}
-
-.text-order-date {
-  font-weight: bold;
+/* 채널 이미지 */
+.img-channel {
+  width: 80px;
+  height: 80px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  margin-right: 1rem;
+  border-radius:100%;
 }
 
 /* 요소 사이 가로선 */
@@ -187,5 +174,18 @@ export default {
   width: 100%;
   border: 0.5px solid #ccc;
   margin: 1rem 0;
+}
+
+.channel-move-button{
+  min-width: fit-content;
+  background-color: darkgreen;
+  padding: 0.5rem 1rem;
+  color: white;
+border-radius: 10px;
+}
+
+.text-order-date{
+  font-weight: bold;
+  margin-bottom:0.5rem;
 }
 </style>

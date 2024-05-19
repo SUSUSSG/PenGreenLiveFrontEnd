@@ -61,12 +61,14 @@ import Icon from "@/components/icon";
 import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import OrderHistory from "@/components/Chatbot/OrderHistory.vue";
 import Profile from "@/components/Chatbot/Profile.vue";
+import Refund from "@/components/Chatbot/Refund.vue";
 export default {
   components: {
     Icon,
     LottieAnimation,
     OrderHistory,
     Profile,
+    Refund,
   },
   data() {
     return {
