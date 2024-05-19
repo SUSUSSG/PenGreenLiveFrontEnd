@@ -1,40 +1,24 @@
 <template>
   <div>
     <div class="order-history">
-      <ul>
-        <li v-for="order in orders" :key="order.orderSeq">
-          <div class="row">
-            <div class="img-wrapper">
-              <img :src="order.productImage" alt="productImage" />
-            </div>
-            <div class="col">
-              <div class="row" style="justify-content: space-between; margin-left:1rem; width:270px;">
-                <div class="row">
-                  <p class="text-order-date">
-                    {{ formatDate(order.orderDate) }}
-                  </p>
-                </div>
-                <p class="text-order-delivery-status">
-                  {{ order.deliveryStatus }}
-                </p>
-              </div>
-              <div class="col name-wrapper">
-                <p class="text-order-product-name">{{ order.productNm }}</p>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
+      <div class="col">
+        <p class="ai-card-title">정보 수정</p>
+        <p style="font-weight:bold; margin-bottom: 0.5rem;">다음과 같은 정보 수정이 가능해요</p>
+        <ol style="text-indent: 1rem;">
+          <li>1. 휴대폰 번호</li>
+          <li>2. 비밀번호</li>
+          <li>3. 이메일</li>
+          <li>4. 배송주소</li>
+        </ol>
+      </div>
     </div>
     <div class="card-button" @click="goToOrderList">
-      <p class="card-text">자세히 보러가기</p>
+      <p class="card-text">수정하러 이동하기</p>
     </div>
   </div>
 </template>
 
 <script>
-import axios from "axios";
-import { useRouter } from "vue-router";
 
 export default {
   data() {
@@ -42,29 +26,13 @@ export default {
       orders: [],
     };
   },
-  mounted() {
-    this.fetchOrders();
-  },
+
   methods: {
-    fetchOrders() {
-      const userUuid = "f23a72e0-1347-11ef-b085-f220affc9a21";
-      axios
-        .get(`http://localhost:8090/unreviewed-orders/${userUuid}`)
-        .then((response) => {
-          this.orders = response.data;
-        })
-        .catch((error) => {
-          console.error("There was an error fetching the orders:", error);
-        });
-    },
-    formatDate(dateString) {
-      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
-      return new Date(dateString).toLocaleDateString("ko-KR", options);
-    },
+   
     goToOrderList() {
       this.$el.querySelector(".card-button").classList.add("clicked");
       setTimeout(() => {
-        this.$router.push("/order-list");
+        this.$router.push("/edit-profile");
       }, 150);
     },
   },
@@ -72,6 +40,12 @@ export default {
 </script>
 
 <style scoped>
+.ai-card-title{
+  font-size:1.4rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color:darkgreen;
+}
 .order-history {
   background-color: #fff;
   padding: 20px;
@@ -144,14 +118,12 @@ export default {
 /* 긴 텍스트 줄바꿈 추가 */
 .text-order-product-name {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 2; /* 두 줄을 넘으면 ... 표시 */
   -webkit-box-orient: vertical;
-  width: 280px;
+  width: 290px;
   word-wrap: break-word;
   white-space: normal;
   text-overflow: ellipsis;
-  text-indent: 0 !important;
-  margin-left: 1rem;
 }
 
 .text-order-delivery-status {

@@ -60,12 +60,13 @@ import axios from "axios";
 import Icon from "@/components/icon";
 import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import OrderHistory from "@/components/Chatbot/OrderHistory.vue";
-
+import Profile from "@/components/Chatbot/Profile.vue";
 export default {
   components: {
     Icon,
     LottieAnimation,
     OrderHistory,
+    Profile,
   },
   data() {
     return {
@@ -159,6 +160,38 @@ export default {
             setTimeout(() => {
               this.scrollToBottom();
             }, 100);
+          } else if (botMessageText.includes("@프로필")) {
+            const botMessage = {
+              id: this.messages.length + 1,
+              text: "개인정보와 관련된 설정은 '정보수정' 페이지에서 가능해요! 페이지로 이동하시겠어요?",
+              type: "bot",
+            };
+            this.messages.push(botMessage);
+            const orderHistoryMessage = {
+              id: this.messages.length + 1,
+              type: "component",
+              component: Profile,
+            };
+            this.messages.push(orderHistoryMessage);
+            const afterBotMessage = {
+              id: this.messages.length + 1,
+              text: "다른 도움이 필요하시다면 말씀해주세요!!",
+              type: "bot",
+            };
+            this.messages.push(afterBotMessage);
+            setTimeout(() => {
+              this.scrollToBottom();
+            }, 100);
+          } else if (botMessageText.includes("@환불")) {
+            
+          } else if (botMessageText.includes("@방송")) {
+            
+          } else if (botMessageText.includes("@환경이야기")) {
+            
+          } else if (botMessageText.includes("@시청기록")) {
+            
+          } else if (botMessageText.includes("@결제수단")) {
+            
           } else {
             const botMessage = {
               id: this.messages.length + 1,
