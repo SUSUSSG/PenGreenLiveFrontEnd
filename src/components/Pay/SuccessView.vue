@@ -18,7 +18,7 @@
         </div>
         </div>
       <div class="w-full mt-10">
-        <Button>돌아가기</Button>
+        <Button @click="goBack">돌아가기</Button>
       </div>
     </div>
   </section>
@@ -96,6 +96,7 @@ async function saveOrder(paymentData) {
     });
     if (orderResponse.status === 200) {
       console.log('Order saved successfully:', orderResponse.data);
+      localStorage.removeItem(paymentData.orderId);
     } else {
       console.log(`Unexpected status code: ${orderResponse.status}`);
     }
@@ -103,6 +104,10 @@ async function saveOrder(paymentData) {
     console.error('Order saving failed:', error);
   }
 }
+
+function goBack() {
+  router.push('/');
+};
 
 onMounted(async () => {
   const { orderId, amount, paymentKey } = route.query;

@@ -394,8 +394,8 @@ async function requestPayment() {
                 orderId: orderId,
                 orderName: product.value.productName,
                 customerName: "김토스",
-                successUrl: `${window.location.origin}/success`,
-                failUrl: `${window.location.origin}/fail`,
+                successUrl: window.location.origin + '/success',
+                failUrl: window.location.origin + '/fail',
                 flowMode: selectedPayment.value.flowMode,
             })
 
