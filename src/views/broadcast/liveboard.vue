@@ -245,7 +245,7 @@ export default {
     loadLiveBroadcastInfo() {
       const broadcastId = this.$route.params.broadcastId;
       console.log("해당 방송 id : " + broadcastId);
-      axios.get(`http://localhost:8090/basic-broadcast-info/${broadcastId}`)
+      axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}`)
         .then((response) => {
           console.log(response.data);
           this.liveBroadcastInfo = response.data;
