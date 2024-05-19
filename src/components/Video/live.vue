@@ -3,7 +3,7 @@
     <div class="title-bar w-full flex items-center justify-between" v-if="showTitleBar">
       <div class="flex items-center">
         <img :src="announceIconSrc" class="logo" style="width: 50%" />
-        <p class="broad-title">방송 제목</p>
+        <p class="broadcast-title"> {{ broadcastTitle }} </p>
       </div>
     </div>
 
@@ -67,6 +67,7 @@ export default {
       default: false,
     },
     streamManager: Object,
+    broadcastTitle: String
   },
   data() {
     return {

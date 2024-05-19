@@ -3,8 +3,10 @@
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: 1 }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
-    <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true"
-          :stream-manager="mainStreamManager"></Live>
+    <Live class="live-section-broad" 
+          show-icon-side-bar="true" show-title-bar="true"
+          :stream-manager="mainStreamManager" 
+          :broadcast-title="broadcastTitle" />
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
       <div v-if="selectedProduct">
@@ -217,6 +219,26 @@ const calculateHeight = () => {
   const viewportHeight = window.innerHeight;
   computedHeight.value = viewportHeight - boxHeight.value;
 }
+
+const liveBroadcastInfo = ref({});
+const broadcastTitle = computed(() => liveBroadcastInfo.value.broadcast?.broadcastTitle || '');
+
+// 방송 정보 가져오기
+const loadLiveBroadcastInfo = async () => {
+  const broadcastId = route.params.broadcastId;
+  console.log("해당 방송 id : " + broadcastId);
+  try {
+    const response = await axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}`);
+    console.log(response.data);
+    liveBroadcastInfo.value = response.data;
+    console.log("broadcast info data : ", liveBroadcastInfo.value);
+  } catch (error) {
+    console.error('방송 예정 목록 load 실패 : ', error);
+  }
+  console.log("여기야~~ " + liveBroadcastInfo.value.broadcast.broadcastTitle);
+};
+
+
 // 모달 및 제품 선택 제어
 const openModal = () => {
   isOpen.value = true;
@@ -253,6 +275,7 @@ onMounted(() => {
   calculateHeight();
   incrementViewsCount(mySessionId.value);
   window.addEventListener('resize', calculateHeight);
+  loadLiveBroadcastInfo(); // 방송정보 호출
 });
 
 watch(boxHeight, calculateHeight)
