@@ -36,13 +36,13 @@
                       </div>
                     </div>
                   </div>
-
                 </div>
                 <template v-slot:footer>
-                  <Button text="삭제" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal()" />
+                  <Button text="삭제" btnClass="btn-dark btn-sm" @click="deleteReview"/>
                   <Button text="닫기" btnClass="btn-dark btn-sm" @click="$refs.modal1.closeModal()" />
                 </template>
               </Modal>
+              <!-- <Button text="리뷰삭제" btnClass="btn-outline-dark btn-sm mt-2" @click="deleteReview" /> -->
             </div>
           </div>
         </div>
@@ -52,7 +52,8 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, withDefaults } from 'vue';
+import axios from 'axios';
+import { defineProps, withDefaults, defineEmits } from 'vue';
 import Modal from "../Modal/Modal.vue";
 import Button from "@/components/Button/index.vue";
 
@@ -63,13 +64,19 @@ const props = withDefaults(defineProps<{
   productNm: string;
   orderProductPrice: number;
   reviewContent: string;
+  reviewSeq: number;
+  userUUID: string;
 }>(), {
   deliveryStatus: 'default-status',
   productImage: 'default-img-url',
   orderDate: new Date().toISOString(),
   productNm: 'default-product',
   orderProductPrice: 0,
+  reviewSeq: 0,
+  userUUID: ''
 });
+
+const emit = defineEmits(['review-deleted']);
 
 const formatNumber = (value: number): string => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -78,6 +85,20 @@ const formatNumber = (value: number): string => {
 const formatDate = (dateString: string): string => {
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
   return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
+const deleteReview = async () => {
+  try {
+    console.log('Deleting review with reviewSeq:', props.reviewSeq);
+    if (props.reviewSeq === 0) {
+      throw new Error('Invalid reviewSeq');
+    }
+    await axios.delete(`http://localhost:8090/reviews/${props.userUUID}/${props.reviewSeq}`);
+    alert('리뷰 삭제가 완료되었습니다.');
+    emit('review-deleted', props.reviewSeq);
+  } catch (error) {
+    alert('리뷰 삭제에 실패했습니다: ' + error.message);
+  }
 };
 
 </script>
@@ -100,4 +121,7 @@ const formatDate = (dateString: string): string => {
   width: 150px;
 }
 
+.mt-2 {
+  margin-top: 0.5rem;
+}
 </style>
