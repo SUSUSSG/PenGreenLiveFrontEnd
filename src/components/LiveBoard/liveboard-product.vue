@@ -79,9 +79,8 @@
         <div class="table-header">
           <span class="header-cell">이미지</span>
           <span class="header-cell">인증배지</span>
-          <span class="header-cell">이름</span>
+          <span class="header-cell name-cell">이름</span>
           <span class="header-cell">원가</span>
-          <span class="header-cell">할인율</span>
           <span class="header-cell">판매가</span>
           <span class="header-cell">판매상태</span>
         </div>
@@ -95,9 +94,11 @@
           <div class="badge-container">
             <img v-for="(image, imgIndex) in getLabelImageArray(product.labelImages)" :key="imgIndex" :src="image" alt="label Image" class="label-image" />
           </div>
-          <span class="cell">{{ product.productNm }}</span>
-          <span class="cell">{{ product.listPrice.toLocaleString() }}원</span>
-          <span class="cell">{{ product.discountRate }}%</span>
+          <span class="cell name-cell">{{ product.productNm }}</span>
+          <span class="cell">
+            <div class="list-price">{{ product.listPrice.toLocaleString() }}원</div>
+            <div class="discount-Rate">{{ product.discountRate }}%</div>
+          </span>
           <span class="cell">{{ product.discountPrice.toLocaleString() }}원</span>
           <span class="cell">
             <Switch v-model="product.showNowImg" />
@@ -181,6 +182,10 @@ export default {
   font-weight: bold;
 }
 
+.header-cell.name-cell {
+  flex: 2;
+}
+
 .table-row {
   display: flex;
   border-bottom: 1px solid #ccc;
@@ -191,6 +196,10 @@ export default {
   flex: 1;
   text-align: center;
   position: relative;
+}
+
+.cell.name-cell {
+  flex: 2;
 }
 
 .image-container {
@@ -223,5 +232,12 @@ export default {
   justify-content: center;
   gap: 5px;
   margin-right: 10px;
+}
+
+.list-price {
+  text-decoration: line-through;
+}
+.discount-Rate {
+  color: red;
 }
 </style>
