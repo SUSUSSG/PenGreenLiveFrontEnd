@@ -56,7 +56,7 @@ export default {
 .card-button {
   background-color: #ffffff;
   padding: 20px;
-  border-radius: 20cm;
+  border-radius: 100px;
   margin-top: 1rem;
   font-weight: bold;
   color: #111111;
