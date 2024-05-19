@@ -26,7 +26,10 @@
         :key="index"
         :class="['chat-message', message.type]"
       >
-        <p v-if="message.type !== 'component'" style="overflow-wrap: break-word">
+        <p
+          v-if="message.type !== 'component'"
+          style="overflow-wrap: break-word"
+        >
           {{ message.text }}
         </p>
         <component :is="message.component" v-else />
@@ -135,12 +138,27 @@ export default {
           );
           let botMessageText = response.data.response;
           if (botMessageText.includes("@주문내역")) {
+            const botMessage = {
+              id: this.messages.length + 1,
+              text: "주문 정보를 조회해볼게요! 잠시만 기다려주세요!!",
+              type: "bot",
+            };
+            this.messages.push(botMessage);
             const orderHistoryMessage = {
               id: this.messages.length + 1,
               type: "component",
               component: OrderHistory,
             };
             this.messages.push(orderHistoryMessage);
+            const afterBotMessage = {
+              id: this.messages.length + 1,
+              text: "주문 내역을 가져왔어요! 도움이 더 필요하시다면 언제든 말씀해주세요😆",
+              type: "bot",
+            };
+            this.messages.push(afterBotMessage);
+            setTimeout(() => {
+              this.scrollToBottom();
+            }, 100);
           } else {
             const botMessage = {
               id: this.messages.length + 1,
@@ -271,7 +289,7 @@ export default {
   border-radius: 1rem 1rem 0rem 1rem;
 }
 
-.chat-message.component{
+.chat-message.component {
   min-width: 440px;
 }
 svg.iconify.iconify--mdi {
