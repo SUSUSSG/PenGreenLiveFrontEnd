@@ -213,13 +213,34 @@ export default {
               this.scrollToBottom();
             }, 100);
           } else if (botMessageText.includes("@방송")) {
-            
+            const [, keyword] = botMessageText.split(",");
+            const botMessage = {
+              id: this.messages.length + 1,
+              text: `${keyword}와(과) 관련된 방송을 찾아드릴게요!! 잠시만 기다려주세요!`,
+              type: "bot",
+            };
+            this.messages.push(botMessage);
+
+            const orderHistoryMessage = {
+              id: this.messages.length + 1,
+              type: "component",
+              component: Broadcast,
+              props: { keyword },
+            };
+            this.messages.push(orderHistoryMessage);
+
+            const afterBotMessage = {
+              id: this.messages.length + 1,
+              text: "도움이 필요하면 언제든지 불러주세요!",
+              type: "bot",
+            };
+            this.messages.push(afterBotMessage);
+            setTimeout(() => {
+              this.scrollToBottom();
+            }, 100);
           } else if (botMessageText.includes("@환경이야기")) {
-            
           } else if (botMessageText.includes("@시청기록")) {
-            
           } else if (botMessageText.includes("@결제수단")) {
-            
           } else {
             const botMessage = {
               id: this.messages.length + 1,
