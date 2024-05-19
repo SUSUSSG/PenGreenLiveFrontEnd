@@ -78,8 +78,8 @@
       <div>
         <div class="table-header">
           <span class="header-cell">이미지</span>
-          <span class="header-cell">이름</span>
           <span class="header-cell">인증배지</span>
+          <span class="header-cell">이름</span>
           <span class="header-cell">원가</span>
           <span class="header-cell">할인율</span>
           <span class="header-cell">판매가</span>
@@ -92,10 +92,10 @@
               <img v-if="product.showNowImg" :src="nowImg" class="now-image"/>
             </div>
           </span>
+          <div class="badge-container">
+            <img v-for="(image, imgIndex) in getLabelImageArray(product.labelImages)" :key="imgIndex" :src="image" alt="label Image" class="label-image" />
+          </div>
           <span class="cell">{{ product.productNm }}</span>
-          <span class="cell" v-for="(image, index) in getLabelImageArray(product.labelImages)" :key="index">
-            <img :src="image" alt="labe Image" class="label-image" />
-          </span>
           <span class="cell">{{ product.listPrice.toLocaleString() }}원</span>
           <span class="cell">{{ product.discountRate }}%</span>
           <span class="cell">{{ product.discountPrice.toLocaleString() }}원</span>
@@ -199,8 +199,8 @@ export default {
 }
 
 .product-image {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
 }
 
@@ -213,7 +213,15 @@ export default {
 }
 
 .label-image {
-  width: 50px;
-  height: 50px;
+  width: 30px;
+  height: 30px;
+}
+
+.badge-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  margin-right: 10px;
 }
 </style>
