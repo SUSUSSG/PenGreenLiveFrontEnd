@@ -2,10 +2,11 @@
   <div class="inline-flex pt-5 ml-5" id="header">
     <img src="/src/assets/images/logo/pengreenlive-logo-white.png" id="logo">
 
-    <div id="resultDisplay" :class="[isBroadcasting ? 'red-style' : 'black-style']" class="mr-4">{{ resultDispalyText }}</div>
+    <div id="resultDisplay" :class="[isBroadcasting ? 'red-style' : 'black-style']" class="mr-4">{{ resultDispalyText }}
+    </div>
     <div class="row">
-      <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ boradcastTitle }}</div>
-      <div>{{ "라이브 일시 " + boradcastDate }}</div>
+      <div class="broadcast-title">{{ boradcastTitle }}</div>
+      <div class="broadcast-time">{{ "라이브 일시 : " + formattedLiveDateTime.current + " ~ " + formattedLiveDateTime.oneHourLater }}</div>
     </div>
 
     <div class="inline-flex flex-grow items-center justify-end">
@@ -30,7 +31,7 @@
       </div>
       <div class="inline-flex flex-grow items-center justify-end mr-8">
         <Button v-on:click="toggleBroadcast()" :text="isBroadcasting ? '라이브 종료' : '라이브 시작'"
-                :btnClass="isBroadcasting ? 'btn-green h-12' : 'btn-light h-12'" id="broadcastControllButton" />
+          :btnClass="isBroadcasting ? 'btn-green h-12' : 'btn-light h-12'" id="broadcastControllButton" />
       </div>
     </div>
   </div>
@@ -46,6 +47,10 @@ export default {
     Card,
     Icon,
     Button
+  },
+  props: {
+    boradcastTitle: String,
+    liveDateTime: String
   },
   data() {
     return {
@@ -70,8 +75,6 @@ export default {
       //초 단위
       elapsedTime: 0,
       remainingTime: 3600,
-      boradcastTitle: "어린이날 맞이 깜짝 라이브 이벤트!! 독도 토너~",
-      boradcastDate: "2024-03-24 14:30 ~ 15:30",
       resultDispalyText: '대기',
     }
   },
@@ -115,6 +118,38 @@ export default {
     },
     updateResultDisplayText() {
       this.resultDispalyText = this.isBroadcasting ? '라이브' : '대기';
+    }
+  },
+  computed: {
+    formattedLiveDateTime() {
+      // 서버에서 받아온 방송 시작 시간
+      const serverLiveTime = new Date(this.liveDateTime);
+
+      // 클라이언트의 시간대와 UTC 시간대의 차이를 보정
+      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000; // 밀리초 단위로 변환
+      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds); // 클라이언트의 시간대에 맞게 조정
+
+      const year = adjustedServerLiveTime.getFullYear();
+      const month = ('0' + (adjustedServerLiveTime.getMonth() + 1)).slice(-2);
+      const day = ('0' + adjustedServerLiveTime.getDate()).slice(-2);
+      const hours = ('0' + adjustedServerLiveTime.getHours()).slice(-2);
+      const minutes = ('0' + adjustedServerLiveTime.getMinutes()).slice(-2);
+
+      const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+
+      // 한 시간 뒤의 시간 계산
+      const oneHourLater = new Date(adjustedServerLiveTime);
+      oneHourLater.setHours(oneHourLater.getHours() + 1);
+
+      const laterHours = ('0' + oneHourLater.getHours()).slice(-2);
+      const laterMinutes = ('0' + oneHourLater.getMinutes()).slice(-2);
+
+      const oneHourLaterFormattedTime = `${laterHours}:${laterMinutes}`;
+
+      return {
+        current: formattedTime,
+        oneHourLater: oneHourLaterFormattedTime
+      };
     }
   }
 };
@@ -162,5 +197,12 @@ export default {
 
 .btn-green {
   background-color: #134010;
+}
+
+.broadcast-title {
+  margin-bottom: 6px;
+  color: #111111;
+  font-weight: bold;
+  font-size: large;
 }
 </style>
