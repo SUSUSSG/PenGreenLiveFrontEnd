@@ -15,8 +15,8 @@ const routes = [
       { path: 'live-viewing', name: '라이브시청', component: () => import('@/views/broadcast/live-viewing.vue') },
       { path: 'success', name: '결제완료', component: () => import('@/components/Pay/SuccessView.vue') },
       { path: 'fail', name: '결제실패', component: () => import('@/components/Pay/FailView.vue') },
-      { path: 'brandpay/success', name: '결제완료', component: () => import('@/components/Pay/brandpay-success.vue') },
-      { path: 'brandpay/fail', name: '결제실패', component: () => import('@/components/Pay/brandpay-fail.vue') },
+      { path: 'brandpay/success', name: '브랜드페이결제완료', component: () => import('@/components/Pay/brandpay-success.vue') },
+      { path: 'brandpay/fail', name: '브랜드페이결제실패', component: () => import('@/components/Pay/brandpay-fail.vue') },
       { path: 'brandpay-test', name: '브랜드페이', component: () => import('@/components/Pay/tosspayments-brandpay-module.vue') },
       {
         path: '/live-viewing/:broadcastId',
