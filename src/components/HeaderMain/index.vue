@@ -14,7 +14,7 @@
     >
       <div
         class="flex justify-between items-center h-full"
-        style="padding: 0 2rem; width: 77%; margin: 0 auto"
+        style="padding: 0 6rem; width: 77%; margin: 0 auto"
       >
         <router-link to="/">
           <div>

@@ -47,11 +47,16 @@
                   v-for="(product, subIndex) in item.products"
                   :key="'product-' + index + '-' + subIndex"
                 >
-                  <img
-                    :src="product.productImage"
-                    class="additional-image"
-                  />
-                  <div class="additional-image-title" style="width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                  <img :src="product.productImage" class="additional-image" />
+                  <div
+                    class="additional-image-title"
+                    style="
+                      width: 100px;
+                      white-space: nowrap;
+                      overflow: hidden;
+                      text-overflow: ellipsis;
+                    "
+                  >
                     {{ product.productNm }}
                   </div>
                   <div class="additional-image-price">
@@ -63,8 +68,12 @@
           </div>
         </swiper-slide>
       </swiper>
-      <div v-else class="skeleton-container" style="padding:0px!important; margin:0px!important;">
-        <SkeletonMainCarousel/>
+      <div
+        v-else
+        class="skeleton-container"
+        style="padding: 0px !important; margin: 0px !important"
+      >
+        <SkeletonMainCarousel />
       </div>
     </div>
 
@@ -97,13 +106,27 @@
           :autoplay="{ delay: 3000, disableOnInteraction: false }"
           style="padding-left: 32px"
         >
-          <swiper-slide v-for="(item, index) in liveItems" :key="index" @click="navigateToBroadcast(item.broadcastSeq)">
+          <swiper-slide
+            v-for="(item, index) in liveItems"
+            :key="index"
+            @click="navigateToBroadcast(item.broadcastSeq)"
+          >
             <img
               :src="item.broadcastImage"
               alt="Main Image"
               class="main-image"
             />
-            <p class="live-main-title" style=" width:200px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ item.broadcastTitle }}</p>
+            <p
+              class="live-main-title"
+              style="
+                width: 200px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              "
+            >
+              {{ item.broadcastTitle }}
+            </p>
             <div class="live-item">
               <img
                 :src="item.productImage"
@@ -159,7 +182,18 @@
       </div>
       <div class="pb-20" />
     </section>
-    <hr />
+    <CustomFooter />
+    <AIChatBot ref="chatbot" style="border-radius: 2rem 2rem 0 0" />
+    <div class="chatbot-wrapper">
+      <LottieAnimation
+        @click="toggleChatbot"
+        class="fixed-lottie"
+        animationPath="src/assets/images/all-img/penguinLottie.json"
+      />
+      <div class="lottie-title">
+        <p>궁금한 것은 AI 슈슈슉에게 물어보세요!</p>
+      </div>
+    </div>
   </section>
 </template>
 
@@ -173,10 +207,13 @@ import Categories from "@/components/Category/Categories.vue";
 import CardComponent from "@/components/Card/BroadcastCard.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
-import SkeletonCarousel from "@/components/Skeleton/Schedule-skeleton.vue"; 
-import SkeletonChance from "@/components/Skeleton/Main-chance-skeleton.vue"; 
+import SkeletonCarousel from "@/components/Skeleton/Schedule-skeleton.vue";
+import SkeletonChance from "@/components/Skeleton/Main-chance-skeleton.vue";
+import CustomFooter from "@/components/footer/CustomFooter.vue";
+import LottieAnimation from "@/components/UI/LottieAnimation.vue";
+import AIChatBot from "@/components/Chatbot/AIChatBot.vue";
 
-import SkeletonMainCarousel from "@/components/Skeleton/Main-Carou-skeleton.vue"; 
+import SkeletonMainCarousel from "@/components/Skeleton/Main-Carou-skeleton.vue";
 import axios from "axios";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
@@ -191,12 +228,16 @@ export default {
     ScrollTopButton,
     SkeletonCarousel,
     SkeletonChance,
-    SkeletonMainCarousel, // SkeletonCarousel 컴포넌트 등록
+    CustomFooter,
+    SkeletonMainCarousel,
+    LottieAnimation,
+    AIChatBot,
   },
   mounted() {
     this.fetchMainCarousels();
     this.fetchScheduledBroadcasts();
     this.fetchLiveChanceCarousels();
+    this.startHideTitleTimer();
   },
   data() {
     return {
@@ -224,7 +265,7 @@ export default {
         .then((response) => {
           this.carousels = response.data;
           this.loadingCarousels = false; // 데이터 로드 완료 후 로딩 상태 false
-          console.log("Main carousels data:", this.carousels); 
+          console.log("Main carousels data:", this.carousels);
         })
         .catch((error) => {
           console.error("Failed to fetch main carousels:", error);
@@ -246,6 +287,33 @@ export default {
         .catch((error) => {
           console.error("Failed to fetch scheduled broadcasts:", error);
         });
+    },
+    startHideTitleTimer() {
+      setInterval(() => {
+        const lottieTitle = document.querySelector(".lottie-title");
+        const chatbotWrapper = document.querySelector(".chatbot-wrapper");
+        if (lottieTitle) {
+          lottieTitle.classList.add("opacity");
+          setTimeout(() => {
+            lottieTitle.style.display = "none";
+          }, 500);
+        }
+        if (chatbotWrapper) {
+          chatbotWrapper.classList.add("collapsed");
+          setTimeout(() => {
+            chatbotWrapper.classList.remove("collapsed");
+            if (lottieTitle) {
+              setTimeout(() => {
+
+              lottieTitle.style.display = "block";
+              },1500);
+              setTimeout(() => {
+                lottieTitle.classList.remove("opacity");
+              }, 1500); // 1.5초 뒤에 천천히 나타나도록 함
+            }
+          }, 7500);
+        }
+      }, 15000); // 5초 후에 3초 간격으로 반복
     },
     fetchLiveChanceCarousels() {
       const categoryCode =
@@ -272,9 +340,13 @@ export default {
       this.fetchScheduledBroadcasts();
       this.fetchLiveChanceCarousels();
     },
+    toggleChatbot() {
+      this.$refs.chatbot.toggleChatbot();
+    },
   },
 };
 </script>
+
 <style scoped>
 .border-container {
   width: 74%;
@@ -534,8 +606,8 @@ export default {
   display: flex;
   flex-direction: row;
   gap: 30px;
-  padding-left:32px;
-  width:100%;
+  padding-left: 32px;
+  width: 100%;
   justify-content: flex-start;
   align-items: center;
 }
@@ -566,5 +638,41 @@ export default {
   100% {
     background-position: 0% 0%;
   }
+}
+.chatbot-wrapper {
+  display: flex;
+  width: 500px;
+  background: rgb(255 255 255);
+  height: fit-content;
+  z-index: 998;
+  position: fixed;
+  bottom: 140px;
+  right: 104px;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 10rem;
+  gap: 1.5rem;
+  font-size: 1.3rem;
+  box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
+  transition: width 2s ease-in-out; /* 애니메이션 추가 */
+}
+.fixed-lottie {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+}
+
+.lottie-title {
+  width: fit-content;
+  height: fit-content;
+  text-align: center;
+  font-weight: bold;
+  transition: opacity 0.5s ease 1.5s; /* 1.5초 후에 나타나도록 트랜지션 추가 */
+}
+.opacity {
+  opacity: 0;
+}
+.collapsed {
+  width: 80px; /* 너비를 80px로 줄이기 */
 }
 </style>
