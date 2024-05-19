@@ -32,7 +32,7 @@
         >
           {{ message.text }}
         </p>
-        <component :is="message.component" v-else />
+        <component :is="message.component" v-bind="message.props" v-else />
       </div>
     </div>
     <div class="chatbot-input">
@@ -62,6 +62,7 @@ import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import OrderHistory from "@/components/Chatbot/OrderHistory.vue";
 import Profile from "@/components/Chatbot/Profile.vue";
 import Refund from "@/components/Chatbot/Refund.vue";
+import BroadcastCard from "@/components/Chatbot/Broadcast.vue";
 export default {
   components: {
     Icon,
@@ -69,6 +70,11 @@ export default {
     OrderHistory,
     Profile,
     Refund,
+    BroadcastCard,
+  },
+  message: {
+    type: Object,
+    required: true,
   },
   data() {
     return {
@@ -213,7 +219,15 @@ export default {
               this.scrollToBottom();
             }, 100);
           } else if (botMessageText.includes("@방송")) {
-            const [, keyword] = botMessageText.split(",");
+            const [, Broadcastkeyword] = botMessageText.split(",");
+
+            // 디버깅을 위해 console.log 추가
+            console.log("Broadcastkeyword:", Broadcastkeyword);
+
+            // Broadcastkeyword가 정의되지 않았거나 빈 문자열일 때 기본 값을 설정합니다.
+            const keyword = Broadcastkeyword?.trim() || "default_keyword";
+            console.log("keyword:", keyword);
+
             const botMessage = {
               id: this.messages.length + 1,
               text: `${keyword}와(과) 관련된 방송을 찾아드릴게요!! 잠시만 기다려주세요!`,
@@ -224,7 +238,7 @@ export default {
             const orderHistoryMessage = {
               id: this.messages.length + 1,
               type: "component",
-              component: Broadcast,
+              component: BroadcastCard,
               props: { keyword },
             };
             this.messages.push(orderHistoryMessage);
