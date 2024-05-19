@@ -183,7 +183,33 @@ export default {
               this.scrollToBottom();
             }, 100);
           } else if (botMessageText.includes("@환불")) {
-            
+            const botMessage = {
+              id: this.messages.length + 1,
+              text: "환불과 관련된 정책은 구매하신 상품의 판매 채널에 따라 상이하여 '펭그린라이브'에서 직접 환불 처리를 진행하지 않는 점 참고 부탁드려요.",
+              type: "bot",
+            };
+            this.messages.push(botMessage);
+            const botMessage2 = {
+              id: this.messages.length + 1,
+              text: "그 대신에 최근에 구매한 상품의 채널 정보를 알려드릴게요.",
+              type: "bot",
+            };
+            this.messages.push(botMessage2);
+            const orderHistoryMessage = {
+              id: this.messages.length + 1,
+              type: "component",
+              component: Refund,
+            };
+            this.messages.push(orderHistoryMessage);
+            const afterBotMessage = {
+              id: this.messages.length + 1,
+              text: "이외에 궁금한 점이 있다면 질문해주세요!! 슈슈슉이 답변드릴게요🙌",
+              type: "bot",
+            };
+            this.messages.push(afterBotMessage);
+            setTimeout(() => {
+              this.scrollToBottom();
+            }, 100);
           } else if (botMessageText.includes("@방송")) {
             
           } else if (botMessageText.includes("@환경이야기")) {
