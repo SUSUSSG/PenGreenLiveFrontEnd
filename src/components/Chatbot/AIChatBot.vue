@@ -30,6 +30,7 @@
           {{ message.text }}
         </p>
       </div>
+      <OrderHistory v-if="showOrderHistoryComponent" />
     </div>
     <div class="chatbot-input">
       <input
@@ -55,17 +56,19 @@
 import axios from "axios";
 import Icon from "@/components/icon";
 import LottieAnimation from "@/components/UI/LottieAnimation.vue";
+import OrderHistory from "@/components/Chatbot/OrderHistory.vue";
 
 export default {
   components: {
     Icon,
     LottieAnimation,
+    OrderHistory, // 주문 내역 컴포넌트 추가
   },
   data() {
     return {
       isOpen: false,
       inputMessage: "",
-      isSending: false, // 메시지 전송 상태 추가
+      isSending: false,
       messages: [
         { id: 1, text: "안녕하세요! 펭귄 슈슈슉이에요!", type: "bot" },
         {
@@ -74,7 +77,8 @@ export default {
           type: "bot",
         },
       ],
-      recognition: null, // 음성 인식 객체 추가
+      recognition: null,
+      showOrderHistoryComponent: false, // 주문 내역 컴포넌트 표시 여부 상태 추가
     };
   },
   mounted() {
@@ -114,14 +118,14 @@ export default {
     },
     async sendMessage() {
       if (this.inputMessage.trim() !== "" && !this.isSending) {
-        this.isSending = true; // 전송 상태 설정
+        this.isSending = true;
         const userMessage = {
           id: this.messages.length + 1,
           text: this.inputMessage,
           type: "user",
         };
         this.messages.push(userMessage);
-        this.scrollToBottom(); // 메시지 추가 후 스크롤 이동
+        this.scrollToBottom();
 
         try {
           const response = await axios.post(
@@ -130,13 +134,19 @@ export default {
               message: this.inputMessage,
             }
           );
+          let botMessageText = response.data.response;
+          if (botMessageText.includes("@주문내역")) {
+            botMessageText =
+              "구매하신 상품의 주문 상태를 확인해드릴게요!🧐 잠시만 기다려주세요😀";
+            this.showOrderHistoryComponent = true; // 주문 내역 컴포넌트 표시
+          }
           const botMessage = {
             id: this.messages.length + 1,
-            text: response.data.response,
+            text: botMessageText,
             type: "bot",
           };
           this.messages.push(botMessage);
-          this.scrollToBottom(); // 메시지 추가 후 스크롤 이동
+          this.scrollToBottom();
         } catch (error) {
           console.error("Error:", error);
           const errorMessage = {
@@ -145,11 +155,11 @@ export default {
             type: "bot",
           };
           this.messages.push(errorMessage);
-          this.scrollToBottom(); // 메시지 추가 후 스크롤 이동
+          this.scrollToBottom();
         }
 
         this.inputMessage = "";
-        this.isSending = false; // 전송 상태 해제
+        this.isSending = false;
       }
     },
     startVoiceRecognition() {
