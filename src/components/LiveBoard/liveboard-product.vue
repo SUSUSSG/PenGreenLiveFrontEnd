@@ -79,6 +79,7 @@
         <div class="table-header">
           <span class="header-cell">이미지</span>
           <span class="header-cell">이름</span>
+          <span class="header-cell">인증배지</span>
           <span class="header-cell">원가</span>
           <span class="header-cell">할인율</span>
           <span class="header-cell">판매가</span>
@@ -92,6 +93,9 @@
             </div>
           </span>
           <span class="cell">{{ product.productNm }}</span>
+          <span class="cell" v-for="(image, index) in getLabelImageArray(product.labelImages)" :key="index">
+            <img :src="image" alt="labe Image" class="label-image" />
+          </span>
           <span class="cell">{{ product.listPrice.toLocaleString() }}원</span>
           <span class="cell">{{ product.discountRate }}%</span>
           <span class="cell">{{ product.discountPrice.toLocaleString() }}원</span>
@@ -136,6 +140,13 @@ export default {
         productCode: row.productCode
       };
       this.$refs.showProductInfo.open();
+    },
+    getLabelImageArray(labelImages) {
+      if (typeof labelImages === 'string') {
+        return labelImages.split(',').map(image => image.trim());
+      } else {
+        return [];
+      }
     }
   }
 }
@@ -199,5 +210,10 @@ export default {
   left: 0;
   width: 60px;
   height: 30px;
+}
+
+.label-image {
+  width: 50px;
+  height: 50px;
 }
 </style>
