@@ -36,7 +36,7 @@ export default {
       state.orderForm.orderId = orderId;
     },
     setOrderForm(state, orderForm) {
-      state.orderForm = orderForm;
+      state.orderForm = { ...state.orderForm, ...orderForm };
     },
     resetState(state) {
       state.selectedProduct = null;

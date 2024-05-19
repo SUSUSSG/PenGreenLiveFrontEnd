@@ -20,6 +20,7 @@ let paymentMethodsWidget;
 const product = computed(()=> (store.getters.selectedProduct)).value;
 const order = computed(()=> (store.getters.orderForm)).value;
 
+
 const emit = defineEmits(['paymentRequested']);
 
 onMounted(async () => {
@@ -28,8 +29,6 @@ onMounted(async () => {
     brandpay.value = window.BrandPay(clientKey, customerKey, {
       redirectUrl: 'http://localhost:8090/api/brandpay/callback-auth',
     });
-
-    console.log("order store ", order);
 
     const totalAmount = order.orderPayedPrice;
     paymentMethodsWidget = brandpay.value.createPaymentMethodsWidget({ amount: totalAmount});
@@ -60,7 +59,6 @@ async function getBrandPayMethods() {
       headers: header
     });
     submittedData.value = response.data;
-    console.log('결과', submittedData.value);
   } catch (error) {
     console.log(error);
   }
@@ -79,8 +77,11 @@ function loadTossPaymentsSDK() {
 
 // 결제 하기
 async function handleSubmit() {
-  const orderId=  computed(()=> (store.getters.orderForm.orderId)).value;
+    const orderId=  computed(()=> (store.getters.orderForm.orderId)).value;
     const widgetPaymentParams = paymentMethodsWidget.getPaymentParams();
+    
+    localStorage.setItem(orderId, JSON.stringify(order));
+
     await brandpay.value.requestPayment({
         orderId: orderId,
         orderName: product.productName,
