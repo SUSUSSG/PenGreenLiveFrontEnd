@@ -7,6 +7,7 @@
           show-icon-side-bar="true" show-title-bar="true"
           :stream-manager="mainStreamManager" 
           :broadcast-title="broadcastTitle" />
+
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
       <div v-if="selectedProduct">
@@ -62,7 +63,7 @@
                   <div v-else-if="tab === '라이브 소개'">{{ liveIntroduction }}</div>
                   <!-- 라이브 혜택 탭 -->
                   <ul v-else-if="tab === '라이브 혜택'" class="benefits-list">
-                    <li v-for="benefit in liveBenefits" :key="benefit">{{ benefit }}</li>
+                    <li v-for="benefit in liveBenefits" :key="benefit">{{ benefit.benefitContent }}</li>
                   </ul>
                 </TabPanel>
               </TabPanels>
@@ -159,9 +160,14 @@ const secondTabGroup = ['공지사항', '자주 묻는 질문'];
 const activeFirstTab = ref(firstTabGroup[0]);
 const activeSecondTab = ref(secondTabGroup[0]);
 
+// 방송 제목
+const liveBroadcastInfo = ref({});
+const broadcastTitle = computed(() => liveBroadcastInfo.value.broadcast?.broadcastTitle || '');
+
 // 정보, 혜택, FAQ 및 알림 상태
-const liveIntroduction = "라이브 소개 입니다.";
-const liveBenefits = ["혜택1", "혜택2"];
+const liveIntroduction = computed(() => liveBroadcastInfo.value.broadcast?.broadcastSummary || '');
+const liveBenefits = computed(() => liveBroadcastInfo.value.benefits || []);
+
 const notices = [
   "안녕하세요 상품 구매 이후 채팅창에 구매 인증해주시면 사은품이 나갑니다 ^^",
   "현금으로 결제할시 추가 서비스 들어갑니다 ^^"
@@ -219,9 +225,6 @@ const calculateHeight = () => {
   const viewportHeight = window.innerHeight;
   computedHeight.value = viewportHeight - boxHeight.value;
 }
-
-const liveBroadcastInfo = ref({});
-const broadcastTitle = computed(() => liveBroadcastInfo.value.broadcast?.broadcastTitle || '');
 
 // 방송 정보 가져오기
 const loadLiveBroadcastInfo = async () => {
