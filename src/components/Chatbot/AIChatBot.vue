@@ -22,15 +22,15 @@
     </div>
     <div class="chatbot-content" ref="chatContent">
       <div
-        v-for="message in messages"
-        :key="message.id"
+        v-for="(message, index) in messages"
+        :key="index"
         :class="['chat-message', message.type]"
       >
-        <p style="overflow-wrap: break-word">
+        <p v-if="message.type !== 'component'" style="overflow-wrap: break-word">
           {{ message.text }}
         </p>
+        <component :is="message.component" v-else />
       </div>
-      <OrderHistory v-if="showOrderHistoryComponent" />
     </div>
     <div class="chatbot-input">
       <input
@@ -62,7 +62,7 @@ export default {
   components: {
     Icon,
     LottieAnimation,
-    OrderHistory, // 주문 내역 컴포넌트 추가
+    OrderHistory,
   },
   data() {
     return {
@@ -78,7 +78,6 @@ export default {
         },
       ],
       recognition: null,
-      showOrderHistoryComponent: false, // 주문 내역 컴포넌트 표시 여부 상태 추가
     };
   },
   mounted() {
@@ -136,16 +135,20 @@ export default {
           );
           let botMessageText = response.data.response;
           if (botMessageText.includes("@주문내역")) {
-            botMessageText =
-              "구매하신 상품의 주문 상태를 확인해드릴게요!🧐 잠시만 기다려주세요😀";
-            this.showOrderHistoryComponent = true; // 주문 내역 컴포넌트 표시
+            const orderHistoryMessage = {
+              id: this.messages.length + 1,
+              type: "component",
+              component: OrderHistory,
+            };
+            this.messages.push(orderHistoryMessage);
+          } else {
+            const botMessage = {
+              id: this.messages.length + 1,
+              text: botMessageText,
+              type: "bot",
+            };
+            this.messages.push(botMessage);
           }
-          const botMessage = {
-            id: this.messages.length + 1,
-            text: botMessageText,
-            type: "bot",
-          };
-          this.messages.push(botMessage);
           this.scrollToBottom();
         } catch (error) {
           console.error("Error:", error);
@@ -266,6 +269,10 @@ export default {
   background-color: #f1ede8;
   align-self: flex-end;
   border-radius: 1rem 1rem 0rem 1rem;
+}
+
+.chat-message.component{
+  min-width: 440px;
 }
 svg.iconify.iconify--mdi {
   display: none;
