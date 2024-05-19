@@ -21,6 +21,7 @@
                       <div class="orderdate">{{ formatDate(orderDate) }}</div>
                       <div class="productname mb-2">{{ productNm }}</div>
                       <div class="price">{{ formatNumber(orderProductPrice) }}</div>
+                      <div class="productSeq">{{ productSeq }}</div>
                     </div>
                   </div>
                   <div data-v-e1812f16="" class="card-text h-full">
@@ -73,7 +74,7 @@ const props = withDefaults(defineProps<{
   productNm: 'default-product',
   orderProductPrice: 0,
   userUUID: '',
-  productSeq: null
+  productSeq: 0
 });
 
 const reviewContent = ref('');
@@ -88,6 +89,7 @@ const formatDate = (dateString: string): string => {
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
   return new Date(dateString).toLocaleDateString(undefined, options);
 }
+
 const submitReview = async () => {
   try {
     const reviewData = {
@@ -101,7 +103,6 @@ const submitReview = async () => {
     alert('리뷰 등록이 완료되었습니다.');
     reviewContent.value = "";
     emit('review-submitted', props.productSeq);
-    // UI 업데이트 로직 추가 가능
   } catch (error) {
     alert('리뷰 등록에 실패했습니다: ' + error.message);
   }

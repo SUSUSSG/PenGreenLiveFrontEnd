@@ -15,7 +15,7 @@
       <TabPanel>
         <orderlist v-for="(item, index) in unreviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
                    :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
-                   :orderProductPrice="item.orderProductPrice" @review-submitted="handleReviewSubmitted" />
+                   :orderProductPrice="item.orderProductPrice" :productSeq="item.productSeq" :userUUID="userUUID" @review-submitted="handleReviewSubmitted" />
       </TabPanel>
 
       <TabPanel>

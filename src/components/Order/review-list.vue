@@ -21,7 +21,6 @@
                       <div class="orderdate">{{ formatDate(orderDate) }}</div>
                       <div class="productname mb-2">{{ productNm }}</div>
                       <div class="price">{{ formatNumber(orderProductPrice) }}</div>
-                      <div class="reviewSeq">{{ reviewSeq }}</div>
                     </div>
                   </div>
                   <div data-v-e1812f16="" class="card-text h-full">
