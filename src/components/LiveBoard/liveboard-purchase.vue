@@ -1,12 +1,12 @@
 <template>
   <div :class="{'active-overlay': isOpen}">
         <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
-        <img :src="productImg"/>
+        <img :src="product.productImg"/>
         <div class="product-header">
-            <div class="brand-name">{{ brand }}</div>
-                <div class="product-name">{{ productName }}</div>  
+            <div class="brand-name">{{ product.brand }}</div>
+                <div class="product-name">{{ product.productName }}</div>  
                 <p class="pt-5 pb-2">
-                    <span class="discount-rate text-slate-900 dark:text-slate-300 text-base font-medium mt-2 ltr:mr-2 rtl:mr-2 text-red-500">{{discountRate}}%</span>
+                    <span class="discount-rate text-slate-900 dark:text-slate-300 text-base font-medium mt-2 ltr:mr-2 rtl:mr-2 text-red-500">{{product.discountRate}}%</span>
                     <del class="product-price text-slate-500 dark:text-slate-500 font-normal text-base">{{formattedPrice}}원</del>
                 </p>
             <div class="discounted-price">{{ formattedDiscountedPrice }}원</div>
@@ -87,48 +87,39 @@
         </div>
         
         <div class="modal flex justify-between items-center modal-adjust z-30" v-show="isOpen">
-          <PurchaseModal @update:isOpen="updateModal"     
-            :productName="productName"
-            :price="price"
-            :discountedPrice="discountedPrice"
-            @openTossPay="handleOpenTossPay"
-            @updateTotalPrice="handleTotalPrice"
-            />
+          <PurchaseModal 
+            @update:isOpen="updateModal"     
+            @openTossPay="handleOpenTossPay"/>
         </div>
 
         <div v-if="showTossPay" class="modal flex justify-between modal-adjust z-50">
             <div class="scroll">
-                <TossPay 
-                :productName="productName"
-                :totalPrice="updateTotalPrice"
-                @openTossPay="close">
-                </TossPay>
+                <TossPay  @openTossPay="close"></TossPay>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { ref, computed, defineProps } from 'vue';
+    import { ref, computed, defineProps, onMounted } from 'vue';
     import Button from "@/components/Button";
     import PurchaseModal from "@/components/Modal/purchase-modal.vue";
     import TossPay from "@/components/Pay/tosspayments-module.vue";
     import "@/components/Pay/style.css";
+    import {useRoute, useRouter} from 'vue-router';
+    import { useStore } from 'vuex';
 
-    const props = defineProps({
-        brand: String,
-        productName: String,
-        price: Number,
-        discountRate: Number,
-        discountedPrice: String,
-        productImg: String,
-    });
+    const route = useRoute();
+    const store = useStore();
 
-    const formattedPrice = computed(() => props.price.toLocaleString());
-    const formattedDiscountedPrice = computed(() => props.discountedPrice.toLocaleString());
+    const product = computed(() => store.getters.selectedProduct || {});
+    const formattedPrice = computed(() => product.value.price ? product.value.price.toLocaleString() : '');
+    const formattedDiscountedPrice = computed(() => store.getters.discountedPrice ? store.getters.discountedPrice.toLocaleString() : '');
+
     const isOpen = ref(false);
     const openModal = () => {
         isOpen.value = true;
+        console.log("방송 ID ", route.params.broadcastId);
     };
 
     const updateModal = (value) => {
@@ -145,10 +136,15 @@
         showTossPay.value = false; 
     }
 
-    let updateTotalPrice = ref(null);
-    function handleTotalPrice(totalPrice) {
-        updateTotalPrice = totalPrice;
-    }
+    const quantity = ref(1);
+
+    onMounted(() => {
+        if (!product.value || !product.value.price) {
+            console.log('No product selected');
+            return;
+        }
+        console.log("product.value ", product.value);
+    });
 
 </script>
 

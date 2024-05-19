@@ -15,8 +15,6 @@
                 <div class="w-full h-full">
                     <BrandPay 
                         ref="brandPayComponent" 
-                        :totalPrice="totalPrice" 
-                        :productName="productName" 
                         @paymentRequested="handleBrandPayPayment">
                     </BrandPay>
                 </div>
@@ -257,16 +255,18 @@
 </template>
 
 <script setup>
-import { ref, onMounted , computed} from 'vue';
+import { ref, onMounted , computed, inject } from 'vue';
 import { nanoid } from "nanoid"; 
 import axios from 'axios';
 import BrandPay from "@/components/Pay/brandpay-register.vue";
+import {useRoute, useRouter} from 'vue-router';
 import "@/components/Pay/style.css";
+import { number } from 'yup';
+import { useStore } from 'vuex';
 
-const props = defineProps({
-    productName: String,
-    totalPrice: String,
-});
+const store = useStore();
+const route = useRoute();
+const product = computed(() => (store.getters.selectedProduct));
 
 function generateOrderId() {
     return nanoid();
@@ -344,6 +344,7 @@ function selectCardCompany(cardCompany) {
 }
   
 const tossPayments = ref(null);
+
 onMounted(async() => {
     loadTossPaymentsSDK().then(() => {
         tossPayments.value = TossPayments(clientKey);
@@ -377,21 +378,21 @@ const brandPayComponent = ref(null);
 
 // 결제 요청 
 async function requestPayment() {
-    const totalAmount = props.totalPrice;
+    const totalAmount = computed(() => store.getters.orderForm.orderPayedPrice).value;
     const orderId = generateOrderId();
+    await store.dispatch('setOrderId', orderId);
 
     if (brandPayComponent.value && selectedPaymentMethod.value==="SUSUSSGPAY") {
         postPaymentInfo(orderId, totalAmount);
-        await brandPayComponent.value.handleSubmit(orderId);
+        await brandPayComponent.value.handleSubmit();
     }
     else {
         postPaymentInfo(orderId, totalAmount);
-
         try {
             const defaultRequestPaymentData = ref({
                 amount: totalAmount,
                 orderId: orderId,
-                orderName: props.productName,
+                orderName: product.value.productName,
                 customerName: "김토스",
                 successUrl: `${window.location.origin}/success`,
                 failUrl: `${window.location.origin}/fail`,
@@ -422,7 +423,6 @@ function showInterestFreeInstallmentInfo() {
   const windowFeatures = "width=600,height=600,scrollbars=yes,resizable=yes";
   window.open(url, "_blank", windowFeatures);
 }
-
 </script>
 
 

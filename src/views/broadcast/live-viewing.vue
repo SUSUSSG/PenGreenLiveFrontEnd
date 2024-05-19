@@ -7,26 +7,20 @@
           :stream-manager="mainStreamManager"></Live>
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
-      <div v-if="selectedProduct">
+      <div v-if="selectedProduct.productSeq">
         <header class="flex justify-between pb-4">
           <div></div>
           <Button text="돌아가기" @click="closePurchaseModal"/>
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-            <LiveBoardPurchase class="purchase-section"
-                               :brand="selectedProduct.brand"
-                               :productName="selectedProduct.productName"
-                               :price="selectedProduct.price"
-                               :discountRate="selectedProduct.discountRate"
-                               :discountedPrice="selectedProduct.discountedPrice"
-                               :product-img="selectedProduct.productImg"
-            />
+            <LiveBoardPurchase class="purchase-section">
+            </LiveBoardPurchase>
           </div>
         </div>
       </div>
 
-      <div v-if="!selectedProduct" class="contents-wrap">
+      <div v-if="!selectedProduct.productSeq" class="contents-wrap">
         <header class="flex justify-between items-center pb-4 border-b">
           <div></div> <!-- 좌측 공백 -->
           <Button class="exit-button" @click="onClickRedirect()">나가기</Button>
@@ -52,6 +46,7 @@
                         :original-price="product.price"
                         :discount-rate="product.discountRate"
                         :product-img="product.productImg"
+                        
                         @click="showProductDetails(product)"
                         @updateDiscountedPrice="handleDiscountedPrice($event, product)"
                     />
@@ -126,9 +121,10 @@ const myUserName = `Subscriber${Math.floor(Math.random() * 100)}`;
 
 // 제품 구매 관련 상태 및 모달 제어
 const isOpen = ref(false);
-const selectedProduct = ref(null);
+const selectedProduct = ref({});
 const productList = ref([
   {
+    productSeq: 1,
     brand: "동구밭",
     productName: "동구밭 중건성 헤어케어 5종 기획세트",
     price: 47500,
@@ -136,6 +132,7 @@ const productList = ref([
     productImg: "/src/assets/images/all-img/product-sample.jpg"
   },
   {
+    productSeq: 2,
     brand: "세타필",
     productName: "세타필 젠틀 바디워시 리프레싱 1,000ml",
     price: 26500,
@@ -143,6 +140,7 @@ const productList = ref([
     productImg: "https://image.oliveyoung.co.kr/uploads/images/goods/400/10/0000/0013/A00000013522735ko.jpg?l=ko"
   },
   {
+    productSeq: 3,
     brand: "민쉭이네",
     productName: "가지가지 나뭇가지",
     price: 10000,
@@ -225,11 +223,15 @@ const updateModal = (value) => {
   isOpen.value = value;
 };
 const showProductDetails = (product) => {
+  store.commit('setSelectedProduct', product);
   selectedProduct.value = product;
 };
 const closePurchaseModal = () => {
-  selectedProduct.value = null;
+  store.commit('setSelectedProduct', {});
+  selectedProduct.value = {};
+  isOpen.value = false;
 };
+
 const handleDiscountedPrice = (discountedPrice, product) => {
   product.discountedPrice = discountedPrice;
 };
@@ -253,6 +255,8 @@ onMounted(() => {
   calculateHeight();
   incrementViewsCount(mySessionId.value);
   window.addEventListener('resize', calculateHeight);
+  store.commit('resetState');
+  store.commit('setBroadcastId', mySessionId.value);
 });
 
 watch(boxHeight, calculateHeight)

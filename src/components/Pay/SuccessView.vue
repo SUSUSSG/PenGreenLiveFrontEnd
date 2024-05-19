@@ -1,6 +1,6 @@
 <template>
   <!-- 결제 성공 시 -->
-  <section class="h-[80vh] flex flex-col justify-center" v-if="confirmed">
+  <section class="h-[80vh] flex flex-col justify-center">
     <div class="box_section py-[10rem] flex flex-col " style="width: 550px">
       <div class="w-full pb-[1rem] flex justify-center items-stretchs">
         <img style="width: 75px" src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" />
@@ -37,7 +37,6 @@ const confirmed = ref(false);
 const jsonData = ref({});
 const submittedData = ref(null);
 const totalAmount = ref(null)
-
 
 // 결제 검증
 async function verifyPayment(requestData) {

@@ -6,28 +6,21 @@
 </template>
   
 <script setup>
-import { ref, onMounted, defineProps, defineEmits} from 'vue';
+import { ref, onMounted, defineProps, defineEmits, computed} from 'vue';
 import axios from 'axios';
 import { nanoid } from "nanoid"; 
+import { useStore } from 'vuex';
 import "@/components/Pay/style.css";
 
+const store = useStore();
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
 const customerKey = 'CUSTOMER_KEY';
 let brandpay = ref(null);
 let paymentMethodsWidget;
-let orderId=ref(null);
-
-const props = defineProps({
-    totalPrice: Number,
-    productName: String, 
-});
-
-function generateOrderId() {
-    return nanoid();
-}
+const product = computed(()=> (store.getters.selectedProduct)).value;
+const order = computed(()=> (store.getters.orderForm)).value;
 
 const emit = defineEmits(['paymentRequested']);
-
 
 onMounted(async () => {
   try {
@@ -36,7 +29,10 @@ onMounted(async () => {
       redirectUrl: 'http://localhost:8090/api/brandpay/callback-auth',
     });
 
-    paymentMethodsWidget = brandpay.value.createPaymentMethodsWidget({ amount: props.totalPrice});
+    console.log("order store ", order);
+
+    const totalAmount = order.orderPayedPrice;
+    paymentMethodsWidget = brandpay.value.createPaymentMethodsWidget({ amount: totalAmount});
     paymentMethodsWidget.render('#payment-methods-widget', {
       ui: {
         promotionSection: {
@@ -58,8 +54,6 @@ onMounted(async () => {
 async function getBrandPayMethods() {
   const submittedData = ref(null);
   const ls = brandpay.value.BrandPayMethod(cards);
-
-  console.log(ls);
 
   try {
     const response = await axios.get('/api/brandpay/access-token', {
@@ -84,11 +78,12 @@ function loadTossPaymentsSDK() {
 
 
 // 결제 하기
-async function handleSubmit(orderId) {
+async function handleSubmit() {
+  const orderId=  computed(()=> (store.getters.orderForm.orderId)).value;
     const widgetPaymentParams = paymentMethodsWidget.getPaymentParams();
     await brandpay.value.requestPayment({
         orderId: orderId,
-        orderName: props.productName,
+        orderName: product.productName,
         successUrl: window.location.origin + '/brandpay/success',
         failUrl: window.location.origin + '/brandpay/fail',
         ...widgetPaymentParams,
