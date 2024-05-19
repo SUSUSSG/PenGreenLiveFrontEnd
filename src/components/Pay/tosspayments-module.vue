@@ -388,6 +388,9 @@ async function requestPayment() {
     }
     else {
         postPaymentInfo(orderId, totalAmount);
+        const order = computed(() => store.getters.orderForm).value;
+        localStorage.setItem(orderId, JSON.stringify(order));
+
         try {
             const defaultRequestPaymentData = ref({
                 amount: totalAmount,
