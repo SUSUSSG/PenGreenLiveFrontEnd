@@ -1,10 +1,10 @@
 <template>
   <div class="bg-white" id="broadCard">
-    <div class="text-base">
-      송출 화면
-    </div>
     <div v-if="streamManager" class="video-player">
       <VideoPlayer :stream-manager="streamManager" :is-muted="true"/>
+    </div>
+    <div v-else class="broadcast-image">
+      <img :src="broadcastImage" alt="Broadcast Image"/>
     </div>
   </div>
 </template>
@@ -18,6 +18,7 @@ export default {
   },
   props: {
     streamManager: Object,
+    broadcastImage: String
   },
   data() {
     return {}
@@ -43,6 +44,12 @@ export default {
   aspect-ratio: 9/16;
   width: 100%;
   object-fit: cover;
+}
+
+.broadcast-image img{
+  width: 1000px;
+  height: 849px;
+  filter: blur(5px)
 }
 
 </style>

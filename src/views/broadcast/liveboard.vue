@@ -7,7 +7,7 @@
       <div class="flex-row">
         <div class="flex-col">
           <div class="flex-row">
-            <LiveboardBroad :stream-manager="mainStreamManager" />
+            <LiveboardBroad :stream-manager="mainStreamManager" :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage"/>
             <LiveBoardChat :current-room="{ id: 1 }" :current-writer="'판매자'" />
           </div>
         </div>
