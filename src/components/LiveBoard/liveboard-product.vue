@@ -4,77 +4,6 @@
       상품 목록
     </div>
     <div id="tableCard">
-      <!-- <vue-good-table :columns="columns" :rows="products" styleClass="vgt-table centered lesspadding2 table-head" :pagination-options="{ enabled: false }" :sort-options="{ enabled: false }">
-        <template v-slot:table-row="props">
-          <span class="relative">
-            <span v-if="props.column.field == 'productImg'" class="cursor-pointer"
-              @click="openDetailProductModal(props.row)">
-              <img :src="props.row.productImg" alt="Product Image" class=" w-18 h-18 object-cover" />
-              <img v-if="props.row.showNowImg" :src="nowImg" alt="Now Image"
-                class="w-15 h-10 absolute top-1 left-0 z-10" id="nowImg" />
-            </span>
-            <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
-              <div class="row items-center justify-center ml-7">
-                <div class="max-w-md">
-                  <div class="flex items-center mb-4">
-                    <div class="text-sm text-slate-600 dark:text-slate-300 mr-4">이미지</div>
-                    <img :src="selectedProduct.productImg" alt="Product Image" class="w-20 h-20 object-cover" />
-                    <div class="text-sm text-slate-600 dark:text-slate-300 mx-4 ml-5">상품명</div>
-                    <div class="text-lg text-slate-900 dark:text-white font-medium">{{
-                      selectedProduct.productName }}</div>
-                    <div class="text-sm text-slate-600 dark:text-slate-300 mx-4 ml-10">상품코드</div>
-                    <div class="text-lg text-slate-900 dark:text-white font-medium">{{
-                      selectedProduct.productCode }}</div>
-                  </div>
-                </div>
-                <div>
-                  <div
-                    style="display: grid; grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(2, 1fr); gap: 10px;">
-                    <div v-for="(product, i) in productStatistics" :key="i" class="inline-flex">
-                      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
-                        <div>
-                          <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-3xl pr-7">
-                            <Icon :icon="product.icon" class="text-primary" />
-                          </div>
-                        </div>
-                        <div>
-                          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
-                            {{ product.title }}
-                          </div>
-                          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
-                            {{ product.count }}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Modal>
-          </span>
-          <span v-if="props.column.field == 'auth'" class="flex">
-            <img v-for="entry in props.row.auth" :key="entry.name" :src="entry.image" :alt="entry.name"
-              class="object-cover w-6 h-6 rounded-full mr-2" />
-          </span>
-          <span v-if="props.column.field == 'productName'" class="cursor-pointer">
-            {{ props.row.productName }}
-          </span>
-          <span v-if="props.column.field == 'discountRate'">
-            {{ props.row.discountRate }}%
-          </span>
-          <span v-if="props.column.field == 'discountPrice'">
-            {{ props.row.discountPrice.toLocaleString() }}원
-          </span>
-          <span v-if="props.column.field == 'originalPrice'">
-            {{ props.row.originalPrice.toLocaleString() }}원
-          </span>
-          <span v-if="props.column.field == 'switch'">
-            <Switch :activeClass="`bg-primary-500`" class="mb-5" badge :active="props.row.switch"
-              :prevIcon="`heroicons-outline:volume-on`" :nextIcon="`heroicons-outline:volume-off`"
-              :class="['mb-5', switchClass]" v-on:click="toggleNowImage(props.row)" />
-          </span>
-        </template>
-</vue-good-table> -->
       <div>
         <div class="table-header">
           <span class="header-cell">이미지</span>
@@ -106,9 +35,24 @@
             <Switch v-model="product.showNowImg" />
           </span>
         </div>
+        <!-- 상품 상세정보 모달 -->
         <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
-          <p>상품 코드: {{ selectedProduct.productCode }}</p>
-          <p>상품 재고: {{ selectedProduct.productStock }}</p>
+          <div class="modal-content">
+            <div class="product-info">
+              <img :src="selectedProduct.productImg" alt="Product Image" class="product-image" />
+              <div class="product-details">
+                <div class="modal-title">{{ selectedProduct.productName }}</div>
+                <p>상품 코드: {{ selectedProduct.productCode }}</p>
+              </div>
+            </div>
+            <!-- 후에 추가 구현 -->
+            <div class="real-time-info">
+              <p>상품 재고: {{ selectedProduct.productStock }}</p>
+              <p>남은 재고: {{ realTimeStock }}</p>
+              <p>주문 건수: {{ orderCount }}</p>
+              <p>주문 금액: {{ orderAmount }}</p>
+            </div>
+          </div>
         </Modal>
       </div>
     </div>
@@ -145,12 +89,10 @@ export default {
       }
     },
     openDetailProductModal(index) {
-      // products 배열에서 해당 인덱스의 항목을 가져옵니다.
       const selectedProduct = this.products[index];
 
-      // selectedProduct 객체를 업데이트합니다.
       this.selectedProduct = {
-        productImg: selectedProduct.productImg,
+        productImg: selectedProduct.productImage,
         productName: selectedProduct.productNm,
         productCode: selectedProduct.productCd,
         productStock: selectedProduct.productStock
@@ -253,5 +195,41 @@ export default {
 
 .discount-Rate {
   color: red;
+}
+
+/* 모달 디자인 */
+
+.modal-title {
+  font-weight: bold;
+}
+.modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.product-info {
+  display: flex;
+  gap: 20px;
+}
+
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.real-time-info {
+  background-color: #f7fafc;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.real-time-info h3 {
+  margin-bottom: 10px;
+}
+
+.real-time-info p {
+  margin: 5px 0;
 }
 </style>
