@@ -84,15 +84,17 @@
           <span class="header-cell">판매가</span>
           <span class="header-cell">판매상태</span>
         </div>
-        <div v-for="(product, index) in products" :key="index" class="table-row cursor-pointer">
+        <div v-for="(product, index) in products" :key="index" class="table-row cursor-pointer"
+          @click="openDetailProductModal(index)">
           <span class="cell">
             <div class="image-container">
               <img :src="product.productImage" alt="Product Image" class="product-image" />
-              <img v-if="product.showNowImg" :src="nowImg" class="now-image"/>
+              <img v-if="product.showNowImg" :src="nowImg" class="now-image" />
             </div>
           </span>
           <div class="badge-container">
-            <img v-for="(image, imgIndex) in getLabelImageArray(product.labelImages)" :key="imgIndex" :src="image" alt="label Image" class="label-image" />
+            <img v-for="(image, imgIndex) in getLabelImageArray(product.labelImages)" :key="imgIndex" :src="image"
+              alt="label Image" class="label-image" />
           </div>
           <span class="cell name-cell">{{ product.productNm }}</span>
           <span class="cell">
@@ -104,6 +106,10 @@
             <Switch v-model="product.showNowImg" />
           </span>
         </div>
+        <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
+          <p>상품 코드: {{ selectedProduct.productCode }}</p>
+          <p>상품 재고: {{ selectedProduct.productStock }}</p>
+        </Modal>
       </div>
     </div>
   </div>
@@ -127,27 +133,34 @@ export default {
   data() {
     return {
       nowImg,
+      selectedProduct: null,
     }
   },
   methods: {
-    showProductInfo() {
-      this.isOpen = true;
-    },
-    openDetailProductModal(row) {
-      this.$refs.showProductInfo.openModal();
-      this.selectedProduct = {
-        productImg: row.productImg,
-        productName: row.productName,
-        productCode: row.productCode
-      };
-      this.$refs.showProductInfo.open();
-    },
     getLabelImageArray(labelImages) {
       if (typeof labelImages === 'string') {
         return labelImages.split(',').map(image => image.trim());
       } else {
         return [];
       }
+    },
+    openDetailProductModal(index) {
+      // products 배열에서 해당 인덱스의 항목을 가져옵니다.
+      const selectedProduct = this.products[index];
+
+      // selectedProduct 객체를 업데이트합니다.
+      this.selectedProduct = {
+        productImg: selectedProduct.productImg,
+        productName: selectedProduct.productNm,
+        productCode: selectedProduct.productCd,
+        productStock: selectedProduct.productStock
+      };
+
+      this.$refs.showProductInfo.openModal();
+      this.$refs.showProductInfo.open();
+    },
+    showProductInfo() {
+      this.isOpen = true;
     }
   }
 }
@@ -237,6 +250,7 @@ export default {
 .list-price {
   text-decoration: line-through;
 }
+
 .discount-Rate {
   color: red;
 }
