@@ -70,7 +70,7 @@
             <label class="ltr:inline-block rtl:block input-label">상품이미지</label><br>
             <input type="file" id="imageUpload" @change="handleEditImageUpload"
               accept="image/jpeg, image/png, image/gif" class="mt-2 text-base text-slate-600 dark:text-slate-300" />
-            <img v-if="editModalData.productImage" :src="editModalData.productImage" alt="대표 이미지 미리보기"
+            <img v-if="editModalData.previewImage" :src="editModalData.previewImage" alt="대표 이미지 미리보기"
               style="max-width: 100px">
           </div>
           <template v-slot:footer>
@@ -89,10 +89,10 @@
             <span v-if="props.column.field === 'productCd'" @click="openEditModal(props.row)" class="cursor-pointer">
               {{ props.row.productCd }}
             </span>
-            <span v-if="props.column.field === 'greenProductId'">
+            <span v-if="props.column.field === 'greenProductId'" >
               {{ props.row.greenProductId }}
             </span>
-            <span v-if="props.column.field === 'productNm'">
+            <span v-if="props.column.field === 'productNm'" class="ellipsis">
               {{ props.row.productNm }}
             </span>
             <span v-if="props.column.field === 'categoryCd'">
@@ -176,6 +176,7 @@ export default {
         greenProductId: '',
         imageSrc: null,
         productImage: null,
+        previewImage: null,
       },
       advancedTable,
       current: 1,
@@ -215,6 +216,7 @@ export default {
         {
           label: "상품명",
           field: "productNm",
+          width: "200px"
         },
         {
           label: "카테고리",
@@ -348,8 +350,8 @@ export default {
         productStock: row.productStock,
         brand: row.brand,
         imageSrc: row.productImage ? row.productImage : null,
-        productImage: row.productImage
-        
+        productImage: row.productImage,
+        previewImage: row.productImage
       };
       console.log(this.editModalData.productSeq);
       this.$refs.editModal.openModal();
@@ -380,7 +382,7 @@ export default {
         listPrice: this.editModalData.listPrice,
         productStock: this.editModalData.productStock,
         brand: this.editModalData.brand,
-        base64Image: this.editModalData.base64Image,
+        base64Image: this.editModalData.imageSrc,
       };
 
       axios.put(url, productData)
@@ -461,4 +463,5 @@ export default {
   justify-content: flex-end;
   margin-bottom: 16px;
 }
+
 </style>
