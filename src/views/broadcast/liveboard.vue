@@ -19,7 +19,8 @@
         </div>
         <div class="flex-col">
           <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호"
-            @broadcast-device-selected="handleDeviceChange" />
+            @broadcast-device-selected="handleDeviceChange"
+            :notices="liveBroadcastInfo.notices" />
         </div>
       </div>
     </div>

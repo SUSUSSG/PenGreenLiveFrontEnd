@@ -97,9 +97,8 @@
             <!-- 공지사항 목록-->
             <div class="space-y-2">
               <label for="addNotice" class="text-sm font-medium text-gray-700">공지사항 목록</label>
-              <div v-for="(word, index) in noticeList" :key="index"
-                   class="flex items-center justify-between bg-gray-100 p-2 rounded">
-                <span>{{ word }}</span>
+              <div class="notice-list">
+                <li v-for="notice in notices" :key="notice.noticeSeq">{{ notice.noticeContent }}</li>
                 <button @click="removeNotice(index)"
                         class="bg-red-500 hover:bg-red-600 text-white rounded p-1">
                   <Icon icon="heroicons-outline:x"/>
@@ -179,7 +178,8 @@ export default {
     broadcastTitle: {
       type: String,
       required: true
-    }
+    },
+    notices: Array
   },
   data() {
     return {
@@ -196,27 +196,19 @@ export default {
         },
         {
           icon: "material-symbols:settings-video-camera-sharp",
-          // activeIcon: "material-symbols:settings-video-camera-sharp",
-          // isActive: false
         },
         {
           icon: "material-symbols:app-registration",
-          // activeIcon: "material-symbols:app-registration",
-          // isActive: false
         },
         {
           icon: "material-symbols:campaign-rounded",
-          // activeIcon: "material-symbols:campaign-rounded",
-          // isActive: false
         },
         {
           icon: "material-symbols:maps-ugc-rounded",
-          // activeIcon: "material-symbols:maps-ugc-rounded",
-          // isActive: false
         },
       ],
-      notice: '',
-      noticeList: [],
+      // notice: '',
+      // noticeList: [],
       showLivePrepareModal: false,
       question: '',
       answer: '',
@@ -261,12 +253,12 @@ export default {
     },
     submitNotice() {
       if (this.notice.trim()) {
-        this.noticeList.push(this.notice)
+        this.notices.push(this.notice)
         this.notice = ''
       }
     },
     removeNotice(index) {
-      this.noticeList.splice(index, 1);
+      this.notices.splice(index, 1);
     },
     submitFaq() {
       if (this.question.trim() && this.answer.trim()) {
@@ -299,5 +291,18 @@ export default {
   border-radius: 0.5rem;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.notice-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f7fafc;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+}
+
+li {
+  list-style: none;
 }
 </style>
