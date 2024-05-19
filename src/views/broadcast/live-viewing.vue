@@ -485,4 +485,9 @@ ul.notice-list li, ul.benefits-list li {
   max-width: 552px !important;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
 }
+
+.tab-active {
+  border-color: #134010;
+  color: #134010;
+}
 </style>
