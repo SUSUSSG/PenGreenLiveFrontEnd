@@ -138,16 +138,15 @@
               <div class="w-1/2 ml-5">
                 <div class="space-y-2">
                   <label for="addFaq" class="text-sm font-medium text-gray-700">기존 목록</label>
-                  <div v-for="(faq, index) in FaqList" :key="index"
-                       class="flex flex-col bg-gray-100 p-2 rounded">
+                  <div class="faq-list" v-for="(faq, index) in faqs" :key="faq.faqSeq">
                     <div class="flex justify-between items-center">
-                      <span class="font-medium text-gray-600">{{ "Q. " + faq.question }}</span>
+                      <dt :data-question="`Q: ${faq.question}`">{{ faq.questionTitle }}</dt>
                       <button @click="removeFaq(index)"
                               class="bg-red-500 hover:bg-red-600 text-white rounded p-1">
                         <Icon icon="heroicons-outline:x"/>
                       </button>
                     </div>
-                    <p class="font-medium">{{ "A. " + faq.answer }}</p>
+                    <dd>{{ faq.questionAnswer }}</dd>
                   </div>
                 </div>
               </div>
@@ -179,7 +178,8 @@ export default {
       type: String,
       required: true
     },
-    notices: Array
+    notices: Array,
+    faqs: Array
   },
   data() {
     return {
@@ -212,7 +212,7 @@ export default {
       showLivePrepareModal: false,
       question: '',
       answer: '',
-      FaqList: [],
+      // FaqList: [],
       newBroadcastTitle: ""
     }
   },
@@ -302,7 +302,20 @@ export default {
   border-radius: 0.25rem;
 }
 
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  background-color: #f7fafc; /* Tailwind CSS의 bg-gray-100 */
+  padding: 0.5rem; /* Tailwind CSS의 p-2, 2 * 0.25rem = 0.5rem */
+  border-radius: 0.25rem; /* Tailwind CSS의 rounded */
+}
+
 li {
   list-style: none;
 }
+
+dt {
+  font-weight: bold;
+}
+
 </style>
