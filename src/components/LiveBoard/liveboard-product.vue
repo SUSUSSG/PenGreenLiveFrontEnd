@@ -4,8 +4,7 @@
       상품 목록
     </div>
     <div id="tableCard">
-      <vue-good-table :columns="columns" styleClass="vgt-table centered lesspadding2 table-head"
-        :rows="liveProductTable" :pagination-options="{ enabled: false }" :sort-options="{ enabled: false }">
+      <!-- <vue-good-table :columns="columns" :rows="products" styleClass="vgt-table centered lesspadding2 table-head" :pagination-options="{ enabled: false }" :sort-options="{ enabled: false }">
         <template v-slot:table-row="props">
           <span class="relative">
             <span v-if="props.column.field == 'productImg'" class="cursor-pointer"
@@ -75,13 +74,30 @@
               :class="['mb-5', switchClass]" v-on:click="toggleNowImage(props.row)" />
           </span>
         </template>
-      </vue-good-table>
+</vue-good-table> -->
+      <div>
+        <div class="table-header">
+          <span class="header-cell">이미지</span>
+          <span class="header-cell">이름</span>
+          <span class="header-cell">원가</span>
+          <span class="header-cell">할인율</span>
+          <span class="header-cell">판매가</span>
+        </div>
+        <div v-for="(product, index) in products" :key="index" class="table-row">
+          <span class="cell">
+            <img :src="product.productImage" alt="Product Image" class="product-image" />
+          </span>
+          <span class="cell">{{ product.productNm }}</span>
+          <span class="cell">{{ product.listPrice.toLocaleString() }}원</span>
+          <span class="cell">{{ product.discountRate }}%</span>
+          <span class="cell">{{ product.discountPrice.toLocaleString() }}원</span>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import { liveProductTable } from "@/constant/live-product-data";
 import Switch from '@/components/Switch';
 import nowImg from '@/assets/images/all-img/now.png';
 import Modal from "../Modal/Modal.vue";
@@ -93,67 +109,12 @@ export default {
     Modal,
     Icon
   },
+  props: {
+    products: Array
+  },
   data() {
     return {
-      liveProductTable,
       nowImg,
-      columns: [
-        {
-          label: "이미지",
-          field: "productImg",
-        },
-        {
-          label: "배지",
-          field: "auth",
-        },
-        {
-          label: "상품명",
-          field: "productName",
-        },
-        {
-          label: "할인율",
-          field: "discountRate",
-        },
-        {
-          label: "할인가",
-          field: "discountPrice",
-        },
-        {
-          label: "판매가",
-          field: "originalPrice",
-        },
-        {
-          label: "소개 설정",
-          field: "switch",
-          width: "15px"
-        }
-      ],
-      productStatistics: [
-        {
-          // name: "statistics1",
-          title: "기존 수량",
-          count: "250",
-          icon: "material-symbols:fact-check-rounded"
-        },
-        {
-          // name: "statistics2",
-          title: "남은 수량",
-          count: "25",
-          icon: "material-symbols:fact-check-outline-rounded"
-        },
-        {
-          // name: "statistics3",
-          title: "주문건수",
-          count: "460",
-          icon: "heroicons:chart-bar-square-16-solid"
-        },
-        {
-          // name: "statistics4",
-          title: "누적 주문 금액",
-          count: "12,300,303",
-          icon: "heroicons:currency-dollar-20-solid"
-        },
-      ]
     }
   },
   methods: {
@@ -225,5 +186,34 @@ export default {
 
 .text-primary {
   color: darkgreen;
+}
+
+.table-header {
+  display: flex;
+  font-weight: bold;
+  border-bottom: 2px solid #000;
+  padding-bottom: 10px;
+}
+
+.header-cell {
+  flex: 1;
+  text-align: center;
+}
+
+.table-row {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+  padding: 10px 0;
+}
+
+.cell {
+  flex: 1;
+  text-align: center;
+}
+
+.product-image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
 }
 </style>

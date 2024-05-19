@@ -14,7 +14,7 @@
         <div class="flex-col">
           <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck"
             @update-statistics="updateStatistics" />
-          <LiveboardProduct />
+          <LiveboardProduct :products="liveBoradcastProduct" />
           <LiveboardPrompt />
         </div>
         <div class="flex-col">
@@ -65,7 +65,9 @@ export default {
       averageViewers: 0,
 
       // 실시간 방송 정보
-      liveBroadcastInfo: []
+      liveBroadcastInfo: [],
+      // 방송 판매 상품
+      liveBoradcastProduct: []
     };
   },
   methods: {
@@ -244,6 +246,8 @@ export default {
       this.maxViewers = maxViewers;
       this.averageViewers = averageViewers;
     },
+
+    // 라이브 방송 정보 불러오기
     loadLiveBroadcastInfo() {
       const broadcastId = this.$route.params.broadcastId;
       console.log("해당 방송 id : " + broadcastId);
@@ -258,12 +262,28 @@ export default {
           console.error('방송 예정 목록 load 실패 : ', error);
           this.loading = false;
         })
+    },
+
+    // 라이브 판매상품 불러오기
+    loadLiveBroadcastProduct() {
+      const broadcastId = this.$route.params.broadcastId;
+      console.log("해당 방송 id : " + broadcastId);
+      axios.get(`http://localhost:8090/live-broadcast-product/${broadcastId}`)
+        .then((response) => {
+          console.log(response.data);
+          this.liveBoradcastProduct = response.data;
+          console.log("product info data : ", this.liveBoradcastProduct);
+        })
+        .catch(error => {
+          console.error('방송 판매 상품 load 실패 : ', error);
+        })
     }
   },
   //컴포넌트가 생성될 시 mySessionId변수에 현재 url정보(방송id)를 할당합니다.
   created() {
     this.mySessionId = this.$route.params.broadcastId || 'defaultSessionId';
-    this.loadLiveBroadcastInfo()
+    this.loadLiveBroadcastInfo();
+    this.loadLiveBroadcastProduct();
   }
 };
 </script>
