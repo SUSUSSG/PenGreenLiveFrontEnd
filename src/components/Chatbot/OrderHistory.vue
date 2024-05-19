@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="order-history">
+      <p class="ai-card-title">나의 주문 내역</p>
       <ul>
         <li v-for="order in orders" :key="order.orderSeq">
           <div class="row">
@@ -78,7 +79,12 @@ export default {
   border-radius: 20px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
-
+.ai-card-title{
+  font-size:1.2rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color:darkgreen;
+}
 .card-button {
   background-color: #ffffff;
   padding: 20px;

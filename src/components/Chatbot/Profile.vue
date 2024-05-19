@@ -2,8 +2,8 @@
   <div>
     <div class="order-history">
       <div class="col">
-        <p class="ai-card-title">정보 수정</p>
-        <p style="font-weight:bold; margin-bottom: 0.5rem;">다음과 같은 정보 수정이 가능해요</p>
+        <p class="ai-card-title">나의 정보 수정</p>
+        <p style="margin-bottom: 0.5rem;">다음과 같은 정보 수정이 가능해요</p>
         <ol style="text-indent: 1rem;">
           <li>1. 휴대폰 번호</li>
           <li>2. 비밀번호</li>
@@ -41,9 +41,9 @@ export default {
 
 <style scoped>
 .ai-card-title{
-  font-size:1.4rem;
+  font-size:1.2rem;
   font-weight: bold;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   color:darkgreen;
 }
 .order-history {
