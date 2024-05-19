@@ -89,10 +89,10 @@
             <span v-if="props.column.field === 'productCd'" @click="openEditModal(props.row)" class="cursor-pointer">
               {{ props.row.productCd }}
             </span>
-            <span v-if="props.column.field === 'greenProductId'">
+            <span v-if="props.column.field === 'greenProductId'" >
               {{ props.row.greenProductId }}
             </span>
-            <span v-if="props.column.field === 'productNm'">
+            <span v-if="props.column.field === 'productNm'" class="ellipsis">
               {{ props.row.productNm }}
             </span>
             <span v-if="props.column.field === 'categoryCd'">
@@ -216,6 +216,7 @@ export default {
         {
           label: "상품명",
           field: "productNm",
+          width: "200px"
         },
         {
           label: "카테고리",
@@ -462,4 +463,5 @@ export default {
   justify-content: flex-end;
   margin-bottom: 16px;
 }
+
 </style>
