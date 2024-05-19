@@ -15,46 +15,16 @@
         <span class="card-title">인기 TOP 10 상품</span>
         <StatsTable
           :headers="['판매 랭킹', '상품 이름', '매출액']"
-          :data="[
-            ['1위', '제품1', 30345000],
-            ['2위', '제품2', 20345350],
-            ['3위', '제품3', 10945000],
-            ['4위', '제품4', 10500900],
-            ['5위', '제품5', 9345000],
-            ['6위', '제품6', 8345000],
-            ['7위', '제품7', 7345350],
-            ['8위', '제품8', 6945000],
-            ['9위', '제품9', 5500900],
-            ['10위', '제품10', 4045000],
-          ]"
+          :data="topProducts"
+          @product-click="fetchProductDetails"
         />
       </div>
       <div class="card-content">
         <span class="card-title">채널 전체 상품</span>
         <StatsTable
           :headers="['상품 코드', '상품 이름', '누적 매출액']"
-          :data="[
-            ['P001', '제품1', 20345000],
-            ['P002', '제품2', 4309030],
-            ['P003', '제품3', 1200300],
-            ['P004', '제품4', 8765432],
-            ['P005', '제품5', 3456789],
-            ['P006', '제품6', 7890123],
-            ['P007', '제품7', 2345678],
-            ['P008', '제품8', 9876543],
-            ['P009', '제품9', 5432109],
-            ['P010', '제품10', 6789012],
-            ['P011', '제품11', 1234567],
-            ['P012', '제품12', 8901234],
-            ['P013', '제품13', 5678901],
-            ['P014', '제품14', 2345678],
-            ['P015', '제품15', 9012345],
-            ['P016', '제품16', 6789012],
-            ['P017', '제품17', 3456789],
-            ['P018', '제품18', 7890123],
-            ['P019', '제품19', 4567890],
-            ['P020', '제품20', 1234567],
-          ]"
+          :data="allProducts"
+          @product-click="fetchProductDetails"
         />
       </div>
       <div class="card-content">
@@ -66,9 +36,11 @@
 </template>
 
 <script>
+import axios from 'axios';
 import AnalyticsCard from "@/components/Card/analytics-card.vue";
 import StatsTable from "@/components/Table/statistics-default-table.vue";
 import ProductCard from "@/components/Card/product-statistics-card.vue";
+
 export default {
   components: {
     AnalyticsCard,
@@ -82,47 +54,121 @@ export default {
           id: 1,
           icon: "uil-money-withdrawal",
           title: "누적 거래액",
-          result: "92600000원",
+          result: "0원",
         },
         {
           id: 2,
           icon: "uil-money-bill",
-          title: "상품 평균 주문 수",
-          result: "58600건",
+          title: "누적 판매 건수",
+          result: "0건",
         },
         {
           id: 3,
           icon: "uil-bag",
-          title: "상품 평균 판매 금액",
-          result: "49054980원",
+          title: "판매 상품 평균 단가",
+          result: "0원",
         },
         {
           id: 4,
           icon: "uil-user",
           title: "상품 평균 구매자 수",
-          result: "4908명",
+          result: "0명",
         },
         {
           id: 5,
           icon: "uil-shopping-cart",
-          title: "상품 평균 구매 개수",
-          result: "5215개",
+          title: "상품 평균 판매 수량",
+          result: "0개",
         },
       ],
+      topProducts: [],
+      allProducts: [],
       productData: {
-        imageUrl: "https://placehold.co/200x200",
-        productCode: "ABC123",
-        greenCode: "GR001",
-        certificationImages: [
-          "https://placehold.co/50x50",
-          "https://placehold.co/50x50",
-        ],
-        certificationReason: "This product meets our environmental standards.",
-        productPrice: "$29.99",
-        brand: "Brand X",
-        category: "Electronics",
+        imageUrl: "",
+        productCode: "",
+        greenCode: "",
+        certificationImages: [],
+        certificationReason: "",
+        productPrice: "",
+        brand: "",
+        category: "",
       },
     };
+  },
+  async mounted() {
+    await this.fetchAnalyticsData();
+    await this.fetchTopProducts();
+    await this.fetchAllProducts();
+
+    // 첫 번째 상품 상세 정보 조회
+    if (this.allProducts.length > 0) {
+      this.fetchProductDetails(this.allProducts[0][0]);
+    }
+  },
+  methods: {
+    async fetchAnalyticsData() {
+      try {
+        const response = await axios.get('http://localhost:8090/products/statistics/sales-data', {
+          params: { channelSeq: 1 }
+        });
+        const data = response.data;
+        this.analyticsCards[0].result = `${data.totalSales}원`;
+        this.analyticsCards[1].result = `${data.totalOrders}건`;
+        this.analyticsCards[2].result = `${data.avgUnitPrice}원`;
+        this.analyticsCards[3].result = `${data.avgBuyersPerProduct}명`;
+        this.analyticsCards[4].result = `${data.avgQuantityPerProduct}개`;
+      } catch (error) {
+        console.error('Error fetching analytics data:', error);
+      }
+    },
+    async fetchTopProducts() {
+      try {
+        const response = await axios.get('http://localhost:8090/products/statistics/top-products', {
+          params: { channelSeq: 1 }
+        });
+        this.topProducts = response.data.map((product, index) => [
+          `${index + 1}위`,
+          product.productNm,
+          product.totalSales,
+        ]);
+      } catch (error) {
+        console.error('Error fetching top products:', error);
+      }
+    },
+    async fetchAllProducts() {
+      try {
+        const response = await axios.get('http://localhost:8090/products/statistics/all-products', {
+          params: { channelSeq: 1 }
+        });
+        this.allProducts = response.data.map((product) => [
+          product.productCd,
+          product.productNm,
+          product.totalSales,
+        ]);
+      } catch (error) {
+        console.error('Error fetching all products:', error);
+      }
+    },
+    async fetchProductDetails(productCd) {
+      try {
+        const response = await axios.get('http://localhost:8090/products/statistics/product-details', {
+          params: { productCd }
+        });
+        const product = response.data;
+        this.productData = {
+          imageUrl: product.productImage,
+          productCode: product.productCd,
+          greenCode: product.greenProductId,
+          certificationImages: product.labels.map(label => label.labelImage),
+          certificationReason: product.labels.map(label => label.certificationReason).join(', '),
+          productPrice: `${product.listPrice}원`,
+          brand: product.brand,
+          category: product.categoryNm,
+        };
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
+    },
   },
 };
 </script>
@@ -131,9 +177,9 @@ export default {
 .flex-row {
   display: flex;
   flex-direction: row;
-  width:100%;
+  width: 100%;
   justify-content: space-between;
-  gap:1.5rem;
+  gap: 1.5rem;
 }
 
 .content-wrapper {
@@ -143,19 +189,20 @@ export default {
   display: flex;
   flex-direction: column;
 }
-.card-title{
+
+.card-title {
   font-size: 24px;
   font-weight: bold;
 }
 
-.card-content{
+.card-content {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
   background: white;
-  border: 1px solid #E5E7EB;
+  border: 1px solid #e5e7eb;
   border-radius: 10px;
   padding: 1.5rem;
-  width:100%;
+  width: 100%;
 }
 </style>

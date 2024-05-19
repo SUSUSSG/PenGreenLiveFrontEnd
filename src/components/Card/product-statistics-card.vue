@@ -23,7 +23,7 @@
       </div>
       <div class="product-details">
         <p class="info-description">상품 가격</p>
-        <div class="product-price">{{ productPrice }}</div>
+        <div class="product-price">{{ formattedProductPrice }}</div>
         <p class="info-description">상품 브랜드</p>
         <div class="product-brand">{{ brand }}</div>
         <p class="info-description">상품 카테고리</p>
@@ -50,7 +50,7 @@ export default {
       required: true,
     },
     certificationImages: {
-      type: Array,
+      type: Array,  // Array로 타입 수정
       required: true,
     },
     certificationReason: {
@@ -68,6 +68,13 @@ export default {
     category: {
       type: String,
       required: true,
+    },
+  },
+  computed: {
+    formattedProductPrice() {
+      // 상품 가격을 숫자로 변환한 후 세 자리마다 콤마를 찍어 포맷합니다.
+      const price = parseInt(this.productPrice.replace(/[^0-9]/g, ''));
+      return price.toLocaleString() + '원';
     },
   },
 };
@@ -97,13 +104,15 @@ export default {
   padding: 16px;
 }
 
-.stats-card-content div{
-    font-size: 20px;
+.stats-card-content div {
+  font-size: 20px;
 }
-.stats-card-content p{
-    font-size: 1rem;
-    color:gray;
+
+.stats-card-content p {
+  font-size: 1rem;
+  color: gray;
 }
+
 .product-info {
   flex: 1;
 }
@@ -123,7 +132,4 @@ export default {
 .product-details {
   margin-top: 16px;
 }
-
-
-
 </style>

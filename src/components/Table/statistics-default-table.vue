@@ -7,7 +7,12 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(row, rowIndex) in data" :key="rowIndex" :class="{ 'selected': selectedRow === rowIndex }" @click="selectRow(rowIndex)">
+        <tr
+          v-for="(row, rowIndex) in data"
+          :key="rowIndex"
+          :class="{ 'selected': selectedRow === rowIndex }"
+          @click="selectRow(rowIndex, row)"
+        >
           <td v-for="(cell, cellIndex) in row" :key="cellIndex">
             {{ cellIndex === 2 && typeof cell === 'number' ? formatNumber(cell) : cell }}
           </td>
@@ -34,13 +39,15 @@ export default {
       selectedRow: null,
     };
   },
+
   methods: {
     formatNumber(value) {
       if (!value) return '0';
       return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },
-    selectRow(index) {
+    selectRow(index, row) {
       this.selectedRow = this.selectedRow === index ? null : index;
+      this.$emit('product-click', row[0]); // 상품 코드가 첫 번째 열에 있다고 가정
     },
   },
 };

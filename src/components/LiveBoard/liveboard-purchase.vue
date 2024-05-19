@@ -96,7 +96,7 @@
             />
         </div>
 
-        <div v-if="showTossPay" class="modal flex justify-between items-center modal-adjust z-50">
+        <div v-if="showTossPay" class="modal flex justify-between modal-adjust z-50">
             <div class="scroll">
                 <TossPay 
                 :productName="productName"

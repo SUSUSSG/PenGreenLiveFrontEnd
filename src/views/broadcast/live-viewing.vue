@@ -3,8 +3,12 @@
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: 1 }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
-    <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true"
-          :stream-manager="mainStreamManager"></Live>
+    <Live class="live-section-broad" 
+          show-icon-side-bar="true" show-title-bar="true"
+          :stream-manager="mainStreamManager" 
+          :broadcast-title="broadcastTitle"
+          :broadcast-image="broadcastImage" />
+
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
       <div v-if="selectedProduct">
@@ -60,7 +64,7 @@
                   <div v-else-if="tab === '라이브 소개'">{{ liveIntroduction }}</div>
                   <!-- 라이브 혜택 탭 -->
                   <ul v-else-if="tab === '라이브 혜택'" class="benefits-list">
-                    <li v-for="benefit in liveBenefits" :key="benefit">{{ benefit }}</li>
+                    <li v-for="benefit in liveBenefits" :key="benefit">{{ benefit.benefitContent }}</li>
                   </ul>
                 </TabPanel>
               </TabPanels>
@@ -79,13 +83,13 @@
                 <TabPanel v-for="tab in secondTabGroup" :key="tab" v-show="tab === activeSecondTab" class="tab-panel">
                   <!-- 공지사항 탭 -->
                   <ul v-if="tab === '공지사항'" class="notice-list">
-                    <li v-for="notice in notices" :key="notice">{{ notice }}</li>
+                    <li v-for="notice in notices" :key="notice">{{ notice.noticeContent }}</li>
                   </ul>
                   <!-- 자주 묻는 질문 탭 -->
                   <dl v-else-if="tab === '자주 묻는 질문'">
                     <template v-for="(faq, index) in faqs" :key="`faq-${index}`">
-                      <dt :data-question="`Q: ${faq.question}`">{{ faq.question }}</dt>
-                      <dd>{{ faq.answer }}</dd>
+                      <dt :data-question="`Q: ${faq.question}`">{{ faq.questionTitle }}</dt>
+                      <dd>{{ faq.questionAnswer }}</dd>
                     </template>
                   </dl>
                 </TabPanel>
@@ -157,17 +161,16 @@ const secondTabGroup = ['공지사항', '자주 묻는 질문'];
 const activeFirstTab = ref(firstTabGroup[0]);
 const activeSecondTab = ref(secondTabGroup[0]);
 
+// 방송 제목, 썸네일
+const liveBroadcastInfo = ref({});
+const broadcastTitle = computed(() => liveBroadcastInfo.value.broadcast?.broadcastTitle || '');
+const broadcastImage = computed(() => liveBroadcastInfo.value.broadcast?.broadcastImage || '');
+
 // 정보, 혜택, FAQ 및 알림 상태
-const liveIntroduction = "라이브 소개 입니다.";
-const liveBenefits = ["혜택1", "혜택2"];
-const notices = [
-  "안녕하세요 상품 구매 이후 채팅창에 구매 인증해주시면 사은품이 나갑니다 ^^",
-  "현금으로 결제할시 추가 서비스 들어갑니다 ^^"
-];
-const faqs = [
-  {question: "질문 1", answer: "답변 1"},
-  {question: "질문 2", answer: "답변 2"}
-];
+const liveIntroduction = computed(() => liveBroadcastInfo.value.broadcast?.broadcastSummary || '');
+const liveBenefits = computed(() => liveBroadcastInfo.value.benefits || []);
+const notices = computed(() => liveBroadcastInfo.value.notices || []);
+const faqs = computed(() =>liveBroadcastInfo.value.faqs || []);
 
 // 뷰포트 및 스크롤 높이 계산
 const store = useStore();
@@ -217,6 +220,23 @@ const calculateHeight = () => {
   const viewportHeight = window.innerHeight;
   computedHeight.value = viewportHeight - boxHeight.value;
 }
+
+// 방송 정보 가져오기
+const loadLiveBroadcastInfo = async () => {
+  const broadcastId = route.params.broadcastId;
+  console.log("해당 방송 id : " + broadcastId);
+  try {
+    const response = await axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}`);
+    console.log(response.data);
+    liveBroadcastInfo.value = response.data;
+    console.log("broadcast info data : ", liveBroadcastInfo.value);
+  } catch (error) {
+    console.error('방송 예정 목록 load 실패 : ', error);
+  }
+  console.log("여기야~~ " + liveBroadcastInfo.value.broadcast.broadcastTitle);
+};
+
+
 // 모달 및 제품 선택 제어
 const openModal = () => {
   isOpen.value = true;
@@ -233,6 +253,13 @@ const closePurchaseModal = () => {
 const handleDiscountedPrice = (discountedPrice, product) => {
   product.discountedPrice = discountedPrice;
 };
+const incrementViewsCount = async (sessionId) => {
+  console.log("세션 id", sessionId);
+  // await axios.patch(`http://localhost:8090/broadcasts/statistics/${sessionId}/viewsCount`, {}, {
+  //   withCredentials: true
+  // });
+  await axios.patch(`http://localhost:8090/broadcasts/statistics/${sessionId}/viewsCount`);
+}
 
 // 나가기 버튼 동작
 const onClickRedirect = () => {
@@ -244,7 +271,9 @@ onMounted(() => {
   mySessionId.value = route.params.broadcastId;
   joinSession();
   calculateHeight();
+  incrementViewsCount(mySessionId.value);
   window.addEventListener('resize', calculateHeight);
+  loadLiveBroadcastInfo(); // 방송정보 호출
 });
 
 watch(boxHeight, calculateHeight)
@@ -455,5 +484,10 @@ ul.notice-list li, ul.benefits-list li {
   height: auto;
   max-width: 552px !important;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.tab-active {
+  border-color: #134010;
+  color: #134010;
 }
 </style>

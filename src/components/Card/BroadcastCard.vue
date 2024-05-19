@@ -99,12 +99,20 @@ export default {
 }
 
 .card-title {
-  font-size: 20px;
-  margin-bottom: 8px;
+  white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨김 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 ...로 표시 */
+  width: 90%;
+  font-size: 18px;
+  margin-bottom: 6px;
   margin-left: 0.5rem;
 }
 
 .card-text {
+  white-space: nowrap; /* 텍스트를 한 줄로 표시 */
+  overflow: hidden; /* 넘치는 텍스트를 숨김 */
+  text-overflow: ellipsis; /* 넘치는 텍스트를 ...로 표시 */
+  width: 90%;
   font-size: 14px;
   text-align: left;
   margin-left: 0.5rem;
