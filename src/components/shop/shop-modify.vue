@@ -42,22 +42,6 @@ export default {
   },
   methods: {
     handleImageUpload(event) {
-  const file = event.target.files[0];
-  if (file) {
-    
-    const reader = new FileReader();
-    reader.onload = (e) => { 
-      this.previewImage = e.target.result;
-      const base64String = e.target.result.split(',')[1]; // MIME 타입 정보 제거
-      this.imageSrc = base64String;
-    };
-    reader.readAsDataURL(file);
-  } else {
-    this.previewImage = null;
-    this.imageSrc = null;
-  }
-},
-    handleImageUpload(event) {
       const file = event.target.files[0];
       if (file) {
         const reader = new FileReader();
@@ -67,7 +51,7 @@ export default {
         };
         reader.readAsDataURL(file);
       } else {
-        this.previewImage = null;
+        this.previewImage = this.shopInfo.channelImage || null;
       }
     },
     getChannelSeqFromUrl() {
@@ -82,10 +66,11 @@ export default {
           this.shopInfo.channelUrl = response.data.channelUrl;
           this.shopInfo.channelInfo = response.data.channelInfo;
 
-          if (response.data.rawchannelImage) {
-            this.previewImage = response.data.rawchannelImage; // URL로부터 로드된 이미지
-            this.shopInfo.rawchannelImage = response.data.rawchannelImage;
-            this.shopInfo.channelImage = null; // URL에서 로드했으므로 base64 이미지를 초기화
+          if (response.data.channelImage) {
+            this.previewImage = response.data.channelImage; // URL로부터 로드된 이미지
+            this.shopInfo.channelImage = response.data.channelImage;
+          } else {
+            this.previewImage = null;
           }
         })
         .catch(error => {
@@ -97,7 +82,7 @@ export default {
       const url = `http://localhost:8090/shop/${this.shopInfo.channelSeq}`;
       const shopInfoToSend = {
         ...this.shopInfo,
-        channelImage: this.shopInfo.channelImage || null, // base64 이미지가 있으면 보냄
+        channelImage: this.shopInfo.channelImage || null, 
       };
       axios.put(url, shopInfoToSend, {
         headers: {
@@ -106,7 +91,7 @@ export default {
       })
         .then(response => {
           alert('상점 정보가 성공적으로 업데이트되었습니다.');
-          this.loadShopInfo(); // 업데이트 후 상점 정보 다시 로드
+          this.loadShopInfo(); 
         })
         .catch(error => {
           console.error('상점 정보 업데이트 실패:', error);
