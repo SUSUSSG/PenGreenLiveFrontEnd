@@ -1,6 +1,7 @@
 // src/store/index.js
-import { createStore } from 'vuex';
-import userModule from './modules/user';
+import { createStore } from "vuex";
+import userModule from "./modules/user";
+import orderModule from "./modules/order";
 
 export default createStore({
   state: {
@@ -13,7 +14,7 @@ export default createStore({
   },
   actions: {
     updateBoxHeight({ commit }, height) {
-      commit('setBoxHeight', height);
+      commit("setBoxHeight", height);
     },
   },
   getters: {
@@ -21,5 +22,6 @@ export default createStore({
   },
   modules: {
     user: userModule, // user 모듈을 등록합니다
+    order: orderModule,
   },
 });
