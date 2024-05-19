@@ -82,13 +82,13 @@
                 <TabPanel v-for="tab in secondTabGroup" :key="tab" v-show="tab === activeSecondTab" class="tab-panel">
                   <!-- 공지사항 탭 -->
                   <ul v-if="tab === '공지사항'" class="notice-list">
-                    <li v-for="notice in notices" :key="notice">{{ notice }}</li>
+                    <li v-for="notice in notices" :key="notice">{{ notice.noticeContent }}</li>
                   </ul>
                   <!-- 자주 묻는 질문 탭 -->
                   <dl v-else-if="tab === '자주 묻는 질문'">
                     <template v-for="(faq, index) in faqs" :key="`faq-${index}`">
-                      <dt :data-question="`Q: ${faq.question}`">{{ faq.question }}</dt>
-                      <dd>{{ faq.answer }}</dd>
+                      <dt :data-question="`Q: ${faq.question}`">{{ faq.questionTitle }}</dt>
+                      <dd>{{ faq.questionAnswer }}</dd>
                     </template>
                   </dl>
                 </TabPanel>
@@ -167,15 +167,8 @@ const broadcastTitle = computed(() => liveBroadcastInfo.value.broadcast?.broadca
 // 정보, 혜택, FAQ 및 알림 상태
 const liveIntroduction = computed(() => liveBroadcastInfo.value.broadcast?.broadcastSummary || '');
 const liveBenefits = computed(() => liveBroadcastInfo.value.benefits || []);
-
-const notices = [
-  "안녕하세요 상품 구매 이후 채팅창에 구매 인증해주시면 사은품이 나갑니다 ^^",
-  "현금으로 결제할시 추가 서비스 들어갑니다 ^^"
-];
-const faqs = [
-  {question: "질문 1", answer: "답변 1"},
-  {question: "질문 2", answer: "답변 2"}
-];
+const notices = computed(() => liveBroadcastInfo.value.notices || []);
+const faqs = computed(() =>liveBroadcastInfo.value.faqs || []);
 
 // 뷰포트 및 스크롤 높이 계산
 const store = useStore();
