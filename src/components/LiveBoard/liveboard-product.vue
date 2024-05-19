@@ -82,15 +82,22 @@
           <span class="header-cell">원가</span>
           <span class="header-cell">할인율</span>
           <span class="header-cell">판매가</span>
+          <span class="header-cell">판매상태</span>
         </div>
-        <div v-for="(product, index) in products" :key="index" class="table-row">
+        <div v-for="(product, index) in products" :key="index" class="table-row cursor-pointer">
           <span class="cell">
-            <img :src="product.productImage" alt="Product Image" class="product-image" />
+            <div class="image-container">
+              <img :src="product.productImage" alt="Product Image" class="product-image" />
+              <img v-if="product.showNowImg" :src="nowImg" class="now-image"/>
+            </div>
           </span>
           <span class="cell">{{ product.productNm }}</span>
           <span class="cell">{{ product.listPrice.toLocaleString() }}원</span>
           <span class="cell">{{ product.discountRate }}%</span>
           <span class="cell">{{ product.discountPrice.toLocaleString() }}원</span>
+          <span class="cell">
+            <Switch v-model="product.showNowImg" />
+          </span>
         </div>
       </div>
     </div>
@@ -118,9 +125,6 @@ export default {
     }
   },
   methods: {
-    toggleNowImage(row) {
-      row.showNowImg = !row.showNowImg;
-    },
     showProductInfo() {
       this.isOpen = true;
     },
@@ -149,55 +153,21 @@ export default {
   overflow-y: auto;
 }
 
-#nowImg {
-  width: auto;
-  height: 20px;
-  object-fit: contain;
-}
-
-.relative {
-  position: relative;
-}
-
-.absolute {
-  position: absolute;
-}
-
-.top-0 {
-  top: 0;
-}
-
-.left-0 {
-  left: 0;
-}
-
-.z-10 {
-  z-index: 10;
-}
-
-.vgt-table {
-  width: 750px;
-  max-width: 100%;
-}
-
-.vgt-table thead th {
-  padding: 10px;
-}
-
 .text-primary {
   color: darkgreen;
 }
 
 .table-header {
   display: flex;
-  font-weight: bold;
-  border-bottom: 2px solid #000;
-  padding-bottom: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  background-color: #FAFAFA;
 }
 
 .header-cell {
   flex: 1;
   text-align: center;
+  font-weight: bold;
 }
 
 .table-row {
@@ -209,11 +179,25 @@ export default {
 .cell {
   flex: 1;
   text-align: center;
+  position: relative;
+}
+
+.image-container {
+  position: relative;
+  display: inline-block;
 }
 
 .product-image {
   width: 100px;
   height: 100px;
   object-fit: cover;
+}
+
+.now-image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60px;
+  height: 30px;
 }
 </style>
