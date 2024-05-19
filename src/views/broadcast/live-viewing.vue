@@ -6,7 +6,8 @@
     <Live class="live-section-broad" 
           show-icon-side-bar="true" show-title-bar="true"
           :stream-manager="mainStreamManager" 
-          :broadcast-title="broadcastTitle" />
+          :broadcast-title="broadcastTitle"
+          :broadcast-image="broadcastImage" />
 
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
@@ -160,9 +161,10 @@ const secondTabGroup = ['공지사항', '자주 묻는 질문'];
 const activeFirstTab = ref(firstTabGroup[0]);
 const activeSecondTab = ref(secondTabGroup[0]);
 
-// 방송 제목
+// 방송 제목, 썸네일
 const liveBroadcastInfo = ref({});
 const broadcastTitle = computed(() => liveBroadcastInfo.value.broadcast?.broadcastTitle || '');
+const broadcastImage = computed(() => liveBroadcastInfo.value.broadcast?.broadcastImage || '');
 
 // 정보, 혜택, FAQ 및 알림 상태
 const liveIntroduction = computed(() => liveBroadcastInfo.value.broadcast?.broadcastSummary || '');
