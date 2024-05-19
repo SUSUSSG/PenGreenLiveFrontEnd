@@ -70,7 +70,7 @@
             <label class="ltr:inline-block rtl:block input-label">상품이미지</label><br>
             <input type="file" id="imageUpload" @change="handleEditImageUpload"
               accept="image/jpeg, image/png, image/gif" class="mt-2 text-base text-slate-600 dark:text-slate-300" />
-            <img v-if="editModalData.productImage" :src="editModalData.productImage" alt="대표 이미지 미리보기"
+            <img v-if="editModalData.previewImage" :src="editModalData.previewImage" alt="대표 이미지 미리보기"
               style="max-width: 100px">
           </div>
           <template v-slot:footer>
@@ -176,6 +176,7 @@ export default {
         greenProductId: '',
         imageSrc: null,
         productImage: null,
+        previewImage: null,
       },
       advancedTable,
       current: 1,
@@ -348,8 +349,8 @@ export default {
         productStock: row.productStock,
         brand: row.brand,
         imageSrc: row.productImage ? row.productImage : null,
-        productImage: row.productImage
-        
+        productImage: row.productImage,
+        previewImage: row.productImage
       };
       console.log(this.editModalData.productSeq);
       this.$refs.editModal.openModal();
@@ -380,7 +381,7 @@ export default {
         listPrice: this.editModalData.listPrice,
         productStock: this.editModalData.productStock,
         brand: this.editModalData.brand,
-        base64Image: this.editModalData.base64Image,
+        base64Image: this.editModalData.imageSrc,
       };
 
       axios.put(url, productData)
