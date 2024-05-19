@@ -54,27 +54,24 @@
     </div>
   </div>
 </template>
-
 <script>
 import axios from "axios";
+import { markRaw } from 'vue'; // markRaw 가져오기
 import Icon from "@/components/icon";
 import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import OrderHistory from "@/components/Chatbot/OrderHistory.vue";
 import Profile from "@/components/Chatbot/Profile.vue";
 import Refund from "@/components/Chatbot/Refund.vue";
 import BroadcastCard from "@/components/Chatbot/Broadcast.vue";
+
 export default {
   components: {
-    Icon,
-    LottieAnimation,
-    OrderHistory,
-    Profile,
-    Refund,
-    BroadcastCard,
-  },
-  message: {
-    type: Object,
-    required: true,
+    Icon: markRaw(Icon),
+    LottieAnimation: markRaw(LottieAnimation),
+    OrderHistory: markRaw(OrderHistory),
+    Profile: markRaw(Profile),
+    Refund: markRaw(Refund),
+    BroadcastCard: markRaw(BroadcastCard),
   },
   data() {
     return {
@@ -156,7 +153,7 @@ export default {
             const orderHistoryMessage = {
               id: this.messages.length + 1,
               type: "component",
-              component: OrderHistory,
+              component: markRaw(OrderHistory),
             };
             this.messages.push(orderHistoryMessage);
             const afterBotMessage = {
@@ -175,12 +172,12 @@ export default {
               type: "bot",
             };
             this.messages.push(botMessage);
-            const orderHistoryMessage = {
+            const profileMessage = {
               id: this.messages.length + 1,
               type: "component",
-              component: Profile,
+              component: markRaw(Profile),
             };
-            this.messages.push(orderHistoryMessage);
+            this.messages.push(profileMessage);
             const afterBotMessage = {
               id: this.messages.length + 1,
               text: "다른 도움이 필요하시다면 말씀해주세요!!",
@@ -203,12 +200,12 @@ export default {
               type: "bot",
             };
             this.messages.push(botMessage2);
-            const orderHistoryMessage = {
+            const refundMessage = {
               id: this.messages.length + 1,
               type: "component",
-              component: Refund,
+              component: markRaw(Refund),
             };
-            this.messages.push(orderHistoryMessage);
+            this.messages.push(refundMessage);
             const afterBotMessage = {
               id: this.messages.length + 1,
               text: "이외에 궁금한 점이 있다면 질문해주세요!! 슈슈슉이 답변드릴게요🙌",
@@ -235,13 +232,13 @@ export default {
             };
             this.messages.push(botMessage);
 
-            const orderHistoryMessage = {
+            const broadcastMessage = {
               id: this.messages.length + 1,
               type: "component",
-              component: BroadcastCard,
+              component: markRaw(BroadcastCard),
               props: { keyword },
             };
-            this.messages.push(orderHistoryMessage);
+            this.messages.push(broadcastMessage);
 
             const afterBotMessage = {
               id: this.messages.length + 1,
