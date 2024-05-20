@@ -7,7 +7,7 @@
       <div>
         <div class="table-header">
           <span class="header-cell">이미지</span>
-          <span class="header-cell">인증배지</span>
+          <span class="header-cell badge-cell">인증배지</span>
           <span class="header-cell name-cell">이름</span>
           <span class="header-cell">원가</span>
           <span class="header-cell">판매가</span>
@@ -21,18 +21,18 @@
               <img v-if="product.showNowImg" :src="nowImg" class="now-image" />
             </div>
           </span>
-          <div class="badge-container">
+          <div class="badge-container cell badge-cell">
             <img v-for="(image, imgIndex) in getLabelImageArray(product.labelImages)" :key="imgIndex" :src="image"
               alt="label Image" class="label-image" />
           </div>
           <span class="cell name-cell">{{ product.productNm }}</span>
-          <span class="cell">
+          <span class="cell price-cell">
             <div class="list-price">{{ product.listPrice.toLocaleString() }}원</div>
-            <div class="discount-Rate">{{ product.discountRate }}%</div>
+            <div class="discount-rate">{{ product.discountRate }}%</div>
           </span>
-          <span class="cell">{{ product.discountPrice.toLocaleString() }}원</span>
-          <span class="cell">
-            <Switch v-model="product.showNowImg" :activeClass="`bg-primary-500`"/>
+          <span class="cell discount-price">{{ product.discountPrice.toLocaleString() }}원</span>
+          <span class="cell switch-cell">
+            <Switch v-model="product.showNowImg" :activeClass="`bg-primary-500`" />
           </span>
         </div>
         <!-- 상품 상세정보 모달 -->
@@ -131,6 +131,7 @@ export default {
   background-color: #FAFAFA;
 }
 
+/* header-cell */
 .header-cell {
   flex: 1;
   text-align: center;
@@ -141,20 +142,51 @@ export default {
   flex: 2;
 }
 
+.header-cell.badge-cell {
+  flex: 1.5;
+}
+
 .table-row {
   display: flex;
   border-bottom: 1px solid #ccc;
   padding: 10px 0;
 }
 
+/* cell */
 .cell {
   flex: 1;
   text-align: center;
-  position: relative;
+  align-items: center;
+  justify-content: center;
 }
 
 .cell.name-cell {
   flex: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell.badge-cell {
+  flex: 1.5;
+}
+
+.cell.discount-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell.price-cell {
+  margin-top: 19px;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell.switch-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .image-container {
@@ -193,7 +225,7 @@ export default {
   text-decoration: line-through;
 }
 
-.discount-Rate {
+.discount-rate {
   color: red;
 }
 
