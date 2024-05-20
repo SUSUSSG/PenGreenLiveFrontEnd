@@ -1,6 +1,8 @@
 <template>
   <div>
     <ScrollTopButton />
+    <AIChatBot ref="chatbot" style="border-radius: 2rem 2rem 0 0" />
+
     <div class="border-container">
       <MenuHeaderNav />
       <hr />
@@ -51,6 +53,16 @@
         <hr class="mt-6" />
         <hr />
       </div>
+      <div class="chatbot-wrapper">
+        <LottieAnimation
+          @click="toggleChatbot"
+          class="fixed-lottie"
+          animationPath="src/assets/images/all-img/penguinLottie.json"
+        />
+        <div class="lottie-title">
+          <p>궁금한 것은 AI 슈슈슉에게 물어보세요!</p>
+        </div>
+      </div>
       <CustomFooter />
     </div>
   </div>
@@ -65,6 +77,8 @@ import DataTab from "@/components/HeaderMain/date-tab.vue";
 import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
 import SkeletonCard from "@/components/Skeleton/Schedule-skeleton.vue";
 import CustomFooter from "@/components/footer/CustomFooter.vue";
+import LottieAnimation from "@/components/UI/LottieAnimation.vue";
+import AIChatBot from "@/components/Chatbot/AIChatBot.vue";
 
 export default {
   components: {
@@ -75,6 +89,8 @@ export default {
     ScrollTopButton,
     SkeletonCard,
     CustomFooter,
+    LottieAnimation,
+    AIChatBot,
   },
   data() {
     return {
@@ -86,6 +102,9 @@ export default {
   },
   created() {
     this.fetchLiveData();
+  },
+  mounted(){
+    this.startHideTitleTimer();
   },
   watch: {
     selectedDate() {
@@ -131,6 +150,35 @@ export default {
       }
       return btoa(binary);
     },
+    toggleChatbot() {
+      this.$refs.chatbot.toggleChatbot();
+    },
+    startHideTitleTimer() {
+      setInterval(() => {
+        const lottieTitle = document.querySelector(".lottie-title");
+        const chatbotWrapper = document.querySelector(".chatbot-wrapper");
+        if (lottieTitle) {
+          lottieTitle.classList.add("opacity");
+          setTimeout(() => {
+            lottieTitle.style.display = "none";
+          }, 500);
+        }
+        if (chatbotWrapper) {
+          chatbotWrapper.classList.add("collapsed");
+          setTimeout(() => {
+            chatbotWrapper.classList.remove("collapsed");
+            if (lottieTitle) {
+              setTimeout(() => {
+                lottieTitle.style.display = "block";
+              }, 1500);
+              setTimeout(() => {
+                lottieTitle.classList.remove("opacity");
+              }, 1500); // 1.5초 뒤에 천천히 나타나도록 함
+            }
+          }, 7500);
+        }
+      }, 15000); // 5초 후에 3초 간격으로 반복
+    },
   },
 };
 </script>
@@ -157,5 +205,41 @@ export default {
 }
 .under-category-section::-webkit-scrollbar {
   display: none;
+}
+.chatbot-wrapper {
+  display: flex;
+  width: 500px;
+  background: rgb(255 255 255);
+  height: fit-content;
+  z-index: 998;
+  position: fixed;
+  bottom: 140px;
+  right: 104px;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 10rem;
+  gap: 1.5rem;
+  font-size: 1.3rem;
+  box-shadow: 0px 10px 20px 0px rgba(0, 0, 0, 0.1);
+  transition: width 2s ease-in-out; /* 애니메이션 추가 */
+}
+.fixed-lottie {
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+}
+
+.lottie-title {
+  width: fit-content;
+  height: fit-content;
+  text-align: center;
+  font-weight: bold;
+  transition: opacity 0.5s ease 1.5s; /* 1.5초 후에 나타나도록 트랜지션 추가 */
+}
+.opacity {
+  opacity: 0;
+}
+.collapsed {
+  width: 80px; /* 너비를 80px로 줄이기 */
 }
 </style>
