@@ -60,7 +60,7 @@
                     {{ product.productNm }}
                   </div>
                   <div class="additional-image-price">
-                    {{ product.discountPrice }}
+                    {{ formatPrice(product.discountPrice) }}원
                   </div>
                 </div>
               </div>
@@ -342,6 +342,10 @@ export default {
     },
     toggleChatbot() {
       this.$refs.chatbot.toggleChatbot();
+    },
+    formatPrice(value) {
+      if (!value) return "";
+      return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
   },
 };
