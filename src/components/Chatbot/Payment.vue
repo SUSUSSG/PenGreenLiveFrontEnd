@@ -3,7 +3,9 @@
     <div class="order-history">
       <div class="col">
         <p class="ai-card-title">나의 결제수단</p>
-        <BrandpayRegister/>
+        <div class="brand-pay-wrapper">
+          <BrandpayRegister class="payment"/>
+        </div>
       </div>
     </div>
     <div class="card-button" @click="goToPaymentRegister">
@@ -25,7 +27,6 @@ export default {
     BrandpayRegister,
   },
   methods: {
-   
     goToPaymentRegister() {
       this.$el.querySelector(".card-button").classList.add("clicked");
       setTimeout(() => {
@@ -37,11 +38,11 @@ export default {
 </script>
 
 <style scoped>
-.ai-card-title{
-  font-size:1.2rem;
+.ai-card-title {
+  font-size: 1.2rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
-  color:darkgreen;
+  color: darkgreen;
 }
 .order-history {
   background-color: #fff;
@@ -83,6 +84,7 @@ export default {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  margin : 0 auto;
 }
 
 .row {
@@ -135,4 +137,5 @@ export default {
 .text-order-date {
   font-weight: bold;
 }
+
 </style>

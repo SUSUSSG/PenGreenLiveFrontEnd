@@ -389,7 +389,7 @@ export default {
             this.messages.push(brandpayMessage);
             const afterBotMessage = {
               id: this.messages.length + 1,
-              text: "최근 시청기록을 가져왔어요~ 다른 도움이 필요하시면 말씀해주세요 :)",
+              text: "도움이 필요하시다면 언제든지 불러주세요~!",
               type: "bot",
             };
             this.messages.push(afterBotMessage);
