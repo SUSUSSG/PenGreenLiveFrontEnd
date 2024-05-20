@@ -13,124 +13,50 @@
             </TabList>
 
             <TabPanel>
-                <broadcasthistory v-for="(item, index) in broadcasthistoryData" :key="index"
-                    :broadcastTitle="item.broadcastTitle" :thumbimageSrc="item.thumbimageSrc"
-                    :productimageSrc="item.productimageSrc" :productName="item.productName"
-                    :productPrice="item.productPrice" />
+                <BroadcastHistory v-for="(item, index) in broadcasthistoryData" :key="index"
+                    :broadcast-title="item.broadcastTitle" :broadcast-image="item.broadcastImage"
+                    :product-image="item.productImage" :product-nm="item.productNm" :list-price="item.listPrice"
+                    :user-uuid="item.userUUID" :channelNm="item.channelNm"/>
             </TabPanel>
 
-            <TabPanel style="padding-left: 6px;">
-                <div class="header">
-                    <div class="header-item">상품이미지</div>
-                    <div class="header-item">상품명</div>
-                    <div class="header-item">브랜드</div>
-                    <div class="header-item">가격 정보</div>
-                </div>
-                <producthistory v-for="(item, index) in producthistoryData" :key="index"
-                    :productimageSrc="item.productimageSrc" :productname="item.productname"
-                    :productbrand="item.productbrand" :productprice="item.productprice"/>
-            </TabPanel>
+            
         </TabGroup>
     </div>
 </template>
 
 <script setup>
-import { ref, defineProps, defineEmits } from 'vue'
+import axios from 'axios';
+import { ref, onMounted } from 'vue'
 import { TabGroup, TabList, Tab, TabPanel } from '@headlessui/vue'
-import Button from '@/components/Button/index.vue'
-import broadcasthistory from '@/components/Card/broadcast-historyCard.vue';
-import producthistory from '@/components/Card/product-historyCard.vue';
+import BroadcastHistory from '@/components/Card/broadcast-historyCard.vue';
+import ProductHistory from '@/components/Card/product-historyCard.vue';
+
 
 const buttons = ref([
     { title: "최근 본 방송" },
-    { title: "최근 본 상품" }
 ]);
 
-const broadcasthistoryData = ref([
-    {
-        broadcastTitle: "방송제목1",
-        thumbimageSrc: "http://via.placeholder.com/100x130",
-        productimageSrc: "http://via.placeholder.com/50x50",
-        productName: "테스트상품1",
-        productPrice: 42000
-    },
-    {
-        broadcastTitle: "방송제목1",
-        thumbimageSrc: "http://via.placeholder.com/100x130",
-        productimageSrc: "http://via.placeholder.com/50x50",
-        productName: "테스트상품1",
-        productPrice: 42000
-    },
-    {
-        broadcastTitle: "방송제목1",
-        thumbimageSrc: "http://via.placeholder.com/100x130",
-        productimageSrc: "http://via.placeholder.com/50x50",
-        productName: "테스트상품2",
-        productPrice: 42000
-    },
-    {
-        broadcastTitle: "방송제목1",
-        thumbimageSrc: "http://via.placeholder.com/100x130",
-        productimageSrc: "http://via.placeholder.com/50x50",
-        productName: "테스트상품3",
-        productPrice: 42000
-    },
-    {
-        broadcastTitle: "방송제목1",
-        thumbimageSrc: "http://via.placeholder.com/100x130",
-        productimageSrc: "http://via.placeholder.com/50x50",
-        productName: "테스트상품4",
-        productPrice: 42000
-    },
-    {
-        broadcastTitle: "방송제목1",
-        thumbimageSrc: "http://via.placeholder.com/100x130",
-        productimageSrc: "http://via.placeholder.com/50x50",
-        productName: "테스트상품5",
-        productPrice: 42000
-    },
-])
+const broadcasthistoryData = ref([]);
+const producthistoryData = ref([]);
+const userUUID = 'f23a72e0-1347-11ef-b085-f220affc9a21';
 
-const producthistoryData = ref([
-    {
-        productimageSrc: "http://via.placeholder.com/100x100",
-        productname: "테스트상품 1",
-        productbrand: "테크브루",
-        productprice: 40000,
-    },
-    {
-        productimageSrc: "http://via.placeholder.com/100x100",
-        productname: "테스트상품 1",
-        productbrand: "테크브루",
-        productprice: 40000,
-    },
-    {
-        productimageSrc: "http://via.placeholder.com/100x100",
-        productname: "테스트상품 1",
-        productbrand: "테크브루",
-        productprice: 40000,
-        productdiscountprice: 20000,
-    },
-    {
-        productimageSrc: "http://via.placeholder.com/100x100",
-        productname: "테스트상품 1",
-        productbrand: "테크브루",
-        productprice: 40000,
+const fetchRecentBroadcasts = async (userUUID) => {
+    try {
+        const recentlyViewedResponse = await axios.get(`http://localhost:8090/recently-viewed/broadcasts`, {
+            params: { userUUID: userUUID }
+        });
+        console.log('Recently Viewed Broadcasts:', recentlyViewedResponse.data);
+        broadcasthistoryData.value = recentlyViewedResponse.data;
 
-    },
-    {
-        productimageSrc: "http://via.placeholder.com/100x100",
-        productname: "테스트상품 1",
-        productbrand: "테크브루",
-        productprice: 40000,
-    },
-    {
-        productimageSrc: "http://via.placeholder.com/100x100",
-        productname: "테스트상품 1",
-        productbrand: "테크브루",
-        productprice: 40000,
-    },
-])
+    } catch (error) {
+        console.error('Error fetching broadcasts:', error);
+    }
+};
+
+
+onMounted(() => {
+    fetchRecentBroadcasts(userUUID);
+});
 
 </script>
 
@@ -160,21 +86,25 @@ const producthistoryData = ref([
     background-color: #e2e8f0;
 }
 
-.header, .product-row {
+.header,
+.product-row {
     display: flex;
     align-items: center;
-    padding-top:2.5rem;
+    padding-top: 2.5rem;
     padding-left: 2.5rem;
-    padding-bottom: 1.5rem;;
+    padding-bottom: 1.5rem;
+    ;
     border-bottom: 1px solid #ddd;
 }
 
-.header, .header-item {
+.header,
+.header-item {
     font-weight: bold;
 }
 
-.header-item, .product-row div {
+.header-item,
+.product-row div {
     flex: 1;
-    text-align: left; 
+    text-align: left;
 }
 </style>

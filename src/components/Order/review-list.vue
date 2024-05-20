@@ -42,7 +42,6 @@
                   <Button text="닫기" btnClass="btn-dark btn-sm" @click="$refs.modal1.closeModal()" />
                 </template>
               </Modal>
-              <!-- <Button text="리뷰삭제" btnClass="btn-outline-dark btn-sm mt-2" @click="deleteReview" /> -->
             </div>
           </div>
         </div>

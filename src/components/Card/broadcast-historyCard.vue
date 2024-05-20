@@ -1,45 +1,46 @@
 <template>
-    <div class="card-component">
-      <div class="top-section">
-        <img :src="thumbimageSrc" alt="Thumbnail Image" class="thumbnail-image">
-        <div class="broadcast-info">
-          <div class="broadcast-title">{{ broadcastTitle }}</div>
-          <div class="product-section">
-            <img :src="productimageSrc" alt="Product Image" class="product-image">
-            <div class="product-details">
-              <div class="product-name">{{ productName }}</div>
-              <div class="product-price">{{ formatNumber(productPrice) }}</div>
-            </div>
+  <div class="card-component">
+    <div class="top-section">
+      <img :src="broadcastImage" alt="Thumbnail Image" class="thumbnail-image">
+      <div class="broadcast-info">
+        <div class="broadcast-title">{{ broadcastTitle }}</div>
+        <div class="product-section">
+          <img :src="productImage" alt="Product Image" class="product-image">
+          <div class="product-details">
+            <div class="product-name">{{ productNm }}</div>
+            <div class="product-price">{{ formatNumber(listPrice) }}</div>
+            <div class="channel-name"><p>{{ channelNm }}</p></div>
           </div>
         </div>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
 <script setup lang="ts">
-import { TabGroup, TabList, Tab, TabPanel } from "@headlessui/vue";
-import { withDefaults, defineProps, ref } from 'vue';
-import Modal from "../Modal/Modal.vue";
-import Button from "@/components/Button/index.vue"
+import { withDefaults, defineProps } from 'vue';
 
-const props = withDefaults(defineProps < {
-    broadcastTitle: string;
-    thumbimageSrc: string;
-    productimageSrc: string; 
-    productName: string;
-    productPrice: number;
-} > (), {
-    broadcastTitle: 'default-status',
-    thumbimageSrc: 'default-img-url',
-    productimageSrc: 'default-img-url',
-    productName: 'default-product',
-    productPrice: 0,
+const props = withDefaults(defineProps<{
+  broadcastTitle: string;
+  broadcastImage: string;
+  productImage: string;
+  productNm: string;
+  listPrice: number;
+  userUUID: string;
+  channelNm: string;
+}>(), {
+  broadcastTitle: 'default-status',
+  broadcastImage: 'default-img-url',
+  productImage: 'default-img-url',
+  productNm: 'default-product',
+  listPrice: 0,
+  userUUID: '',
+  channelNm:''
 });
 
 const formatNumber = (value: number): string => {
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
-
 </script>
 
 <style scoped>
@@ -50,7 +51,6 @@ const formatNumber = (value: number): string => {
   width: 100%;
   height: 120px;
   padding: 10px;
-
 }
 
 .top-section {
@@ -60,22 +60,22 @@ const formatNumber = (value: number): string => {
 }
 
 .thumbnail-image {
-    width: auto;
-    height: 100%;
-    margin-right: 10px;
+  width: 66px;
+  height: 100%;
+  margin-right: 10px;
 }
 
 .broadcast-info {
-    display: flex;
-    flex-direction: column;
-    min-height: 100%;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  justify-content: space-between;
 }
 
 .broadcast-title {
-    font-size: 18px;
-    font-weight: bold;
-    margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
 }
 
 .product-section {
@@ -104,6 +104,9 @@ const formatNumber = (value: number): string => {
   font-size: 14px;
   font-weight: bold;
 }
-</style>
 
-  
+.channel-name {
+  text-align: right !important;
+  flex-grow: 1 !important;
+}
+</style>
