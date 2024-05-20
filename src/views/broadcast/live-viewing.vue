@@ -235,6 +235,9 @@ const sendWatchTime = async () => {
     console.error('Error adding watch time:', error);
   }
 };
+const incrementProductClicks = async (broadcastSeq, productSeq) => {
+  await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/product/${productSeq}/increment-click`)
+}
 
 const cleanSessionProperties = () => {
   session.value = undefined;
@@ -287,6 +290,7 @@ const updateModal = (value) => {
   isOpen.value = value;
 };
 const showProductDetails = (product) => {
+  incrementProductClicks(mySessionId.value, 3) // 프로덕트 seq 동적으로 바꿔야함
   selectedProduct.value = product;
 };
 const closePurchaseModal = () => {
