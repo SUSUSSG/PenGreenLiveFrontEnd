@@ -30,7 +30,7 @@ onMounted(async () => {
       redirectUrl: 'http://localhost:8090/api/brandpay/callback-auth',
     });
 
-    const totalAmount = order.orderPayedPrice;
+    const totalAmount = order.orderPayedPrice ? order.orderPayedPrice : 1;
     paymentMethodsWidget = brandpay.value.createPaymentMethodsWidget({ amount: totalAmount});
     paymentMethodsWidget.render('#payment-methods-widget', {
       ui: {
