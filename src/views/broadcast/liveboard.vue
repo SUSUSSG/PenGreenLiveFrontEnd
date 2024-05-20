@@ -125,6 +125,7 @@ export default {
         console.log("세션은 이미 활성화 상태입니다.");
         return;
       }
+      this.createProductClicks(this.$route.params.broadcastId);
       this.OV = new OpenVidu();
       this.session = this.OV.initSession();
       this.session.on("streamCreated", ({stream}) => {
@@ -255,6 +256,14 @@ export default {
       });
       this.maxViewers = maxViewers;
       this.averageViewers = averageViewers;
+    },
+    async createProductClicks(broadcastSeq) {
+      try {
+        const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}`);
+        console.log('Product clicks created:', response.data);
+      } catch (error) {
+        console.error('Error creating product clicks:', error.response ? error.response.data : error.message);
+      }
     },
     loadLiveBroadcastInfo() {
       const broadcastId = this.$route.params.broadcastId;
