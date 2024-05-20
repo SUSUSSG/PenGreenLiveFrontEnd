@@ -47,12 +47,15 @@ import muteIcon from "@/assets/images/all-img/mute.png";
 import shareIcon from "@/assets/images/all-img/share.png";
 import soundIcon from "@/assets/images/all-img/speaker.png";
 import redheart from "@/assets/images/all-img/redheart.png";
-import { onMounted } from 'vue';
+import { onMounted, onBeforeMount } from 'vue';
 import axios from "axios";
 
 export default {
   setup() {
     onMounted(() => {
+
+    });
+    onBeforeMount(() =>{
 
     });
   },
@@ -96,6 +99,7 @@ export default {
       session: null,
       likeQueue: [],
       likeTimeout: null,
+      likesUpdateInterval:null
     };
   },
   async mounted() {
@@ -103,6 +107,9 @@ export default {
     setInterval(async () => {
       await this.updateLikes();
     }, 15000);
+  },
+  beforeUnmount() {
+    clearInterval(this.likesUpdateInterval); // 타이머 정리
   },
   methods: {
     toggleLike() {

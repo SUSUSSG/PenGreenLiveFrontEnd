@@ -1,27 +1,28 @@
 <template>
-  <div class="main-wrapper">
-    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast" 
-      :boradcast-title="liveBroadcastInfo.broadcast.broadcastTitle" 
-      :live-date-time="liveBroadcastInfo.broadcast.broadcastScheduledTime"/>
-    <div class="content-wrapper">
-      <div class="flex-row">
-        <div class="flex-col">
-          <div class="flex-row">
-            <LiveboardBroad :stream-manager="mainStreamManager" :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage"/>
-            <LiveBoardChat :current-room="{ id: 1 }" :current-writer="'판매자'" />
+  <div className="main-wrapper">
+    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast"
+                   :boradcast-title="liveBroadcastInfo.broadcast.broadcastTitle"
+                   :live-date-time="liveBroadcastInfo.broadcast.broadcastScheduledTime"/>
+    <div className="content-wrapper">
+      <div className="flex-row">
+        <div className="flex-col">
+          <div className="flex-row">
+            <LiveboardBroad :stream-manager="mainStreamManager"
+                            :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage"/>
+            <LiveBoardChat :current-room="{ id: 1 }" :current-writer="'판매자'"/>
           </div>
         </div>
-        <div class="flex-col">
+        <div className="flex-col">
           <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck"
-            @update-statistics="updateStatistics" />
-          <LiveboardProduct />
-          <LiveboardPrompt />
+                               @update-statistics="updateStatistics"/>
+          <LiveboardProduct/>
+          <LiveboardPrompt/>
         </div>
-        <div class="flex-col">
+        <div className="flex-col">
           <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호"
-            @broadcast-device-selected="handleDeviceChange"
-            :notices="liveBroadcastInfo.notices"
-            :faqs="liveBroadcastInfo.faqs" />
+                            @broadcast-device-selected="handleDeviceChange"
+                            :notices="liveBroadcastInfo.notices"
+                            :faqs="liveBroadcastInfo.faqs"/>
         </div>
       </div>
     </div>
@@ -30,7 +31,7 @@
 
 <script>
 import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
+import {OpenVidu} from 'openvidu-browser';
 import LiveBoardTime from "@/components/LiveBoard/liveboard-time.vue";
 import LiveBoardChat from "@/components/LiveBoard/liveboard-chat.vue";
 import LiveboardBroad from "@/components/liveboard/liveboard-broad.vue";
@@ -70,36 +71,36 @@ export default {
   },
   methods: {
     //방송중인 상태에서 사용하는 카메라와 오디오 장치를 변경합니다.
-    handleDeviceChange({ camera, microphone }) {
+    handleDeviceChange({camera, microphone}) {
       // 카메라 변경
       if (camera) {
         console.log("카메라");
         console.log(camera);
         navigator.mediaDevices
-          .getUserMedia({
-            video: { deviceId: camera, width: 900, height: 1600 } // 새로운 해상도 설정
-          })
-          .then((newVideoStream) => {
-            console.log(camera);
-            const videoTrack = newVideoStream.getVideoTracks()[0];
-            this.publisher.replaceTrack(videoTrack);
-          })
-          .catch((error) => {
-            console.error('Error accessing camera stream:', error);
-          });
+            .getUserMedia({
+              video: {deviceId: camera, width: 900, height: 1600} // 새로운 해상도 설정
+            })
+            .then((newVideoStream) => {
+              console.log(camera);
+              const videoTrack = newVideoStream.getVideoTracks()[0];
+              this.publisher.replaceTrack(videoTrack);
+            })
+            .catch((error) => {
+              console.error('Error accessing camera stream:', error);
+            });
       }
 
       // 마이크 변경
       if (microphone) {
         navigator.mediaDevices
-          .getUserMedia({ audio: { deviceId: microphone } })
-          .then((newAudioStream) => {
-            const audioTrack = newAudioStream.getAudioTracks()[0];
-            this.publisher.replaceTrack(audioTrack);
-          })
-          .catch((error) => {
-            console.error('Error accessing microphone:', error);
-          });
+            .getUserMedia({audio: {deviceId: microphone}})
+            .then((newAudioStream) => {
+              const audioTrack = newAudioStream.getAudioTracks()[0];
+              this.publisher.replaceTrack(audioTrack);
+            })
+            .catch((error) => {
+              console.error('Error accessing microphone:', error);
+            });
       }
     },
     //Video와 Audio출력을 활성/비활성합니다.
@@ -126,38 +127,38 @@ export default {
       }
       this.OV = new OpenVidu();
       this.session = this.OV.initSession();
-      this.session.on("streamCreated", ({ stream }) => {
+      this.session.on("streamCreated", ({stream}) => {
         const subscriber = this.session.subscribe(stream);
         this.subscribers.push(subscriber);
       });
-      this.session.on("streamDestroyed", ({ stream }) => {
+      this.session.on("streamDestroyed", ({stream}) => {
         const index = this.subscribers.indexOf(stream.streamManager, 0);
         if (index >= 0) {
           this.subscribers.splice(index, 1);
         }
       });
-      this.session.on("exception", ({ exception }) => {
+      this.session.on("exception", ({exception}) => {
         console.warn(exception);
       });
       this.getToken(this.mySessionId).then(token => {
-        this.session.connect(token, { clientData: this.myUserName })
-          .then(() => {
-            this.publisher = this.OV.initPublisher(undefined, {
-              audioSource: undefined,
-              videoSource: undefined,
-              publishAudio: true,
-              publishVideo: true,
-              resolution: "900x1600",
-              frameRate: 30,
-              insertMode: "APPEND",
-              mirror: false,
+        this.session.connect(token, {clientData: this.myUserName})
+            .then(() => {
+              this.publisher = this.OV.initPublisher(undefined, {
+                audioSource: undefined,
+                videoSource: undefined,
+                publishAudio: true,
+                publishVideo: true,
+                resolution: "900x1600",
+                frameRate: 30,
+                insertMode: "APPEND",
+                mirror: false,
+              });
+              this.mainStreamManager = this.publisher;
+              this.session.publish(this.publisher);
+            })
+            .catch(error => {
+              console.log("There was an error connecting to the session:", error.code, error.message);
             });
-            this.mainStreamManager = this.publisher;
-            this.session.publish(this.publisher);
-          })
-          .catch(error => {
-            console.log("There was an error connecting to the session:", error.code, error.message);
-          });
       });
       this.isSessionActive = true;
       this.readyToCheck = true;  // 방송을 시작할 때 true로 설정
@@ -176,7 +177,10 @@ export default {
       });
 
       // 평균 시청자수와 최대 시청자수, 방송 진행시간을 db에 반영하는 axios 요청
-      await this.updateBroadcastStatistics({ maxViewerCount, avgViewerCount, broadcastDuration: elapsedTime });
+      await this.updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration: elapsedTime});
+
+      // 평균 시청 시간 계산 및 데이터 삭제 요청
+      await this.calculateAndDeleteWatchTime(this.mySessionId);
 
       // 방송 종료 로직
       this.leaveSession();
@@ -208,16 +212,16 @@ export default {
       return this.createSession(sessionId).then(sessionId => this.createToken(sessionId));
     },
     createSession(sessionId) {
-      return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions`, { customSessionId: sessionId }, {
-        headers: { 'Content-Type': 'application/json' }
+      return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions`, {customSessionId: sessionId}, {
+        headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
     createToken(sessionId) {
       return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions/${sessionId}/connections`, {}, {
-        headers: { 'Content-Type': 'application/json' }
+        headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
-    async updateBroadcastStatistics({ maxViewerCount, avgViewerCount, broadcastDuration }) {
+    async updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration}) {
       console.log('Updating broadcast statistics:', {
         maxViewerCount,
         avgViewerCount,
@@ -236,7 +240,15 @@ export default {
         console.error('Error updating statistics:', error.response ? error.response.data : error.message);
       }
     },
-    updateStatistics({ maxViewers, averageViewers }) {
+    async calculateAndDeleteWatchTime(broadcastSeq) {
+      try {
+        const response = await axios.post(`http://localhost:8090/api/watch-times/calculate/${broadcastSeq}`);
+        console.log('Watch time calculated and deleted:', response.data);
+      } catch (error) {
+        console.error('Error calculating and deleting watch time:', error.response ? error.response.data : error.message);
+      }
+    },
+    updateStatistics({maxViewers, averageViewers}) {
       console.log('Updating parent statistics:', {
         maxViewers,
         averageViewers,
@@ -248,16 +260,16 @@ export default {
       const broadcastId = this.$route.params.broadcastId;
       console.log("해당 방송 id : " + broadcastId);
       axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}`)
-        .then((response) => {
-          console.log(response.data);
-          this.liveBroadcastInfo = response.data;
-          this.loading = false;
-          console.log("broadcast info data : ", this.liveBroadcastInfo);
-        })
-        .catch(error => {
-          console.error('방송 예정 목록 load 실패 : ', error);
-          this.loading = false;
-        })
+          .then((response) => {
+            console.log(response.data);
+            this.liveBroadcastInfo = response.data;
+            this.loading = false;
+            console.log("broadcast info data : ", this.liveBroadcastInfo);
+          })
+          .catch(error => {
+            console.error('방송 예정 목록 load 실패 : ', error);
+            this.loading = false;
+          })
     }
   },
   //컴포넌트가 생성될 시 mySessionId변수에 현재 url정보(방송id)를 할당합니다.
@@ -269,7 +281,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-/* CSS remains the same as before */
 .main-wrapper {
   width: 100%;
   height: 100%;
