@@ -6,7 +6,7 @@
                     <header class="px-4 pt-4 pb-3 mb-3">
                         <p class="card-title mb-0 text-center">일반회원가입</p>
                     </header>
-                    <div class="vgt-inner-wrap">
+                    <form class="vgt-inner-wrap" @submit.prevent="handleSubmit">
                         <div class="vgt-fixed-header"></div>
                         <div class="vgt-responsive">
                             <table id="vgt-table" class="vgt-table">
@@ -21,7 +21,7 @@
                                         </td>
                                         <td class="vgt-right-align">
                                             <div class="flex">
-                                                <input type="text" name="pn" placeholder="이름" class="flex-grow-7 classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
+                                                <input v-model="form.userNm" type="text" name="pn" placeholder="이름" class="flex-grow-7 classinput input-control w-full block focus:outline-none h-[40px]" id="username">
                                                 <div class="flex-grow-3"></div>
                                             </div>                                    
                                         </td>
@@ -34,19 +34,20 @@
                                             <div class="mb-5">
                                                 <div class="flex items-center">                                                        
                                                     <div class="flex items-center flex-grow-7">
-                                                        <input type="text" value="010" class=" w-[20%] mr-2 input-control focus:outline-none h-[40px]" id="pn3" readonly="" disabled="">
-                                                        <input type="text" placeholder="휴대폰번호 (-없이 입력)" class="w-full input-control focus:outline-none h-[40px]" id="pn">
+                                                        <input type="text" value="010" class=" w-[20%] mr-2 input-control focus:outline-none h-[40px]" readonly="" disabled="">
+                                                        <input v-model="form.userTel" type="text" placeholder="휴대폰번호 (-없이 입력)" class="w-full input-control focus:outline-none h-[40px]"
+                                                        >
                                                     </div>
                                                     <div class="w-[163px]">
-                                                        <Button text="인증번호 받기" class="w-full"/>
+                                                        <Button type="button" text="인증번호 받기" class="w-full"/>
                                                     </div>
                                                 </div>                                    
                                             </div>
                                             <div class="grid-cols-1 grid mb-5 last:mb-0">
                                                 <div class="flex items-center"> 
-                                                    <input type="text" name="pn" placeholder="인증번호 6자리 입력" class="flex-grow-7 input-control focus:outline-none h-[40px]" id="pn">
+                                                    <input type="text" name="pn" placeholder="인증번호 6자리 입력" class="flex-grow-7 input-control focus:outline-none h-[40px]">
                                                     <div class="flex-grow-3">
-                                                        <Button text="인증번호 확인" class="w-full"/>
+                                                        <Button type="button" text="인증번호 확인" class="w-full"/>
                                                     </div>
                                                 </div> 
                                             </div>
@@ -59,9 +60,9 @@
                                         <td class="vgt-right-align">
                                             <div class="grid-cols-1 grid mb-5 last:mb-0">
                                                 <div class="flex items-center">
-                                                    <input type="text" name="pn" placeholder="아이디 (5~12자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]" id="pn">
+                                                    <input v-model="form.userId" type="text" name="pn" placeholder="아이디 (5~12자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
                                                     <div class="flex-grow-3">
-                                                        <Button text="중복체크" class="w-full"/>
+                                                        <Button type="button" text="중복체크" class="w-full"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -73,7 +74,7 @@
                                         </td>
                                         <td class="vgt-right-align">
                                             <div class="flex">
-                                                <input type="password" name="pn" placeholder="비밀번호 (8~20자 영문+숫자)" class="flex-grow-7 classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
+                                                <input v-model="form.userPw" type="password" placeholder="비밀번호 (8~20자 영문+숫자)" class="flex-grow-7 classinput input-control w-full block focus:outline-none h-[40px]">
                                                 <div class="flex-grow-3"></div>
                                             </div>
                                         </td>
@@ -84,7 +85,7 @@
                                         </td>
                                         <td class="vgt-right-align">
                                             <div class="flex">
-                                                <input type="password" name="pn" placeholder="비밀번호 확인 (8~20자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]" id="pn">
+                                                <input type="password" placeholder="비밀번호 확인 (8~20자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
                                                 <div class="flex-grow-3"></div>
                                             </div>
                                         </td>
@@ -95,7 +96,7 @@
                                         </td>
                                         <td class="vgt-right-align">
                                             <div data-v-33d05f57="" class="flex">
-                                                <select data-v-33d05f57="" class="flex-grow-7 classinput input-control block focus:outline-none min-h-[40px]" formatter="a=>a">
+                                                <select v-model="form.userGender" data-v-33d05f57="" class="flex-grow-7 classinput input-control block focus:outline-none min-h-[40px]" formatter="a=>a">
                                                     <option data-v-33d05f57="" value="">응답 안함</option>
                                                     <option data-v-33d05f57="" value="">여성</option>
                                                     <option data-v-33d05f57="" value="">남성</option>
@@ -110,7 +111,7 @@
                                         </td>
                                         <td class="vgt-right-align">
                                             <div class="flex">
-                                                <input type="email" name="pn" placeholder="이메일 입력" class="flex-grow-7 classinput input-control w-full block focus:outline-none h-[40px]" id="pn">
+                                                <input v-model="form.userEmail" type="email" placeholder="이메일 입력" class="flex-grow-7 classinput input-control w-full block focus:outline-none h-[40px]">
                                                 <div class="flex-grow-3"></div>
                                             </div>
                                         </td>
@@ -122,9 +123,9 @@
                                         <td class="vgt-right-align">
                                             <div class="grid-cols-1 grid mb-5 last:mb-0">
                                                 <div class="flex items-center">
-                                                    <input type="text" name="pn" placeholder="주소 입력" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]" id="pn">
+                                                    <input v-model="form.userAddress" type="text" name="pn" placeholder="주소 입력" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
                                                     <div class="flex-grow-3">
-                                                        <Button text="우편번호 찾기" class="w-full"/>
+                                                        <Button type="button" text="우편번호 찾기" class="w-full"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -135,6 +136,7 @@
                             <div class="py-10 px-1" >
                                 <div class="py-3">
                                     <Checkbox
+                                        v-model="agreement"
                                         label="필수약관에 모두 동의합니다."
                                         name="tc" value="1" :checked="false" />
                                 </div>
@@ -162,6 +164,7 @@
                                 </div>
                                 <div class="relative flex-1" >
                                     <Checkbox
+                                        v-model="form.optionalAgreementYn"
                                         label="마케팅 목적의 개인정보 수집 및 이용 동의 (선택)"
                                         name="tc" value="1" :checked="false" />
                                     <textarea class="form-control py-2 my-3 h-[100px]" name="pd" readonly>당사는 고객의 동의 하에 다음과 같이 개인정보를 수집, 이용할 수 있습니다.
@@ -174,11 +177,11 @@
                                 </div>
 
                                 <div class="text-center my-10">
-                                    <Button class="px-20" text="가입하기" btnClass="btn-primary"/>
+                                    <Button type="submit" class="px-20" text="가입하기" btnClass="btn-primary"/>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </main>
             </div>
         </div>
@@ -186,9 +189,54 @@
 </template>
 
 <script setup>    
+    import { ref } from 'vue';
+    import axios from 'axios';
+    import { useRoute, useRouter } from 'vue-router';
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
     import Textarea from "@/components/Textarea";
+
+    const router = useRouter();
+
+    const form = ref({
+        userUuid : null,
+        userNm: null,
+        userGender: null,
+        userBirthDt: null,
+        userTel: null,
+        userEmail: null,
+        userAddress: null,
+        optionalAgreementYn: null,
+        accountActive: null,
+        createAccountDt: null,
+        userProfileImg: null,
+        userId: null,
+        userPw: null,
+    });
+
+    let agreement = ref(false);
+
+    // 휴대폰 번호 인증
+    
+    // 아이디 중복 체크
+
+    // 비밀번호 일치 체크
+
+    // 우편번호 찾기
+
+    // 회원가입 정보 전송
+    async function handleSubmit() {
+        console.log("form ", form);
+    //     try {
+    //     const response = await axios.post('/api/signup', form.value);
+        
+    //     if (response.data === 'success')
+    //         router.push('/'); 
+    //   } catch (error) {
+    //     console.error('Submission failed:', error);
+    //   }
+    }
+
 
 </script>
   
