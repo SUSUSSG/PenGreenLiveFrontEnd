@@ -16,7 +16,8 @@
                 <BroadcastHistory v-for="(item, index) in broadcasthistoryData" :key="index"
                     :broadcast-title="item.broadcastTitle" :broadcast-image="item.broadcastImage"
                     :product-image="item.productImage" :product-nm="item.productNm" :list-price="item.listPrice"
-                    :user-uuid="item.userUUID" :channelNm="item.channelNm"/>
+                    :user-uuid="item.userUUID" :channelNm="item.channelNm" :viewedDate="item.viewedDate" 
+                    :channelImage="item.channelImage"/>
             </TabPanel>
 
             
@@ -29,8 +30,6 @@ import axios from 'axios';
 import { ref, onMounted } from 'vue'
 import { TabGroup, TabList, Tab, TabPanel } from '@headlessui/vue'
 import BroadcastHistory from '@/components/Card/broadcast-historyCard.vue';
-import ProductHistory from '@/components/Card/product-historyCard.vue';
-
 
 const buttons = ref([
     { title: "최근 본 방송" },

@@ -28,7 +28,7 @@ export default {
     return {
       previewImage: null,
       shopInfo: {
-        channelSeq: 4,
+        channelSeq: 1,
         channelNM: '',
         channelUrl: '',
         channelImage: null,
