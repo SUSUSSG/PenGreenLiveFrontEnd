@@ -11,7 +11,7 @@
 
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
-      <div v-if="selectedProduct.productSeq">
+      <div v-if="selectedProduct">
         <header class="flex justify-between pb-4">
           <div></div>
           <Button text="돌아가기" @click="closePurchaseModal"/>
@@ -24,7 +24,7 @@
         </div>
       </div>
 
-      <div v-if="!selectedProduct.productSeq" class="contents-wrap">
+      <div v-if="!selectedProduct" class="contents-wrap">
         <header class="flex justify-between items-center pb-4 border-b">
           <div></div> <!-- 좌측 공백 -->
           <Button class="exit-button" @click="onClickRedirect()">나가기</Button>
@@ -241,11 +241,12 @@ const calculateHeight = () => {
   computedHeight.value = viewportHeight - boxHeight.value;
 };
 
+// 방송 정보 가져오기
 const loadLiveBroadcastInfo = async () => {
   const broadcastId = route.params.broadcastId;
   console.log("해당 방송 id : " + broadcastId);
   try {
-    const response = await axios.get(`${APPLICATION_SERVER_URL}live-broadcast-info/${broadcastId}`);
+    const response = await axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}`);
     console.log(response.data);
     liveBroadcastInfo.value = response.data;
     console.log("broadcast info data : ", liveBroadcastInfo.value);
@@ -254,7 +255,6 @@ const loadLiveBroadcastInfo = async () => {
   }
   console.log("여기야~~ " + liveBroadcastInfo.value.broadcast.broadcastTitle);
 };
-
 
 // 상품 정보 가져오기
 const loadBroadcastProduct = async () => {
@@ -292,9 +292,10 @@ const showProductDetails = (product) => {
   selectedProduct.value = product;
 };
 const closePurchaseModal = () => {
-  store.commit('setSelectedProduct', {});
-  selectedProduct.value = {};
-  isOpen.value = false;
+  selectedProduct.value = null;
+  // store.commit('setSelectedProduct', {});
+  // selectedProduct.value = {};
+  // isOpen.value = false;
 };
 
 const handleDiscountedPrice = (discountedPrice, product) => {
