@@ -292,9 +292,10 @@ const showProductDetails = (product) => {
   selectedProduct.value = product;
 };
 const closePurchaseModal = () => {
-  store.commit('setSelectedProduct', {});
-  selectedProduct.value = {};
-  isOpen.value = false;
+  selectedProduct.value = null;
+  // store.commit('setSelectedProduct', {});
+  // selectedProduct.value = {};
+  // isOpen.value = false;
 };
 
 const handleDiscountedPrice = (discountedPrice, product) => {
