@@ -11,7 +11,7 @@
             <div class="buy-options__goods-item">
               <div class="goods-item__head">
                   <span class="goods-item__title" id="product-name">
-                    {{productName}}
+                    {{product.productName}}
                   </span>
               </div>
             <div class="goods-item__contents">
@@ -36,7 +36,7 @@
           구매수량<span id="total-count" class="count">{{ quantity }}</span>개
         </span>
           <span class="total-summary__price-sum">
-          총<span id="total-price" class="price">{{ totalPrice }}</span>원
+          총<span id="total-price" class="price">{{ formattedTotalPrice }}</span>원
         </span>
       </div>
       <div id="today-delivery" class="today-delivery is-checked" style="display: block;">
@@ -59,27 +59,31 @@
 
 <script setup>
 import Button from "@/components/Button";
-import { ref, computed, defineProps } from 'vue';
+import { ref, computed, defineProps, provide } from 'vue';
+import { useStore } from 'vuex';
 
-const emit = defineEmits(['update:isOpen', 'openTossPay', 'updateTotalPrice']);
+const store = useStore();
+const emit = defineEmits(['update:isOpen', 'openTossPay']);
+const product = computed(() => store.getters.selectedProduct || {});
+
+
 const close = () => {
   emit('update:isOpen', false);
 };
 
 function triggerTossPay() {
+  store.commit('updateQuantity', quantity.value);
+  store.commit('updateTotalAmount', totalPrice.value);
+  console.log("store ", store.getters.orderForm);
   emit('openTossPay'); 
 }
 
 const props = defineProps({
   isOpen: Boolean,
-  productName: String,
-  discountedPrice: Number,
-  address: String,
   activatePayPopup: Boolean,
 });
 
 const quantity = ref(1);
-
 const increaseQuantity = () => {
   quantity.value++;
 };
@@ -90,14 +94,9 @@ const decreaseQuantity = () => {
   }
 };
 
-const totalPrice = computed(() => {
-  const price = quantity.value * props.discountedPrice;
-  emit('updateTotalPrice', price);
-  return price.toLocaleString();
-});
-
-const formattedDiscountedPrice = computed(() => props.discountedPrice.toLocaleString());
-
+const formattedDiscountedPrice = computed(() => store.getters.discountedPrice.toLocaleString());
+const totalPrice = computed(() => (store.getters.discountedPrice * quantity.value));
+const formattedTotalPrice = computed(() => totalPrice.value.toLocaleString());
 </script>
 
 <style scoped>
