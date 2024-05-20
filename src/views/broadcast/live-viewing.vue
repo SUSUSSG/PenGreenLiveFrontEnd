@@ -50,7 +50,7 @@
                         :original-price="product.price"
                         :discount-rate="product.discountRate"
                         :product-img="product.productImg"
-                        
+                        :label-img="product.labelImg"
                         @click="showProductDetails(product)"
                         @updateDiscountedPrice="handleDiscountedPrice($event, product)"
                     />
@@ -126,33 +126,11 @@ const myUserName = `Subscriber${Math.floor(Math.random() * 100)}`;
 
 // 제품 구매 관련 상태 및 모달 제어
 const isOpen = ref(false);
-const selectedProduct = ref({});
-const productList = ref([
-  {
-    productSeq: 1,
-    brand: "동구밭",
-    productName: "동구밭 중건성 헤어케어 5종 기획세트",
-    price: 47500,
-    discountRate: 30,
-    productImg: "/src/assets/images/all-img/product-sample.jpg"
-  },
-  {
-    productSeq: 2,
-    brand: "세타필",
-    productName: "세타필 젠틀 바디워시 리프레싱 1,000ml",
-    price: 26500,
-    discountRate: 40,
-    productImg: "https://image.oliveyoung.co.kr/uploads/images/goods/400/10/0000/0013/A00000013522735ko.jpg?l=ko"
-  },
-  {
-    productSeq: 3,
-    brand: "민쉭이네",
-    productName: "가지가지 나뭇가지",
-    price: 10000,
-    discountRate: 30,
-    productImg: "https://ae01.alicdn.com/kf/S02dbb2aba6c14e829d6fd38a80523470G/33cm-DIY.jpeg_640x640.jpeg_.webp"
-  }
-]);
+const selectedProduct = ref(null);
+
+// 상품 내역
+const productList = ref([]);
+
 
 // 탭 상태 및 탭 그룹 데이터
 const firstTabGroup = ['상품 정보', '라이브 소개', '라이브 혜택'];
@@ -277,10 +255,31 @@ const loadLiveBroadcastInfo = async () => {
   console.log("여기야~~ " + liveBroadcastInfo.value.broadcast.broadcastTitle);
 };
 
-const isBroadcastLive = () => {
-  return liveBroadcastInfo.value.broadcast?.isLive;
-};
 
+// 상품 정보 가져오기
+const loadBroadcastProduct = async () => {
+  const broadcastId = route.params.broadcastId;
+  console.log("해당 방송 id : " + broadcastId);
+  try {
+    const response = await axios.get(`http://localhost:8090/live-broadcast-product/${broadcastId}`);
+    console.log(response.data);
+    productList.value = response.data.map(product => {
+      const labelImagesArray = product.labelImages.split(',').map(image => image.trim());
+      console.log("labelImagesArray:", labelImagesArray);
+      return {
+        productName: product.productNm,
+        price: product.listPrice,
+        discountRate: product.discountRate,
+        productImg: product.productImage,
+        labelImg: labelImagesArray
+      };
+    });
+    console.log("product info data : ", productList.value);
+  } catch (error) {
+    console.error('판새 상품 목록 load 실패 : ', error);
+  }
+};
+// 모달 및 제품 선택 제어
 const openModal = () => {
   isOpen.value = true;
 };
@@ -320,6 +319,7 @@ onMounted(() => {
   store.commit('setBroadcastId', mySessionId.value);
   window.addEventListener('beforeunload', leaveSession);
   loadLiveBroadcastInfo(); // 방송정보 호출
+  loadBroadcastProduct(); // 상품정보 호출
 });
 
 onBeforeUnmount(() => {
