@@ -127,6 +127,7 @@ const formattedViewedDate = computed(() => {
   align-items: center;
   margin-left: auto;
   text-align: right;
+  margin-right: 10px;
 }
 
 .viewed-time {
@@ -135,8 +136,8 @@ const formattedViewedDate = computed(() => {
 }
 
 .channel-image {
-  width: 50px; 
-  height: 50px; 
+  width: 40px; 
+  height: 40px; 
   margin-right: 8px;
   border-radius: 100%;
   aspect-ratio: 1 / 1;
