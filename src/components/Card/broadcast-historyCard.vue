@@ -3,22 +3,24 @@
     <div class="top-section">
       <img :src="broadcastImage" alt="Thumbnail Image" class="thumbnail-image">
       <div class="broadcast-info">
+        <div class="viewed-time">{{ formattedViewedDate  }}</div>
         <div class="broadcast-title">{{ broadcastTitle }}</div>
         <div class="product-section">
           <img :src="productImage" alt="Product Image" class="product-image">
           <div class="product-details">
             <div class="product-name">{{ productNm }}</div>
             <div class="product-price">{{ formatNumber(listPrice) }}</div>
-            <div class="channel-name"><p>{{ channelNm }}</p></div>
           </div>
         </div>
+        
       </div>
+      <div class="channel-name">{{ channelNm }}</div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { withDefaults, defineProps } from 'vue';
+import { withDefaults, defineProps, computed } from 'vue';
 
 const props = withDefaults(defineProps<{
   broadcastTitle: string;
@@ -28,6 +30,7 @@ const props = withDefaults(defineProps<{
   listPrice: number;
   userUUID: string;
   channelNm: string;
+  viewedDate: Date;
 }>(), {
   broadcastTitle: 'default-status',
   broadcastImage: 'default-img-url',
@@ -41,6 +44,17 @@ const props = withDefaults(defineProps<{
 const formatNumber = (value: number): string => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+const formattedViewedDate = computed(() => {
+  const date = new Date(props.viewedDate);
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  const hours = String(date.getHours()).padStart(2, '0');
+  const minutes = String(date.getMinutes()).padStart(2, '0');
+  const seconds = String(date.getSeconds()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+});
 </script>
 
 <style scoped>
@@ -55,7 +69,7 @@ const formatNumber = (value: number): string => {
 
 .top-section {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   height: 100%;
 }
 
@@ -106,7 +120,12 @@ const formatNumber = (value: number): string => {
 }
 
 .channel-name {
-  text-align: right !important;
-  flex-grow: 1 !important;
+  margin-left: auto;
+  text-align: right;
+}
+
+.viewed-time {
+  font-size: 12px;
+  color: gray;
 }
 </style>

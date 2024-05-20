@@ -16,7 +16,7 @@
                 <BroadcastHistory v-for="(item, index) in broadcasthistoryData" :key="index"
                     :broadcast-title="item.broadcastTitle" :broadcast-image="item.broadcastImage"
                     :product-image="item.productImage" :product-nm="item.productNm" :list-price="item.listPrice"
-                    :user-uuid="item.userUUID" :channelNm="item.channelNm"/>
+                    :user-uuid="item.userUUID" :channelNm="item.channelNm" :viewedDate="item.viewedDate"/>
             </TabPanel>
 
             
