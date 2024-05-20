@@ -62,7 +62,7 @@
                                                 <div class="flex items-center">
                                                     <input v-model="form.userId" type="text" name="pn" placeholder="아이디 (5~12자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
                                                     <div class="flex-grow-3">
-                                                        <Button type="button" text="중복체크" class="w-full"/>
+                                                        <Button @click="checkDuplicateUserId" type="button" text="중복체크" class="w-full"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -219,6 +219,17 @@
     // 휴대폰 번호 인증
     
     // 아이디 중복 체크
+    async function checkDuplicateUserId(userId) {
+        const id = form.value.userId;
+
+        try {
+            const response = await axios.post(`/api/check-id`, {id});
+            if (response.data==='available') alert("사용 가능한 아이디입니다.");
+            else alert("이미 사용 중인 아이디입니다.");
+        } catch (error) {
+            console.error('Error checking username:', error);
+        }
+    }
 
     // 비밀번호 일치 체크
 
@@ -227,14 +238,14 @@
     // 회원가입 정보 전송
     async function handleSubmit() {
         console.log("form ", form);
-    //     try {
-    //     const response = await axios.post('/api/signup', form.value);
+        try {
+        const response = await axios.post('/api/signup', form.value);
         
-    //     if (response.data === 'success')
-    //         router.push('/'); 
-    //   } catch (error) {
-    //     console.error('Submission failed:', error);
-    //   }
+        // if (response.data === 'success')
+        //     router.push('/'); 
+      } catch (error) {
+        console.error('Submission failed:', error);
+      }
     }
 
 
