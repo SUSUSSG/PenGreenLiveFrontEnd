@@ -3,34 +3,28 @@
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: 1 }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
-    <Live class="live-section-broad" 
+    <Live class="live-section-broad"
           show-icon-side-bar="true" show-title-bar="true"
-          :stream-manager="mainStreamManager" 
+          :stream-manager="mainStreamManager"
           :broadcast-title="broadcastTitle"
           :broadcast-image="broadcastImage" />
 
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
-      <div v-if="selectedProduct">
+      <div v-if="selectedProduct.productSeq">
         <header class="flex justify-between pb-4">
           <div></div>
           <Button text="돌아가기" @click="closePurchaseModal"/>
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-            <LiveBoardPurchase class="purchase-section"
-                               :brand="selectedProduct.brand"
-                               :productName="selectedProduct.productName"
-                               :price="selectedProduct.price"
-                               :discountRate="selectedProduct.discountRate"
-                               :discountedPrice="selectedProduct.discountedPrice"
-                               :product-img="selectedProduct.productImg"
-            />
+            <LiveBoardPurchase class="purchase-section">
+            </LiveBoardPurchase>
           </div>
         </div>
       </div>
 
-      <div v-if="!selectedProduct" class="contents-wrap">
+      <div v-if="!selectedProduct.productSeq" class="contents-wrap">
         <header class="flex justify-between items-center pb-4 border-b">
           <div></div> <!-- 좌측 공백 -->
           <Button class="exit-button" @click="onClickRedirect()">나가기</Button>
@@ -103,19 +97,20 @@
 
   </div>
 </template>
+
 <script setup>
-import {ref, onMounted, computed, watch} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
+import {ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
-import {OpenVidu} from 'openvidu-browser';
+import { OpenVidu } from 'openvidu-browser';
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
 import LiveBoardPurchase from "@/components/liveboard/liveboard-purchase.vue";
 import Live from "@/components/Video/live.vue";
 import ProductCard from "@/components/Card/product-card.vue";
 import Button from "@/components/Button";
 import PurchaseModal from "@/components/Modal/purchase-modal.vue";
-import {TabGroup, TabList, Tab, TabPanels, TabPanel} from '@headlessui/vue';
-import {useStore} from 'vuex';
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import { useStore } from 'vuex';
 
 // 라우트 및 환경변수 설정
 const route = useRoute();
@@ -135,6 +130,7 @@ const selectedProduct = ref(null);
 
 // 상품 내역
 const productList = ref([]);
+
 
 // 탭 상태 및 탭 그룹 데이터
 const firstTabGroup = ['상품 정보', '라이브 소개', '라이브 혜택'];
@@ -158,25 +154,66 @@ const store = useStore();
 const boxHeight = computed(() => store.getters.getBoxHeight);
 const computedHeight = ref(0);
 
+// 시청 시간 기록 상태
+const watchStartTime = ref(null);
+const watchEndTime = ref(null);
+
 // 세션 참가/종료 및 토큰 관련 메소드
 const joinSession = async () => {
+
   OV.value = new OpenVidu();
   session.value = OV.value.initSession();
-  session.value.on("streamCreated", ({stream}) => {
+  session.value.on("streamCreated", ({ stream }) => {
     mainStreamManager.value = session.value.subscribe(stream);
   });
 
   const token = await getToken(mySessionId.value);
-  session.value.connect(token, {clientData: myUserName});
+  await session.value.connect(token, { clientData: myUserName });
 
   window.addEventListener("beforeunload", leaveSession);
+
+  // 시청 시작 시간 기록
+  watchStartTime.value = new Date().toISOString();
+  console.log('Watch start time recorded:', watchStartTime.value);
 };
 
 const leaveSession = () => {
   if (session.value) session.value.disconnect();
+
+  // 시청 종료 시간 기록
+  watchEndTime.value = new Date().toISOString();
+  console.log('Watch end time recorded:', watchEndTime.value);
+
+  sendWatchTime();
   cleanSessionProperties();
+
   window.removeEventListener("beforeunload", leaveSession);
 };
+
+const handleBeforeUnload = (event) => {
+  leaveSession();
+  // 표준에 따르면, 이벤트 핸들러 내에서 반환된 값이 사용자에게 표시되지 않을 수 있습니다.
+  event.returnValue = '';
+};
+const sendWatchTime = async () => {
+  if (!watchStartTime.value || !watchEndTime.value) return;
+
+  const watchTime = {
+    broadcastSeq: mySessionId.value,
+    watchStartTime: watchStartTime.value,
+    watchEndTime: watchEndTime.value,
+  };
+
+  try {
+    const response = await axios.post(`${APPLICATION_SERVER_URL}api/watch-times`, watchTime);
+    console.log('Watch time successfully sent:', response.data);
+  } catch (error) {
+    console.error('Error adding watch time:', error);
+  }
+};
+const incrementProductClicks = async (broadcastSeq, productSeq) => {
+  await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/product/${productSeq}/increment-click`)
+}
 
 const cleanSessionProperties = () => {
   session.value = undefined;
@@ -188,8 +225,9 @@ const getToken = async (sessionId) => {
   const sessionData = await createSession(sessionId);
   return createToken(sessionData);
 };
+
 const createSession = async (sessionId) => {
-  const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`, {customSessionId: sessionId});
+  const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`, { customSessionId: sessionId });
   return response.data;
 };
 
@@ -197,17 +235,17 @@ const createToken = async (sessionId) => {
   const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`);
   return response.data;
 };
+
 const calculateHeight = () => {
   const viewportHeight = window.innerHeight;
   computedHeight.value = viewportHeight - boxHeight.value;
-}
+};
 
-// 방송 정보 가져오기
 const loadLiveBroadcastInfo = async () => {
   const broadcastId = route.params.broadcastId;
   console.log("해당 방송 id : " + broadcastId);
   try {
-    const response = await axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}`);
+    const response = await axios.get(`${APPLICATION_SERVER_URL}live-broadcast-info/${broadcastId}`);
     console.log(response.data);
     liveBroadcastInfo.value = response.data;
     console.log("broadcast info data : ", liveBroadcastInfo.value);
@@ -216,6 +254,7 @@ const loadLiveBroadcastInfo = async () => {
   }
   console.log("여기야~~ " + liveBroadcastInfo.value.broadcast.broadcastTitle);
 };
+
 
 // 상품 정보 가져오기
 const loadBroadcastProduct = async () => {
@@ -248,39 +287,47 @@ const updateModal = (value) => {
   isOpen.value = value;
 };
 const showProductDetails = (product) => {
+  store.commit('setSelectedProduct', product);
+  incrementProductClicks(mySessionId.value, 3) // 프로덕트 seq 동적으로 바꿔야함
   selectedProduct.value = product;
 };
 const closePurchaseModal = () => {
-  selectedProduct.value = null;
+  store.commit('setSelectedProduct', {});
+  selectedProduct.value = {};
+  isOpen.value = false;
 };
+
 const handleDiscountedPrice = (discountedPrice, product) => {
   product.discountedPrice = discountedPrice;
 };
 const incrementViewsCount = async (sessionId) => {
   console.log("세션 id", sessionId);
-  // await axios.patch(`http://localhost:8090/broadcasts/statistics/${sessionId}/viewsCount`, {}, {
-  //   withCredentials: true
-  // });
-  await axios.patch(`http://localhost:8090/broadcasts/statistics/${sessionId}/viewsCount`);
-}
-
-// 나가기 버튼 동작
-const onClickRedirect = () => {
-  router.push({name: 'home'});
+  await axios.patch(`${APPLICATION_SERVER_URL}broadcasts/statistics/${sessionId}/viewsCount`);
 };
 
-// 초기 설정 및 리스너 등록
+const onClickRedirect = () => {
+  router.push({ name: 'home' });
+};
+
 onMounted(() => {
   mySessionId.value = route.params.broadcastId;
   joinSession();
   calculateHeight();
   incrementViewsCount(mySessionId.value);
   window.addEventListener('resize', calculateHeight);
+  store.commit('resetState');
+  store.commit('setBroadcastId', mySessionId.value);
+  window.addEventListener('beforeunload', leaveSession);
   loadLiveBroadcastInfo(); // 방송정보 호출
   loadBroadcastProduct(); // 상품정보 호출
 });
 
-watch(boxHeight, calculateHeight)
+onBeforeUnmount(() => {
+  leaveSession();
+  window.removeEventListener('beforeunload', handleBeforeUnload);
+});
+
+watch(boxHeight, calculateHeight);
 </script>
 
 <style scoped>

@@ -15,13 +15,14 @@
       <TabPanel>
         <orderlist v-for="(item, index) in unreviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
                    :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
-                   :orderProductPrice="item.orderProductPrice" @review-submitted="handleReviewSubmitted" />
+                   :orderProductPrice="item.orderProductPrice" :productSeq="item.productSeq" :userUUID="userUUID" @review-submitted="handleReviewSubmitted" />
       </TabPanel>
 
       <TabPanel>
         <reviewlist v-for="(item, index) in reviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
                     :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
-                    :orderProductPrice="item.orderProductPrice" :reviewContent="item.reviewContent"/>
+                    :orderProductPrice="item.orderProductPrice" :reviewContent="item.reviewContent"
+                    :reviewSeq="item.reviewSeq" :userUUID="userUUID" @review-deleted="handleReviewDeleted"/>
       </TabPanel>
     </TabGroup>
   </div>
@@ -41,6 +42,7 @@ const buttons = ref([
 
 const unreviewedOrders = ref([]);
 const reviewedOrders = ref([]);
+const userUUID = 'f23a72e0-1347-11ef-b085-f220affc9a21';
 
 const fetchOrders = async (userUuid) => {
   try {
@@ -64,9 +66,15 @@ const handleReviewSubmitted = (productSeq) => {
   }
 };
 
+const handleReviewDeleted = (reviewSeq) => {
+  const reviewIndex = reviewedOrders.value.findIndex(review => review.reviewSeq === reviewSeq);
+  if (reviewIndex !== -1) {
+    reviewedOrders.value.splice(reviewIndex, 1);
+  }
+};
+
 onMounted(() => {
-  const userUuid = 'f23a72e0-1347-11ef-b085-f220affc9a21'; // 실제 사용자 UUID로 대체
-  fetchOrders(userUuid);
+  fetchOrders(userUUID);
 });
 </script>
 
