@@ -177,6 +177,7 @@ export default {
         elapsedTime,
       });
 
+      await this.updateProductClicks(this.mySessionId);
       // 평균 시청자수와 최대 시청자수, 방송 진행시간을 db에 반영하는 axios 요청
       await this.updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration: elapsedTime});
 
@@ -247,6 +248,14 @@ export default {
         console.log('Watch time calculated and deleted:', response.data);
       } catch (error) {
         console.error('Error calculating and deleting watch time:', error.response ? error.response.data : error.message);
+      }
+    },
+    async updateProductClicks(broadcastSeq){
+      try{
+        const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/update-average-clicks`)
+        console.log(`성공적 클릭수 업데이트`);
+      } catch (error){
+        console.error('클릭수 업데이트 실패', error.response ? error.response.data : error.message);
       }
     },
     updateStatistics({maxViewers, averageViewers}) {
