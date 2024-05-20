@@ -64,7 +64,7 @@ import Profile from "@/components/Chatbot/Profile.vue";
 import Refund from "@/components/Chatbot/Refund.vue";
 import BroadcastCard from "@/components/Chatbot/Broadcast.vue";
 import RecentViewedBroadcasts from "@/components/Chatbot/RecentViewedBroadcasts.vue";
-
+import Payment from "@/components/Chatbot/Payment.vue";
 export default {
   components: {
     Icon: markRaw(Icon),
@@ -74,6 +74,7 @@ export default {
     Refund: markRaw(Refund),
     BroadcastCard: markRaw(BroadcastCard),
     RecentViewedBroadcasts : markRaw(RecentViewedBroadcasts),
+    Payment : markRaw(Payment),
   },
   data() {
     return {
@@ -374,6 +375,27 @@ export default {
               this.scrollToBottom();
             }, 100);
           } else if (botMessageText.includes("@결제수단")) {
+            const botMessage = {
+              id: this.messages.length + 1,
+              text: "결제수단 관리는 마이페이지의 결제수단 관리에서 가능해요!",
+              type: "bot",
+            };
+            this.messages.push(botMessage);
+            const brandpayMessage = {
+              id: this.messages.length + 1,
+              type: "component",
+              component: markRaw(Payment),
+            };
+            this.messages.push(brandpayMessage);
+            const afterBotMessage = {
+              id: this.messages.length + 1,
+              text: "최근 시청기록을 가져왔어요~ 다른 도움이 필요하시면 말씀해주세요 :)",
+              type: "bot",
+            };
+            this.messages.push(afterBotMessage);
+            setTimeout(() => {
+              this.scrollToBottom();
+            }, 100);
           } else {
             const botMessage = {
               id: this.messages.length + 1,
