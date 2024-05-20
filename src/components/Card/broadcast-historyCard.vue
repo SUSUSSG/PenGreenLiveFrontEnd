@@ -9,6 +9,7 @@
           <div class="product-details">
             <div class="product-name">{{ productNm }}</div>
             <div class="product-price">{{ formatNumber(listPrice) }}</div>
+            <div class="channel-name"><p>{{ channelNm }}</p></div>
           </div>
         </div>
       </div>
@@ -26,13 +27,15 @@ const props = withDefaults(defineProps<{
   productNm: string;
   listPrice: number;
   userUUID: string;
+  channelNm: string;
 }>(), {
   broadcastTitle: 'default-status',
   broadcastImage: 'default-img-url',
   productImage: 'default-img-url',
   productNm: 'default-product',
   listPrice: 0,
-  userUUID: ''
+  userUUID: '',
+  channelNm:''
 });
 
 const formatNumber = (value: number): string => {
@@ -100,5 +103,10 @@ const formatNumber = (value: number): string => {
 .product-price {
   font-size: 14px;
   font-weight: bold;
+}
+
+.channel-name {
+  text-align: right !important;
+  flex-grow: 1 !important;
 }
 </style>

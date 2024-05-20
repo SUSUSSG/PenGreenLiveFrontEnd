@@ -16,20 +16,10 @@
                 <BroadcastHistory v-for="(item, index) in broadcasthistoryData" :key="index"
                     :broadcast-title="item.broadcastTitle" :broadcast-image="item.broadcastImage"
                     :product-image="item.productImage" :product-nm="item.productNm" :list-price="item.listPrice"
-                    :user-uuid="item.userUUID" />
+                    :user-uuid="item.userUUID" :channelNm="item.channelNm"/>
             </TabPanel>
 
-            <TabPanel style="padding-left: 6px;">
-                <div class="header">
-                    <div class="header-item">상품이미지</div>
-                    <div class="header-item">상품명</div>
-                    <div class="header-item">브랜드</div>
-                    <div class="header-item">가격 정보</div>
-                </div>
-                <ProductHistory v-for="(item, index) in producthistoryData" :key="index"
-                    :product-image-src="item.productImageSrc" :product-name="item.productName"
-                    :product-brand="item.productBrand" :product-price="item.productPrice" />
-            </TabPanel>
+            
         </TabGroup>
     </div>
 </template>
@@ -44,7 +34,6 @@ import ProductHistory from '@/components/Card/product-historyCard.vue';
 
 const buttons = ref([
     { title: "최근 본 방송" },
-    { title: "최근 본 상품" }
 ]);
 
 const broadcasthistoryData = ref([]);
