@@ -1,33 +1,22 @@
 <template>
   <div class="content-wrapper">
-    <!-- 채널 전체 상품과 상품 상세 정보 -->
+
     <div class="flex-row">
       <div class="card-content">
         <span class="card-title">채널 전체 상품</span>
-        <productlist :headers="['상품 코드', '상품 이름']" :data="[
-          ['P001', '제품1'],
-          ['P002', '제품2'],
-          ['P003', '제품3'],
-          ['P004', '제품4'],
-          ['P005', '제품5'],
-          ['P006', '제품6'],
-          ['P007', '제품7'],
-          ['P008', '제품8'],
-          ['P009', '제품9'],
-          ['P010', '제품10'],
-          ['P011', '제품11'],
-          ['P012', '제품12'],
-          ['P013', '제품13'],
-        ]" />
+        <productlist
+          :headers="['상품코드', '상품명']"
+          :data="allProducts"
+          @product-click="fetchProductDetails"
+        />
       </div>
       <div class="card-content">
         <span class="card-title">상품 상세 정보</span>
-        <productdetail v-bind="productdetailData" />
+        <productdetail v-bind="productData" class="productdetail" />
       </div>
 
       <div class="card-content">
         <span class="card-title">리뷰 내용 요약</span>
-
       </div>
 
     </div>
@@ -38,8 +27,9 @@
 </template>
 
 <script>
+import axios from 'axios';
 import productlist from "@/components/Table/statistics-default-table.vue";
-import productdetail from "@/components/Card/review-statistics-card.vue";
+import productdetail from "@/components/Card/product-statistics-card.vue";
 import reviewchart from "@/components/reivew/reviewchart.vue";
 
 export default {
@@ -50,25 +40,70 @@ export default {
   },
   data() {
     return {
-      productdetailData: {
-        imageUrl: "https://placehold.co/80x80",
-        productCode: "ABC123",
-        greenCode: "GR001",
-        certificationImages: [
-          "https://placehold.co/50x50",
-          "https://placehold.co/50x50",
-        ],
-        certificationReason: "This product meets our environmental standards.",
-        productPrice: "$29.99",
-        brand: "Brand X",
-        category: "Electronics",
+      allProducts: [],
+      productData: {
+        imageUrl: "",
+        productCode: "",
+        greenCode: "",
+        certificationImages: [],
+        certificationReason: "",
+        productPrice: "",
+        brand: "",
+        category: "",
       },
+    }
+  },
+  async mounted() {
+    await this.fetchAllProducts();
+
+    // 첫 번째 상품 상세 정보 조회
+    if (this.allProducts.length > 0) {
+      this.fetchProductDetails(this.allProducts[0][0]);
+    }
+  },
+  methods: {
+    async fetchAllProducts() {
+      try {
+        const response = await axios.get('http://localhost:8090/products/statistics/all-products', {
+          params: { channelSeq: 1 }
+        });
+        this.allProducts = response.data.map((product) => [
+          product.productCd,
+          product.productNm,
+        ]);
+      } catch (error) {
+        console.error('Error fetching all products:', error);
+      }
+    },
+    async fetchProductDetails(productCd) {
+      try {
+        const response = await axios.get('http://localhost:8090/products/statistics/product-details', {
+          params: { productCd }
+        });
+        const product = response.data;
+        this.productData = {
+          imageUrl: product.productImage,
+          productCode: product.productCd,
+          greenCode: product.greenProductId,
+          certificationImages: product.labels.map(label => label.labelImage),
+          certificationReason: product.labels.map(label => label.certificationReason).join(', '),
+          productPrice: `${product.listPrice}원`,
+          brand: product.brand,
+          category: product.categoryNm,
+        };
+      } catch (error) {
+        console.error('Error fetching product details:', error);
+      }
     }
   }
 };
 </script>
 
 <style scoped>
+
+.productdetail{
+  overflow-y: scroll;
+}
 
 .content-wrapper {
   display: flex;
