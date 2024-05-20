@@ -32,7 +32,7 @@
           </span>
           <span class="cell">{{ product.discountPrice.toLocaleString() }}원</span>
           <span class="cell">
-            <Switch v-model="product.showNowImg" />
+            <Switch v-model="product.showNowImg" :activeClass="`bg-primary-500`"/>
           </span>
         </div>
         <!-- 상품 상세정보 모달 -->
@@ -231,5 +231,10 @@ export default {
 
 .real-time-info p {
   margin: 5px 0;
+}
+
+/* 스위치 색상 */
+.on-color {
+  background-color: #134010;
 }
 </style>
