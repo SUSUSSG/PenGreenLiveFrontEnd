@@ -56,6 +56,7 @@
                         :original-price="product.price"
                         :discount-rate="product.discountRate"
                         :product-img="product.productImg"
+                        :label-img="product.labelImg"
                         @click="showProductDetails(product)"
                         @updateDiscountedPrice="handleDiscountedPrice($event, product)"
                     />
@@ -223,19 +224,22 @@ const loadBroadcastProduct = async () => {
   try {
     const response = await axios.get(`http://localhost:8090/live-broadcast-product/${broadcastId}`);
     console.log(response.data);
-    productList.value = response.data.map(product => ({
-      productName: product.productNm,
-      price: product.listPrice,
-      discountRate: product.discountRate,
-      productImg: product.productImage
-    }));
+    productList.value = response.data.map(product => {
+      const labelImagesArray = product.labelImages.split(',').map(image => image.trim());
+      console.log("labelImagesArray:", labelImagesArray);
+      return {
+        productName: product.productNm,
+        price: product.listPrice,
+        discountRate: product.discountRate,
+        productImg: product.productImage,
+        labelImg: labelImagesArray
+      };
+    });
     console.log("product info data : ", productList.value);
   } catch (error) {
     console.error('판새 상품 목록 load 실패 : ', error);
   }
-  console.log("여기야^^ " + productList.value[0].productSeq);
 };
-
 // 모달 및 제품 선택 제어
 const openModal = () => {
   isOpen.value = true;
