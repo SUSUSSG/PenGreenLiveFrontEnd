@@ -14,7 +14,8 @@
         </div>
         
       </div>
-      <div class="channel-name">{{ channelNm }}</div>
+      
+      <div class="channel-name"><img :src="channelImage" class="channel-image"> {{ channelNm }} </div>
     </div>
   </div>
 </template>
@@ -31,6 +32,7 @@ const props = withDefaults(defineProps<{
   userUUID: string;
   channelNm: string;
   viewedDate: Date;
+  channelImage: string;
 }>(), {
   broadcastTitle: 'default-status',
   broadcastImage: 'default-img-url',
@@ -38,7 +40,8 @@ const props = withDefaults(defineProps<{
   productNm: 'default-product',
   listPrice: 0,
   userUUID: '',
-  channelNm:''
+  channelNm:'',
+  channelImage:''
 });
 
 const formatNumber = (value: number): string => {
@@ -120,6 +123,8 @@ const formattedViewedDate = computed(() => {
 }
 
 .channel-name {
+  display: flex;
+  align-items: center;
   margin-left: auto;
   text-align: right;
 }
@@ -127,5 +132,15 @@ const formattedViewedDate = computed(() => {
 .viewed-time {
   font-size: 12px;
   color: gray;
+}
+
+.channel-image {
+  width: 50px; 
+  height: 50px; 
+  margin-right: 8px;
+  border-radius: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 0.5px solid gray;
 }
 </style>
