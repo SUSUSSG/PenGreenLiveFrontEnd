@@ -3,8 +3,12 @@
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: 1 }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
-    <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true"
-          :stream-manager="mainStreamManager"></Live>
+    <Live class="live-section-broad"
+          show-icon-side-bar="true" show-title-bar="true"
+          :stream-manager="mainStreamManager"
+          :broadcast-title="broadcastTitle"
+          :broadcast-image="broadcastImage" />
+
     <div class="live-section relative" :class="{'active-overlay': isOpen}">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
       <div v-if="selectedProduct.productSeq">
@@ -55,7 +59,7 @@
                   <div v-else-if="tab === '라이브 소개'">{{ liveIntroduction }}</div>
                   <!-- 라이브 혜택 탭 -->
                   <ul v-else-if="tab === '라이브 혜택'" class="benefits-list">
-                    <li v-for="benefit in liveBenefits" :key="benefit">{{ benefit }}</li>
+                    <li v-for="benefit in liveBenefits" :key="benefit">{{ benefit.benefitContent }}</li>
                   </ul>
                 </TabPanel>
               </TabPanels>
@@ -74,13 +78,13 @@
                 <TabPanel v-for="tab in secondTabGroup" :key="tab" v-show="tab === activeSecondTab" class="tab-panel">
                   <!-- 공지사항 탭 -->
                   <ul v-if="tab === '공지사항'" class="notice-list">
-                    <li v-for="notice in notices" :key="notice">{{ notice }}</li>
+                    <li v-for="notice in notices" :key="notice">{{ notice.noticeContent }}</li>
                   </ul>
                   <!-- 자주 묻는 질문 탭 -->
                   <dl v-else-if="tab === '자주 묻는 질문'">
                     <template v-for="(faq, index) in faqs" :key="`faq-${index}`">
-                      <dt :data-question="`Q: ${faq.question}`">{{ faq.question }}</dt>
-                      <dd>{{ faq.answer }}</dd>
+                      <dt :data-question="`Q: ${faq.question}`">{{ faq.questionTitle }}</dt>
+                      <dd>{{ faq.questionAnswer }}</dd>
                     </template>
                   </dl>
                 </TabPanel>
@@ -93,19 +97,20 @@
 
   </div>
 </template>
+
 <script setup>
-import {ref, onMounted, computed, watch} from 'vue';
-import {useRoute, useRouter} from 'vue-router';
+import {ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
-import {OpenVidu} from 'openvidu-browser';
+import { OpenVidu } from 'openvidu-browser';
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
 import LiveBoardPurchase from "@/components/liveboard/liveboard-purchase.vue";
 import Live from "@/components/Video/live.vue";
 import ProductCard from "@/components/Card/product-card.vue";
 import Button from "@/components/Button";
 import PurchaseModal from "@/components/Modal/purchase-modal.vue";
-import {TabGroup, TabList, Tab, TabPanels, TabPanel} from '@headlessui/vue';
-import {useStore} from 'vuex';
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import { useStore } from 'vuex';
 
 // 라우트 및 환경변수 설정
 const route = useRoute();
@@ -155,42 +160,82 @@ const secondTabGroup = ['공지사항', '자주 묻는 질문'];
 const activeFirstTab = ref(firstTabGroup[0]);
 const activeSecondTab = ref(secondTabGroup[0]);
 
+// 방송 제목, 썸네일
+const liveBroadcastInfo = ref({});
+const broadcastTitle = computed(() => liveBroadcastInfo.value.broadcast?.broadcastTitle || '');
+const broadcastImage = computed(() => liveBroadcastInfo.value.broadcast?.broadcastImage || '');
+
 // 정보, 혜택, FAQ 및 알림 상태
-const liveIntroduction = "라이브 소개 입니다.";
-const liveBenefits = ["혜택1", "혜택2"];
-const notices = [
-  "안녕하세요 상품 구매 이후 채팅창에 구매 인증해주시면 사은품이 나갑니다 ^^",
-  "현금으로 결제할시 추가 서비스 들어갑니다 ^^"
-];
-const faqs = [
-  {question: "질문 1", answer: "답변 1"},
-  {question: "질문 2", answer: "답변 2"}
-];
+const liveIntroduction = computed(() => liveBroadcastInfo.value.broadcast?.broadcastSummary || '');
+const liveBenefits = computed(() => liveBroadcastInfo.value.benefits || []);
+const notices = computed(() => liveBroadcastInfo.value.notices || []);
+const faqs = computed(() =>liveBroadcastInfo.value.faqs || []);
 
 // 뷰포트 및 스크롤 높이 계산
 const store = useStore();
 const boxHeight = computed(() => store.getters.getBoxHeight);
 const computedHeight = ref(0);
 
+// 시청 시간 기록 상태
+const watchStartTime = ref(null);
+const watchEndTime = ref(null);
+
 // 세션 참가/종료 및 토큰 관련 메소드
 const joinSession = async () => {
+
   OV.value = new OpenVidu();
   session.value = OV.value.initSession();
-  session.value.on("streamCreated", ({stream}) => {
+  session.value.on("streamCreated", ({ stream }) => {
     mainStreamManager.value = session.value.subscribe(stream);
   });
 
   const token = await getToken(mySessionId.value);
-  session.value.connect(token, {clientData: myUserName});
+  await session.value.connect(token, { clientData: myUserName });
 
   window.addEventListener("beforeunload", leaveSession);
+
+  // 시청 시작 시간 기록
+  watchStartTime.value = new Date().toISOString();
+  console.log('Watch start time recorded:', watchStartTime.value);
 };
 
 const leaveSession = () => {
   if (session.value) session.value.disconnect();
+
+  // 시청 종료 시간 기록
+  watchEndTime.value = new Date().toISOString();
+  console.log('Watch end time recorded:', watchEndTime.value);
+
+  sendWatchTime();
   cleanSessionProperties();
+
   window.removeEventListener("beforeunload", leaveSession);
 };
+
+const handleBeforeUnload = (event) => {
+  leaveSession();
+  // 표준에 따르면, 이벤트 핸들러 내에서 반환된 값이 사용자에게 표시되지 않을 수 있습니다.
+  event.returnValue = '';
+};
+const sendWatchTime = async () => {
+  if (!watchStartTime.value || !watchEndTime.value) return;
+
+  const watchTime = {
+    broadcastSeq: mySessionId.value,
+    watchStartTime: watchStartTime.value,
+    watchEndTime: watchEndTime.value,
+  };
+
+  try {
+    const response = await axios.post(`${APPLICATION_SERVER_URL}api/watch-times`, watchTime);
+    console.log('Watch time successfully sent:', response.data);
+  } catch (error) {
+    console.error('Error adding watch time:', error);
+  }
+};
+const incrementProductClicks = async (broadcastSeq, productSeq) => {
+  await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/product/${productSeq}/increment-click`)
+}
 
 const cleanSessionProperties = () => {
   session.value = undefined;
@@ -202,8 +247,9 @@ const getToken = async (sessionId) => {
   const sessionData = await createSession(sessionId);
   return createToken(sessionData);
 };
+
 const createSession = async (sessionId) => {
-  const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`, {customSessionId: sessionId});
+  const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`, { customSessionId: sessionId });
   return response.data;
 };
 
@@ -211,11 +257,30 @@ const createToken = async (sessionId) => {
   const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`);
   return response.data;
 };
+
 const calculateHeight = () => {
   const viewportHeight = window.innerHeight;
   computedHeight.value = viewportHeight - boxHeight.value;
-}
-// 모달 및 제품 선택 제어
+};
+
+const loadLiveBroadcastInfo = async () => {
+  const broadcastId = route.params.broadcastId;
+  console.log("해당 방송 id : " + broadcastId);
+  try {
+    const response = await axios.get(`${APPLICATION_SERVER_URL}live-broadcast-info/${broadcastId}`);
+    console.log(response.data);
+    liveBroadcastInfo.value = response.data;
+    console.log("broadcast info data : ", liveBroadcastInfo.value);
+  } catch (error) {
+    console.error('방송 예정 목록 load 실패 : ', error);
+  }
+  console.log("여기야~~ " + liveBroadcastInfo.value.broadcast.broadcastTitle);
+};
+
+const isBroadcastLive = () => {
+  return liveBroadcastInfo.value.broadcast?.isLive;
+};
+
 const openModal = () => {
   isOpen.value = true;
 };
@@ -224,6 +289,7 @@ const updateModal = (value) => {
 };
 const showProductDetails = (product) => {
   store.commit('setSelectedProduct', product);
+  incrementProductClicks(mySessionId.value, 3) // 프로덕트 seq 동적으로 바꿔야함
   selectedProduct.value = product;
 };
 const closePurchaseModal = () => {
@@ -237,18 +303,13 @@ const handleDiscountedPrice = (discountedPrice, product) => {
 };
 const incrementViewsCount = async (sessionId) => {
   console.log("세션 id", sessionId);
-  // await axios.patch(`http://localhost:8090/broadcasts/statistics/${sessionId}/viewsCount`, {}, {
-  //   withCredentials: true
-  // });
-  await axios.patch(`http://localhost:8090/broadcasts/statistics/${sessionId}/viewsCount`);
-}
-
-// 나가기 버튼 동작
-const onClickRedirect = () => {
-  router.push({name: 'home'});
+  await axios.patch(`${APPLICATION_SERVER_URL}broadcasts/statistics/${sessionId}/viewsCount`);
 };
 
-// 초기 설정 및 리스너 등록
+const onClickRedirect = () => {
+  router.push({ name: 'home' });
+};
+
 onMounted(() => {
   mySessionId.value = route.params.broadcastId;
   joinSession();
@@ -257,9 +318,16 @@ onMounted(() => {
   window.addEventListener('resize', calculateHeight);
   store.commit('resetState');
   store.commit('setBroadcastId', mySessionId.value);
+  window.addEventListener('beforeunload', leaveSession);
+  loadLiveBroadcastInfo(); // 방송정보 호출
 });
 
-watch(boxHeight, calculateHeight)
+onBeforeUnmount(() => {
+  leaveSession();
+  window.removeEventListener('beforeunload', handleBeforeUnload);
+});
+
+watch(boxHeight, calculateHeight);
 </script>
 
 <style scoped>
@@ -467,5 +535,10 @@ ul.notice-list li, ul.benefits-list li {
   height: auto;
   max-width: 552px !important;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.tab-active {
+  border-color: #134010;
+  color: #134010;
 }
 </style>

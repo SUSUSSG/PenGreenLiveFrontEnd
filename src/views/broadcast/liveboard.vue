@@ -1,21 +1,28 @@
 <template>
-  <div class="main-wrapper">
-    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast"/>
-    <div class="content-wrapper">
-      <div class="flex-row">
-        <div class="flex-col">
-          <div class="flex-row">
-            <LiveboardBroad :stream-manager="mainStreamManager"/>
+  <div className="main-wrapper">
+    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast"
+                   :boradcast-title="liveBroadcastInfo.broadcast.broadcastTitle"
+                   :live-date-time="liveBroadcastInfo.broadcast.broadcastScheduledTime"/>
+    <div className="content-wrapper">
+      <div className="flex-row">
+        <div className="flex-col">
+          <div className="flex-row">
+            <LiveboardBroad :stream-manager="mainStreamManager"
+                            :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage"/>
             <LiveBoardChat :current-room="{ id: 1 }" :current-writer="'판매자'"/>
           </div>
         </div>
-        <div class="flex-col">
-          <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck" @update-statistics="updateStatistics"/>
+        <div className="flex-col">
+          <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck"
+                               @update-statistics="updateStatistics"/>
           <LiveboardProduct/>
           <LiveboardPrompt/>
         </div>
-        <div class="flex-col">
-          <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호" @broadcast-device-selected="handleDeviceChange"/>
+        <div className="flex-col">
+          <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호"
+                            @broadcast-device-selected="handleDeviceChange"
+                            :notices="liveBroadcastInfo.notices"
+                            :faqs="liveBroadcastInfo.faqs"/>
         </div>
       </div>
     </div>
@@ -24,7 +31,7 @@
 
 <script>
 import axios from 'axios';
-import { OpenVidu } from 'openvidu-browser';
+import {OpenVidu} from 'openvidu-browser';
 import LiveBoardTime from "@/components/LiveBoard/liveboard-time.vue";
 import LiveBoardChat from "@/components/LiveBoard/liveboard-chat.vue";
 import LiveboardBroad from "@/components/liveboard/liveboard-broad.vue";
@@ -57,18 +64,21 @@ export default {
       readyToCheck: false,
       maxViewers: 0,
       averageViewers: 0,
+
+      // 실시간 방송 정보
+      liveBroadcastInfo: []
     };
   },
   methods: {
     //방송중인 상태에서 사용하는 카메라와 오디오 장치를 변경합니다.
-    handleDeviceChange({ camera, microphone }) {
+    handleDeviceChange({camera, microphone}) {
       // 카메라 변경
       if (camera) {
         console.log("카메라");
         console.log(camera);
         navigator.mediaDevices
             .getUserMedia({
-              video: { deviceId: camera, width: 900, height: 1600 } // 새로운 해상도 설정
+              video: {deviceId: camera, width: 900, height: 1600} // 새로운 해상도 설정
             })
             .then((newVideoStream) => {
               console.log(camera);
@@ -83,7 +93,7 @@ export default {
       // 마이크 변경
       if (microphone) {
         navigator.mediaDevices
-            .getUserMedia({ audio: { deviceId: microphone } })
+            .getUserMedia({audio: {deviceId: microphone}})
             .then((newAudioStream) => {
               const audioTrack = newAudioStream.getAudioTracks()[0];
               this.publisher.replaceTrack(audioTrack);
@@ -115,23 +125,24 @@ export default {
         console.log("세션은 이미 활성화 상태입니다.");
         return;
       }
+      this.createProductClicks(this.$route.params.broadcastId);
       this.OV = new OpenVidu();
       this.session = this.OV.initSession();
-      this.session.on("streamCreated", ({ stream }) => {
+      this.session.on("streamCreated", ({stream}) => {
         const subscriber = this.session.subscribe(stream);
         this.subscribers.push(subscriber);
       });
-      this.session.on("streamDestroyed", ({ stream }) => {
+      this.session.on("streamDestroyed", ({stream}) => {
         const index = this.subscribers.indexOf(stream.streamManager, 0);
         if (index >= 0) {
           this.subscribers.splice(index, 1);
         }
       });
-      this.session.on("exception", ({ exception }) => {
+      this.session.on("exception", ({exception}) => {
         console.warn(exception);
       });
       this.getToken(this.mySessionId).then(token => {
-        this.session.connect(token, { clientData: this.myUserName })
+        this.session.connect(token, {clientData: this.myUserName})
             .then(() => {
               this.publisher = this.OV.initPublisher(undefined, {
                 audioSource: undefined,
@@ -166,8 +177,12 @@ export default {
         elapsedTime,
       });
 
+      await this.updateProductClicks(this.mySessionId);
       // 평균 시청자수와 최대 시청자수, 방송 진행시간을 db에 반영하는 axios 요청
-      await this.updateBroadcastStatistics({ maxViewerCount, avgViewerCount, broadcastDuration: elapsedTime });
+      await this.updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration: elapsedTime});
+
+      // 평균 시청 시간 계산 및 데이터 삭제 요청
+      await this.calculateAndDeleteWatchTime(this.mySessionId);
 
       // 방송 종료 로직
       this.leaveSession();
@@ -199,16 +214,16 @@ export default {
       return this.createSession(sessionId).then(sessionId => this.createToken(sessionId));
     },
     createSession(sessionId) {
-      return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions`, { customSessionId: sessionId }, {
-        headers: { 'Content-Type': 'application/json' }
+      return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions`, {customSessionId: sessionId}, {
+        headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
     createToken(sessionId) {
       return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions/${sessionId}/connections`, {}, {
-        headers: { 'Content-Type': 'application/json' }
+        headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
-    async updateBroadcastStatistics({ maxViewerCount, avgViewerCount, broadcastDuration }) {
+    async updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration}) {
       console.log('Updating broadcast statistics:', {
         maxViewerCount,
         avgViewerCount,
@@ -227,36 +242,77 @@ export default {
         console.error('Error updating statistics:', error.response ? error.response.data : error.message);
       }
     },
-    updateStatistics({ maxViewers, averageViewers }) {
+    async calculateAndDeleteWatchTime(broadcastSeq) {
+      try {
+        const response = await axios.post(`http://localhost:8090/api/watch-times/calculate/${broadcastSeq}`);
+        console.log('Watch time calculated and deleted:', response.data);
+      } catch (error) {
+        console.error('Error calculating and deleting watch time:', error.response ? error.response.data : error.message);
+      }
+    },
+    async updateProductClicks(broadcastSeq){
+      try{
+        const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/update-average-clicks`)
+        console.log(`성공적 클릭수 업데이트`);
+      } catch (error){
+        console.error('클릭수 업데이트 실패', error.response ? error.response.data : error.message);
+      }
+    },
+    updateStatistics({maxViewers, averageViewers}) {
       console.log('Updating parent statistics:', {
         maxViewers,
         averageViewers,
       });
       this.maxViewers = maxViewers;
       this.averageViewers = averageViewers;
+    },
+    async createProductClicks(broadcastSeq) {
+      try {
+        const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}`);
+        console.log('Product clicks created:', response.data);
+      } catch (error) {
+        console.error('Error creating product clicks:', error.response ? error.response.data : error.message);
+      }
+    },
+    loadLiveBroadcastInfo() {
+      const broadcastId = this.$route.params.broadcastId;
+      console.log("해당 방송 id : " + broadcastId);
+      axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}`)
+          .then((response) => {
+            console.log(response.data);
+            this.liveBroadcastInfo = response.data;
+            this.loading = false;
+            console.log("broadcast info data : ", this.liveBroadcastInfo);
+          })
+          .catch(error => {
+            console.error('방송 예정 목록 load 실패 : ', error);
+            this.loading = false;
+          })
     }
   },
   //컴포넌트가 생성될 시 mySessionId변수에 현재 url정보(방송id)를 할당합니다.
   created() {
     this.mySessionId = this.$route.params.broadcastId || 'defaultSessionId';
+    this.loadLiveBroadcastInfo()
   }
 };
 </script>
 
 <style lang="scss" scoped>
-/* CSS remains the same as before */
 .main-wrapper {
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
 }
+
 .content-wrapper {
   width: 100%;
   height: 100%;
   padding: 1rem;
   overflow: hidden;
 }
+
 .flex-row {
   display: flex !important;
   flex-direction: row;
@@ -265,6 +321,7 @@ export default {
   align-items: flex-start;
   gap: 1rem;
 }
+
 .flex-col {
   display: flex !important;
   flex-direction: column;

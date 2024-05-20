@@ -3,27 +3,37 @@
     <div class="title-bar w-full flex items-center justify-between" v-if="showTitleBar">
       <div class="flex items-center">
         <img :src="announceIconSrc" class="logo" style="width: 50%" />
-        <p class="broad-title">방송 제목</p>
+        <p class="broadcast-title"> {{ broadcastTitle }} </p>
       </div>
     </div>
 
     <div class="video-and-sidebar-wrapper">
       <div v-if="streamManager">
         <VideoPlayer :stream-manager="streamManager" :is-muted="isMuted"></VideoPlayer>
+        <div class="icons-sidebar" v-if="showIconSideBar">
+          <div class="icon-wrapper" @click="toggleLike">
+            <img ref="heartIcon" :src="isLiked ? activeHeartIconSrc : heartIconSrc" class="heart-icon" />
+            <span class="likes-count">{{ likesCount }}</span>
+          </div>
+          <div class="icon-wrapper" @click="toggleMute">
+            <img :src="isMuted ? muteIconSrc : soundIconSrc" class="mute-icon" />
+            <span class="icon-label">Mute</span>
+          </div>
+          <div class="icon-wrapper" @click="share">
+            <img :src="shareIconSrc" class="share-icon" />
+            <span class="icon-label">Share</span>
+          </div>
+        </div>
       </div>
-      <div class="icons-sidebar" v-if="showIconSideBar">
-        <div class="icon-wrapper" @click="toggleLike">
-          <img ref="heartIcon" :src="isLiked ? activeHeartIconSrc : heartIconSrc" class="heart-icon" />
-          <span class="likes-count">{{ likesCount }}</span>
+      <!-- 방송 시작전 썸네일 -->
+      <div v-else class="broadcast-image">
+        <img :src="broadcastImage">
+        <div class="overlay">
+        <div class="overlay-text">
+          방송 시작 전입니다. <br>
+          잠시만 기다려 주세요.
         </div>
-        <div class="icon-wrapper" @click="toggleMute">
-          <img :src="isMuted ? muteIconSrc : soundIconSrc" class="mute-icon" />
-          <span class="icon-label">Mute</span>
-        </div>
-        <div class="icon-wrapper" @click="share">
-          <img :src="shareIconSrc" class="share-icon" />
-          <span class="icon-label">Share</span>
-        </div>
+      </div>
       </div>
     </div>
   </div>
@@ -37,12 +47,15 @@ import muteIcon from "@/assets/images/all-img/mute.png";
 import shareIcon from "@/assets/images/all-img/share.png";
 import soundIcon from "@/assets/images/all-img/speaker.png";
 import redheart from "@/assets/images/all-img/redheart.png";
-import { onMounted } from 'vue';
+import { onMounted, onBeforeMount } from 'vue';
 import axios from "axios";
 
 export default {
   setup() {
     onMounted(() => {
+
+    });
+    onBeforeMount(() =>{
 
     });
   },
@@ -67,6 +80,8 @@ export default {
       default: false,
     },
     streamManager: Object,
+    broadcastTitle: String,
+    broadcastImage: String
   },
   data() {
     return {
@@ -84,6 +99,7 @@ export default {
       session: null,
       likeQueue: [],
       likeTimeout: null,
+      likesUpdateInterval:null
     };
   },
   async mounted() {
@@ -91,6 +107,9 @@ export default {
     setInterval(async () => {
       await this.updateLikes();
     }, 15000);
+  },
+  beforeUnmount() {
+    clearInterval(this.likesUpdateInterval); // 타이머 정리
   },
   methods: {
     toggleLike() {
@@ -241,6 +260,35 @@ export default {
 .icon-label {
   font-size: 12px;
   color: #333;
+}
+
+.broadcast-image {
+  position: relative;
+}
+
+
+.broadcast-image img{
+  width: 1000px;
+  height: 849px;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3); 
+  justify-content: center;
+  align-items: center;
+}
+
+.overlay-text {
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 350px;
+  text-align: center; /* 텍스트 가운데 정렬 */
 }
 
 @media (max-width: 600px) {
