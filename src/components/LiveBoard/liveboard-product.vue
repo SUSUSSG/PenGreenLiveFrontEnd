@@ -11,14 +11,12 @@
           <span class="header-cell name-cell">이름</span>
           <span class="header-cell">원가</span>
           <span class="header-cell">판매가</span>
-          <span class="header-cell">판매상태</span>
         </div>
         <div v-for="(product, index) in products" :key="index" class="table-row cursor-pointer"
           @click="openDetailProductModal(index)">
           <span class="cell">
             <div class="image-container">
               <img :src="product.productImage" alt="Product Image" class="product-image" />
-              <img v-if="product.showNowImg" :src="nowImg" class="now-image" />
             </div>
           </span>
           <div class="badge-container cell badge-cell">
@@ -31,9 +29,6 @@
             <div class="discount-rate">{{ product.discountRate }}%</div>
           </span>
           <span class="cell discount-price">{{ product.discountPrice.toLocaleString() }}원</span>
-          <span class="cell switch-cell">
-            <Switch v-model="product.showNowImg" :activeClass="`bg-primary-500`" />
-          </span>
         </div>
         <!-- 상품 상세정보 모달 -->
         <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
@@ -60,14 +55,12 @@
 </template>
 
 <script>
-import Switch from '@/components/Switch';
 import nowImg from '@/assets/images/all-img/now.png';
 import Modal from "../Modal/Modal.vue";
 import Icon from "@/components/Icon";
 
 export default {
   components: {
-    Switch,
     Modal,
     Icon
   },
@@ -183,12 +176,6 @@ export default {
   justify-content: center;
 }
 
-.cell.switch-cell {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .image-container {
   position: relative;
   display: inline-block;
@@ -263,10 +250,5 @@ export default {
 
 .real-time-info p {
   margin: 5px 0;
-}
-
-/* 스위치 색상 */
-.on-color {
-  background-color: #134010;
 }
 </style>
