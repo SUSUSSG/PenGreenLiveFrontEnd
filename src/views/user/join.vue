@@ -85,7 +85,7 @@
                                         </td>
                                         <td class="vgt-right-align">
                                             <div class="flex">
-                                                <input type="password" placeholder="비밀번호 확인 (8~20자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
+                                                <input v-model="confirmPassword" type="password" placeholder="비밀번호 확인 (8~20자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
                                                 <div class="flex-grow-3"></div>
                                             </div>
                                         </td>
@@ -215,11 +215,12 @@
     });
 
     let agreement = ref(false);
+    let confirmPassword = ref(null);
 
     // 휴대폰 번호 인증
     
     // 아이디 중복 체크
-    async function checkDuplicateUserId(userId) {
+    async function checkDuplicateUserId() {
         const id = form.value.userId;
 
         try {
@@ -232,20 +233,31 @@
     }
 
     // 비밀번호 일치 체크
+    function checkPasswordsMatch() {
+        if (form.value.userPw !== confirmPassword.value) {
+            alert("비밀번호가 일치하지 않습니다.");
+            return false;
+        }
+        return true;
+    }
+
 
     // 우편번호 찾기
 
     // 회원가입 정보 전송
     async function handleSubmit() {
-        console.log("form ", form);
-        try {
-        const response = await axios.post('/api/signup', form.value);
+
+        checkPasswordsMatch();
+
+    //     console.log("form ", form);
+    //     try {
+    //     const response = await axios.post('/api/signup', form.value);
         
-        // if (response.data === 'success')
-        //     router.push('/'); 
-      } catch (error) {
-        console.error('Submission failed:', error);
-      }
+    //     // if (response.data === 'success')
+    //     //     router.push('/'); 
+    //   } catch (error) {
+    //     console.error('Submission failed:', error);
+    //   }
     }
 
 
