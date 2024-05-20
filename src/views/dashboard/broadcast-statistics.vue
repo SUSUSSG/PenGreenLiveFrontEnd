@@ -1,9 +1,10 @@
 <template>
   <div id="content" class="flex flex-col items-center">
+    <!-- 검색 및 필터링 -->
     <div id="search-container" class="w-full flex justify-center">
       <div id="search" class="inline-flex items-center gap-4">
         <div v-if="!totalStats" class="card-title mr-7 p-2">
-          <div class="flex gap-4 ml-5 w-full ">
+          <div class="flex gap-4 ml-5 w-full">
             {{ selectedBroadcastTitle }}
           </div>
         </div>
@@ -23,6 +24,8 @@
         </div>
       </div>
     </div>
+
+    <!-- 결과 표시 -->
     <div id="result-container" class="w-full flex flex-col items-center">
       <div>
         <div :id="resultId" class="mt-3">{{ resultTitle }}</div>
@@ -36,6 +39,10 @@
         </div>
       </div>
     </div>
+    <div id="detail-result-container" class="w-full p-5 flex flex-col items-center" v-if="!totalStats">
+      <line-chart :chartData="lineChartData" :options="lineChartOptions" :style="{ width: '30%', height: '400px' }"></line-chart>
+    </div>
+
     <!-- 방송 이름별 상세 통계 -->
     <div id="detail-result-container" class="w-full p-5 flex flex-col items-center" v-if="!totalStats">
       <div id="detailResultName" class="ml-3">판매 상품</div>
@@ -56,6 +63,7 @@
         <Button btnClass="btn-primary btn-sm" @click="toggleResult">확인</Button>
       </div>
     </div>
+
     <!-- 방송 이름 선택 -->
     <div v-else>
       <div class="inline-flex inline-flex items-center gap-4">
@@ -74,11 +82,16 @@
 import axios from 'axios';
 import Card from "@/components/Card/analytics-card.vue";
 import Button from "@/components/Button";
+import { Line } from 'vue-chartjs'
+import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js'
+
+ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement)
 
 export default {
   components: {
     Card,
     Button,
+    LineChart: Line
   },
   data() {
     return {
@@ -112,6 +125,60 @@ export default {
           discountRate: "20%",
         },
       ],
+      lineChartData: {
+        labels: [],
+        datasets: [
+          {
+            label: '시청자 수',
+            backgroundColor: '#f87979',
+            borderColor: '#f87979',
+            fill: false,
+            data: [],
+            pointRadius: 0,
+            pointHoverRadius: 0
+          }
+        ]
+      },
+      lineChartOptions: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          x: {
+            type: 'time',
+            time: {
+              unit: 'minute',
+              displayFormats: {
+                minute: 'HH:mm'
+              }
+            },
+            title: {
+              display: true,
+              text: '시간'
+            }
+          },
+          y: {
+            title: {
+              display: true,
+              text: '시청자 수'
+            }
+          }
+        },
+        plugins: {
+          legend: {
+            display: true,
+            labels: {
+              color: 'black'
+            }
+          },
+          tooltip: {
+            callbacks: {
+              title: (tooltipItems) => {
+                return tooltipItems[0].label.replace('T', ' ').substring(0, 16);
+              }
+            }
+          }
+        }
+      }
     };
   },
   computed: {
@@ -127,7 +194,7 @@ export default {
     },
     async fetchStatisticsByDateRange() {
       try {
-        const vendorSeq = 3; // Replace with actual vendorSeq
+        const vendorSeq = 3;
         const startDate = this.startDate || "2000-01-01";
         const endDate = this.endDate || "2099-12-31";
 
@@ -203,7 +270,7 @@ export default {
     },
     async fetchBroadcastOptions() {
       try {
-        const vendorSeq = 3; // Replace with actual vendorSeq
+        const vendorSeq = 3;
         const startDate = this.startDate || "2000-01-01";
         const endDate = this.endDate || "2099-12-31";
 
@@ -291,6 +358,21 @@ export default {
       const secs = seconds % 60;
       return `${hours}시간 ${minutes}분 ${secs}초`;
     },
+    async fetchViewerCountData() {
+      if (!this.selectedBroadcastTitleOption) return;
+
+      try {
+        const broadcastSeq = this.selectedBroadcastTitleOption;
+        const response = await axios.get(`http://localhost:8090/broadcast-viewer-count/${broadcastSeq}`);
+
+        const viewerCountData = response.data;
+
+        this.lineChartData.labels = viewerCountData.map(data => new Date(data.recordTime).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }));
+        this.lineChartData.datasets[0].data = viewerCountData.map(data => data.viewerCount);
+      } catch (error) {
+        console.error("Error fetching viewer count data:", error);
+      }
+    }
   },
   mounted() {
     this.fetchStatisticsByDateRange();
@@ -304,6 +386,7 @@ export default {
       if (selectedOption) {
         this.selectedBroadcastTitle = selectedOption.label;
       }
+      this.fetchViewerCountData();
     },
   },
 };
@@ -388,5 +471,9 @@ export default {
 
 .text-base {
   color: #111111;
+}
+
+#chart-container {
+  width: 90%;
 }
 </style>
