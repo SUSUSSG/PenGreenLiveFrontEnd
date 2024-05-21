@@ -50,11 +50,12 @@
         <div v-for="(product, i) in products" :key="i" class="inline-flex ml-3">
           <div class="inline-flex rounded pt-3 px-4 pl-0" id="productCard">
             <div class="flex items-center justify-center">
-              <img :src="product.img" alt="Product Image" />
+              <img :src="product.img" class="product-image" alt="Product Image" />
             </div>
             <div class="ml-3 flex flex-col justify-center">
-              <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ product.name }}</div>
-              <div class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]">{{ product.price }} ({{ product.discountRate }})</div>
+              <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ product.nm }}</div>
+              <div class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]">{{ product.price }}원 ({{ product.discountRate }}%)</div>
+              <div class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]">구매 전환률 : {{product.conversionRate}}%</div>
             </div>
           </div>
         </div>
@@ -105,26 +106,7 @@ export default {
       resultId: "resultName",
       resultTitle: "전체 통계",
       searchResultCardDataList: [],
-      products: [
-        {
-          img: "https://via.placeholder.com/50x50",
-          name: "상품이름1",
-          price: "13,000",
-          discountRate: "50%",
-        },
-        {
-          img: "https://via.placeholder.com/50x50",
-          name: "상품이름2",
-          price: "14,000",
-          discountRate: "70%",
-        },
-        {
-          img: "https://via.placeholder.com/50x50",
-          name: "상품이름3",
-          price: "15,000",
-          discountRate: "20%",
-        },
-      ],
+      products: [],
       lineChartData: {
         labels: [],
         datasets: [
@@ -294,6 +276,7 @@ export default {
     async fetchBroadcastDetails() {
       if (!this.selectedBroadcastTitleOption) return;
 
+      await this.loadBroadcastProduct();
       try {
         const broadcastSeq = this.selectedBroadcastTitleOption;
 
@@ -345,6 +328,11 @@ export default {
             analyticsTitle: "좋아요 수",
             analyticsResult: `${broadcastStatistics.likesCount} 개`,
           },
+          {
+            icon: "heroicons:circle-stack",
+            analyticsTitle: "구매 전환율",
+            analyticsResult: `${broadcastStatistics.conversionRate}%`,
+          }
         ];
 
         this.toggleResult();
@@ -372,6 +360,28 @@ export default {
       } catch (error) {
         console.error("Error fetching viewer count data:", error);
       }
+    },
+    async loadBroadcastProduct() {
+      if (!this.selectedBroadcastTitleOption) return;
+      const broadcastId = this.selectedBroadcastTitleOption;
+      console.log("해당 방송 id : " + broadcastId);
+      try {
+        const response = await axios.get(`http://localhost:8090/live-broadcast-product/${broadcastId}`);
+        console.log(response.data);
+        this.products = response.data.map(product => {
+          return {
+            name: product.productNm,
+            price: product.listPrice,
+            discountRate: product.discountRate,
+            img: product.productImage,
+            productSeq: product.productSeq,
+            conversionRate: product.conversionRate
+          };
+        });
+        console.log("product info data : ", this.products);
+      } catch (error) {
+        console.error('판매 상품 목록 load 실패 : ', error);
+      }
     }
   },
   mounted() {
@@ -392,7 +402,9 @@ export default {
 };
 </script>
 
+
 <style>
+
 #content {
   width: 100%;
 }
@@ -467,6 +479,11 @@ export default {
 .input-wrapper label {
   margin-right: 8px;
   color: #111111;
+}
+
+.product-image{
+  width: 50px;
+  height: 50px;
 }
 
 .text-base {
