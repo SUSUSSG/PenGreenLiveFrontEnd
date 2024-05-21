@@ -3,70 +3,24 @@
     <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(6, 1fr);">
       <div class="grid gap-8" style="grid-template-rows: repeat(6, 1fr);">
 
+        <!-- 1. 카메라 on/off -->
         <div class="sidebar-icon" @click="toggleIcon(statistics[0])">
           <Icon :icon="statistics[0].isActive ? statistics[0].activeIcon : statistics[0].icon">
           </Icon>
         </div>
 
+        <!-- 마이크 on/off -->
         <div class="sidebar-icon" @click="toggleIcon(statistics[1])">
           <Icon :icon="statistics[1].isActive ? statistics[1].activeIcon : statistics[1].icon">
           </Icon>
         </div>
 
-        <div>
-          <div class="sidebar-icon" @click="openBroadcastDeviceControl()">
-            <Icon :icon="statistics[2].icon"></Icon>
-          </div>
-          <LivePrepareModal v-if="showLivePrepareModal" @broadcast-device-selected="handleDeviceSelection"
-            title="방송 기기 설정" ref="broadcastDeviceControl" :showButtons="false" class="z-20" />
+        <!-- 방송 송출 기기 설정 -->
+        <div class="sidebar-icon" @click="openBroadcastDeviceControl()">
+          <Icon :icon="statistics[2].icon" />
         </div>
-
-        <!-- <div class="sidebar-icon" @click="toggleIcon(statistics[3]); editBroadcastInfoModal()">
-          <Icon :icon="statistics[3].icon"></Icon>
-          <Modal title="방송 정보 편집" ref="editBroadcastInfo" :showButtons="false" :sizeClass="'max-w-2xl'">
-            <div class="space-y-4">
-              방송 제목
-              <div class="flex items-center justify-between">
-                <div class="flex flex-col">
-                  <label for="boardcastTitle" class="block text-sm font-medium text-gray-700">방송
-                    제목</label>
-                  <input id="newBoardcastTitle" type="text" v-model="newBroadcastTitle" placeholder="방송 제목 입력"
-                    @input="updateNewBroadcastTitle"
-                    class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md mt-3" />
-                </div>
-                <div class="flex items-center">
-                  <Button btnClass="btn-primary btn-sm">
-                    등록
-                  </Button>
-                </div>
-              </div>
-
-              방송 썸네일
-              <div class="flex items-center justify-between">
-                <div class="flex flex-col">
-                  <label for="boardcastThumbnail" class="block text-sm font-medium text-gray-700 mt-10">썸네일</label>
-                  <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                      <img src="https://via.placeholder.com/90x160" alt="대표 이미지 미리보기" style="max-width: 400px;"
-                        class="mt-2" />
-                    </div>
-                    <div class="ml-4">
-                      <p>최대 용량 : 1mb</p>
-                      <p>권장 사이즈 : 720 x 1280</p>
-                      <input type="file" id="imageUpload" @change="handleImageUpload"
-                        accept="image/jpeg, image/png, image/gif" class="mb-2" />
-                    </div>
-                  </div>
-                </div>
-                <div class="flex items-center">
-                  <Button btnClass="btn-primary btn-sm">
-                    등록
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Modal>
-        </div> -->
+        <LivePrepareModal v-if="showLivePrepareModal" @broadcast-device-selected="handleDeviceSelection"
+          ref="broadcastDeviceControl" :showButtons="false" class="z-20" />
 
         <div class="sidebar-icon" @click="toggleIcon(statistics[4]); addNoticeModal()">
           <Icon :icon="statistics[4].icon" />
@@ -301,16 +255,21 @@ dt {
 .sidebar-icon {
   margin-left: auto;
   margin-right: auto;
-  height: 2.5rem; /* 40px */
-  width: 2.5rem; /* 40px */
+  height: 2.5rem;
+  /* 40px */
+  width: 2.5rem;
+  /* 40px */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border-radius: 50%; /* full rounded */
+  border-radius: 50%;
+  /* full rounded */
   background-color: white;
-  font-size: 1.5rem; /* 24px */
-  margin-bottom: 1rem; /* 16px */
+  font-size: 1.5rem;
+  /* 24px */
+  margin-bottom: 1rem;
+  /* 16px */
   color: black;
   cursor: pointer;
 }
