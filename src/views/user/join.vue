@@ -60,7 +60,7 @@
                                         <td class="vgt-right-align">
                                             <div class="grid-cols-1 grid mb-5 last:mb-0">
                                                 <div class="flex items-center">
-                                                    <input v-model="form.userId" type="text" name="pn" placeholder="아이디 (5~12자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
+                                                    <input v-model="form.userId" type="text" placeholder="아이디 (5~12자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
                                                     <div class="flex-grow-3">
                                                         <Button @click="checkDuplicateUserId" type="button" text="중복체크" class="w-full"/>
                                                     </div>
@@ -95,17 +95,18 @@
                                             <span>성별</span>
                                         </td>
                                         <td class="vgt-right-align">
-                                            <div data-v-33d05f57="" class="flex">
-                                                <select v-model="form.userGender" data-v-33d05f57="" class="flex-grow-7 classinput input-control block focus:outline-none min-h-[40px]" formatter="a=>a">
-                                                    <option data-v-33d05f57="" value="">응답 안함</option>
-                                                    <option data-v-33d05f57="" value="">여성</option>
-                                                    <option data-v-33d05f57="" value="">남성</option>
+                                            <div class="flex">
+                                                <select v-model="form.userGender" class="flex-grow-7 classinput input-control block focus:outline-none min-h-[40px]">
+                                                    <option disabled selected value="">선택</option>
+                                                    <option>응답 안함</option>
+                                                    <option>여성</option>
+                                                    <option>남성</option>
                                                 </select>
                                                 <div class="flex-grow-3"></div>
                                             </div>
                                         </td>
                                     </tr>
-                                    <tr class="">
+                                    <tr>
                                         <td class="vgt-left-align">
                                             <span>이메일</span>
                                         </td>
@@ -211,25 +212,20 @@
     const router = useRouter();
 
     const form = ref({
-        userUuid : null,
-        userNm: null,
-        userGender: null,
+        userUuid: null,
+        userNm: "",
+        userGender: "",
         userBirthDt: null,
-        userTel: null,
-        userEmail: null,
-        userAddress: null,
-        optionalAgreementYn: null,
-        accountActive: null,
-        createAccountDt: null,
-        userProfileImg: null,
-        userId: null,
-        userPw: null,
+        userTel: "",
+        userEmail: "",
+        userAddress: "",
+        optionalAgreementYn: false,  
+        userId: "",
+        userPw: "",
     });
-
     let agreement = ref(false);
     let confirmPassword = ref(null);
     let inputAuthCode = ref(null);
-
 
     // 휴대폰 번호 인증
     async function requestPhoneAuthCode() {
@@ -252,7 +248,6 @@
     // 아이디 중복 체크
     async function checkDuplicateUserId() {
         const id = form.value.userId;
-
         try {
             const response = await axios.post(`/api/check-id`, {id});
             if (response.data==='available') alert("사용 가능한 아이디입니다.");
@@ -262,13 +257,29 @@
         }
     }
 
+    // 아이디 형식 검사
+    function validateUserId() {
+        const pattern = /^[a-zA-Z0-9]{5,12}$/;
+        return pattern.test(form.value.userId);
+    }   
+
+
     // 비밀번호 일치 체크
     function checkPasswordsMatch() {
-        if (form.value.userPw !== confirmPassword.value) {
-            alert("비밀번호가 일치하지 않습니다.");
-            return false;
-        }
-        return true;
+        return form.value.userPw === confirmPassword.value;
+    }
+
+    // 비밀번호 형식 검사
+    function validateUserPw() {
+        const pattern = /^[a-zA-Z0-9]{8,20}$/;
+        return pattern.test(form.value.userPw);
+    }
+
+    // 이메일 타입 체크
+    const emailError = ref(true);
+    function validateEmail() {
+        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailPattern.test(form.value.userEmail);
     }
 
     // 우편번호 찾기
@@ -294,21 +305,50 @@
         });
     };
 
+    // 공백 및 null 검사
+    function validateFormFields() {
+        for (const key in form.value) {
+            if (['userUuid', 'optionalAgreementYn', 'userBirthDt'].includes(key)) {
+                continue;
+            }
+            const value = form.value[key];
+            if (value === null || value === "" || value === undefined) {
+                alert(`${key} 필드는 필수입니다.`);
+                return false;
+            }
+        }
+        return true;
+    }
 
     // 회원가입 정보 전송
     async function handleSubmit() {
 
-        // checkPasswordsMatch();
+        if (!validateFormFields()) {
+            return;
+        }
 
-        console.log("form ", form);
-        try {
-        const response = await axios.post('/api/signup', form.value);
-        
-        // if (response.data === 'success')
-        //     router.push('/'); 
-      } catch (error) {
-        console.error('Submission failed:', error);
-      }
+        const emailValid = validateEmail();
+        const userIdValid = validateUserId();
+        const userPwValid = validateUserPw();
+        const passwordsMatch = checkPasswordsMatch();
+
+        if (emailValid && userIdValid && userPwValid && passwordsMatch) {
+            console.log("유효성 검사 통과");
+            try {
+                const response = await axios.post('/api/signup', form.value);
+                if (response.data === 'success') {
+                    router.push('/');
+                }
+            } catch (error) {
+                console.error('Submission failed:', error);
+            }
+        } else {
+            console.error("유효성 검사 통과 x");
+            if (!emailValid) alert("이메일 형식이 잘못되었습니다.");
+            if (!userIdValid) alert("아이디는 5~12자의 영문과 숫자만 포함해야 합니다.");
+            if (!userPwValid) alert("비밀번호는 8~20자의 영문과 숫자만 포함해야 합니다.");
+            if (!passwordsMatch) alert("입력한 비밀번호가 서로 일치하지 않습니다.");
+        }
     }
 
 </script>
