@@ -29,7 +29,7 @@
             <div class="notice-add">
               <label for="addNotice" class="notice-label">공지사항 등록</label>
               <div class="flex items-center space-x-2">
-                <input id="addNotice" type="text" name="addNotice" v-model="notice" class="notice-input" />
+                <input id="addNotice" type="text" name="addNotice" v-model="noticeContent" class="notice-input" />
                 <Button btnClass="btn-primary btn-sm" @click="submitNotice()">
                   등록
                 </Button>
@@ -38,8 +38,7 @@
             <!-- 목록-->
             <div class="space-y-2">
               <label for="addNotice" class="notice-label">공지사항 목록</label>
-              <div class="notice-list">
-                <li v-for="notice in notices" :key="notice.noticeSeq">{{ notice.noticeContent }}</li>
+              <div class="notice-list" v-for="notice in notices" :key="notice.noticeSeq">{{ notice.noticeContent }}
                 <Icon icon="heroicons-outline:x" @click="removeNotice(index)" class="remove-button" />
               </div>
             </div>
@@ -97,6 +96,9 @@ import Button from "@/components/Button";
 import LivePrepareModal from "@/components/Modal/live-prepare-modal.vue";
 import Textarea from "@/components/Textarea";
 
+import { useToast } from "vue-toastification";
+import axios from "axios";
+
 export default {
   components: {
     Icon,
@@ -128,8 +130,7 @@ export default {
         { icon: "material-symbols:campaign-rounded" },
         { icon: "material-symbols:maps-ugc-rounded" },
       ],
-      // notice: '',
-      // noticeList: [],
+      noticeContent: '',
       showLivePrepareModal: false,
       question: '',
       answer: '',
@@ -173,10 +174,35 @@ export default {
       this.$refs.addFaqRef.openModal();
     },
     submitNotice() {
-      if (this.notice.trim()) {
-        this.notices.push(this.notice)
-        this.notice = ''
+      const toast = useToast();
+
+      const broadcastSeq = this.broadcastId;
+      const noticeContent = this.noticeContent;
+
+      const requestData = {
+        broadcastSeq: broadcastSeq,
+        noticeContent: noticeContent
       }
+
+      console.log(requestData)
+
+      axios.post('http://localhost:8090/live-notice', requestData)
+        .then(response =>{
+          // 아래 목록에 추가
+          const newNotice = response.data;
+          console.log("newNotice", newNotice)
+          this.notices.push(newNotice);
+          this.noticeContent = '';
+          toast.success("새로운 공지사항 등록 성공", {
+            timeout: 1000
+          })
+        })
+        .catch(error => {
+          console.error("공지 추가 실패 : ", error);
+          toast.error("공지 사항 추가 실패", {
+            timeout: 1000
+          })
+        })
     },
     removeNotice(index) {
       this.notices.splice(index, 1);
