@@ -30,8 +30,7 @@
             <div class="notice-add">
               <label for="addNotice" class="notice-label">공지사항 등록</label>
               <div class="flex items-center space-x-2">
-                <input id="addNotice" type="text" name="addNotice" v-model="notice" placeholder="공지사항 입력"
-                  class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
+                <input id="addNotice" type="text" name="addNotice" v-model="notice" class="notice-input" />
                 <Button btnClass="btn-primary btn-sm" @click="submitNotice()">
                   등록
                 </Button>
@@ -56,18 +55,16 @@
               <div class="w-1/2">
                 <div class="flex flex-col">
                   <div class="flex items-center mb-2">
-                    <label for="addFaq" class="text-sm font-medium text-gray-700 mr-4 w-20">질문
-                      등록</label>
+                    <label for="addFaq" class="faq-label">질문 등록</label>
                     <textarea id="addQuestion" type="text" name="addFaq" placeholder="여기에 작성해주세요" rows="1"
                       v-model="question"
-                      class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-black-500 focus:border-black-500 rounded-l-md"></textarea>
+                      class="faq-textarea"></textarea>
                   </div>
                   <div class="flex items-center mb-2">
-                    <label for="addFaq" class="text-sm font-medium text-gray-700 mr-4 w-20">답변
-                      등록</label>
+                    <label for="addFaq" class="faq-label">답변 등록</label>
                     <textarea id="addAnswer" type="text" name="addFaq" placeholder="여기에 작성해주세요" rows="5"
                       v-model="answer"
-                      class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-black-500 rounded-l-md"></textarea>
+                      class="faq-textarea"></textarea>
                   </div>
                   <Button btnClass="btn-primary btn-sm mt-5" @click="submitFaq()">
                     등록
@@ -196,12 +193,12 @@ export default {
     removeFaq() {
       this.FaqList.splice(index, 1);
     },
-    saveChangeBroadcastTitle() {
-      // 후에 작성하기
-    },
-    saveChangeThumbnail() {
-      // 후에 작성하기
-    }
+    // saveChangeBroadcastTitle() {
+    //   // 후에 작성하기
+    // },
+    // saveChangeThumbnail() {
+    //   // 후에 작성하기
+    // }
   }
 }
 </script>
@@ -285,5 +282,15 @@ dt {
 .faq-label {
   margin-right: 1rem;
   width: 5rem; 
+}
+
+.notice-input,
+.faq-textarea {
+  flex-grow: 1;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border-bottom: #134010 1px solid; 
+  border-radius: 0.1rem;
 }
 </style>
