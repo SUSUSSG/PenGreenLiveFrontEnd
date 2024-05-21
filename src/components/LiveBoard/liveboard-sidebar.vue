@@ -2,7 +2,6 @@
   <div class="sidebar">
     <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(5, 1fr);">
       <div class="grid gap-8" style="grid-template-rows: repeat(5, 1fr);">
-
         <!-- 카메라 on/off -->
         <div class="sidebar-icon" @click="toggleIcon(statistics[0])">
           <Icon :icon="statistics[0].isActive ? statistics[0].activeIcon : statistics[0].icon">
@@ -56,15 +55,13 @@
                 <div class="flex flex-col">
                   <div class="flex items-center mb-2">
                     <label for="addFaq" class="faq-label">질문 등록</label>
-                    <textarea id="addQuestion" type="text" name="addFaq" placeholder="여기에 작성해주세요" rows="1"
-                      v-model="question"
-                      class="faq-textarea"></textarea>
+                    <textarea id="addQuestion" type="text" name="addFaq" rows="1" class="faq-textarea"
+                      v-model="question" />
                   </div>
                   <div class="flex items-center mb-2">
                     <label for="addFaq" class="faq-label">답변 등록</label>
-                    <textarea id="addAnswer" type="text" name="addFaq" placeholder="여기에 작성해주세요" rows="5"
-                      v-model="answer"
-                      class="faq-textarea"></textarea>
+                    <textarea id="addAnswer" type="text" name="addFaq" rows="4" class="faq-textarea"
+                      v-model="answer" />
                   </div>
                   <Button btnClass="btn-primary btn-sm mt-5" @click="submitFaq()">
                     등록
@@ -73,7 +70,7 @@
               </div>
               <div class="w-1/2 ml-5">
                 <div class="space-y-2">
-                  <label for="addFaq" class="text-sm font-medium text-gray-700">기존 목록</label>
+                  <label for="addFaq" class="faq-label">기존 목록</label>
                   <div class="faq-list" v-for="(faq, index) in faqs" :key="faq.faqSeq">
                     <div class="flex justify-between items-center">
                       <Icon icon="heroicons-outline:x" @click="removeFaq(index)" class="remove-button mr-3" />
@@ -110,7 +107,8 @@ export default {
   },
   props: {
     notices: Array,
-    faqs: Array
+    faqs: Array,
+    broadcastId: Number
   },
   data() {
     return {
@@ -193,12 +191,6 @@ export default {
     removeFaq() {
       this.FaqList.splice(index, 1);
     },
-    // saveChangeBroadcastTitle() {
-    //   // 후에 작성하기
-    // },
-    // saveChangeThumbnail() {
-    //   // 후에 작성하기
-    // }
   }
 }
 </script>
