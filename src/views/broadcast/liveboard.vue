@@ -252,6 +252,14 @@ export default {
         console.error('Error calculating and deleting watch time:', error.response ? error.response.data : error.message);
       }
     },
+    async createProductClicks(broadcastSeq) {
+      try {
+        const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}`);
+        console.log('Product clicks created:', response.data);
+      } catch (error) {
+        console.error('Error creating product clicks:', error.response ? error.response.data : error.message);
+      }
+    },
     async updateProductClicks(broadcastSeq){
       try{
         const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/update-average-clicks`)
