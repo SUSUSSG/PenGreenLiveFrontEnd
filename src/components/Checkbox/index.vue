@@ -14,7 +14,6 @@
         v-model="localValue"
         v-bind="$attrs"
       />
-
       <span
         class="h-4 w-4 border flex-none border-slate-100 dark:border-slate-800 rounded inline-flex ltr:mr-3 rtl:ml-3 relative transition-all duration-150"
         :class="
@@ -39,8 +38,10 @@
     </label>
   </div>
 </template>
+
 <script>
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watch } from "vue";
+
 export default defineComponent({
   name: "Checkbox",
   inheritAttrs: false,
@@ -72,29 +73,28 @@ export default defineComponent({
       type: null,
     },
   },
-  emits: {
-    "update:modelValue": (newValue) => ({
-      modelValue: newValue,
-    }),
-    // use newValue
-    // "update:checked": (newValue) => true,
-  },
-
-  setup(props, context) {
+  emits: ["update:modelValue", "update:checked"],
+  setup(props, { emit }) {
     const ck = ref(props.checked);
 
-    // on change event
-    const onChange = () => {
-      ck.value = !ck.value;
+    const onChange = (event) => {
+      ck.value = event.target.checked;
+      emit("update:checked", ck.value);
     };
 
     const localValue = computed({
       get: () => props.modelValue,
-      set: (newValue) => context.emit("update:modelValue", newValue),
+      set: (newValue) => emit("update:modelValue", newValue),
     });
+
+    watch(
+      () => props.checked,
+      (newChecked) => {
+        ck.value = newChecked;
+      }
+    );
 
     return { localValue, ck, onChange };
   },
 });
 </script>
-<style lang=""></style>
