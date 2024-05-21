@@ -57,13 +57,15 @@ const fetchOrders = async (userUuid) => {
   }
 };
 
-const handleReviewSubmitted = (productSeq) => {
+const handleReviewSubmitted = (productSeq, reviewContent) => {
   const orderIndex = unreviewedOrders.value.findIndex(order => order.productSeq === productSeq);
   if (orderIndex !== -1) {
     const reviewedOrder = unreviewedOrders.value.splice(orderIndex, 1)[0];
     reviewedOrder.reviewYn = true;
+    reviewedOrder.reviewContent = reviewContent; 
     reviewedOrders.value.push(reviewedOrder);
   }
+  window.location.reload();
 };
 
 const handleReviewDeleted = (reviewSeq) => {
