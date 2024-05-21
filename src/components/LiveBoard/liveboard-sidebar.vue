@@ -3,39 +3,29 @@
     <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(6, 1fr);">
       <div class="grid gap-8" style="grid-template-rows: repeat(6, 1fr);">
 
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[0])">
+        <div class="sidebar-icon" @click="toggleIcon(statistics[0])">
           <Icon :icon="statistics[0].isActive ? statistics[0].activeIcon : statistics[0].icon">
-            <!-- 카메라 조정 -->
           </Icon>
         </div>
 
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[1])">
+        <div class="sidebar-icon" @click="toggleIcon(statistics[1])">
           <Icon :icon="statistics[1].isActive ? statistics[1].activeIcon : statistics[1].icon">
-            <!-- 마이크 조정 -->
           </Icon>
         </div>
 
         <div>
-          <div
-            class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-            @click="openBroadcastDeviceControl()">
+          <div class="sidebar-icon" @click="openBroadcastDeviceControl()">
             <Icon :icon="statistics[2].icon"></Icon>
           </div>
           <LivePrepareModal v-if="showLivePrepareModal" @broadcast-device-selected="handleDeviceSelection"
             title="방송 기기 설정" ref="broadcastDeviceControl" :showButtons="false" class="z-20" />
         </div>
 
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[3]); editBroadcastInfoModal()">
+        <!-- <div class="sidebar-icon" @click="toggleIcon(statistics[3]); editBroadcastInfoModal()">
           <Icon :icon="statistics[3].icon"></Icon>
           <Modal title="방송 정보 편집" ref="editBroadcastInfo" :showButtons="false" :sizeClass="'max-w-2xl'">
             <div class="space-y-4">
-              <!-- 방송 제목 -->
+              방송 제목
               <div class="flex items-center justify-between">
                 <div class="flex flex-col">
                   <label for="boardcastTitle" class="block text-sm font-medium text-gray-700">방송
@@ -51,7 +41,7 @@
                 </div>
               </div>
 
-              <!-- 방송 썸네일 -->
+              방송 썸네일
               <div class="flex items-center justify-between">
                 <div class="flex flex-col">
                   <label for="boardcastThumbnail" class="block text-sm font-medium text-gray-700 mt-10">썸네일</label>
@@ -76,12 +66,10 @@
               </div>
             </div>
           </Modal>
-        </div>
+        </div> -->
 
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[4]); addNoticeModal()">
-          <Icon :icon="statistics[4].icon"></Icon>
+        <div class="sidebar-icon" @click="toggleIcon(statistics[4]); addNoticeModal()">
+          <Icon :icon="statistics[4].icon" />
           <Modal title="공지사항 등록" ref="addNoticeModal" :showButtons="false">
             <!-- 공지사항 등록 -->
             <div class="flex flex-col space-y-2 mb-4">
@@ -99,16 +87,14 @@
               <label for="addNotice" class="text-sm font-medium text-gray-700">공지사항 목록</label>
               <div class="notice-list">
                 <li v-for="notice in notices" :key="notice.noticeSeq">{{ notice.noticeContent }}</li>
-                <Icon icon="heroicons-outline:x" @click="removeNotice(index)" class="removeButton" />
+                <Icon icon="heroicons-outline:x" @click="removeNotice(index)" class="remove-button" />
               </div>
             </div>
           </Modal>
         </div>
 
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[5]); addFaqModal()">
-          <Icon :icon="statistics[5].icon"></Icon>
+        <div class="sidebar-icon" @click="toggleIcon(statistics[5]); addFaqModal()">
+          <Icon :icon="statistics[5].icon" />
           <Modal title="자주 묻는 질문 등록" ref="addFaqRef" :showButtons="false" id="addFaq" :sizeClass="'max-w-6xl'">
             <div class="flex">
               <div class="w-1/2">
@@ -137,7 +123,7 @@
                   <label for="addFaq" class="text-sm font-medium text-gray-700">기존 목록</label>
                   <div class="faq-list" v-for="(faq, index) in faqs" :key="faq.faqSeq">
                     <div class="flex justify-between items-center">
-                      <Icon icon="heroicons-outline:x" @click="removeFaq(index)" class="removeButton mr-3" />
+                      <Icon icon="heroicons-outline:x" @click="removeFaq(index)" class="remove-button mr-3" />
                       <div>
                         <dt :data-question="`Q: ${faq.question}`">{{ faq.questionTitle }}</dt>
                         <dd>{{ faq.questionAnswer }}</dd>
@@ -170,10 +156,6 @@ export default {
     Textarea
   },
   props: {
-    broadcastTitle: {
-      type: String,
-      required: true
-    },
     notices: Array,
     faqs: Array
   },
@@ -190,18 +172,10 @@ export default {
           activeIcon: "material-symbols:mic-off",
           isActive: false
         },
-        {
-          icon: "material-symbols:settings-video-camera-sharp",
-        },
-        {
-          icon: "material-symbols:app-registration",
-        },
-        {
-          icon: "material-symbols:campaign-rounded",
-        },
-        {
-          icon: "material-symbols:maps-ugc-rounded",
-        },
+        { icon: "material-symbols:settings-video-camera-sharp" },
+        { icon: "material-symbols:app-registration" },
+        { icon: "material-symbols:campaign-rounded" },
+        { icon: "material-symbols:maps-ugc-rounded" },
       ],
       // notice: '',
       // noticeList: [],
@@ -317,10 +291,27 @@ dt {
   font-weight: bold;
 }
 
-.removeButton {
+.remove-button {
   background-color: rgb(251, 56, 56);
   color: #fff;
   border-radius: 0.25rem;
   padding: 0.25rem;
+}
+
+.sidebar-icon {
+  margin-left: auto;
+  margin-right: auto;
+  height: 2.5rem; /* 40px */
+  width: 2.5rem; /* 40px */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%; /* full rounded */
+  background-color: white;
+  font-size: 1.5rem; /* 24px */
+  margin-bottom: 1rem; /* 16px */
+  color: black;
+  cursor: pointer;
 }
 </style>
