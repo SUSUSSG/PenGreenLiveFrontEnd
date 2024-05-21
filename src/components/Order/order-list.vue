@@ -108,7 +108,7 @@ const props = withDefaults(
 
 const reviewContent = ref("");
 
-const { emit } = getCurrentInstance();
+const { emit, proxy  } = getCurrentInstance();
 
 const formatNumber = (value: number): string => {
   return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -121,6 +121,12 @@ const formatDate = (dateString: string): string => {
     day: "2-digit",
   };
   return new Date(dateString).toLocaleDateString(undefined, options);
+};
+
+const closeModal = () => {
+  if (proxy && proxy.$refs && proxy.$refs.modal1) {
+    proxy.$refs.modal1.closeModal();
+  }
 };
 
 const submitReview = async () => {
@@ -149,12 +155,14 @@ const submitReview = async () => {
     await axios.post("http://localhost:8090/reviews", reviewData);
     alert("리뷰 등록이 완료되었습니다.");
     reviewContent.value = "";
-    emit("review-submitted", props.productSeq);
+    closeModal();
+    emit('review-submitted', props.productSeq);
+    window.location.reload(); // 페이지 새로고침
   } catch (error) {
     alert("리뷰 등록에 실패했습니다: " + error.message);
   }
 };
-
+  
 </script>
 
 <style scoped>
