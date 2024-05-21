@@ -45,7 +45,7 @@
                                             </div>
                                             <div class="grid-cols-1 grid mb-5 last:mb-0">
                                                 <div class="flex items-center"> 
-                                                    <input type="text" name="pn" placeholder="인증번호 6자리 입력" class="flex-grow-7 input-control focus:outline-none h-[40px]">
+                                                    <input v-model="inputAuthCode" type="text" placeholder="인증번호 6자리 입력" class="flex-grow-7 input-control focus:outline-none h-[40px]">
                                                     <div class="flex-grow-3">
                                                         <Button type="button" text="인증번호 확인" class="w-full"/>
                                                     </div>
@@ -121,13 +121,23 @@
                                             <span>주소</span>
                                         </td>
                                         <td class="vgt-right-align">
-                                            <div class="grid-cols-1 grid mb-5 last:mb-0">
-                                                <div class="flex items-center">
-                                                    <input v-model="form.userAddress" type="text" name="pn" placeholder="주소 입력" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
-                                                    <div class="flex-grow-3">
-                                                        <Button type="button" text="우편번호 찾기" class="w-full"/>
+                                            <div class="mb-5">
+                                                <div class="flex items-center">                                                        
+                                                    <div class="flex items-center flex-grow-7">
+                                                        <input v-model="addressForm.zonecode" type="text" placeholder="우편번호" class=" w-[40%] mr-2 input-control focus:outline-none h-[40px]">
+                                                        <input v-model="addressForm.address" type="text" placeholder="주소" class="w-full input-control focus:outline-none h-[40px]">
                                                     </div>
-                                                </div>
+                                                    <div class="w-[163px]">
+                                                    </div>
+                                                </div>                                    
+                                            </div>
+                                            <div class="grid-cols-1 grid mb-5 last:mb-0">
+                                                <div class="flex items-center"> 
+                                                    <input v-model="addressForm.detailAddress" type="text" placeholder="상세주소" class="flex-grow-7 input-control focus:outline-none h-[40px]">
+                                                    <div class="flex-grow-3">
+                                                        <Button @click="openAddressPopup" type="button" text="우편번호 찾기" class="w-full"/>
+                                                    </div>
+                                                </div> 
                                             </div>
                                         </td>
                                     </tr>
@@ -195,6 +205,8 @@
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
     import Textarea from "@/components/Textarea";
+    import Map from "@/components/Map/map.vue";
+    import { NIL } from 'uuid';
 
     const router = useRouter();
 
@@ -216,9 +228,27 @@
 
     let agreement = ref(false);
     let confirmPassword = ref(null);
+    let inputAuthCode = ref(null);
+
 
     // 휴대폰 번호 인증
-    
+    async function requestPhoneAuthCode() {
+        const phoneNumber = form.value.userTel;
+        try {
+            const response = await axios.post(`/api/request-authcode`, {phoneNumber});
+        } catch (error) {
+            console.error('Error checking username:', error);
+        }
+    }
+
+    function verifyPhoneNumber(authCode) {
+        if (authCode===inputAuthCode.value) {
+            console.log("인증번호 일치");
+        } else {
+            console.log("인증번호 미일치");
+        }
+    }
+
     // 아이디 중복 체크
     async function checkDuplicateUserId() {
         const id = form.value.userId;
@@ -228,7 +258,7 @@
             if (response.data==='available') alert("사용 가능한 아이디입니다.");
             else alert("이미 사용 중인 아이디입니다.");
         } catch (error) {
-            console.error('Error checking username:', error);
+            console.error('Error checking id:', error);
         }
     }
 
@@ -241,25 +271,45 @@
         return true;
     }
 
-
     // 우편번호 찾기
+    const showMapModal =ref(false); 
+    const postalCode = ref('');
+    const addressForm = ref({
+        address: null,
+        zonecode: null,
+        detailAddress: null,
+    });
+
+    function openAddressPopup(data) {
+        const popup = window.open('/daum-map', 'popup', 'width=500px,height=505px');
+    
+        window.addEventListener('message', (event) => {
+            if (event.origin !== window.location.origin) return;
+
+            const { address, zonecode, buildingName } = event.data;
+            form.value.userAddress = `${address} ${buildingName} ${zonecode}`;
+            addressForm.value.address = address;
+            addressForm.value.zonecode = zonecode;
+            addressForm.value.detailAddress = `(${buildingName}) `;
+        });
+    };
+
 
     // 회원가입 정보 전송
     async function handleSubmit() {
 
-        checkPasswordsMatch();
+        // checkPasswordsMatch();
 
-    //     console.log("form ", form);
-    //     try {
-    //     const response = await axios.post('/api/signup', form.value);
+        console.log("form ", form);
+        try {
+        const response = await axios.post('/api/signup', form.value);
         
-    //     // if (response.data === 'success')
-    //     //     router.push('/'); 
-    //   } catch (error) {
-    //     console.error('Submission failed:', error);
-    //   }
+        // if (response.data === 'success')
+        //     router.push('/'); 
+      } catch (error) {
+        console.error('Submission failed:', error);
+      }
     }
-
 
 </script>
   
