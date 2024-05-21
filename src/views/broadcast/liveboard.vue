@@ -14,7 +14,8 @@
         </div>
         <div className="flex-col">
           <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck"
-            @update-statistics="updateStatistics" />
+            @update-statistics="updateStatistics" 
+            :channelNm="liveBroadcastInfo.broadcast.channelNm"/>
           <LiveboardProduct :products="liveBoradcastProduct" />
           <LiveboardPrompt />
         </div>
