@@ -183,8 +183,11 @@ export default {
       // 평균 시청자수와 최대 시청자수, 방송 진행시간을 db에 반영하는 axios 요청
       await this.updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration: elapsedTime});
 
-      // 평균 시청 시간 계산 및 데이터 삭제 요청
+      // 평균 시청 시간 계산
       await this.calculateAndDeleteWatchTime(this.mySessionId);
+
+      //구매 전환률 업데이트
+      await this.updateConversionRate(this.mySessionId);
 
       // 방송 종료 로직
       this.leaveSession();
@@ -224,6 +227,13 @@ export default {
       return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions/${sessionId}/connections`, {}, {
         headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
+    },
+    async updateConversionRate(broadcastSeq){
+      try{
+        const response = axios.post(`http://localhost:8090/product-clicks/updateConversionRates/${broadcastSeq}`)
+      }catch (error){
+        console.log("구매 전환률 업데이트 실패", error);
+      }
     },
     async updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration}) {
       console.log('Updating broadcast statistics:', {
