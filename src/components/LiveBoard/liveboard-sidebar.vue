@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-white rounded pt-3 px-4 mt-4 ml-5" id="sidebar">
-    <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(6, 1fr);">
-      <div class="grid gap-8" style="grid-template-rows: repeat(6, 1fr);">
+  <div class="sidebar">
+    <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(5, 1fr);">
+      <div class="grid gap-8" style="grid-template-rows: repeat(5, 1fr);">
 
-        <!-- 1. 카메라 on/off -->
+        <!-- 카메라 on/off -->
         <div class="sidebar-icon" @click="toggleIcon(statistics[0])">
           <Icon :icon="statistics[0].isActive ? statistics[0].activeIcon : statistics[0].icon">
           </Icon>
@@ -22,12 +22,13 @@
         <LivePrepareModal v-if="showLivePrepareModal" @broadcast-device-selected="handleDeviceSelection"
           ref="broadcastDeviceControl" :showButtons="false" class="z-20" />
 
+        <!-- 공지사항 -->
         <div class="sidebar-icon" @click="toggleIcon(statistics[4]); addNoticeModal()">
           <Icon :icon="statistics[4].icon" />
           <Modal title="공지사항 등록" ref="addNoticeModal" :showButtons="false">
-            <!-- 공지사항 등록 -->
-            <div class="flex flex-col space-y-2 mb-4">
-              <label for="addNotice" class="text-sm font-medium text-gray-700">공지사항 등록</label>
+            <!-- 등록 -->
+            <div class="notice-add">
+              <label for="addNotice" class="notice-label">공지사항 등록</label>
               <div class="flex items-center space-x-2">
                 <input id="addNotice" type="text" name="addNotice" v-model="notice" placeholder="공지사항 입력"
                   class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
@@ -36,9 +37,9 @@
                 </Button>
               </div>
             </div>
-            <!-- 공지사항 목록-->
+            <!-- 목록-->
             <div class="space-y-2">
-              <label for="addNotice" class="text-sm font-medium text-gray-700">공지사항 목록</label>
+              <label for="addNotice" class="notice-label">공지사항 목록</label>
               <div class="notice-list">
                 <li v-for="notice in notices" :key="notice.noticeSeq">{{ notice.noticeContent }}</li>
                 <Icon icon="heroicons-outline:x" @click="removeNotice(index)" class="remove-button" />
@@ -47,6 +48,7 @@
           </Modal>
         </div>
 
+        <!-- 자주 묻는 질문 -->
         <div class="sidebar-icon" @click="toggleIcon(statistics[5]); addFaqModal()">
           <Icon :icon="statistics[5].icon" />
           <Modal title="자주 묻는 질문 등록" ref="addFaqRef" :showButtons="false" id="addFaq" :sizeClass="'max-w-6xl'">
@@ -205,7 +207,7 @@ export default {
 </script>
 
 <style>
-#sidebar {
+.sidebar {
   width: 70px;
   height: 550px;
   margin-top: 130px;
@@ -230,11 +232,8 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: #f7fafc;
-  /* Tailwind CSS의 bg-gray-100 */
   padding: 0.5rem;
-  /* Tailwind CSS의 p-2, 2 * 0.25rem = 0.5rem */
   border-radius: 0.25rem;
-  /* Tailwind CSS의 rounded */
 }
 
 li {
@@ -256,21 +255,35 @@ dt {
   margin-left: auto;
   margin-right: auto;
   height: 2.5rem;
-  /* 40px */
   width: 2.5rem;
-  /* 40px */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  /* full rounded */
   background-color: white;
   font-size: 1.5rem;
-  /* 24px */
   margin-bottom: 1rem;
-  /* 16px */
   color: black;
   cursor: pointer;
+}
+
+.notice-add {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem; 
+  margin-bottom: 1rem;
+}
+
+.notice-label,
+.faq-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563; 
+}
+
+.faq-label {
+  margin-right: 1rem;
+  width: 5rem; 
 }
 </style>
