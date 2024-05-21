@@ -3983,6 +3983,11 @@ vue-cli-plugin-tailwind@~3.0.0:
   resolved "https://registry.npmjs.org/vue-cli-plugin-tailwind/-/vue-cli-plugin-tailwind-3.0.0.tgz"
   integrity sha512-bUWjfwGtJCeBU7pL4lD86RC+HsJAmAlYqr8e65NGC3q/ZBzC9KQs1Iy/vTyfDTnB7ZJm3huB+1a/m+17fdMZ8A==
 
+vue-daum-postcode@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/vue-daum-postcode/-/vue-daum-postcode-1.2.1.tgz#c589d11925fe17001f9d9f4d91c89661091b6d6f"
+  integrity sha512-TSR6rmVhQOKPy+NrgD3os2XKDa1k6G6RmmxX1Nm1xHTxlY1WQU25kKgPAUO61nXZEkP8ZSbhLuplpb2Y1aQzoQ==
+
 vue-demi@*:
   version "0.13.11"
   resolved "https://registry.npmjs.org/vue-demi/-/vue-demi-0.13.11.tgz"
