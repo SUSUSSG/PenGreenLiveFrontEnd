@@ -55,12 +55,12 @@
                   <div class="flex items-center mb-2">
                     <label for="addFaq" class="faq-label">질문 등록</label>
                     <textarea id="addQuestion" type="text" name="addFaq" rows="1" class="faq-textarea"
-                      v-model="question" />
+                      v-model="questionTitle" />
                   </div>
                   <div class="flex items-center mb-2">
                     <label for="addFaq" class="faq-label">답변 등록</label>
                     <textarea id="addAnswer" type="text" name="addFaq" rows="4" class="faq-textarea"
-                      v-model="answer" />
+                      v-model="questionAnswer" />
                   </div>
                   <Button btnClass="btn-primary btn-sm mt-5" @click="submitFaq()">
                     등록
@@ -70,11 +70,11 @@
               <div class="w-1/2 ml-5">
                 <div class="space-y-2">
                   <label for="addFaq" class="faq-label">기존 목록</label>
-                  <div class="faq-list" v-for="(faq, index) in faqs" :key="faq.faqSeq">
-                    <div class="flex justify-between items-center">
-                      <Icon icon="heroicons-outline:x" @click="removeFaq(index)" class="remove-button mr-3" />
+                  <div class="faq-list" v-for="faq in faqs" :key="faq.faqSeq">
+                    <div class="flex  items-center">
+                      <Icon icon="heroicons-outline:x" @click="removeFaq(faq.faqSeq)" class="remove-button mr-3" />
                       <div>
-                        <dt :data-question="`Q: ${faq.question}`">{{ faq.questionTitle }}</dt>
+                        <dt>{{ faq.questionTitle }}</dt>
                         <dd>{{ faq.questionAnswer }}</dd>
                       </div>
                     </div>
@@ -132,10 +132,8 @@ export default {
       ],
       noticeContent: '',
       showLivePrepareModal: false,
-      question: '',
-      answer: '',
-      // FaqList: [],
-      newBroadcastTitle: ""
+      questionTitle: '',
+      questionAnswer: '',
     }
   },
   methods: {
@@ -213,11 +211,26 @@ export default {
         })
     },
     submitFaq() {
-      if (this.question.trim() && this.answer.trim()) {
-        this.FaqList.push({ question: this.question, answer: this.answer });
-        this.question = '';
-        this.answer = '';
+      const toast = useToast();
+
+      const requestData = {
+        broadcastSeq: this.broadcastId,
+        questionTitle: this.questionTitle,
+        questionAnswer: this.questionAnswer
       }
+
+      axios.post('http://localhost:8090/live-faq/add', requestData)
+        .then(response =>{
+          const newFaq = response.data;
+          console.log("newFaq", newFaq);
+          this.faqs.push(newFaq);
+          this.questionTitle = '';
+          this.questionAnswer = '';
+        })
+        .catch(error => {
+          console.error("자주묻는 질문 및 답변 추가 실패 : ", error);
+          toast.error("자주묻는 질문 및 답변  추가 실패", { timeout: 1000 })
+        })
     },
     removeFaq() {
       this.FaqList.splice(index, 1);
