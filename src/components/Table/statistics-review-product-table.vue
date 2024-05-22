@@ -3,12 +3,12 @@
     <table>
       <thead>
         <tr>
-          <th v-for="header in filteredHeaders" :key="header">{{ header }}</th>
+          <th v-for="header in headers" :key="header">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="(row, rowIndex) in filteredData"
+          v-for="(row, rowIndex) in data"
           :key="rowIndex"
           :class="{ 'selected': selectedRow === rowIndex }"
           @click="selectRow(rowIndex, row)"
@@ -39,14 +39,6 @@ export default {
       selectedRow: null,
     };
   },
-  computed: {
-    filteredHeaders() {
-      return this.headers.filter(header => header !== '코드');
-    },
-    filteredData() {
-      return this.data.map(row => row.filter((cell, index) => index !== row.length - 1));
-    },
-  },
   methods: {
     formatNumber(value) {
       if (!value) return '0';
@@ -54,7 +46,7 @@ export default {
     },
     selectRow(index, row) {
       this.selectedRow = this.selectedRow === index ? null : index;
-      this.$emit('product-click', row[0], row[row.length - 1]); // 상품 코드와 productSeq를 전달
+      this.$emit('product-click', row[0], row[3]); // 상품 코드와 productSeq를 전달
     },
   },
 };
