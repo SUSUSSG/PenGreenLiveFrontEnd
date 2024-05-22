@@ -2,34 +2,28 @@
   <div class="inline-flex pt-5 ml-5" id="header">
     <img src="/src/assets/images/logo/pengreenlive-logo-white.png" id="logo">
 
-    <div id="resultDisplay" :class="[isBroadcasting ? 'red-style' : 'black-style']" class="mr-4">{{ resultDispalyText }}
+    <div class="result-display" :class="[isBroadcasting ? 'red-style' : 'black-style']">{{ resultDispalyText }}
     </div>
-    <div class="row">
+    <div class="row ml-3">
       <div class="broadcast-title">{{ boradcastTitle }}</div>
       <div class="broadcast-time">{{ "라이브 일시 : " + formattedLiveDateTime.current + " ~ " + formattedLiveDateTime.oneHourLater }}</div>
     </div>
 
-    <div class="inline-flex flex-grow items-center justify-end">
+    <div class="right-content">
       <div class="row ml-10" id="times">
         <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
-          <div class="inline-flex bg-white rounded pt-3 px-4 pl-0" id="timeCard">
+          <div class="time-card">
             <div>
-              <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl">
-                <Icon :icon="`heroicons:clock`" />
-              </div>
+              <Icon :icon="`heroicons:clock`" class="icon-style"/>
             </div>
             <div>
-              <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
-                {{ item.title }}
-              </div>
-              <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
-                {{ item.time }}
-              </div>
+              <div class="item-title"> {{ item.title }} </div>
+              <div class="item-time"> {{ item.time }} </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="inline-flex flex-grow items-center justify-end mr-8">
+      <div class="broadcast-controll-button">
         <Button v-on:click="toggleBroadcast()" :text="isBroadcasting ? '라이브 종료' : '라이브 시작'"
           :btnClass="isBroadcasting ? 'btn-green h-12' : 'btn-light h-12'" id="broadcastControllButton" />
       </div>
@@ -161,18 +155,25 @@ export default {
   height: 100px;
 }
 
-#timeCard {
+.time-card {
   width: 150px;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  background-color: #ffffff;
+  border-radius: 0.25rem;
+  padding-top: 0.75rem;
+  padding-right: 1rem;
+  padding-left: 0;
 }
 
-#resultDisplay {
+.result-display {
   width: 80px;
   height: 30px;
   border-radius: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-right: 4px;
 }
 
 .red-style {
@@ -204,5 +205,44 @@ export default {
   color: #111111;
   font-weight: bold;
   font-size: large;
+}
+
+.right-content {
+  display: inline-flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.broadcast-controll-button {
+  display: inline-flex; 
+  flex-grow: 1;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 2rem;
+}
+
+.icon-style {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 9999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.item-title {
+  font-size: 0.875rem; 
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.item-time {
+  font-size: 1.125rem;
+  color: #0f172a;
+  font-weight: 500;
+  margin-bottom: 6px;
 }
 </style>
