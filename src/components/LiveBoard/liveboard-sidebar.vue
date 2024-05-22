@@ -200,7 +200,6 @@ export default {
         })
     },
     removeNotice(noticeId) {
-      console.log("key", noticeId);
       axios.delete(`http://localhost:8090/live-notice/delete/${noticeId}`)
       .then(response => {
         const index = this.notices.findIndex(notice => notice.noticeSeq === noticeId);
