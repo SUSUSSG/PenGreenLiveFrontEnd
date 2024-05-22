@@ -4,8 +4,7 @@
       <div class="card-content">
         <span class="card-title">채널 전체 상품</span>
         <productlist
-          :headers="['상품코드', '상품명', '총 판매량', '관리용 번호']"
-
+          :headers="['자체 코드', '품명', '매출액', '코드']"
           :data="allProducts"
           @product-click="handleProductClick"
         />
@@ -16,39 +15,43 @@
       </div>
       <div class="card-content">
         <div class="review-summary-content">
-        <span class="card-title">리뷰 내용 요약</span>
-        <div class="review-summary">
+          <span class="card-title">리뷰 내용 요약</span>
+          <div class="review-summary">
             <p class="summary-title">🌟AI에 의해 요약된 리뷰입니다.</p>
-            <p class="summary-content" v-if="reviewSummary">{{ reviewSummary }}</p>
+            <p class="summary-content" v-if="reviewSummary">
+              {{ reviewSummary }}
+            </p>
           </div>
-        <div v-if="reviewsList.length" class="review-table">
-          <table>
-            <thead>
-              <tr>
-                <th>리뷰 내용</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(review, index) in reviewsList" :key="index">
-                <td>{{ review }}</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div v-else>
-            <p style="margin-top:15px">리뷰가 없습니다.</p>
+          <div v-if="reviewsList.length" class="review-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>리뷰 내용</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(review, index) in reviewsList" :key="index">
+                  <td>{{ review }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
- 
+          <div v-else>
+            <p style="margin-top: 15px">리뷰가 없습니다.</p>
+          </div>
         </div>
       </div>
     </div>
-    <reviewchart :reviewImage="reviewImage" :loading="loading"></reviewchart>
+    <reviewchart
+      :dailySentiments="dailySentiments"
+      :reviewImage="reviewImage"
+      :loading="loading"
+    ></reviewchart>
   </div>
 </template>
 
 <script>
 import axios from "axios";
-
 import productlist from "@/components/Table/statistics-review-product-table.vue";
 import productdetail from "@/components/Card/product-statistics-card.vue";
 import reviewchart from "@/components/reivew/reviewchart.vue";
@@ -73,16 +76,16 @@ export default {
         brand: "",
         category: "",
       },
-      reviewImage: "", // 리뷰 이미지 데이터를 관리
-      loading: false, // 이미지 로딩 상태를 관리
+      reviewImage: "",
+      loading: false,
       reviewSummary: "",
       reviewsList: [],
-    }
+      dailySentiments: {}, // 일별 감정 분석 결과를 저장하는 데이터
+    };
   },
   async mounted() {
     await this.fetchAllProducts();
 
-    // 첫 번째 상품 상세 정보 조회
     if (this.allProducts.length > 0) {
       this.handleProductClick(this.allProducts[0][0], this.allProducts[0][3]);
     }
@@ -99,8 +102,8 @@ export default {
         this.allProducts = response.data.map((product) => [
           product.productCd,
           product.productNm,
-          product.totalSales, // 총 판매량 추가
-          product.productSeq, // productSeq 추가
+          product.totalSales,
+          product.productSeq,
         ]);
       } catch (error) {
         console.error("Error fetching all products:", error);
@@ -161,9 +164,9 @@ export default {
         } else {
           console.error("Error message:", error.message);
         }
-        this.reviewImage = null; // 오류가 발생하면 null로 설정
+        this.reviewImage = null;
       } finally {
-        this.loading = false; // 로딩 종료
+        this.loading = false;
       }
     },
 
@@ -171,8 +174,11 @@ export default {
       console.log(
         `Product Clicked - productCd: ${productCd}, productSeq: ${productSeq}`
       );
-      this.loading = true; // 상품 클릭 시 로딩 상태로 설정
-      this.reviewImage = null; // 이전 이미지를 초기화
+      this.loading = true;
+      this.reviewImage = null;
+      this.reviewsList = [];
+      this.reviewSummary = "";
+      this.dailySentiments = {};
 
       await this.fetchProductDetails(productCd);
       if (productSeq) {
@@ -180,65 +186,80 @@ export default {
         await this.fetchReviewImage(productSeq);
         await this.fetchReviewSummary(productSeq);
         await this.fetchReviewsList(productSeq);
+        await this.fetchDailySentiments(productSeq); // 일별 감정 분석 결과를 가져오는 메서드 호출
       } else {
         console.log("상품 코드 없음: " + productSeq);
         this.loading = false;
-        this.reviewImage = null; 
+        this.reviewImage = null;
         this.reviewsList = [];
       }
     },
     async fetchReviewSummary(productSeq) {
       try {
-        const response = await axios.post('http://localhost:8090/review/summarize', null, {
-          params: { productSeq: productSeq }
-        });
+        const response = await axios.post(
+          "http://localhost:8090/review/summarize",
+          null,
+          {
+            params: { productSeq: productSeq },
+          }
+        );
         this.reviewSummary = response.data;
       } catch (error) {
-        console.error('Error fetching review summary:', error);
+        console.error("Error fetching review summary:", error);
         this.reviewSummary = "리뷰가 없습니다";
       }
     },
     async fetchReviewsList(productSeq) {
       try {
-        const response = await axios.get('http://localhost:8090/reviewlist', {
-          params: { productSeq: productSeq }
+        const response = await axios.get("http://localhost:8090/reviewlist", {
+          params: { productSeq: productSeq },
         });
         this.reviewsList = response.data;
       } catch (error) {
-        console.error('Error fetching reviews list:', error);
+        console.error("Error fetching reviews list:", error);
         this.reviewsList = [];
       }
     },
-  }
+    async fetchDailySentiments(productSeq) {
+      try {
+        const response = await axios.get(
+          "http://localhost:8090/review/sentiment/daily",
+          {
+            params: { productSeq: productSeq },
+          }
+        );
+        this.dailySentiments = response.data;
+      } catch (error) {
+        console.error("Error fetching daily sentiments:", error);
+        this.dailySentiments = {};
+      }
+    },
+  },
 };
 </script>
 
 <style scoped>
-
-.summary-title{
-  margin-bottom: 1rem!important;
-  font-size:0.8rem!important;
+.summary-title {
+  margin-bottom: 1rem !important;
+  font-size: 0.8rem !important;
   font-weight: 700;
-  color:#676767!important;
+  color: #676767 !important;
 }
-.summary-content{
-  font-weight:600;
-  font-size: 1.1rem!important;
+.summary-content {
+  font-weight: 600;
+  font-size: 1.1rem !important;
 }
-
 .productdetail {
   overflow-y: scroll;
 }
-
 .content-wrapper {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   align-items: stretch;
   width: 100%;
-  gap: 1.5rem;
+  gap: 1rem;
 }
-
 .card-content {
   display: flex;
   flex-direction: column;
@@ -246,44 +267,37 @@ export default {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
-  padding: 1.5rem;
+  padding: 1rem;
   width: 32%;
   height: 400px;
-  margin: 10px;
 }
-
 .flex-row {
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
-  gap: 1.5rem;
   flex-wrap: wrap;
+  gap:1rem;
 }
-
 .card-title {
   font-size: 1.25rem;
-  font-weight: bold;
+  font-weight:500;
+  color:#0f172A;
 }
-
 .card-content:first-child {
   flex: 1;
 }
-
 .card-content:nth-child(2),
 .card-content:nth-child(3) {
   flex: 1;
 }
-
 .table-container td {
   padding: 4px 8px;
 }
-
 th,
 td {
   text-align: center;
 }
-
 img {
   max-width: 100%;
   height: auto;
@@ -291,52 +305,42 @@ img {
   border: 1px solid #ccc;
   border-radius: 8px;
 }
-
-
 .review-summary-content {
   overflow-y: auto;
   height: 100%;
 }
-
 .review-summary {
   background-color: #ffffff;
   padding: 0.2rem 1rem 0.2rem 1rem;
   margin-top: 10px;
   border-left: 3px solid rgb(231, 93, 228);
-  
 }
-
 .review-summary p {
   margin: 0;
   font-size: 1rem;
   color: #333;
 }
-
 .review-table {
   margin-top: 10px;
 }
-
 .review-table table {
   width: 100%;
   border-collapse: collapse;
 }
-
-.review-table th, .review-table td {
+.review-table th,
+.review-table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: left;
 }
-
 .review-table th {
   background-color: #f2f2f2;
   font-weight: bold;
   text-align: center;
 }
-
 .review-table tr:nth-child(even) {
   background-color: #f9f9f9;
 }
-
 .review-table tr:hover {
   background-color: #f1f1f1;
 }

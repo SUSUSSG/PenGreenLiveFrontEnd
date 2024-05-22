@@ -76,6 +76,10 @@ thead {
   background-color: #ece6cc;
 }
 
+th {
+  white-space: nowrap; /* 헤더 텍스트 줄바꿈 방지 */
+}
+
 .selected {
   background-color: #f0f0f0;
 }

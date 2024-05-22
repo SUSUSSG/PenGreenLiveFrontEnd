@@ -2,31 +2,46 @@
   <div class="review-charts-container">
     <div class="card">
       <Card title="리뷰 감정 추이 분포">
-        <apexchart
-          type="bar"
-          height="350"
-          :options="
-            this.$store.themeSettingsStore.isDark
-              ? stackChartDark.chartOptions
-              : stackChart.chartOptions
-          "
-          :series="stackChart.series"
-        ></apexchart>
+        <template v-if="loading">
+          <div class="loading-text">조회 중...</div>
+        </template>
+        <template v-else-if="!dailySentiments || Object.keys(dailySentiments).length === 0">
+          <div class="error-text">데이터가 부족합니다.</div>
+        </template>
+        <template v-else>
+          <apexchart
+            type="line"
+            height="350"
+            :options="chartOptions"
+            :series="series"
+          ></apexchart>
+          <div class="chart-data">
+            <p>가로축: 일자</p>
+            <p>세로축: 긍정, 부정, 중립 비율</p>
+          </div>
+        </template>
       </Card>
     </div>
 
     <div class="card">
       <Card title="리뷰 긍정률 분포">
-        <apexchart
-          type="donut"
-          height="450"
-          :options="
-            this.$store.themeSettingsStore.isDark
-              ? donutChartDark.chartOptions
-              : donutChart.chartOptions
-          "
-          :series="donutChart.series"
-        ></apexchart>
+        <template v-if="loading">
+          <div class="loading-text">조회 중...</div>
+        </template>
+        <template v-else-if="!donutSeries || donutSeries.length === 0">
+          <div class="error-text">데이터가 부족합니다.</div>
+        </template>
+        <template v-else>
+          <apexchart
+            type="donut"
+            height="450"
+            :options="donutChartOptions"
+            :series="donutSeries"
+          ></apexchart>
+          <div class="chart-data">
+            <p>긍정, 부정, 중립 비율</p>
+          </div>
+        </template>
       </Card>
     </div>
 
@@ -39,10 +54,7 @@
           <img :src="reviewImage" alt="리뷰 요약 이미지" />
         </template>
         <template v-else>
-          <div class="col">
-            <p>-- 에러 --</p>
-            <p>분석을 위한 리뷰 수가 부족합니다!!</p>
-          </div>
+          <div class="error-text">분석을 위한 리뷰 수가 부족합니다!!</div>
         </template>
       </Card>
     </div>
@@ -51,23 +63,124 @@
 
 <script>
 import Card from "@/components/Card";
-import { stackChart } from "@/constant/appex-chart";
-import { donutChart } from "@/constant/appex-chart";
+import { ref, watch } from "vue";
+import VueApexCharts from "vue3-apexcharts";
 
 export default {
   components: {
     Card,
+    apexchart: VueApexCharts,
   },
   props: {
-    reviewImage: String, // 상위 컴포넌트에서 전달받는 리뷰 이미지 데이터
-    loading: Boolean,    // 상위 컴포넌트에서 전달받는 로딩 상태
+    dailySentiments: Object,
+    reviewImage: String,
+    loading: Boolean,
   },
   data() {
     return {
-      stackChart,
-      donutChart,
+      chartOptions: {
+        chart: {
+          type: 'line',
+        },
+        xaxis: {
+          categories: [],
+          title: {
+            text: '날짜'
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'smooth',
+          width: 2,
+        },
+        yaxis: {
+          title: {
+            text: 'Percentage'
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + "%";
+            }
+          }
+        },
+        legend: {
+          position: 'bottom'
+        }
+      },
+      series: [],
+      donutChartOptions: {
+        chart: {
+          type: 'donut',
+        },
+        labels: ['Positive', 'Negative', 'Neutral'],
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }],
+        legend: {
+          position: 'bottom'
+        }
+      },
+      donutSeries: []
     };
   },
+  watch: {
+    dailySentiments: {
+      handler(newValue) {
+        this.updateChartData(newValue);
+      },
+      deep: true,
+    }
+  },
+  methods: {
+    updateChartData(data) {
+      const dates = Object.keys(data);
+      const positive = dates.map(date => data[date].positive);
+      const negative = dates.map(date => data[date].negative);
+      const neutral = dates.map(date => data[date].neutral);
+
+      this.chartOptions.xaxis.categories = dates;
+      this.series = [
+        {
+          name: 'Positive',
+          data: positive
+        },
+        {
+          name: 'Negative',
+          data: negative
+        },
+        {
+          name: 'Neutral',
+          data: neutral
+        }
+      ];
+
+      const totalSentiments = dates.reduce((acc, date) => {
+        acc.positive += data[date].positive;
+        acc.negative += data[date].negative;
+        acc.neutral += data[date].neutral;
+        return acc;
+      }, { positive: 0, negative: 0, neutral: 0 });
+
+      const totalCount = dates.length;
+      this.donutSeries = [
+        totalSentiments.positive / totalCount,
+        totalSentiments.negative / totalCount,
+        totalSentiments.neutral / totalCount
+      ];
+    }
+  }
 };
 </script>
 
@@ -80,7 +193,9 @@ export default {
   text-align: center;
 }
 
-.review-word-loading {
+.review-word-loading,
+.loading-text,
+.error-text {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,7 +211,6 @@ export default {
 
 .review-charts-container > div {
   flex: 1;
-  margin: 0 10px;
 }
 
 .apexchart {
@@ -106,7 +220,7 @@ export default {
 .card-content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
@@ -122,7 +236,7 @@ export default {
   justify-content: space-around;
   align-items: stretch;
   width: 100%;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 img {
@@ -130,6 +244,17 @@ img {
   height: auto;
   margin-top: 1rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 20px;
+}
+
+.chart-data {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+}
+
+.apexcharts-legend {
+  justify-content: center !important;
 }
 </style>
