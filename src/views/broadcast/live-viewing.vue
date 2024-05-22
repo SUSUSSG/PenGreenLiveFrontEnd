@@ -1,6 +1,6 @@
 <template>
   <div class="live-container" :style="{ height: computedHeight + 'px' }">
-    <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: 1 }"
+    <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: chattingId }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
     <Live class="live-section-broad"
@@ -100,7 +100,7 @@
 </template>
 
 <script setup>
-import {ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
+import { ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
@@ -113,10 +113,14 @@ import PurchaseModal from "@/components/Modal/purchase-modal.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
 
+
 // 라우트 및 환경변수 설정
 const route = useRoute();
 const router = useRouter();
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/';
+
+//채팅 방 번호
+const chattingId = ref(route.params.broadcastId);
 
 // 세션 및 OpenVidu 관련 상태
 const mySessionId = ref('');
