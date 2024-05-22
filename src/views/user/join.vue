@@ -298,12 +298,13 @@
             if (event.origin !== window.location.origin) return;
 
             const { address, zonecode, buildingName } = event.data;
-            form.value.userAddress = `${address} ${buildingName} ${zonecode}`;
+            form.value.userAddress = ` ${zonecode} ${address} ${addressForm.detailAddress}`;
             addressForm.value.address = address;
             addressForm.value.zonecode = zonecode;
             addressForm.value.detailAddress = `(${buildingName}) `;
         });
     };
+
 
     // 약관 동의
     const allAgreed = ref(false);
