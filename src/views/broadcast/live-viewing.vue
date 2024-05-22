@@ -47,7 +47,7 @@
                       :product-name="product.productName" 
                       :original-price="product.price"
                       :discount-rate="product.discountRate"
-                       :product-img="product.productImg"
+                      :product-img="product.productImg"
                       :label-img="product.labelImg" 
                       @click="showProductDetails(product)"
                       @updateDiscountedPrice="handleDiscountedPrice($event, product)" />
@@ -488,9 +488,7 @@ watch(boxHeight, calculateHeight);
 }
 
 .product-list {
-  /* display: flex;/ */
-  /* flex-wrap: wrap; */
-  gap: 10px; /* 상품 카드 사이의 간격을 설정합니다. */
+  gap: 10px; 
 }
 
 .exit-button {
@@ -506,14 +504,14 @@ watch(boxHeight, calculateHeight);
 
 
 .product-list ul {
-  height: 100%; /* ul의 높이를 부모의 100%로 설정 */
-  overflow: auto; /* ul 내부에서 스크롤 발생 */
+  height: 100%; 
+  overflow: auto;
 }
 
 /* 질문 및 답변 스타일 변경 */
 dt {
   font-weight: bold;
-  border-bottom: 1px dashed #ccc; /* 구분선 추가 */
+  border-bottom: 1px dashed #ccc;
   padding-bottom: 5px;
   margin-bottom: 5px;
   display: block;
@@ -528,7 +526,7 @@ dd {
 
 ul.notice-list,
 ul.benefits-list {
-  list-style: none; /* 기본 목록 스타일 제거 */
+  list-style: none;
   padding: 0;
   margin: 0 10px;
 }
