@@ -35,15 +35,15 @@
                                                 <div class="flex items-center">                                                        
                                                     <div class="flex items-center flex-grow-7">
                                                         <input type="text" value="010" class=" w-[20%] mr-2 input-control focus:outline-none h-[40px]" readonly="" disabled="">
-                                                        <input v-model="form.userTel" type="text" placeholder="휴대폰번호 (-없이 입력)" class="w-full input-control focus:outline-none h-[40px]"
+                                                        <input v-model="form.userTel" :disabled="responseAuth" type="text" placeholder="휴대폰번호 (-없이 입력)" class="w-full input-control focus:outline-none h-[40px]"
                                                         >
                                                     </div>
                                                     <div class="w-[163px]">
-                                                        <Button type="button" text="인증번호 받기" class="w-full"/>
+                                                        <Button :disabled="responseAuth" @click="requestPhoneAuthCode" type="button" text="인증번호 받기" class="w-full"/>
                                                     </div>
                                                 </div>                                    
                                             </div>
-                                            <div class="grid-cols-1 grid mb-5 last:mb-0">
+                                            <div class="grid-cols-1 grid mb-5 last:mb-0" v-if="requestAuth">
                                                 <div class="flex items-center"> 
                                                     <input v-model="inputAuthCode" type="text" placeholder="인증번호 6자리 입력" class="flex-grow-7 input-control focus:outline-none h-[40px]">
                                                     <div class="flex-grow-3">
@@ -224,42 +224,98 @@
 
 
     // 휴대폰 번호 인증
+    let requestAuth = ref(false);
+    let responseAuth = ref(false);        
     let inputAuthCode = ref(null);
 
+    function phoneNumberCheck(number){
+        let result = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
+        return result.test(number);
+    }
+
+    function initPhoneNumberInput() {
+        responseAuth.value = false;
+        requestAuth.value = false;
+        form.value.userTel = "";
+    }
+
     async function requestPhoneAuthCode() {
-        const phoneNumber = form.value.userTel;
+        const phoneNumber = `010${form.value.userTel}`;
+
+        if (phoneNumber==="010") {
+            alert("휴대폰 번호를 입력하세요.");
+            return;
+        }
+        else if (!phoneNumberCheck(phoneNumber)) {
+            alert("휴대폰번호 입력 형식이 다릅니다.");
+            return;
+        } 
+
         const params = {
             phoneNumber: phoneNumber
         }
+
         try {
+            responseAuth.value = true;
             const response = await axios.post(`/api/sms/request-authcode`, null, {params});
+
             if (response.status===200) {
                 console.log(response.statusText);
+                requestAuth.value = true;
             } else {
                 console.log(response.statusText);
             }
         } catch (error) {
-            console.error('Error :', error);
+            alert('Error :', error.response.data);
+            responseAuth.value = false;
+            requestAuth.value = false;
         }
     }
 
     async function verifyCode() {
+        const phoneNumber = `010${form.value.userTel}`;
+
+
+        if (inputAuthCode.value===null) {
+            alert("인증번호를 입력해주세요.");
+            return;
+        }
+
         const params = {
-            phoneNumber: form.value.userTel,
-            code: inputAuthCode
+            phoneNumber: phoneNumber,
+            code: inputAuthCode.value
         }
 
         try {
-            const response = await axios.post(`/api/sms/verify`, null, {params});
-            if (response.status===200) {
-                console.log(response.statusText);
-            } else if (response.status===400){
-                alert(response.statusText);
+            const response = await axios.post('/api/sms/verify', null, {params});
+            if (response.status === 200) {
+                console.log(response.data);
+                alert("인증되었습니다.");
+                requestAuth.value = false;
             } else {
-                console.log(response.statusText);
+                alert(response.data);
             }
         } catch (error) {
-            console.error('Error :', error);
+            if (error.response) {
+                if (error.response.status === 401) {    // 인증번호 틀림
+                    alert(error.response.data);
+                } else if(error.response.status === 410) {  // 인증시간 만료
+                    alert(error.response.data);
+                    initPhoneNumberInput();
+                } 
+                else {
+                    alert(`서버 오류: ${error.response.tbody}`);
+                    responseAuth.value = false;
+                    requestAuth.value = false;
+                    form.value.userTel = "";
+                }
+            } else if (error.request) {
+                console.error('Error request:', error.request);
+                alert('네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+            } else {
+                console.error('Error message:', error.message);
+                alert('알 수 없는 오류가 발생했습니다. 나중에 다시 시도해주세요.');
+            }
         }
     }
 
