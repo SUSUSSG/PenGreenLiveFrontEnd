@@ -186,16 +186,13 @@ export default {
 
       console.log(requestData)
 
-      axios.post('http://localhost:8090/live-notice', requestData)
+      axios.post('http://localhost:8090/live-notice/add', requestData)
         .then(response =>{
           // 아래 목록에 추가
           const newNotice = response.data;
-          console.log("newNotice", newNotice)
+          console.log("newNotice", newNotice);
           this.notices.push(newNotice);
           this.noticeContent = '';
-          toast.success("새로운 공지사항 등록 성공", {
-            timeout: 1000
-          })
         })
         .catch(error => {
           console.error("공지 추가 실패 : ", error);
