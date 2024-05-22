@@ -17,7 +17,7 @@
             @update-statistics="updateStatistics" 
             :channelNm="liveBroadcastInfo.broadcast.channelNm"/>
           <LiveboardProduct :products="liveBoradcastProduct" />
-          <LiveboardPrompt />
+          <LiveboardPrompt :broadcastSeq="broadcastId" />
         </div>
         <div className="flex-col">
           <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호"
