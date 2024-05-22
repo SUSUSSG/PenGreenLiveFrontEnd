@@ -14,7 +14,31 @@
         <productdetail v-bind="productData" class="productdetail" />
       </div>
       <div class="card-content">
+        <div class="review-summary-content">
         <span class="card-title">리뷰 내용 요약</span>
+        <div class="review-summary">
+            <p class="summary-title">🌟AI에 의해 요약된 리뷰입니다.</p>
+            <p class="summary-content" v-if="reviewSummary">{{ reviewSummary }}</p>
+          </div>
+        <div v-if="reviewsList.length" class="review-table">
+          <table>
+            <thead>
+              <tr>
+                <th>리뷰 내용</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(review, index) in reviewsList" :key="index">
+                <td>{{ review }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else>
+            <p style="margin-top:15px">리뷰가 없습니다.</p>
+          </div>
+ 
+        </div>
       </div>
     </div>
     <reviewchart :reviewImage="reviewImage"></reviewchart>
@@ -47,7 +71,9 @@ export default {
         brand: "",
         category: "",
       },
-      reviewImage: "",  // 리뷰 이미지 데이터를 관리
+      reviewImage: "",
+      reviewSummary: "",
+      reviewsList: [],
     }
   },
   async mounted() {
@@ -107,7 +133,7 @@ export default {
         this.reviewImage = imageData;
       } catch (error) {
         console.error('Error fetching review image:', error);
-        this.reviewImage = null; // 오류가 발생하면 null로 설정
+        this.reviewImage = null; 
       }
     },
     async handleProductClick(productCd, productSeq) {
@@ -116,16 +142,52 @@ export default {
       if (productSeq) {
         console.log("상품 코드 있음: " + productSeq);
         await this.fetchReviewImage(productSeq);
+        await this.fetchReviewSummary(productSeq);
+        await this.fetchReviewsList(productSeq);
       } else {
         console.log("상품 코드 없음: " + productSeq);
-        this.reviewImage = null; // productSeq가 없으면 null로 설정
+        this.reviewImage = null; 
+        this.reviewsList = [];
       }
-    }
+    },
+    async fetchReviewSummary(productSeq) {
+      try {
+        const response = await axios.post('http://localhost:8090/review/summarize', null, {
+          params: { productSeq: productSeq }
+        });
+        this.reviewSummary = response.data;
+      } catch (error) {
+        console.error('Error fetching review summary:', error);
+        this.reviewSummary = "리뷰가 없습니다";
+      }
+    },
+    async fetchReviewsList(productSeq) {
+      try {
+        const response = await axios.get('http://localhost:8090/reviewlist', {
+          params: { productSeq: productSeq }
+        });
+        this.reviewsList = response.data;
+      } catch (error) {
+        console.error('Error fetching reviews list:', error);
+        this.reviewsList = [];
+      }
+    },
   }
 };
 </script>
 
 <style scoped>
+.summary-title{
+  margin-bottom: 1rem!important;
+  font-size:0.8rem!important;
+  font-weight: 700;
+  color:#676767!important;
+}
+.summary-content{
+  font-weight:600;
+  font-size: 1.1rem!important;
+}
+
 .productdetail {
   overflow-y: scroll;
 }
@@ -189,5 +251,53 @@ img {
   margin-top: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
+}
+
+.review-summary-content {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.review-summary {
+  background-color: #ffffff;
+  padding: 0.2rem 1rem 0.2rem 1rem;
+  margin-top: 10px;
+  border-left: 3px solid rgb(231, 93, 228);
+  
+}
+
+.review-summary p {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
+}
+
+.review-table {
+  margin-top: 10px;
+}
+
+.review-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.review-table th, .review-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.review-table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  text-align: center;
+}
+
+.review-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.review-table tr:hover {
+  background-color: #f1f1f1;
 }
 </style>
