@@ -32,7 +32,10 @@
 
     <div class="card">
       <Card title="리뷰 핵심 문구 차트">
-        <template v-if="reviewImage">
+        <template v-if="loading">
+          <div class="review-word-loading">리뷰 핵심 단어 연관관계 분석 중...</div>
+        </template>
+        <template v-else-if="reviewImage">
           <img :src="reviewImage" alt="리뷰 요약 이미지" />
         </template>
         <template v-else>
@@ -57,6 +60,7 @@ export default {
   },
   props: {
     reviewImage: String, // 상위 컴포넌트에서 전달받는 리뷰 이미지 데이터
+    loading: Boolean,    // 상위 컴포넌트에서 전달받는 로딩 상태
   },
   data() {
     return {
@@ -75,6 +79,15 @@ export default {
   align-content: center;
   text-align: center;
 }
+
+.review-word-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1rem;
+  color: #333;
+}
+
 .review-charts-container {
   display: flex;
   justify-content: space-around;
