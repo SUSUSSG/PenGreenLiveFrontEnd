@@ -15,6 +15,12 @@
       </div>
       <div class="card-content">
         <span class="card-title">리뷰 내용 요약</span>
+        <div v-if="reviewSummary" class="review-summary">
+          <p>{{ reviewSummary }}</p>
+        </div>
+        <div v-else>
+          <p>리뷰 요약을 불러오는 중...</p>
+        </div>
       </div>
     </div>
     <reviewchart :reviewImage="reviewImage"></reviewchart>
@@ -47,7 +53,8 @@ export default {
         brand: "",
         category: "",
       },
-      reviewImage: "",  // 리뷰 이미지 데이터를 관리
+      reviewImage: "",
+      reviewSummary: "", // 리뷰 요약 데이터를 관리
     }
   },
   async mounted() {
@@ -107,7 +114,7 @@ export default {
         this.reviewImage = imageData;
       } catch (error) {
         console.error('Error fetching review image:', error);
-        this.reviewImage = null; // 오류가 발생하면 null로 설정
+        this.reviewImage = null; 
       }
     },
     async handleProductClick(productCd, productSeq) {
@@ -116,11 +123,23 @@ export default {
       if (productSeq) {
         console.log("상품 코드 있음: " + productSeq);
         await this.fetchReviewImage(productSeq);
+        await this.fetchReviewSummary(productSeq);
       } else {
         console.log("상품 코드 없음: " + productSeq);
-        this.reviewImage = null; // productSeq가 없으면 null로 설정
+        this.reviewImage = null; 
       }
-    }
+    },
+    async fetchReviewSummary(productSeq) {
+      try {
+        const response = await axios.post('http://localhost:8090/review/summarize', null, {
+          params: { productSeq: productSeq }
+        });
+        this.reviewSummary = response.data;
+      } catch (error) {
+        console.error('Error fetching review summary:', error);
+        this.reviewSummary = "리뷰가 없습니다";
+      }
+    },
   }
 };
 </script>
@@ -189,5 +208,19 @@ img {
   margin-top: 1rem;
   border: 1px solid #ccc;
   border-radius: 8px;
+}
+
+.review-summary {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 10px;
+}
+
+.review-summary p {
+  margin: 0;
+  font-size: 1rem;
+  color: #333;
 }
 </style>
