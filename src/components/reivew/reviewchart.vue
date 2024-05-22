@@ -5,12 +5,8 @@
         <apexchart
           type="bar"
           height="350"
-          :options="
-            this.$store.themeSettingsStore.isDark
-              ? stackChartDark.chartOptions
-              : stackChart.chartOptions
-          "
-          :series="stackChart.series"
+          :options="chartOptions"
+          :series="series"
         ></apexchart>
       </Card>
     </div>
@@ -20,12 +16,8 @@
         <apexchart
           type="donut"
           height="450"
-          :options="
-            this.$store.themeSettingsStore.isDark
-              ? donutChartDark.chartOptions
-              : donutChart.chartOptions
-          "
-          :series="donutChart.series"
+          :options="donutChartOptions"
+          :series="donutSeries"
         ></apexchart>
       </Card>
     </div>
@@ -51,23 +43,129 @@
 
 <script>
 import Card from "@/components/Card";
-import { stackChart } from "@/constant/appex-chart";
-import { donutChart } from "@/constant/appex-chart";
+import { ref, watch } from "vue";
+import VueApexCharts from "vue3-apexcharts";
 
 export default {
   components: {
     Card,
+    apexchart: VueApexCharts,
   },
   props: {
-    reviewImage: String, // 상위 컴포넌트에서 전달받는 리뷰 이미지 데이터
-    loading: Boolean,    // 상위 컴포넌트에서 전달받는 로딩 상태
+    dailySentiments: Object,
+    reviewImage: String,
+    loading: Boolean,
   },
   data() {
     return {
-      stackChart,
-      donutChart,
+      chartOptions: {
+        chart: {
+          type: 'bar',
+        },
+        xaxis: {
+          categories: [],
+          title: {
+            text: '날짜'
+          }
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+            columnWidth: '55%',
+            endingShape: 'rounded'
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          show: true,
+          width: 2,
+          colors: ['transparent']
+        },
+        yaxis: {
+          title: {
+            text: 'Percentage'
+          }
+        },
+        fill: {
+          opacity: 1
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val + "%";
+            }
+          }
+        }
+      },
+      series: [],
+      donutChartOptions: {
+        chart: {
+          type: 'donut',
+        },
+        labels: ['Positive', 'Negative', 'Neutral'],
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }]
+      },
+      donutSeries: []
     };
   },
+  watch: {
+    dailySentiments: {
+      handler(newValue) {
+        this.updateChartData(newValue);
+      },
+      deep: true,
+    }
+  },
+  methods: {
+    updateChartData(data) {
+      const dates = Object.keys(data);
+      const positive = dates.map(date => data[date].positive);
+      const negative = dates.map(date => data[date].negative);
+      const neutral = dates.map(date => data[date].neutral);
+
+      this.chartOptions.xaxis.categories = dates;
+      this.series = [
+        {
+          name: 'Positive',
+          data: positive
+        },
+        {
+          name: 'Negative',
+          data: negative
+        },
+        {
+          name: 'Neutral',
+          data: neutral
+        }
+      ];
+
+      const totalSentiments = dates.reduce((acc, date) => {
+        acc.positive += data[date].positive;
+        acc.negative += data[date].negative;
+        acc.neutral += data[date].neutral;
+        return acc;
+      }, { positive: 0, negative: 0, neutral: 0 });
+
+      const totalCount = dates.length;
+      this.donutSeries = [
+        totalSentiments.positive / totalCount,
+        totalSentiments.negative / totalCount,
+        totalSentiments.neutral / totalCount
+      ];
+    }
+  }
 };
 </script>
 
