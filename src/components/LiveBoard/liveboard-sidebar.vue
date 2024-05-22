@@ -39,7 +39,7 @@
             <div class="space-y-2">
               <label for="addNotice" class="notice-label">공지사항 목록</label>
               <div class="notice-list" v-for="notice in notices" :key="notice.noticeSeq">{{ notice.noticeContent }}
-                <Icon icon="heroicons-outline:x" @click="removeNotice(index)" class="remove-button" />
+                <Icon icon="heroicons-outline:x" @click="removeNotice(notice.noticeSeq)" class="remove-button" />
               </div>
             </div>
           </Modal>
@@ -196,13 +196,22 @@ export default {
         })
         .catch(error => {
           console.error("공지 추가 실패 : ", error);
-          toast.error("공지 사항 추가 실패", {
-            timeout: 1000
-          })
+          toast.error("공지 사항 추가 실패", { timeout: 1000 })
         })
     },
-    removeNotice(index) {
-      this.notices.splice(index, 1);
+    removeNotice(noticeId) {
+      console.log("key", noticeId);
+      axios.delete(`http://localhost:8090/live-notice/delete/${noticeId}`)
+      .then(response => {
+        const index = this.notices.findIndex(notice => notice.noticeSeq === noticeId);
+        if (index !== -1) {
+                this.notices.splice(index, 1);
+            }
+      })
+      .catch(error => {
+          console.error("공지 삭제 실패 : ", error);
+          toast.error("공지 사항 삭제 실패", { timeout: 1000})
+        })
     },
     submitFaq() {
       if (this.question.trim() && this.answer.trim()) {
