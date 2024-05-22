@@ -46,6 +46,7 @@
                     <ProductCard
                         v-for="product in productList"
                         :key="product.productName"
+                        :brand="product.brand"
                         :product-name="product.productName"
                         :original-price="product.price"
                         :discount-rate="product.discountRate"
@@ -268,6 +269,7 @@ const loadBroadcastProduct = async () => {
       console.log("labelImagesArray:", labelImagesArray);
       return {
         productName: product.productNm,
+        brand: product.brand,
         price: product.listPrice,
         discountRate: product.discountRate,
         productImg: product.productImage,

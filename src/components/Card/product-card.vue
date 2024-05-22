@@ -6,13 +6,14 @@
     <div class="info flex items-center">
       <a class="a_detail" name="Curation2">
         <dl>
-          <dt class="tit original-name">{{ productName }}</dt>
+          <div v-if="brand" class="brand">{{ "[" + brand + "]" }}</div>
+          <dt class="tit original-name" :data-tooltipe=productName>{{ productName }}</dt>
           <div class="price-info">
-            <p class="discount-rate">{{ discountRate }}%</p>
             <div class="prices">
               <del class="original-price">{{ formattedOriginalPrice }}</del>
-              <strong class="discounted-price">{{ formattedDiscountedPrice }}</strong>
+              <p class="discount-rate">{{ discountRate }}%</p>
             </div>
+            <strong class="discounted-price">{{ formattedDiscountedPrice }}</strong>
           </div>
         </dl>
       </a>
@@ -28,6 +29,7 @@ export default {
   name: 'ProductCard',
   props: {
     productName: String,
+    brand: Boolean,
     originalPrice: Number,
     discountRate: Number,
     productImg: String,
@@ -58,6 +60,7 @@ export default {
   width: 400px;
   padding: 0 0 10px 0;
   border-bottom: 1px solid #f0f1f4;
+  padding-top: 5px;
 }
 
 .product-card .thum {
@@ -96,6 +99,20 @@ export default {
   max-height: 36px;
   color: #131518;
   font-size: 14px;
+}
+
+.product-card .info .tit:hover::after {
+  content: attr(data-tooltipe);
+  position: absolute;
+  background-color: rgba(236, 230, 204, 0.9);
+  color: #111111;
+  padding: 3px;
+  border-radius: 10px;
+  left: 0;
+  white-space: nowrap;
+  z-index: 10;
+  cursor: pointer;
+  font-size: 11px;
 }
 
 .product-card .info .price-info {
@@ -137,13 +154,19 @@ export default {
   border-radius: 5px;
 }
 
-.original-name {
-  margin-top: 15px;
-}
 
 .label-image {
   width: 30px;
   height: 30px;
   margin-right: 5px;
+}
+
+.brand {
+  font-size: 0.8rem;
+  margin-bottom: 5px;
+}
+
+.discounted-price {
+  margin-left: 20px;
 }
 </style>
