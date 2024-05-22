@@ -60,9 +60,9 @@
                                         <td class="vgt-right-align">
                                             <div class="grid-cols-1 grid mb-5 last:mb-0">
                                                 <div class="flex items-center">
-                                                    <input v-model="form.userId" type="text" placeholder="아이디 (5~12자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
+                                                    <input @input="onInputChangeId" v-model="form.userId" type="text" placeholder="아이디 (5~12자 영문+숫자)" class="flex-grow-7 classinput input-control block focus:outline-none h-[40px]">
                                                     <div class="flex-grow-3">
-                                                        <Button @click="checkDuplicateUserId" type="button" text="중복체크" class="w-full"/>
+                                                        <Button @click="checkDuplicateUserId" type="button" text="중복확인" class="w-full"/>
                                                     </div>
                                                 </div>
                                             </div>
@@ -227,6 +227,7 @@
     let requestAuth = ref(false);
     let responseAuth = ref(false);        
     let inputAuthCode = ref(null);
+    let userTelVerify = ref(false);
 
     function phoneNumberCheck(number){
         let result = /^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/;
@@ -292,6 +293,7 @@
                 console.log(response.data);
                 alert("인증되었습니다.");
                 requestAuth.value = false;
+                userTelVerify.value = true;
             } else {
                 alert(response.data);
             }
@@ -320,6 +322,8 @@
     }
 
     // 아이디 중복 체크
+    let userIdVerify = ref(false);
+
     async function checkDuplicateUserId() {
         const id = form.value.userId;
 
@@ -329,11 +333,18 @@
         }
         try {
             const response = await axios.post(`/api/check-id`, {id});
-            if (response.data==='available') alert("사용 가능한 아이디입니다.");
+            if (response.data==='available') {
+                alert("사용 가능한 아이디입니다.");
+                userIdVerify.value = true; 
+            } 
             else alert("이미 사용 중인 아이디입니다.");
         } catch (error) {
             console.error('Error checking id:', error);
         }
+    }
+
+    function onInputChangeId() {
+        userIdVerify.value = false; 
     }
 
     // 아이디 형식 검사
@@ -379,11 +390,13 @@
             if (event.origin !== window.location.origin) return;
 
             const { address, zonecode, buildingName } = event.data;
-            form.value.userAddress = ` ${zonecode} ${address} ${addressForm.detailAddress}`;
             addressForm.value.address = address;
             addressForm.value.zonecode = zonecode;
             addressForm.value.detailAddress = `(${buildingName}) `;
+            form.value.userAddress = ` ${zonecode} ${address} ${addressForm.value.detailAddress}`;
         });
+
+        console.log(form.value.userAddress);
     };
 
 
@@ -414,7 +427,7 @@
     // 공백 및 null 검사
     function validateFormFields() {
         for (const key in form.value) {
-            if (['userUuid', 'optionalAgreementYn', 'userBirthDt'].includes(key)) {
+            if (['userUuid', 'optionalAgreementYn', 'userBirthDt', 'userNm'].includes(key)) {
                 continue;
             }
             const value = form.value[key];
@@ -424,8 +437,22 @@
             }
         }
 
-        if (allAgreed===false) {
-            alert(`${allAgreed} 필수 약관에 동의되지 않았습니다.`);
+        if (form.value.userNm==="") {
+            alert('이름이 입력되지 않았습니다.');
+        }
+
+        if (!userTelVerify.value) {
+            alert('휴대폰번호가 인증되지 않았습니다.');
+            return false;
+        }
+
+        if (!userIdVerify.value) {
+            alert('아이디 중복 여부를 확인하세요.') ;
+            return false;
+        }
+
+        if (!allAgreed.value) {
+            alert('필수 약관에 동의되지 않았습니다.');
             return false;
         }
 
