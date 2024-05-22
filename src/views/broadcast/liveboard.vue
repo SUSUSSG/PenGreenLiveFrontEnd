@@ -14,7 +14,8 @@
         </div>
         <div className="flex-col">
           <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck"
-            @update-statistics="updateStatistics" />
+            @update-statistics="updateStatistics" 
+            :channelNm="liveBroadcastInfo.broadcast.channelNm"/>
           <LiveboardProduct :products="liveBoradcastProduct" />
           <LiveboardPrompt />
         </div>
@@ -22,7 +23,8 @@
           <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호"
                             @broadcast-device-selected="handleDeviceChange"
                             :notices="liveBroadcastInfo.notices"
-                            :faqs="liveBroadcastInfo.faqs"/>
+                            :faqs="liveBroadcastInfo.faqs"
+                            :broadcast-id="broadcastId"/>
         </div>
       </div>
     </div>
@@ -68,7 +70,9 @@ export default {
       // 실시간 방송 정보
       liveBroadcastInfo: [],
       // 방송 판매 상품
-      liveBoradcastProduct: []
+      liveBoradcastProduct: [],
+      // 방송 아이디
+      broadcastId: this.$route.params.broadcastId
     };
   },
   methods: {
