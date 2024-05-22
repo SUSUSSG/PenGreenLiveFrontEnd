@@ -6,7 +6,7 @@
     <div class="info flex items-center">
       <a class="a_detail" name="Curation2">
         <dl>
-          <div class="brand">{{ "[" + brand + "]" }}</div>
+          <div v-if="brand" class="brand">{{ "[" + brand + "]" }}</div>
           <dt class="tit original-name" :data-tooltipe=productName>{{ productName }}</dt>
           <div class="price-info">
             <div class="prices">
@@ -29,7 +29,7 @@ export default {
   name: 'ProductCard',
   props: {
     productName: String,
-    brand: String,
+    brand: Boolean,
     originalPrice: Number,
     discountRate: Number,
     productImg: String,
@@ -60,6 +60,7 @@ export default {
   width: 400px;
   padding: 0 0 10px 0;
   border-bottom: 1px solid #f0f1f4;
+  padding-top: 5px;
 }
 
 .product-card .thum {
@@ -103,14 +104,15 @@ export default {
 .product-card .info .tit:hover::after {
   content: attr(data-tooltipe);
   position: absolute;
-  background-color: rgba(236, 230, 204, 0.8);
+  background-color: rgba(236, 230, 204, 0.9);
   color: #111111;
-  padding: 5px;
+  padding: 3px;
   border-radius: 10px;
   left: 0;
   white-space: nowrap;
   z-index: 10;
   cursor: pointer;
+  font-size: 11px;
 }
 
 .product-card .info .price-info {
