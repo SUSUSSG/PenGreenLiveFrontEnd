@@ -251,7 +251,7 @@
                 </div>
             </div>
 
-            <div class="w-full flex items-center justify-center payment-button pt-[1rem]">
+            <div class="pay-button w-full flex items-center justify-center payment-button">
                 <button @click="requestPayment" class="button w-full" id="payment-button">결제하기</button>
             </div>
         </section>
@@ -260,7 +260,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted , computed, inject } from 'vue';
+import { ref, onMounted , computed } from 'vue';
 import { nanoid } from "nanoid"; 
 import axios from 'axios';
 import BrandPay from "@/components/Pay/brandpay-register.vue";
@@ -270,10 +270,8 @@ import { number } from 'yup';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const route = useRoute();
 const product = computed(() => (store.getters.selectedProduct));
 
-const tossModal = ref(true);
 const emit = defineEmits(['openTossPay']);
 
 const close = () => {
@@ -445,6 +443,7 @@ function showInterestFreeInstallmentInfo() {
 
 <style scoped>
 .consumer-cache-1cchlll {
+    height: 100%;
     align-items: flex-start;
     display: flex;
     flex-direction: row;
@@ -454,6 +453,7 @@ function showInterestFreeInstallmentInfo() {
 }
 
 .consumer-cache-8z48kx {
+    height: 100%;
     flex: 1 1 0%;
     background-color: white;
 }
@@ -1070,4 +1070,9 @@ input[type="radio"] {
   border-radius: 3px;
 }
 
+.pay-button {
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 1rem;
+}
 </style>
