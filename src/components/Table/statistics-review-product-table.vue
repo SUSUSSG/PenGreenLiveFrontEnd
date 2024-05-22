@@ -3,12 +3,12 @@
     <table>
       <thead>
         <tr>
-          <th v-for="header in filteredHeaders" :key="header">{{ header }}</th>
+          <th v-for="header in headers" :key="header">{{ header }}</th>
         </tr>
       </thead>
       <tbody>
         <tr
-          v-for="(row, rowIndex) in filteredData"
+          v-for="(row, rowIndex) in data"
           :key="rowIndex"
           :class="{ 'selected': selectedRow === rowIndex }"
           @click="selectRow(rowIndex, row)"
@@ -38,14 +38,6 @@ export default {
     return {
       selectedRow: null,
     };
-  },
-  computed: {
-    filteredHeaders() {
-      return this.headers.slice(0, -1);
-    },
-    filteredData() {
-      return this.data.map(row => row.slice(0, -1));
-    },
   },
   methods: {
     formatNumber(value) {
