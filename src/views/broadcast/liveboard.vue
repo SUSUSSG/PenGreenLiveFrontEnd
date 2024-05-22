@@ -127,7 +127,7 @@ export default {
         console.log("세션은 이미 활성화 상태입니다.");
         return;
       }
-      this.createProductClicks(this.$route.params.broadcastId);
+      // this.createProductClicks(this.$route.params.broadcastId);
       this.OV = new OpenVidu();
       this.session = this.OV.initSession();
       this.session.on("streamCreated", ({stream}) => {
@@ -183,8 +183,11 @@ export default {
       // 평균 시청자수와 최대 시청자수, 방송 진행시간을 db에 반영하는 axios 요청
       await this.updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration: elapsedTime});
 
-      // 평균 시청 시간 계산 및 데이터 삭제 요청
+      // 평균 시청 시간 계산
       await this.calculateAndDeleteWatchTime(this.mySessionId);
+
+      //구매 전환률 업데이트
+      await this.updateConversionRate(this.mySessionId);
 
       // 방송 종료 로직
       this.leaveSession();
@@ -225,6 +228,13 @@ export default {
         headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
+    async updateConversionRate(broadcastSeq){
+      try{
+        const response = axios.post(`http://localhost:8090/product-clicks/updateConversionRates/${broadcastSeq}`)
+      }catch (error){
+        console.log("구매 전환률 업데이트 실패", error);
+      }
+    },
     async updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration}) {
       console.log('Updating broadcast statistics:', {
         maxViewerCount,
@@ -252,6 +262,14 @@ export default {
         console.error('Error calculating and deleting watch time:', error.response ? error.response.data : error.message);
       }
     },
+    // async createProductClicks(broadcastSeq) {
+    //   try {
+    //     const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}`);
+    //     console.log('Product clicks created:', response.data);
+    //   } catch (error) {
+    //     console.error('Error creating product clicks:', error.response ? error.response.data : error.message);
+    //   }
+    // },
     async updateProductClicks(broadcastSeq){
       try{
         const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/update-average-clicks`)

@@ -271,7 +271,8 @@ const loadBroadcastProduct = async () => {
         price: product.listPrice,
         discountRate: product.discountRate,
         productImg: product.productImage,
-        labelImg: labelImagesArray
+        labelImg: labelImagesArray,
+        productSeq: product.productSeq
       };
     });
     console.log("product info data : ", productList.value);
@@ -288,7 +289,7 @@ const updateModal = (value) => {
 };
 const showProductDetails = (product) => {
   store.commit('setSelectedProduct', product);
-  incrementProductClicks(mySessionId.value, 3) // 프로덕트 seq 동적으로 바꿔야함
+  incrementProductClicks(mySessionId.value, product.productSeq) // 프로덕트 seq 동적으로 바꿔야함
   selectedProduct.value = product;
 };
 const closePurchaseModal = () => {
