@@ -185,7 +185,7 @@ export default {
       console.log(requestData)
 
       axios.post('http://localhost:8090/live-notice/add', requestData)
-        .then(response =>{
+        .then(response => {
           // 아래 목록에 추가
           const newNotice = response.data;
           console.log("newNotice", newNotice);
@@ -199,15 +199,15 @@ export default {
     },
     removeNotice(noticeId) {
       axios.delete(`http://localhost:8090/live-notice/delete/${noticeId}`)
-      .then(response => {
-        const index = this.notices.findIndex(notice => notice.noticeSeq === noticeId);
-        if (index !== -1) {
-                this.notices.splice(index, 1);
-            }
-      })
-      .catch(error => {
+        .then(response => {
+          const index = this.notices.findIndex(notice => notice.noticeSeq === noticeId);
+          if (index !== -1) {
+            this.notices.splice(index, 1);
+          }
+        })
+        .catch(error => {
           console.error("공지 삭제 실패 : ", error);
-          toast.error("공지 사항 삭제 실패", { timeout: 1000})
+          toast.error("공지 사항 삭제 실패", { timeout: 1000 })
         })
     },
     submitFaq() {
@@ -220,7 +220,7 @@ export default {
       }
 
       axios.post('http://localhost:8090/live-faq/add', requestData)
-        .then(response =>{
+        .then(response => {
           const newFaq = response.data;
           console.log("newFaq", newFaq);
           this.faqs.push(newFaq);
@@ -234,15 +234,15 @@ export default {
     },
     removeFaq(faqId) {
       axios.delete(`http://localhost:8090/live-faq/delete/${faqId}`)
-      .then(response => {
-        const index = this.faqs.findIndex(faq => faq.faqSeq === faqId);
-        if (index !== -1) {
-                this.faqs.splice(index, 1);
-            }
-      })
-      .catch(error => {
+        .then(response => {
+          const index = this.faqs.findIndex(faq => faq.faqSeq === faqId);
+          if (index !== -1) {
+            this.faqs.splice(index, 1);
+          }
+        })
+        .catch(error => {
           console.error("자주묻는 질문과 답 삭제 실패 : ", error);
-          toast.error("자주묻는 질문과 답  삭제 실패", { timeout: 1000})
+          toast.error("자주묻는 질문과 답  삭제 실패", { timeout: 1000 })
         })
     },
   }
@@ -314,7 +314,7 @@ dt {
 .notice-add {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem; 
+  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
@@ -322,12 +322,12 @@ dt {
 .faq-label {
   font-size: 0.875rem;
   font-weight: 500;
-  color: #4b5563; 
+  color: #4b5563;
 }
 
 .faq-label {
   margin-right: 1rem;
-  width: 5rem; 
+  width: 5rem;
 }
 
 .notice-input,
@@ -336,7 +336,7 @@ dt {
   display: block;
   width: 100%;
   min-width: 0;
-  border-bottom: #134010 1px solid; 
+  border-bottom: #134010 1px solid;
   border-radius: 0.1rem;
 }
 </style>
