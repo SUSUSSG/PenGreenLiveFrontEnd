@@ -1,6 +1,6 @@
 <template>
   <div className="video-wrapper">
-    <video ref="videoElement" muted autoPlay className="video"></video>
+    <video ref="videoElement" muted="isMuted" autoPlay className="video"></video>
   </div>
 </template>
 
@@ -11,18 +11,20 @@ export default {
   props: {
     streamManager: Object,
     isMuted: Boolean,
+    isPublisher: false
   },
 
   mounted() {
     this.streamManager.addVideoElement(this.$refs.videoElement);
-    this.unmuteVideo();
+    if(!this.isPublisher){
+      this.unmuteVideo();
+    }
   },
   methods: {
     unmuteVideo() {
       const videoElement = this.$refs.videoElement;
       videoElement.muted = true;
       videoElement.play().then(() => {
-        // 무음으로 비디오가 자동 재생되면 짧은 지연 후에 소리를 켭니다.
         setTimeout(() => {
           videoElement.muted = false;
         }, 1000); // 1초 지연 후 소리 켜기
@@ -45,6 +47,7 @@ export default {
 .video-wrapper {
   width: 100%;
   aspect-ratio: 9 / 16;
+  position: relative;
 }
 
 .video {
