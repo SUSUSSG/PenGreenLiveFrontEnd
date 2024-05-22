@@ -1,131 +1,66 @@
 <template>
-  <div class="bg-white rounded pt-3 px-4 mt-4 ml-5" id="sidebar">
-    <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(6, 1fr);">
-      <div class="grid gap-8" style="grid-template-rows: repeat(6, 1fr);">
-
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[0])">
+  <div class="sidebar">
+    <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(5, 1fr);">
+      <div class="grid gap-8" style="grid-template-rows: repeat(5, 1fr);">
+        <!-- 카메라 on/off -->
+        <div class="sidebar-icon" @click="toggleIcon(statistics[0])">
           <Icon :icon="statistics[0].isActive ? statistics[0].activeIcon : statistics[0].icon">
-            <!-- 카메라 조정 -->
           </Icon>
         </div>
 
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[1])">
+        <!-- 마이크 on/off -->
+        <div class="sidebar-icon" @click="toggleIcon(statistics[1])">
           <Icon :icon="statistics[1].isActive ? statistics[1].activeIcon : statistics[1].icon">
-            <!-- 마이크 조정 -->
           </Icon>
         </div>
 
-        <div>
-          <div
-            class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-            @click="openBroadcastDeviceControl()">
-            <Icon :icon="statistics[2].icon"></Icon>
-          </div>
-          <LivePrepareModal v-if="showLivePrepareModal" @broadcast-device-selected="handleDeviceSelection"
-            title="방송 기기 설정" ref="broadcastDeviceControl" :showButtons="false" class="z-20" />
+        <!-- 방송 송출 기기 설정 -->
+        <div class="sidebar-icon" @click="openBroadcastDeviceControl()">
+          <Icon :icon="statistics[2].icon" />
         </div>
+        <LivePrepareModal v-if="showLivePrepareModal" @broadcast-device-selected="handleDeviceSelection"
+          ref="broadcastDeviceControl" :showButtons="false" class="z-20" />
 
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[3]); editBroadcastInfoModal()">
-          <Icon :icon="statistics[3].icon"></Icon>
-          <Modal title="방송 정보 편집" ref="editBroadcastInfo" :showButtons="false" :sizeClass="'max-w-2xl'">
-            <div class="space-y-4">
-              <!-- 방송 제목 -->
-              <div class="flex items-center justify-between">
-                <div class="flex flex-col">
-                  <label for="boardcastTitle" class="block text-sm font-medium text-gray-700">방송
-                    제목</label>
-                  <input id="newBoardcastTitle" type="text" v-model="newBroadcastTitle" placeholder="방송 제목 입력"
-                    @input="updateNewBroadcastTitle"
-                    class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md mt-3" />
-                </div>
-                <div class="flex items-center">
-                  <Button btnClass="btn-primary btn-sm">
-                    등록
-                  </Button>
-                </div>
-              </div>
-
-              <!-- 방송 썸네일 -->
-              <div class="flex items-center justify-between">
-                <div class="flex flex-col">
-                  <label for="boardcastThumbnail" class="block text-sm font-medium text-gray-700 mt-10">썸네일</label>
-                  <div class="flex items-center">
-                    <div class="flex-shrink-0">
-                      <img src="https://via.placeholder.com/90x160" alt="대표 이미지 미리보기" style="max-width: 400px;"
-                        class="mt-2" />
-                    </div>
-                    <div class="ml-4">
-                      <p>최대 용량 : 1mb</p>
-                      <p>권장 사이즈 : 720 x 1280</p>
-                      <input type="file" id="imageUpload" @change="handleImageUpload"
-                        accept="image/jpeg, image/png, image/gif" class="mb-2" />
-                    </div>
-                  </div>
-                </div>
-                <div class="flex items-center">
-                  <Button btnClass="btn-primary btn-sm">
-                    등록
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </Modal>
-        </div>
-
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[4]); addNoticeModal()">
-          <Icon :icon="statistics[4].icon"></Icon>
+        <!-- 공지사항 -->
+        <div class="sidebar-icon" @click="toggleIcon(statistics[4]); addNoticeModal()">
+          <Icon :icon="statistics[4].icon" />
           <Modal title="공지사항 등록" ref="addNoticeModal" :showButtons="false">
-            <!-- 공지사항 등록 -->
-            <div class="flex flex-col space-y-2 mb-4">
-              <label for="addNotice" class="text-sm font-medium text-gray-700">공지사항 등록</label>
+            <!-- 등록 -->
+            <div class="notice-add">
+              <label for="addNotice" class="notice-label">공지사항 등록</label>
               <div class="flex items-center space-x-2">
-                <input id="addNotice" type="text" name="addNotice" v-model="notice" placeholder="공지사항 입력"
-                  class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
+                <input id="addNotice" type="text" name="addNotice" v-model="noticeContent" class="notice-input" />
                 <Button btnClass="btn-primary btn-sm" @click="submitNotice()">
                   등록
                 </Button>
               </div>
             </div>
-            <!-- 공지사항 목록-->
+            <!-- 목록-->
             <div class="space-y-2">
-              <label for="addNotice" class="text-sm font-medium text-gray-700">공지사항 목록</label>
-              <div class="notice-list">
-                <li v-for="notice in notices" :key="notice.noticeSeq">{{ notice.noticeContent }}</li>
-                <Icon icon="heroicons-outline:x" @click="removeNotice(index)" class="removeButton" />
+              <label for="addNotice" class="notice-label">공지사항 목록</label>
+              <div class="notice-list" v-for="notice in notices" :key="notice.noticeSeq">{{ notice.noticeContent }}
+                <Icon icon="heroicons-outline:x" @click="removeNotice(notice.noticeSeq)" class="remove-button" />
               </div>
             </div>
           </Modal>
         </div>
 
-        <div
-          class="mx-auto h-10 w-10 flex flex-col items-center justify-center rounded-full bg-white text-2xl mb-4 black cursor-pointer"
-          @click="toggleIcon(statistics[5]); addFaqModal()">
-          <Icon :icon="statistics[5].icon"></Icon>
+        <!-- 자주 묻는 질문 -->
+        <div class="sidebar-icon" @click="toggleIcon(statistics[5]); addFaqModal()">
+          <Icon :icon="statistics[5].icon" />
           <Modal title="자주 묻는 질문 등록" ref="addFaqRef" :showButtons="false" id="addFaq" :sizeClass="'max-w-6xl'">
             <div class="flex">
               <div class="w-1/2">
                 <div class="flex flex-col">
                   <div class="flex items-center mb-2">
-                    <label for="addFaq" class="text-sm font-medium text-gray-700 mr-4 w-20">질문
-                      등록</label>
-                    <textarea id="addQuestion" type="text" name="addFaq" placeholder="여기에 작성해주세요" rows="1"
-                      v-model="question"
-                      class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-black-500 focus:border-black-500 rounded-l-md"></textarea>
+                    <label for="addFaq" class="faq-label">질문 등록</label>
+                    <textarea id="addQuestion" type="text" name="addFaq" rows="1" class="faq-textarea"
+                      v-model="questionTitle" />
                   </div>
                   <div class="flex items-center mb-2">
-                    <label for="addFaq" class="text-sm font-medium text-gray-700 mr-4 w-20">답변
-                      등록</label>
-                    <textarea id="addAnswer" type="text" name="addFaq" placeholder="여기에 작성해주세요" rows="5"
-                      v-model="answer"
-                      class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-black-500 rounded-l-md"></textarea>
+                    <label for="addFaq" class="faq-label">답변 등록</label>
+                    <textarea id="addAnswer" type="text" name="addFaq" rows="4" class="faq-textarea"
+                      v-model="questionAnswer" />
                   </div>
                   <Button btnClass="btn-primary btn-sm mt-5" @click="submitFaq()">
                     등록
@@ -134,12 +69,12 @@
               </div>
               <div class="w-1/2 ml-5">
                 <div class="space-y-2">
-                  <label for="addFaq" class="text-sm font-medium text-gray-700">기존 목록</label>
-                  <div class="faq-list" v-for="(faq, index) in faqs" :key="faq.faqSeq">
-                    <div class="flex justify-between items-center">
-                      <Icon icon="heroicons-outline:x" @click="removeFaq(index)" class="removeButton mr-3" />
+                  <label for="addFaq" class="faq-label">기존 목록</label>
+                  <div class="faq-list" v-for="faq in faqs" :key="faq.faqSeq">
+                    <div class="flex  items-center">
+                      <Icon icon="heroicons-outline:x" @click="removeFaq(faq.faqSeq)" class="remove-button mr-3" />
                       <div>
-                        <dt :data-question="`Q: ${faq.question}`">{{ faq.questionTitle }}</dt>
+                        <dt>{{ faq.questionTitle }}</dt>
                         <dd>{{ faq.questionAnswer }}</dd>
                       </div>
                     </div>
@@ -161,6 +96,9 @@ import Button from "@/components/Button";
 import LivePrepareModal from "@/components/Modal/live-prepare-modal.vue";
 import Textarea from "@/components/Textarea";
 
+import { useToast } from "vue-toastification";
+import axios from "axios";
+
 export default {
   components: {
     Icon,
@@ -170,12 +108,9 @@ export default {
     Textarea
   },
   props: {
-    broadcastTitle: {
-      type: String,
-      required: true
-    },
     notices: Array,
-    faqs: Array
+    faqs: Array,
+    broadcastId: Number
   },
   data() {
     return {
@@ -190,26 +125,15 @@ export default {
           activeIcon: "material-symbols:mic-off",
           isActive: false
         },
-        {
-          icon: "material-symbols:settings-video-camera-sharp",
-        },
-        {
-          icon: "material-symbols:app-registration",
-        },
-        {
-          icon: "material-symbols:campaign-rounded",
-        },
-        {
-          icon: "material-symbols:maps-ugc-rounded",
-        },
+        { icon: "material-symbols:settings-video-camera-sharp" },
+        { icon: "material-symbols:app-registration" },
+        { icon: "material-symbols:campaign-rounded" },
+        { icon: "material-symbols:maps-ugc-rounded" },
       ],
-      // notice: '',
-      // noticeList: [],
+      noticeContent: '',
       showLivePrepareModal: false,
-      question: '',
-      answer: '',
-      // FaqList: [],
-      newBroadcastTitle: ""
+      questionTitle: '',
+      questionAnswer: '',
     }
   },
   methods: {
@@ -248,36 +172,85 @@ export default {
       this.$refs.addFaqRef.openModal();
     },
     submitNotice() {
-      if (this.notice.trim()) {
-        this.notices.push(this.notice)
-        this.notice = ''
+      const toast = useToast();
+
+      const broadcastSeq = this.broadcastId;
+      const noticeContent = this.noticeContent;
+
+      const requestData = {
+        broadcastSeq: broadcastSeq,
+        noticeContent: noticeContent
       }
+
+      console.log(requestData)
+
+      axios.post('http://localhost:8090/live-notice/add', requestData)
+        .then(response => {
+          // 아래 목록에 추가
+          const newNotice = response.data;
+          console.log("newNotice", newNotice);
+          this.notices.push(newNotice);
+          this.noticeContent = '';
+        })
+        .catch(error => {
+          console.error("공지 추가 실패 : ", error);
+          toast.error("공지 사항 추가 실패", { timeout: 1000 })
+        })
     },
-    removeNotice(index) {
-      this.notices.splice(index, 1);
+    removeNotice(noticeId) {
+      axios.delete(`http://localhost:8090/live-notice/delete/${noticeId}`)
+        .then(response => {
+          const index = this.notices.findIndex(notice => notice.noticeSeq === noticeId);
+          if (index !== -1) {
+            this.notices.splice(index, 1);
+          }
+        })
+        .catch(error => {
+          console.error("공지 삭제 실패 : ", error);
+          toast.error("공지 사항 삭제 실패", { timeout: 1000 })
+        })
     },
     submitFaq() {
-      if (this.question.trim() && this.answer.trim()) {
-        this.FaqList.push({ question: this.question, answer: this.answer });
-        this.question = '';
-        this.answer = '';
+      const toast = useToast();
+
+      const requestData = {
+        broadcastSeq: this.broadcastId,
+        questionTitle: this.questionTitle,
+        questionAnswer: this.questionAnswer
       }
+
+      axios.post('http://localhost:8090/live-faq/add', requestData)
+        .then(response => {
+          const newFaq = response.data;
+          console.log("newFaq", newFaq);
+          this.faqs.push(newFaq);
+          this.questionTitle = '';
+          this.questionAnswer = '';
+        })
+        .catch(error => {
+          console.error("자주묻는 질문 및 답변 추가 실패 : ", error);
+          toast.error("자주묻는 질문 및 답변  추가 실패", { timeout: 1000 })
+        })
     },
-    removeFaq() {
-      this.FaqList.splice(index, 1);
+    removeFaq(faqId) {
+      axios.delete(`http://localhost:8090/live-faq/delete/${faqId}`)
+        .then(response => {
+          const index = this.faqs.findIndex(faq => faq.faqSeq === faqId);
+          if (index !== -1) {
+            this.faqs.splice(index, 1);
+          }
+        })
+        .catch(error => {
+          console.error("자주묻는 질문과 답 삭제 실패 : ", error);
+          toast.error("자주묻는 질문과 답  삭제 실패", { timeout: 1000 })
+        })
     },
-    saveChangeBroadcastTitle() {
-      // 후에 작성하기
-    },
-    saveChangeThumbnail() {
-      // 후에 작성하기
-    }
   }
 }
 </script>
 
 <style>
-#sidebar {
+.sidebar {
   width: 70px;
   height: 550px;
   margin-top: 130px;
@@ -302,11 +275,8 @@ export default {
   display: flex;
   flex-direction: column;
   background-color: #f7fafc;
-  /* Tailwind CSS의 bg-gray-100 */
   padding: 0.5rem;
-  /* Tailwind CSS의 p-2, 2 * 0.25rem = 0.5rem */
   border-radius: 0.25rem;
-  /* Tailwind CSS의 rounded */
 }
 
 li {
@@ -317,10 +287,56 @@ dt {
   font-weight: bold;
 }
 
-.removeButton {
+.remove-button {
   background-color: rgb(251, 56, 56);
   color: #fff;
   border-radius: 0.25rem;
   padding: 0.25rem;
+}
+
+.sidebar-icon {
+  margin-left: auto;
+  margin-right: auto;
+  height: 2.5rem;
+  width: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: white;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: black;
+  cursor: pointer;
+}
+
+.notice-add {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.notice-label,
+.faq-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #4b5563;
+}
+
+.faq-label {
+  margin-right: 1rem;
+  width: 5rem;
+}
+
+.notice-input,
+.faq-textarea {
+  flex-grow: 1;
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border-bottom: #134010 1px solid;
+  border-radius: 0.1rem;
 }
 </style>
