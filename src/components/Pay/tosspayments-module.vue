@@ -3,6 +3,11 @@
     <div class="consumer-cache-8z48kx">
         <section class="consumer-cache-bd75t9">
             <div class="p-grid consumer-cache-67e79o payment-method-title">
+                <div class="modal-handle-area w-full h-[2rem] flex justify-center items-center" @click="close">
+                    <span class="modal-handle">
+                        <img src="/src/assets/images/svg/down.svg"/>
+                    </span>
+                </div>
                 <div class="p-grid-col p-grid-col12">
                     <h4 class="typography typography--h6 typography--bold color--grey700 consumer-cache-1cmoblx">결제 방법</h4>
                 </div>
@@ -246,7 +251,7 @@
                 </div>
             </div>
 
-            <div class="w-full flex items-center justify-center payment-button pt-[1rem]">
+            <div class="pay-button w-full flex items-center justify-center payment-button">
                 <button @click="requestPayment" class="button w-full" id="payment-button">결제하기</button>
             </div>
         </section>
@@ -255,7 +260,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted , computed, inject } from 'vue';
+import { ref, onMounted , computed } from 'vue';
 import { nanoid } from "nanoid"; 
 import axios from 'axios';
 import BrandPay from "@/components/Pay/brandpay-register.vue";
@@ -265,8 +270,13 @@ import { number } from 'yup';
 import { useStore } from 'vuex';
 
 const store = useStore();
-const route = useRoute();
 const product = computed(() => (store.getters.selectedProduct));
+
+const emit = defineEmits(['openTossPay']);
+
+const close = () => {
+  emit('openTossPay');
+};
 
 function generateOrderId() {
     return nanoid();
@@ -426,11 +436,14 @@ function showInterestFreeInstallmentInfo() {
   const windowFeatures = "width=600,height=600,scrollbars=yes,resizable=yes";
   window.open(url, "_blank", windowFeatures);
 }
+
+
 </script>
 
 
 <style scoped>
 .consumer-cache-1cchlll {
+    height: 100%;
     align-items: flex-start;
     display: flex;
     flex-direction: row;
@@ -440,6 +453,7 @@ function showInterestFreeInstallmentInfo() {
 }
 
 .consumer-cache-8z48kx {
+    height: 100%;
     flex: 1 1 0%;
     background-color: white;
 }
@@ -1050,4 +1064,15 @@ input[type="radio"] {
     align-items: center;
 }
 
+.modal-handle {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+}
+
+.pay-button {
+    position: absolute;
+    bottom: 0;
+    padding-bottom: 1rem;
+}
 </style>
