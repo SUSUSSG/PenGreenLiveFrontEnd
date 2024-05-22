@@ -7,7 +7,7 @@
 
     <div class="product-card-container">
       <ProductCard :product-name="productName" :original-price="productPrice" :discount-rate="discountRate"
-        :product-img="productImg" />
+        :product-img="productImg" :brand="false" />
     </div>
 
     <div>
@@ -95,6 +95,7 @@ export default {
   background-size: cover;
   background-position: center;
   border-radius: 5px;
+  margin-bottom: 10px;
 }
 
 .broadcast-title {
