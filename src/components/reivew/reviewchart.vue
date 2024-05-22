@@ -2,23 +2,40 @@
   <div class="review-charts-container">
     <div class="card">
       <Card title="리뷰 감정 추이 분포">
-        <apexchart
-          type="bar"
-          height="350"
-          :options="chartOptions"
-          :series="series"
-        ></apexchart>
+        <template v-if="loading">
+          <div class="loading-text">조회 중...</div>
+        </template>
+        <template v-else>
+          <apexchart
+            type="line"
+            height="350"
+            :options="chartOptions"
+            :series="series"
+          ></apexchart>
+          <div class="chart-data">
+            <p>가로축: 일자</p>
+            <p>세로축: 긍정, 부정, 중립 비율</p>
+          </div>
+        </template>
       </Card>
     </div>
 
     <div class="card">
       <Card title="리뷰 긍정률 분포">
-        <apexchart
-          type="donut"
-          height="450"
-          :options="donutChartOptions"
-          :series="donutSeries"
-        ></apexchart>
+        <template v-if="loading">
+          <div class="loading-text">조회 중...</div>
+        </template>
+        <template v-else>
+          <apexchart
+            type="donut"
+            height="450"
+            :options="donutChartOptions"
+            :series="donutSeries"
+          ></apexchart>
+          <div class="chart-data">
+            <p>긍정, 부정, 중립 비율</p>
+          </div>
+        </template>
       </Card>
     </div>
 
@@ -60,7 +77,7 @@ export default {
     return {
       chartOptions: {
         chart: {
-          type: 'bar',
+          type: 'line',
         },
         xaxis: {
           categories: [],
@@ -68,28 +85,17 @@ export default {
             text: '날짜'
           }
         },
-        plotOptions: {
-          bar: {
-            horizontal: false,
-            columnWidth: '55%',
-            endingShape: 'rounded'
-          },
-        },
         dataLabels: {
           enabled: false
         },
         stroke: {
-          show: true,
+          curve: 'smooth',
           width: 2,
-          colors: ['transparent']
         },
         yaxis: {
           title: {
             text: 'Percentage'
           }
-        },
-        fill: {
-          opacity: 1
         },
         tooltip: {
           y: {
@@ -97,6 +103,9 @@ export default {
               return val + "%";
             }
           }
+        },
+        legend: {
+          position: 'bottom'
         }
       },
       series: [],
@@ -115,7 +124,10 @@ export default {
               position: 'bottom'
             }
           }
-        }]
+        }],
+        legend: {
+          position: 'bottom'
+        }
       },
       donutSeries: []
     };
@@ -178,7 +190,8 @@ export default {
   text-align: center;
 }
 
-.review-word-loading {
+.review-word-loading,
+.loading-text {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -194,7 +207,6 @@ export default {
 
 .review-charts-container > div {
   flex: 1;
-  margin: 0 10px;
 }
 
 .apexchart {
@@ -204,7 +216,7 @@ export default {
 .card-content {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
@@ -220,7 +232,7 @@ export default {
   justify-content: space-around;
   align-items: stretch;
   width: 100%;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 img {
@@ -228,6 +240,17 @@ img {
   height: auto;
   margin-top: 1rem;
   border: 1px solid #ccc;
-  border-radius: 8px;
+  border-radius: 20px;
+}
+
+.chart-data {
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+}
+
+.apexcharts-legend {
+  justify-content: center !important;
 }
 </style>

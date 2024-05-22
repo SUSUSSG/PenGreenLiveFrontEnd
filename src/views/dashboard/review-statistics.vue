@@ -4,7 +4,7 @@
       <div class="card-content">
         <span class="card-title">채널 전체 상품</span>
         <productlist
-          :headers="['상품코드', '상품명', '총 판매량', '관리용 번호']"
+          :headers="['자체 코드', '품명', '매출액', '코드']"
           :data="allProducts"
           @product-click="handleProductClick"
         />
@@ -44,6 +44,7 @@
     </div>
     <reviewchart
       :dailySentiments="dailySentiments"
+      :reviewImage="reviewImage"
       :loading="loading"
     ></reviewchart>
   </div>
@@ -95,7 +96,7 @@ export default {
         const response = await axios.get(
           "http://localhost:8090/products/statistics/all-products",
           {
-            params: { channelSeq: 1 },
+            params: { channelSeq: 1 }, // TODO : 로그인 상태 채널 시퀀스 받아오도록 교체
           }
         );
         this.allProducts = response.data.map((product) => [
@@ -254,7 +255,7 @@ export default {
   justify-content: space-around;
   align-items: stretch;
   width: 100%;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 .card-content {
   display: flex;
@@ -263,22 +264,22 @@ export default {
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 10px;
-  padding: 1.5rem;
+  padding: 1rem;
   width: 32%;
   height: 400px;
-  margin: 10px;
 }
 .flex-row {
   display: flex;
   flex-direction: row;
   width: 100%;
   justify-content: space-between;
-  gap: 1.5rem;
   flex-wrap: wrap;
+  gap:1rem;
 }
 .card-title {
   font-size: 1.25rem;
-  font-weight: bold;
+  font-weight:500;
+  color:#0f172A;
 }
 .card-content:first-child {
   flex: 1;
