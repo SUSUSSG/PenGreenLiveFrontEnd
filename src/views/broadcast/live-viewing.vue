@@ -1,20 +1,18 @@
 <template>
   <div class="live-container" :style="{ height: computedHeight + 'px' }">
-    <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: 1 }"
+
+    <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: chattingId }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
-    <Live class="live-section-broad"
-          show-icon-side-bar="true" show-title-bar="true"
-          :stream-manager="mainStreamManager"
-          :broadcast-title="broadcastTitle"
-          :broadcast-image="broadcastImage" />
+    <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true" :stream-manager="mainStreamManager"
+      :broadcast-title="broadcastTitle" :broadcast-image="broadcastImage" />
 
-    <div class="live-section relative" :class="{'active-overlay': isOpen}">
+    <div class="live-section relative" :class="{ 'active-overlay': isOpen }">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
       <div v-if="selectedProduct">
         <header class="flex justify-between pb-4">
           <div></div>
-          <Button text="돌아가기" @click="closePurchaseModal"/>
+          <Button text="돌아가기" @click="closePurchaseModal" />
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
@@ -35,7 +33,7 @@
             <TabGroup as="div" class="tab-group h-full">
               <TabList as="div" class="tab-list">
                 <Tab v-for="tab in firstTabGroup" :key="tab" :class="{ 'tab-active': tab === activeFirstTab }"
-                     @click="activeFirstTab = tab" class="tab">
+                  @click="activeFirstTab = tab" class="tab">
                   {{ tab }}
                 </Tab>
               </TabList>
@@ -43,17 +41,17 @@
                 <TabPanel v-for="tab in firstTabGroup" :key="tab" v-show="tab === activeFirstTab" class="tab-panel">
                   <!-- 상품 정보 탭 -->
                   <div v-if="tab === '상품 정보'" class="product-list">
-                    <ProductCard
-                        v-for="product in productList"
-                        :key="product.productName"
-                        :product-name="product.productName"
-                        :original-price="product.price"
-                        :discount-rate="product.discountRate"
-                        :product-img="product.productImg"
-                        :label-img="product.labelImg"
-                        @click="showProductDetails(product)"
-                        @updateDiscountedPrice="handleDiscountedPrice($event, product)"
-                    />
+                    <ProductCard 
+                      v-for="product in productList" 
+                      :key="product.productName" 
+                      :brand="product.brand"
+                      :product-name="product.productName" 
+                      :original-price="product.price"
+                      :discount-rate="product.discountRate"
+                      :product-img="product.productImg"
+                      :label-img="product.labelImg" 
+                      @click="showProductDetails(product)"
+                      @updateDiscountedPrice="handleDiscountedPrice($event, product)" />
                   </div>
                   <!-- 라이브 소개 탭 -->
                   <div v-else-if="tab === '라이브 소개'">{{ liveIntroduction }}</div>
@@ -70,7 +68,7 @@
             <TabGroup as="div" class="tab-group h-full">
               <TabList as="div" class="tab-list">
                 <Tab v-for="tab in secondTabGroup" :key="tab" :class="{ 'tab-active': tab === activeSecondTab }"
-                     @click="activeSecondTab = tab" class="tab">
+                  @click="activeSecondTab = tab" class="tab">
                   {{ tab }}
                 </Tab>
               </TabList>
@@ -99,7 +97,7 @@
 </template>
 
 <script setup>
-import {ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
+import { ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
@@ -112,10 +110,14 @@ import PurchaseModal from "@/components/Modal/purchase-modal.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
 
+
 // 라우트 및 환경변수 설정
 const route = useRoute();
 const router = useRouter();
 const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/';
+
+//채팅 방 번호
+const chattingId = ref(route.params.broadcastId);
 
 // 세션 및 OpenVidu 관련 상태
 const mySessionId = ref('');
@@ -147,7 +149,7 @@ const broadcastImage = computed(() => liveBroadcastInfo.value.broadcast?.broadca
 const liveIntroduction = computed(() => liveBroadcastInfo.value.broadcast?.broadcastSummary || '');
 const liveBenefits = computed(() => liveBroadcastInfo.value.benefits || []);
 const notices = computed(() => liveBroadcastInfo.value.notices || []);
-const faqs = computed(() =>liveBroadcastInfo.value.faqs || []);
+const faqs = computed(() => liveBroadcastInfo.value.faqs || []);
 
 // 뷰포트 및 스크롤 높이 계산
 const store = useStore();
@@ -157,6 +159,8 @@ const computedHeight = ref(0);
 // 시청 시간 기록 상태
 const watchStartTime = ref(null);
 const watchEndTime = ref(null);
+// 라이브 공지 및 Faq
+let intervalId = ref(null);
 
 // 세션 참가/종료 및 토큰 관련 메소드
 const joinSession = async () => {
@@ -268,6 +272,7 @@ const loadBroadcastProduct = async () => {
       console.log("labelImagesArray:", labelImagesArray);
       return {
         productName: product.productNm,
+        brand: product.brand,
         price: product.listPrice,
         discountRate: product.discountRate,
         productImg: product.productImage,
@@ -280,6 +285,19 @@ const loadBroadcastProduct = async () => {
     console.error('판새 상품 목록 load 실패 : ', error);
   }
 };
+
+// 라이브 실시간 정보 불러오기 (공지, faq)
+const loadLiveBroadcastDetails = async () => {
+  const broadcastId = route.params.broadcastId;
+  try {
+    const response = await axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}/details`);
+    liveBroadcastInfo.value.notices = response.data.notices;
+    liveBroadcastInfo.value.faqs = response.data.faqs;
+  } catch (error) {
+    console.error('방송 디테일 정보 load 실패 : ', error);
+  }
+}
+
 // 모달 및 제품 선택 제어
 const openModal = () => {
   isOpen.value = true;
@@ -322,11 +340,18 @@ onMounted(() => {
   window.addEventListener('beforeunload', leaveSession);
   loadLiveBroadcastInfo(); // 방송정보 호출
   loadBroadcastProduct(); // 상품정보 호출
+
+  intervalId = setInterval(loadLiveBroadcastDetails, 30000); // 15초
+
 });
 
 onBeforeUnmount(() => {
   leaveSession();
   window.removeEventListener('beforeunload', handleBeforeUnload);
+
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
 });
 
 watch(boxHeight, calculateHeight);
@@ -388,8 +413,7 @@ watch(boxHeight, calculateHeight);
 }
 
 .tab-group {
-  box-sizing: border-box;
-  /* overflow: auto; */
+  box-sizing: border-box; /* overflow: auto; */
   height: 100%;
 }
 
@@ -411,8 +435,7 @@ watch(boxHeight, calculateHeight);
 }
 
 .tab-panels {
-  box-sizing: border-box;
-  /* overflow: auto; */
+  box-sizing: border-box; /* overflow: auto; */
   height: 100%;
 }
 
@@ -449,7 +472,8 @@ watch(boxHeight, calculateHeight);
   margin: auto;
 }
 
-.product-discount, .product-price {
+.product-discount,
+.product-price {
   text-align: center;
   font-size: 20px;
   color: red;
@@ -469,9 +493,7 @@ watch(boxHeight, calculateHeight);
 }
 
 .product-list {
-  /* display: flex;/ */
-  /* flex-wrap: wrap; */
-  gap: 10px; /* 상품 카드 사이의 간격을 설정합니다. */
+  gap: 10px; 
 }
 
 .exit-button {
@@ -487,14 +509,14 @@ watch(boxHeight, calculateHeight);
 
 
 .product-list ul {
-  height: 100%; /* ul의 높이를 부모의 100%로 설정 */
-  overflow: auto; /* ul 내부에서 스크롤 발생 */
+  height: 100%; 
+  overflow: auto;
 }
 
 /* 질문 및 답변 스타일 변경 */
 dt {
   font-weight: bold;
-  border-bottom: 1px dashed #ccc; /* 구분선 추가 */
+  border-bottom: 1px dashed #ccc;
   padding-bottom: 5px;
   margin-bottom: 5px;
   display: block;
@@ -504,11 +526,12 @@ dt {
 dd {
   margin-left: 20px;
   color: #666;
-  padding-bottom: 10px; /* 답변 스타일 변경 */
+  padding-bottom: 10px;
 }
 
-ul.notice-list, ul.benefits-list {
-  list-style: none; /* 기본 목록 스타일 제거 */
+ul.notice-list,
+ul.benefits-list {
+  list-style: none;
   padding: 0;
   margin: 0 10px;
 }
@@ -518,9 +541,10 @@ ul.notice-list, ul.benefits-list {
   min-width: 0;
 }
 
-ul.notice-list li, ul.benefits-list li {
+ul.notice-list li,
+ul.benefits-list li {
   padding: 10px;
-  border-bottom: 1px solid #eee; /* 구분선 추가 */
+  border-bottom: 1px solid #eee;
 }
 
 .chat-card {

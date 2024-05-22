@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white" id="broadCard">
     <div v-if="streamManager" class="video-player">
-      <VideoPlayer :stream-manager="streamManager" :is-muted="true"/>
+      <VideoPlayer :stream-manager="streamManager" :is-muted="true" :is-publisher="true"/>
     </div>
     <div v-else class="broadcast-image">
       <img :src="broadcastImage" alt="Broadcast Image" />

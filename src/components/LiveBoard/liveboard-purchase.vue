@@ -92,7 +92,7 @@
             @openTossPay="handleOpenTossPay"/>
         </div>
 
-        <div v-if="showTossPay" class="modal flex justify-between modal-adjust z-50">
+        <div v-if="showTossPay" class="toss-modal flex justify-between modal-adjust z-50">
             <div class="scroll">
                 <TossPay  @openTossPay="close"></TossPay>
             </div>
@@ -229,10 +229,22 @@
     bottom: 0;
     left: 0;
     right: 0;
-    display: flex; /* Ensure it uses flexbox for proper child alignment */
-    flex-direction: column; /* Stack children vertically */
-    max-height: 100%; /* Limit the height to 80% of the viewport height */
-    overflow-y: auto; /* Enable vertical scrolling */
+    display: flex; 
+    flex-direction: column;
+    max-height: 100%; 
+    overflow-y: auto; 
+}
+
+.toss-modal {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex; 
+    flex-direction: column;
+    max-height: 100%; 
+    overflow-y: auto; 
 }
 
 .overlay {

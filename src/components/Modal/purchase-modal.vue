@@ -1,8 +1,8 @@
 <template>
   <div class="modal-content w-[100%] h-[100%] bg-white">
     <div class="purchase-wrap px-[20px]">
-      <div class="modal-handle-area w-full h-[2rem] flex justify-center items-center" @click="close">
-        <span class="modal-handle">
+      <div class="modal-handle-area w-full h-[2.5rem] flex justify-center items-center" @click="close">
+        <span class="modal-handle mt-[1rem]">
           <img src="/src/assets/images/svg/down.svg"/>
         </span>
       </div>
@@ -109,17 +109,17 @@ const formattedTotalPrice = computed(() => totalPrice.value.toLocaleString());
   display: block;
   width: 40px;
   height: 6px;
-  background-color: #999;
+  background-color: #fff;  
   border-radius: 3px;
 
-  display: flex;
+  /* display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   width: 100%;
   height: 30px;
-  background-color: #fff;
-  border-radius: 18px 18px 0 0;
+  
+  border-radius: 18px 18px 0 0; */
 }
 
 /* 구매 정보 */
