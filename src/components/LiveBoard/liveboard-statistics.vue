@@ -50,13 +50,12 @@
           <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ totalOrderAmount }}</div>
         </div>
       </div>
-      <div class="inline-flex bg-white rounded pt-3 px-4 mt-4 pl-5" id="basicCard">
+      <div class="inline-flex bg-white rounded pt-2 px-4 mt-4 pl-5" id="basicCard">
         <div class="h-12 w-12 rounded flex flex-col items-center justify-center text-3xl pr-3">
           <Icon icon="heroicons:building-storefront-16-solid" class="text-primary"/>
         </div>
         <div>
-          <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">카테고리</div>
-          <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ category }}</div>
+          <div class="channel-name">{{ channelNm }}</div>
         </div>
       </div>
     </div>
@@ -80,7 +79,8 @@ export default {
     startCheck: {
       type: Boolean,
       default: false
-    }
+    },
+    channelNm: String
   },
   data() {
     return {
@@ -89,7 +89,6 @@ export default {
       totalLikes: null,
       totalOrders: null,
       totalOrderAmount: null,
-      category: "채널이름",
       viewersHistory: [],
       maxViewers: 0,
       averageViewers: 0,
@@ -203,5 +202,13 @@ export default {
 
 .text-primary {
   color: darkgreen;
+}
+
+.channel-name {
+  font-size: 1rem; 
+  line-height: 1.75rem; 
+  color: #1e293b;
+  font-weight: 500;
+  margin-bottom: 6px;
 }
 </style>
