@@ -176,6 +176,9 @@ export default {
       );
       this.loading = true;
       this.reviewImage = null;
+      this.reviewsList = [];
+      this.reviewSummary = "";
+      this.dailySentiments = {};
 
       await this.fetchProductDetails(productCd);
       if (productSeq) {

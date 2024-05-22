@@ -5,6 +5,9 @@
         <template v-if="loading">
           <div class="loading-text">조회 중...</div>
         </template>
+        <template v-else-if="!dailySentiments || Object.keys(dailySentiments).length === 0">
+          <div class="error-text">데이터가 부족합니다.</div>
+        </template>
         <template v-else>
           <apexchart
             type="line"
@@ -24,6 +27,9 @@
       <Card title="리뷰 긍정률 분포">
         <template v-if="loading">
           <div class="loading-text">조회 중...</div>
+        </template>
+        <template v-else-if="!donutSeries || donutSeries.length === 0">
+          <div class="error-text">데이터가 부족합니다.</div>
         </template>
         <template v-else>
           <apexchart
@@ -48,10 +54,7 @@
           <img :src="reviewImage" alt="리뷰 요약 이미지" />
         </template>
         <template v-else>
-          <div class="col">
-            <p>-- 에러 --</p>
-            <p>분석을 위한 리뷰 수가 부족합니다!!</p>
-          </div>
+          <div class="error-text">분석을 위한 리뷰 수가 부족합니다!!</div>
         </template>
       </Card>
     </div>
@@ -191,7 +194,8 @@ export default {
 }
 
 .review-word-loading,
-.loading-text {
+.loading-text,
+.error-text {
   display: flex;
   justify-content: center;
   align-items: center;
