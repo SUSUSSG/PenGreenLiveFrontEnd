@@ -232,8 +232,18 @@ export default {
           toast.error("자주묻는 질문 및 답변  추가 실패", { timeout: 1000 })
         })
     },
-    removeFaq() {
-      this.FaqList.splice(index, 1);
+    removeFaq(faqId) {
+      axios.delete(`http://localhost:8090/live-faq/delete/${faqId}`)
+      .then(response => {
+        const index = this.faqs.findIndex(faq => faq.faqSeq === faqId);
+        if (index !== -1) {
+                this.faqs.splice(index, 1);
+            }
+      })
+      .catch(error => {
+          console.error("자주묻는 질문과 답 삭제 실패 : ", error);
+          toast.error("자주묻는 질문과 답  삭제 실패", { timeout: 1000})
+        })
     },
   }
 }
