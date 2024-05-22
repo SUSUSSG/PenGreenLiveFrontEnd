@@ -47,7 +47,7 @@
                                                 <div class="flex items-center"> 
                                                     <input v-model="inputAuthCode" type="text" placeholder="인증번호 6자리 입력" class="flex-grow-7 input-control focus:outline-none h-[40px]">
                                                     <div class="flex-grow-3">
-                                                        <Button type="button" text="인증번호 확인" class="w-full"/>
+                                                        <Button @click="verifyCode" type="button" text="인증번호 확인" class="w-full"/>
                                                     </div>
                                                 </div> 
                                             </div>
@@ -228,24 +228,49 @@
 
     async function requestPhoneAuthCode() {
         const phoneNumber = form.value.userTel;
+        const params = {
+            phoneNumber: phoneNumber
+        }
         try {
-            const response = await axios.post(`/api/request-authcode`, {phoneNumber});
+            const response = await axios.post(`/api/sms/request-authcode`, null, {params});
+            if (response.status===200) {
+                console.log(response.statusText);
+            } else {
+                console.log(response.statusText);
+            }
         } catch (error) {
-            console.error('Error checking username:', error);
+            console.error('Error :', error);
         }
     }
 
-    function verifyPhoneNumber(authCode) {
-        if (authCode===inputAuthCode.value) {
-            console.log("인증번호 일치");
-        } else {
-            console.log("인증번호 미일치");
+    async function verifyCode() {
+        const params = {
+            phoneNumber: form.value.userTel,
+            code: inputAuthCode
+        }
+
+        try {
+            const response = await axios.post(`/api/sms/verify`, null, {params});
+            if (response.status===200) {
+                console.log(response.statusText);
+            } else if (response.status===400){
+                alert(response.statusText);
+            } else {
+                console.log(response.statusText);
+            }
+        } catch (error) {
+            console.error('Error :', error);
         }
     }
 
     // 아이디 중복 체크
     async function checkDuplicateUserId() {
         const id = form.value.userId;
+
+        if (id==="") {
+            alert('아이디를 입력하세요.');
+            return;
+        }
         try {
             const response = await axios.post(`/api/check-id`, {id});
             if (response.data==='available') alert("사용 가능한 아이디입니다.");
