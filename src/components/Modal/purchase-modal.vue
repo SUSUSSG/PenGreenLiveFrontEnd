@@ -64,19 +64,24 @@ import { ref, computed, defineProps } from 'vue';
 import { useStore } from 'vuex';
 import axios from 'axios';
 
-const store = useStore();
-const emit = defineEmits(['update:isOpen', 'openTossPay']);
-const product = computed(() => store.getters.selectedProduct || {});
-
 const user = ref(null);
-const address = ref(null);
 
-function checkLoginStatus() {
+onMounted(() => {
   const storedUser = sessionStorage.getItem('user');
   if (storedUser) {
     user.value = JSON.parse(storedUser);
   }
-}
+  
+  if (user.value) {
+    getAddress();
+  }
+});
+
+const store = useStore();
+const emit = defineEmits(['update:isOpen', 'openTossPay']);
+const product = computed(() => store.getters.selectedProduct || {});
+
+const address = ref(null);
 
 async function getAddress() {
   try {
@@ -91,12 +96,7 @@ async function getAddress() {
   }
 }
 
-onMounted(() => {
-  checkLoginStatus();
-  if (user.value) {
-    getAddress();
-  }
-});
+
 
 const close = () => {
   emit('update:isOpen', false);
