@@ -1,7 +1,6 @@
 <template>
   <div class="sidebar">
-    <div class="grid gap-8 mt-5" style="grid-template-rows: repeat(5, 1fr);">
-      <div class="grid gap-8" style="grid-template-rows: repeat(5, 1fr);">
+    <div class="sidebar-area">
         <!-- 카메라 on/off -->
         <div class="sidebar-icon" @click="toggleIcon(statistics[0])">
           <Icon :icon="statistics[0].isActive ? statistics[0].activeIcon : statistics[0].icon">
@@ -86,7 +85,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -260,7 +258,16 @@ export default {
   border-radius: 0.5rem;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  justify-content: center;
+  align-items: center;
 }
+
+.sidebar-area {
+  display: grid;
+  gap: 40px;
+  grid-template-rows: repeat(5, 1fr);
+}
+
 
 .notice-list {
   display: flex;
@@ -306,10 +313,11 @@ dt {
   justify-content: center;
   border-radius: 50%;
   background-color: white;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
   margin-bottom: 1rem;
   color: black;
   cursor: pointer;
+  color: #134010;
 }
 
 .notice-add {

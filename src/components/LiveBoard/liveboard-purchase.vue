@@ -43,34 +43,31 @@
                                 <div data-v-dc744160="" class="w-[99%] card-text h-full">
                                     <div class="flex space-x-3 rtl:space-x-reverse p-5">
                                         <div class="flex-none">
-                                            <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl bg-[#E5F9FF] dark:bg-slate-900 text-info-500">
-                                                <!-- <img src="/src/assets/images/logo/logo-gpt.png"> -->
+                                            <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl dark:bg-slate-900">
+                                                🌟
                                             </div>
                                         </div>
                                         <div class="flex-1">
                                             <div class="text-slate-600 dark:text-slate-400 text-sm mb-1 font-medium">AI에 의해 요약된 리뷰입니다!</div>
-                                            <div class="text-slate-800 dark:text-slate-300 text-lg">가성비가 뛰어나고 생각보다 배송이 빠르게 옵니다.</div>
+                                            <div class="text-slate-800 dark:text-slate-300 text-lg">{{ reviewSummary }}</div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="flex flex-col items-center justify-center">
-                                <div v-for="review in reviews" :key="review.id" class="w-[99%] rounded-md dark:bg-slate-800 shadow-base mb-[0.5rem]">
+                                <div v-for="review in reviews" :key="review.userUuid" class="w-[99%] rounded-md dark:bg-slate-800 shadow-base mb-[0.5rem]">
                                     <div class="h-full">
                                         <div class="p-5 dark:bg-slate-700 rounded-lg">
                                             <div class="flex items-start justify-between">
                                                 <div class="flex flex-row">
-                                                    <div class="w-12 h-12">
-                                                        <img class="rounded-full w-full h-full object-cover" :src="review.image" alt="customer image">
-                                                    </div>
-                                                    <div class="px-[1rem]">
-                                                        <h4 class="font-Inter text-slate-900 dark:text-slate-50 text-xl">{{ review.name }}</h4>
-                                                        <span class="font-Inter text-slate-400 dark:text-slate-300 text-sm font-normal">{{ review.date }}</span>
+                                                    <div>
+                                                        <h4 class="font-Inter text-slate-900 dark:text-slate-50 text-xl">{{ review.userNm }}</h4>
+                                                        <span class="font-Inter text-slate-400 dark:text-slate-300 text-sm font-normal">{{ review.reviewTime }}</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="pt-[1rem]">
-                                                <p class="font-Inter text-slate-500 dark:text-slate-300 text-base font-normal">{{ review.comment }}</p>
+                                                <p class="font-Inter text-slate-500 dark:text-slate-300 text-base font-normal">{{ review.reviewContent }}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -137,6 +134,47 @@
     }
 
     const quantity = ref(1);
+    const reviews = ref([]);
+    const reviewSummary = ref("");
+
+    const formatDate = (datetime) => {
+        const date = new Date(datetime);
+        return date.toLocaleDateString();
+    };
+
+    const fetchReviews = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8090/broadcast/review`, {
+                params: {
+                    productSeq: product.value.productSeq 
+                }
+            });
+            reviews.value = response.data.map(review => ({
+                ...review,
+                reviewTime: formatDate(review.reviewTime)
+            })); 
+            console.log('Fetched reviews:', reviews.value); 
+        } catch (error) {
+            console.error('리뷰를 가져오는 중 오류 발생:', error);
+        }
+    };
+
+    const fetchReviewSummary = async (productSeq) => {
+        try {
+            const response = await axios.post(
+                "http://localhost:8090/review/summarize",
+                null,
+                {
+                    params: { productSeq: productSeq },
+                }
+            );
+            reviewSummary.value = response.data;
+        } catch (error) {
+            console.error("Error fetching review summary:", error);
+            reviewSummary.value = "리뷰가 없습니다";
+        }
+    };
+
 
     onMounted(() => {
         if (!product.value || !product.value.price) {
@@ -144,6 +182,8 @@
             return;
         }
         console.log("product.value ", product.value);
+        fetchReviews();
+        fetchReviewSummary(product.value.productSeq);
     });
 
 </script>
@@ -151,6 +191,7 @@
 <script>
     import Card from "@/components/Card";
     import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+    import axios from 'axios';
     
     export default {
         components: {
@@ -172,22 +213,13 @@
                         title: '리뷰',
                     },
                 ],
-                reviews: [
-                    {
-                        id: 1,
-                        name: "Hello",
-                        date: "2024-04-30",
-                        image: "/src/assets/images/all-img/cus-2.png",
-                        comment: "거품이 잘 나요. 너무 마음에 듭니다. 이제 미용실 안가도 돼요."
-                    },
-                    {
-                        id: 2,
-                        name: "world",
-                        date: "2024-04-30",
-                        image: "/src/assets/images/all-img/cus-1.png",
-                        comment: "좋은 제품을 구매해서 기쁩니다."
-                    },
-                ]
+                reviews: {
+                    userNm: '',
+                    reviewTime: '',
+                    productSeq: 0,
+                    userUuid:''
+                }
+          
             };
         }
     };

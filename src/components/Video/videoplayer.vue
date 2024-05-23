@@ -1,7 +1,6 @@
 <template>
-  <div class="video-wrapper">
-    <!-- ref 속성을 추가하여 video 요소를 직접 참조할 수 있습니다. -->
-    <video ref="videoElement" muted="isMuted" autoPlay class="video"></video>
+  <div className="video-wrapper">
+    <video ref="videoElement" muted="isMuted" autoPlay className="video"></video>
   </div>
 </template>
 
@@ -12,11 +11,27 @@ export default {
   props: {
     streamManager: Object,
     isMuted: Boolean,
+    isPublisher: false
   },
 
   mounted() {
-    // this.$refs를 통해 video 요소에 접근하고, 해당 요소에 비디오 스트림을 추가합니다.
     this.streamManager.addVideoElement(this.$refs.videoElement);
+    if(!this.isPublisher){
+      this.unmuteVideo();
+    }
+  },
+  methods: {
+    unmuteVideo() {
+      const videoElement = this.$refs.videoElement;
+      videoElement.muted = true;
+      videoElement.play().then(() => {
+        setTimeout(() => {
+          videoElement.muted = false;
+        }, 1000); // 1초 지연 후 소리 켜기
+      }).catch(error => {
+        console.error("Failed to play video muted:", error);
+      });
+    },
   },
   watch: {
     isMuted(newVal) {
@@ -32,6 +47,7 @@ export default {
 .video-wrapper {
   width: 100%;
   aspect-ratio: 9 / 16;
+  position: relative;
 }
 
 .video {

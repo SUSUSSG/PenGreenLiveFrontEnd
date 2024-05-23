@@ -2,34 +2,29 @@
   <div class="inline-flex pt-5 ml-5" id="header">
     <img src="/src/assets/images/logo/pengreenlive-logo-white.png" id="logo">
 
-    <div id="resultDisplay" :class="[isBroadcasting ? 'red-style' : 'black-style']" class="mr-4">{{ resultDispalyText }}
+    <div class="result-display" :class="[isBroadcasting ? 'red-style' : 'black-style']">{{ resultDispalyText }}
     </div>
-    <div class="row">
+    <div class="ml-3">
       <div class="broadcast-title">{{ boradcastTitle }}</div>
-      <div class="broadcast-time">{{ "라이브 일시 : " + formattedLiveDateTime.current + " ~ " + formattedLiveDateTime.oneHourLater }}</div>
+      <div class="broadcast-time">{{ "라이브 일시 : " + formattedLiveDateTime.current + " ~ " +
+        formattedLiveDateTime.oneHourLater }}</div>
     </div>
 
-    <div class="inline-flex flex-grow items-center justify-end">
-      <div class="row ml-10" id="times">
+    <div class="right-content">
+      <div class="ml-10" id="times">
         <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
-          <div class="inline-flex bg-white rounded pt-3 px-4 pl-0" id="timeCard">
+          <div class="time-card">
             <div>
-              <div class="h-12 w-12 rounded-full flex flex-col items-center justify-center text-2xl">
-                <Icon :icon="`heroicons:clock`" />
-              </div>
+              <Icon :icon="`heroicons:clock`" class="icon-style" />
             </div>
             <div>
-              <div class="text-sm text-slate-600 dark:text-slate-300 mb-[6px]">
-                {{ item.title }}
-              </div>
-              <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">
-                {{ item.time }}
-              </div>
+              <div class="item-title"> {{ item.title }} </div>
+              <div class="item-time"> {{ item.time }} </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="inline-flex flex-grow items-center justify-end mr-8">
+      <div class="broadcast-controll-button">
         <Button v-on:click="toggleBroadcast()" :text="isBroadcasting ? '라이브 종료' : '라이브 시작'"
           :btnClass="isBroadcasting ? 'btn-green h-12' : 'btn-light h-12'" id="broadcastControllButton" />
       </div>
@@ -41,6 +36,8 @@
 import Card from "@/components/Card";
 import Icon from "@/components/Icon";
 import Button from "@/components/Button";
+
+import axios from "axios";
 
 export default {
   components: {
@@ -85,13 +82,35 @@ export default {
   },
   methods: {
     toggleBroadcast() {
-      if (this.isBroadcasting) {
-        this.$emit('stop-broadcast', this.elapsedTime);
-      } else {
-        this.$emit('start-broadcast');
+      const action = this.isBroadcasting ? 'end' : 'start';
+
+      //시간
+      const date = new Date();
+      const offset = date.getTimezoneOffset() * 60000; // 밀리초 단위로 변환
+      const localDate = new Date(date.getTime() - offset);
+      const time = localDate.toISOString().slice(0, 19);
+
+      const requestData = {
+        broadcastSeq: this.$route.params.broadcastId,
+        time: time,
+        action: action
       }
-      this.isBroadcasting = !this.isBroadcasting;
-      this.updateResultDisplayText();
+      console.log("과연 시간은?", requestData);
+
+      axios.patch('http://localhost:8090/update/broadcast-time', requestData)
+        .then((response) => {
+          console.log(response.data);
+          if (this.isBroadcasting) {
+            this.$emit('stop-broadcast', this.elapsedTime);
+          } else {
+            this.$emit('start-broadcast');
+          }
+          this.isBroadcasting = !this.isBroadcasting;
+          this.updateResultDisplayText();
+        })
+        .catch(error => {
+          console.error('시간 update 실패: ', error);
+        })
     },
     getCurrentTime() {
       let now = new Date();
@@ -161,18 +180,26 @@ export default {
   height: 100px;
 }
 
-#timeCard {
-  width: 150px;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+.time-card {
+  width: 170px;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
+  display: inline-flex;
+  background-color: #ffffff;
+  border-radius: 0.5rem;
+  padding-top: 0.75rem;
+  padding: 0.5rem;
 }
 
-#resultDisplay {
+.result-display {
   width: 80px;
   height: 30px;
   border-radius: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
+  margin-left: 10px;
+  margin-right: 5px;
+  margin-top: 15px;
 }
 
 .red-style {
@@ -204,5 +231,45 @@ export default {
   color: #111111;
   font-weight: bold;
   font-size: large;
+}
+
+.right-content {
+  display: inline-flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.broadcast-controll-button {
+  display: inline-flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: flex-end;
+  margin-right: 2rem;
+}
+
+.icon-style {
+  height: 3rem;
+  width: 3rem;
+  border-radius: 9999px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.item-title {
+  font-size: 0.875rem;
+  color: #475569;
+  margin-bottom: 5px;
+  margin-top: 3px;
+}
+
+.item-time {
+  font-size: 1.125rem;
+  color: #0f172a;
+  font-weight: 500;
+  margin-bottom: 6px;
 }
 </style>

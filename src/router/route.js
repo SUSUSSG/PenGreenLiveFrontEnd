@@ -172,6 +172,11 @@ const routes = [
         name: "결제수단 등록 성공",
         component: () => import("@/components/Pay/callback-auth.vue"),
       },
+      {
+        path: "subscription-settings",
+        name: "채널 구독 관리",
+        component: () => import("@/views/mypage/subscription-settings.vue"),
+      },
     ],
   },
   {
