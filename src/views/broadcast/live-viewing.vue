@@ -1,6 +1,5 @@
 <template>
   <div class="live-container" :style="{ height: computedHeight + 'px' }">
-
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: chattingId }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
