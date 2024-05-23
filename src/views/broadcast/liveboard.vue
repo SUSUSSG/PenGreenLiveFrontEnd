@@ -34,10 +34,10 @@
 <script>
 import axios from 'axios';
 import {OpenVidu} from 'openvidu-browser';
+import LiveBoardStatistics from "@/components/liveboard/liveboard-statistics.vue";
 import LiveBoardTime from "@/components/liveboard/liveboard-time.vue";
 import LiveBoardChat from "@/components/liveboard/liveboard-chat.vue";
 import LiveboardBroad from "@/components/liveboard/liveboard-broad.vue";
-import LiveBoardStatistics from "@/components/liveboard/liveboard-statistics.vue";
 import LiveboardPrompt from "@/components/liveboard/liveboard-prompt.vue";
 import LiveboardSidebar from "@/components/liveboard/liveboard-sidebar.vue";
 import LiveboardProduct from "@/components/liveboard/liveboard-product.vue";
