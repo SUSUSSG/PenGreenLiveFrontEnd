@@ -8,8 +8,8 @@
         <div className="flex-col">
           <div className="flex-row">
             <LiveboardBroad :stream-manager="mainStreamManager"
-                            :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage"/>
-            <LiveBoardChat :current-room="{ id: broadcastId }" :current-writer="'판매자'"/>
+                            :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage" class="card-radius"/>
+            <LiveBoardChat :current-room="{ id: broadcastId }" :current-writer="'판매자'" class="card-radius"/>
           </div>
         </div>
         <div className="flex-col">
@@ -361,5 +361,10 @@ export default {
   height: 100%;
   justify-content: center;
   align-items: center;
+}
+
+.card-radius {
+  border-radius: 0.5rem;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
 }
 </style>
