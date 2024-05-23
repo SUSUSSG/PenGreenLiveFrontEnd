@@ -15,7 +15,7 @@
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-            <LiveBoardPurchase class="purchase-section"/>
+            <LiveboardPurchase class="purchase-section"/>
           </div>
         </div>
       </div>
@@ -97,7 +97,7 @@
 <script setup>
 import { ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import LiveBoardPurchase from "@/components/liveboard/liveboard-purchase.vue";
+import LiveboardgPurchase from "@/components/liveboard/liveboard-purchase.vue";
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";

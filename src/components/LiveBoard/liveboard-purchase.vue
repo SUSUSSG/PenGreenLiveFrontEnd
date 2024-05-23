@@ -91,7 +91,7 @@
 
         <div v-if="showTossPay" class="toss-modal flex justify-between modal-adjust z-50">
             <div class="scroll">
-                <TossPay  @openTossPay="close"></TossPay>
+                <TossPay @openTossPay="close"></TossPay>
             </div>
         </div>
     </div>
@@ -103,7 +103,7 @@
     import PurchaseModal from "@/components/Modal/purchase-modal.vue";
     import TossPay from "@/components/Pay/tosspayments-module.vue";
     import "@/components/Pay/style.css";
-    import {useRoute, useRouter} from 'vue-router';
+    import {useRoute} from 'vue-router';
     import { useStore } from 'vuex';
 
     const route = useRoute();
