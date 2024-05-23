@@ -90,14 +90,13 @@
         </main>
       </div>
     </div>
-
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import LiveboardPurchase from "@/components/liveboard/liveboard-purchase.vue";
+import LiveboardPurchase from "/src/components/liveboard/liveboard-purchase.vue";
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
