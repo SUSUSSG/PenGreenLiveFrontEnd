@@ -15,14 +15,14 @@
       <TabPanel>
         <orderlist v-for="(item, index) in unreviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
                    :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
-                   :orderProductPrice="item.orderProductPrice" :productSeq="item.productSeq" :userUUID="userUUID" @review-submitted="handleReviewSubmitted" />
+                   :orderProductPrice="item.orderProductPrice" :productSeq="item.productSeq" :userUUID="user.uuid" @review-submitted="handleReviewSubmitted" />
       </TabPanel>
 
       <TabPanel>
         <reviewlist v-for="(item, index) in reviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
                     :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
                     :orderProductPrice="item.orderProductPrice" :reviewContent="item.reviewContent"
-                    :reviewSeq="item.reviewSeq" :userUUID="userUUID" @review-deleted="handleReviewDeleted"/>
+                    :reviewSeq="item.reviewSeq" :userUUID="user.uuid" @review-deleted="handleReviewDeleted"/>
       </TabPanel>
     </TabGroup>
   </div>
@@ -36,13 +36,12 @@ import orderlist from '@/components/Order/order-list.vue';
 import reviewlist from '@/components/Order/review-list.vue';
 
 const user = ref(null);
-let userUUID = null;
 
 function checkLoginStatus() {
   const storedUser = sessionStorage.getItem('user');
   if (storedUser) {
     user.value = JSON.parse(storedUser);
-    userUUID = user.value.userUuid;
+    fetchOrders();
   }
 }
 
@@ -58,13 +57,13 @@ const buttons = ref([
 const unreviewedOrders = ref([]);
 const reviewedOrders = ref([]);
 
-const fetchOrders = async (userUuid) => {
+const fetchOrders = async () => {
   try {
-    const unreviewedResponse = await axios.get(`http://localhost:8090/unreviewed-orders/${userUuid}`);
+    const unreviewedResponse = await axios.get(`http://localhost:8090/unreviewed-orders/${user.value.uuid}`);
     console.log('Unreviewed Orders:', unreviewedResponse.data); 
     unreviewedOrders.value = unreviewedResponse.data;
 
-    const reviewedResponse = await axios.get(`http://localhost:8090/reviewed-orders/${userUuid}`);
+    const reviewedResponse = await axios.get(`http://localhost:8090/reviewed-orders/${user.value.uuid}`);
     reviewedOrders.value = reviewedResponse.data;
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -89,9 +88,6 @@ const handleReviewDeleted = (reviewSeq) => {
   }
 };
 
-onMounted(() => {
-  fetchOrders(userUUID);
-});
 </script>
 
 <style scoped>
