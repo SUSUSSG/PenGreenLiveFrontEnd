@@ -27,16 +27,29 @@
     </div>
   </div>
 </template>
+
 <script setup>
 import { ref, onMounted } from "vue";
 import axios from "axios";
+
+const user = ref({});
+
+onMounted(() => {
+    const storedUser = sessionStorage.getItem('user');
+    if (storedUser) {
+        user.value = JSON.parse(storedUser);
+        fetchSubscribedChannels();
+    }
+});
+
 
 const subscribedChannels = ref([]);
 
 const fetchSubscribedChannels = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8090/subscribed-channels"
+      `http://localhost:8090/subscribed-channels/${user.value.uuid}`,
+      // { withCredentials: true }
     );
     if (response.status === 200) {
       subscribedChannels.value = response.data;
@@ -53,7 +66,7 @@ const unsubscribe = async (channelSeq) => {
       null,
       {
         params: { channelSeq },
-      }
+      },
     );
     if (response.status === 200) {
       subscribedChannels.value = subscribedChannels.value.filter(
@@ -70,9 +83,8 @@ const confirmUnsubscribe = (channelSeq) => {
     unsubscribe(channelSeq);
   }
 };
-
-onMounted(fetchSubscribedChannels);
 </script>
+
 <style scoped>
 .col {
   width: 100%;
