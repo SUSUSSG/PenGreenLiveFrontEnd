@@ -266,10 +266,21 @@ import axios from 'axios';
 import BrandPay from "@/components/Pay/brandpay-register.vue";
 import {useRoute, useRouter} from 'vue-router';
 import "@/components/Pay/style.css";
-import { number } from 'yup';
 import { useStore } from 'vuex';
 
 const store = useStore();
+const user = ref(null);
+let clientKey; 
+
+
+onMounted(() => {
+    const storedUser = sessionStorage.getItem('user');
+    if (storedUser) {
+        user.value = JSON.parse(storedUser);
+        clientKey = user.value.uuid;
+    }
+});
+
 const product = computed(() => (store.getters.selectedProduct));
 
 const emit = defineEmits(['openTossPay']);
@@ -282,7 +293,6 @@ function generateOrderId() {
     return nanoid();
 }
 
-const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
 const selectedPayment = ref({ key: 'credit', method:'카드', flowMode: 'DIRECT', label: '신용·체크카드' });
 const selectedCardCompany = ref(null);
 const isOpen = ref(false);
@@ -406,7 +416,7 @@ async function requestPayment() {
                 amount: totalAmount,
                 orderId: orderId,
                 orderName: product.value.productName,
-                customerName: "김토스",
+                customerName: user.value.name,
                 successUrl: window.location.origin + '/success',
                 failUrl: window.location.origin + '/fail',
                 flowMode: selectedPayment.value.flowMode,

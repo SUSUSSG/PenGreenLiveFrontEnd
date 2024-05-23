@@ -20,7 +20,7 @@ function checkLoginStatus() {
   const storedUser = sessionStorage.getItem('user');
   if (storedUser) {
     user.value = JSON.parse(storedUser);
-    customerKey = user.value.userUuid;
+    customerKey = user.value.uuid;
   }
 }
 
