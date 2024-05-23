@@ -34,7 +34,7 @@
 <script>
 import axios from 'axios';
 import {OpenVidu} from 'openvidu-browser';
-import LiveBoardTime from "@/components/Liveboard/liveboard-time.vue";
+import LiveBoardTime from "@/components/liveboard/liveboard-time.vue";
 import LiveBoardChat from "@/components/liveboard/liveboard-chat.vue";
 import LiveboardBroad from "@/components/Liveboard/liveboard-broad.vue";
 import LiveBoardStatistics from "@/components/Liveboard/liveboard-statistics.vue";
