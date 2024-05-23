@@ -104,7 +104,7 @@ import ProductCard from "@/components/Card/product-card.vue";
 import Button from "@/components/Button";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
-import LiveboardPurchase from "@/components/LiveBoard/liveboard-purchase.vue";
+import LiveboardPurchase from "@/components/liveBoard/liveboard-purchase.vue";
 
 
 // 라우트 및 환경변수 설정
