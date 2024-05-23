@@ -32,15 +32,14 @@ import { TabGroup, TabList, Tab, TabPanel } from '@headlessui/vue'
 import BroadcastHistory from '@/components/Card/broadcast-historyCard.vue';
 
 
-let userUUID = null;
+const user = ref({});
 
 onMounted(() => {
     const storedUser = sessionStorage.getItem('user');
     if (storedUser) {
-        userUUID = JSON.parse(storedUser).userUuid;
-        console.log("uuid ", userUUID);
+        user.value = JSON.parse(storedUser);
+        fetchRecentBroadcasts(user.value.uuid);
     }
-    fetchRecentBroadcasts(userUUID);
 });
 
 
@@ -63,8 +62,6 @@ const fetchRecentBroadcasts = async (userUUID) => {
         console.error('Error fetching broadcasts:', error);
     }
 };
-
-
 
 </script>
 
