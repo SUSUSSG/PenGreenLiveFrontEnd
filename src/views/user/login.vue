@@ -18,17 +18,17 @@
                                             <h4 class="font-medium">PenGreenLive 로그인</h4>
                                             <div class="text-slate-500 dark:text-slate-400 text-base">Sign in to your account to start using Dashcode</div>
                                         </div>
-                                        <form class="space-y-4 ">
+                                        <form class="space-y-4" @submit.prevent="login">
                                             <div class="fromGroup       ">
                                                 <div class="relative ">
-                                                    <input type="email" name="email" class="  form-control py-2 h-[48px]  " placeholder="아이디">
+                                                    <input v-model="username" type="text" name="username" id="username" class="  form-control py-2 h-[48px]  " placeholder="아이디">
                                                     <div class="flex text-xl absolute ltr:right-[14px] rtl:left-[14px] top-1/2 -translate-y-1/2  space-x-1 rtl:space-x-reverse"></div>
                                                 </div>
                                                 <label class="block capitalize form-label  ">아이디를 입력하세요</label>
                                             </div>
                                             <div class="fromGroup       ">
                                                 <div class="relative ">
-                                                    <input type="password" name="password" class="  form-control py-2 h-[48px]  " placeholder="비밀번호">
+                                                    <input v-model="password" type="password" name="password" id="password" class="  form-control py-2 h-[48px]  " placeholder="비밀번호">
                                                     <div class="flex text-xl absolute ltr:right-[14px] rtl:left-[14px] top-1/2 -translate-y-1/2  space-x-1 rtl:space-x-reverse"></div>
                                                 </div>
                                                 <label class="block capitalize form-label  ">비밀번호를 입력하세요</label>
@@ -92,9 +92,48 @@
 </template>
 
 <script setup>    
+    import {ref} from 'vue';
+    import axios from 'axios';
+    import { useRoute, useRouter } from 'vue-router';
+
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
     import Textarea from "@/components/Textarea";
+
+    const router = useRouter();
+
+    // 일반 로그인
+    const username=ref(null);
+    const password=ref(null);
+
+    async function login() {
+
+        try {
+            console.log(username.value, password.value);
+            const response = await axios.post('/login', {
+                username: username.value,
+                password: password.value
+            }, { withCredentials: true });
+
+                console.log('login response', response);
+            if (response.status === 200) {
+                console.log('Login successful:', response.data);
+                router.push("/");
+                alert("로그인 성공.");
+
+            }
+        } catch (error) {
+            console.error('login error', error);
+            if (error.response && error.response.status === 401) {
+                console.error('Authentication failed:', error.response.data);
+                alert("아이디 또는 비밀번호가 잘못되었습니다.");
+            }
+        }
+
+    }
+    
+    
+    // 소셜 로그인
 
 </script>
 

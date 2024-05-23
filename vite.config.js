@@ -32,7 +32,11 @@ export default defineConfig({
         target: `ws://${host}:${port}`,
         changeOrigin: false,
         ws: true,
-      }
+      },
+      '/login': {
+        target: `http://${host}:${port}`,
+        changeOrigin: true,
+      },
     }
   }
 });
