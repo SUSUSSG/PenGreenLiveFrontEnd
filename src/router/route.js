@@ -72,8 +72,7 @@ const routes = [
       {
         path: "brandpay-test",
         name: "브랜드페이",
-        component: () =>
-          import("@/components/Pay/tosspayments-brandpay-module.vue"),
+        component: () => import("@/components/Pay/tosspayments-brandpay-module.vue"),
       },
       {
         path: "/live-viewing/:broadcastId",
@@ -168,6 +167,11 @@ const routes = [
     path: "/liveboard/:broadcastId",
     name: "라이브보드",
     component: () => import("@/views/broadcast/liveboard.vue"),
+  },
+  {
+    path: "/chat",
+    name: "chat",
+    component: () => import("@/views/chat-view.vue"),
   },
   {
     path: "/daum-map",
