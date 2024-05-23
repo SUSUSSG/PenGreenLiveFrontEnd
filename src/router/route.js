@@ -158,6 +158,11 @@ const routes = [
         component: () => import("@/views/mypage/broadcast-history.vue"),
       },
       {
+        path: "profile",
+        name: "프로필",
+        component: () => import("@/views/mypage/edit-profile.vue"),
+      },
+      {
         path: "member/edit-profile",
         name: "정보수정",
         component: () => import("@/views/mypage/edit-profile.vue"),
