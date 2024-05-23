@@ -91,19 +91,19 @@
 
         <div v-if="showTossPay" class="toss-modal flex justify-between modal-adjust z-50">
             <div class="scroll">
-                <TossPay @openTossPay="close"></TossPay>
+                <TossPay  @openTossPay="close"></TossPay>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { ref, computed, onMounted } from 'vue';
+    import { ref, computed, defineProps, onMounted } from 'vue';
     import Button from "@/components/Button";
     import PurchaseModal from "@/components/Modal/purchase-modal.vue";
     import TossPay from "@/components/Pay/tosspayments-module.vue";
     import "@/components/Pay/style.css";
-    import {useRoute} from 'vue-router';
+    import {useRoute, useRouter} from 'vue-router';
     import { useStore } from 'vuex';
 
     const route = useRoute();
@@ -244,7 +244,7 @@
     font-weight: 400;
     line-height: 20px;
     color: #000;
-    overflow-wrap: break-word;
+    overflow-wrap: break-all;
 }
 
 .purchase-container .discounted-price {

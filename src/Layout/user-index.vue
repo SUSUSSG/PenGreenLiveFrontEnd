@@ -60,14 +60,14 @@
 </template>
 <script>
 import Breadcrumbs from "@/components/Breadcrumbs";
-import Footer from "../components/footer";
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Settings from "../components/Settings";
 import Sidebar from "../components/UserSidebar/";
 import window from "@/mixins/window";
 import MobileSidebar from "@/components/Sidebar/MobileSidebar.vue";
 import Navmenu from "@/components/UserSidebar/Navmenu.vue";
-import FooterMenu from "@/components/footer/FooterMenu.vue";
+import FooterMenu from "@/components/Footer/FooterMenu.vue";
 
 export default {
   mixins: [window],
