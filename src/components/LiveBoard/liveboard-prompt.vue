@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded p-4 overlay-container" id="promptCard">
+  <div class="prompt-card">
     <div class="row">
       <div class="text-base mb-3">프롬프터</div>
       <button
@@ -133,15 +133,17 @@ export default {
   padding-right: 1rem;
 }
 
-#promptCard {
+.prompt-card {
   width: 100%;
-  max-height: 500px;
+  height: 262px;
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   margin-top: 14px;
+  position: relative;
+  padding: 1rem;
   position: relative;
 }
 
@@ -152,7 +154,7 @@ export default {
 textarea {
   width: 100%;
   height: 100%;
-  max-height: 500px;
+  max-height: 170px;
   border: 1px solid #ccc;
   border-radius: 4px;
   font-size: 1rem;
@@ -166,11 +168,11 @@ textarea {
   background: linear-gradient(45deg, #6a5acd, #00c3ff);
   border: none;
   color: white;
-  padding: 10px 20px;
+  padding: 8px 16px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
-  font-size: 1rem;
+  font-size: 0.9rem;
   margin-bottom: 1rem;
   cursor: pointer;
   transition: box-shadow 0.5s, transform 0.5s, background-color 0.5s;
