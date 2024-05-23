@@ -1,57 +1,55 @@
 <template>
-  <div class="bg-white rounded pt-3 px-4 mt-4" id="productCard">
-    <div class="text-base mb-3">
+  <div class="table-card">
+    <div class="text-base mb-3 mt-3">
       상품 목록
     </div>
-    <div id="tableCard">
-      <div>
-        <div class="table-header">
-          <span class="header-cell">이미지</span>
-          <span class="header-cell badge-cell">인증배지</span>
-          <span class="header-cell name-cell">이름</span>
-          <span class="header-cell">원가</span>
-          <span class="header-cell">판매가</span>
-        </div>
-        <div v-for="(product, index) in products" :key="index" class="table-row cursor-pointer"
-          @click="openDetailProductModal(index)">
-          <span class="cell">
-            <div class="image-container">
-              <img :src="product.productImage" alt="Product Image" class="product-image" />
-            </div>
-          </span>
-          <div class="badge-container cell badge-cell">
-            <img v-for="(image, imgIndex) in getLabelImageArray(product.labelImages)" :key="imgIndex" :src="image"
-              alt="label Image" class="label-image" />
-          </div>
-          <span class="cell name-cell">{{ product.productNm }}</span>
-          <span class="cell price-cell">
-            <div class="list-price">{{ product.listPrice.toLocaleString() }}원</div>
-            <div class="discount-rate">{{ product.discountRate }}%</div>
-          </span>
-          <span class="cell discount-price">{{ product.discountPrice.toLocaleString() }}원</span>
-        </div>
-        <!-- 상품 상세정보 모달 -->
-        <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
-          <div class="modal-content">
-            <div class="product-info">
-              <img :src="selectedProduct.productImg" alt="Product Image" class="product-image" />
-              <div class="product-details">
-                <div class="modal-title">{{ selectedProduct.productName }}</div>
-                <p>상품 코드: {{ selectedProduct.productCode }}</p>
-              </div>
-            </div>
-            <!-- 후에 추가 구현 -->
-            <div class="real-time-info">
-              <p>상품 재고: {{ selectedProduct.productStock }}</p>
-              <p>남은 재고: {{ realTimeStock }}</p>
-              <p>주문 건수: {{ orderCount }}</p>
-              <p>주문 금액: {{ orderAmount }}</p>
-            </div>
-          </div>
-        </Modal>
+
+      <div class="table-header">
+        <span class="header-cell">이미지</span>
+        <span class="header-cell badge-cell">인증배지</span>
+        <span class="header-cell name-cell">이름</span>
+        <span class="header-cell">원가</span>
+        <span class="header-cell">판매가</span>
       </div>
+      <div v-for="(product, index) in products" :key="index" class="table-row cursor-pointer"
+        @click="openDetailProductModal(index)">
+        <span class="cell">
+          <div class="image-container">
+            <img :src="product.productImage" alt="Product Image" class="product-image" />
+          </div>
+        </span>
+        <div class="badge-container cell badge-cell">
+          <img v-for="(image, imgIndex) in getLabelImageArray(product.labelImages)" :key="imgIndex" :src="image"
+            alt="label Image" class="label-image" />
+        </div>
+        <span class="cell name-cell">{{ product.productNm }}</span>
+        <span class="cell price-cell">
+          <div class="list-price">{{ product.listPrice.toLocaleString() }}원</div>
+          <div class="discount-rate">{{ product.discountRate }}%</div>
+        </span>
+        <span class="cell discount-price">{{ product.discountPrice.toLocaleString() }}원</span>
+      </div>
+      <!-- 상품 상세정보 모달 -->
+      <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
+        <div class="modal-content">
+          <div class="product-info">
+            <img :src="selectedProduct.productImg" alt="Product Image" class="product-image" />
+            <div class="product-details">
+              <div class="modal-title">{{ selectedProduct.productName }}</div>
+              <p>상품 코드: {{ selectedProduct.productCode }}</p>
+            </div>
+          </div>
+          <!-- 후에 추가 구현 -->
+          <div class="real-time-info">
+            <p>상품 재고: {{ selectedProduct.productStock }}</p>
+            <p>남은 재고: {{ realTimeStock }}</p>
+            <p>주문 건수: {{ orderCount }}</p>
+            <p>주문 금액: {{ orderAmount }}</p>
+          </div>
+        </div>
+      </Modal>
     </div>
-  </div>
+
 </template>
 
 <script>
@@ -102,15 +100,18 @@ export default {
 </script>
 
 <style>
-#productCard {
+.table-card {
   width: 100%;
-  max-height: 328px;
+  height: 328px;
   display: flex;
   flex-direction: column;
   border-radius: 0.5rem;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
   overflow-y: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-top: 1rem;
 }
 
 .text-primary {
@@ -141,7 +142,7 @@ export default {
 
 .table-row {
   display: flex;
-  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
   padding: 10px 0;
 }
 
@@ -221,6 +222,7 @@ export default {
 .modal-title {
   font-weight: bold;
 }
+
 .modal-content {
   display: flex;
   flex-direction: column;
