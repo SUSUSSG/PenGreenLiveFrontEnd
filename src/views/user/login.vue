@@ -114,13 +114,14 @@
                 username: username.value,
                 password: password.value
             }, { withCredentials: true });
-
                 console.log('login response', response);
             if (response.status === 200) {
-                console.log('Login successful:', response.data);
+                const userInfo = JSON.parse(response.data.user);
+                sessionStorage.setItem('user', JSON.stringify(userInfo));
+
+                console.log("로그인 정보", userInfo)
                 router.push("/");
                 alert("로그인 성공.");
-
             }
         } catch (error) {
             console.error('login error', error);
@@ -129,9 +130,7 @@
                 alert("아이디 또는 비밀번호가 잘못되었습니다.");
             }
         }
-
     }
-    
     
     // 소셜 로그인
 
