@@ -97,7 +97,7 @@
 <script setup>
 import { ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import LiveboardgPurchase from "@/components/liveboard/liveboard-purchase.vue";
+import LiveboardPurchase from "@/components/liveboard/liveboard-purchase.vue";
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
