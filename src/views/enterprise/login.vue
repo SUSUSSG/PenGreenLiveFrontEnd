@@ -11,7 +11,7 @@
                                     <div class="auth-box h-full flex flex-col justify-center">
                                         <div class="mobile-logo text-center mb-6 lg:hidden block">
                                             <a href="/">
-                                                svg가 있었던 하이퍼 링크
+                                                <img src="/assets/logo.60c41eaa.svg" alt="" class="mx-auto">
                                             </a>
                                         </div>
                                         <div class="text-left 2xl:mb-10 mb-4">
@@ -80,6 +80,7 @@
                                     <div class="auth-footer text-center">©  susussg, Co., Ltd.. All Rights Reserved</div>
                                 </div>
                             </div>
+                            <div class="left-column bg-cover bg-no-repeat bg-center " style="background-image: url();"><div class="flex flex-col h-full justify-center"><div class="flex-1 flex flex-col justify-center items-center"><a href="/"><img src="/assets/logo-white.5e389a51.svg" alt="" class="mb-10"></a></div><div></div></div></div>
                         </div>
                     </div>
                 </main>

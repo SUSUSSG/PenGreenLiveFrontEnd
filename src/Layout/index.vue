@@ -61,12 +61,12 @@
 </template>
 <script>
 import Breadcrumbs from "@/components/Breadcrumbs";
-import Footer from "../components/footer";
+import Footer from "../components/Footer";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar/";
 import window from "@/mixins/window";
 import MobileSidebar from "@/components/Sidebar/MobileSidebar.vue";
-import FooterMenu from "@/components/footer/FooterMenu.vue";
+import FooterMenu from "@/components/Footer/FooterMenu.vue";
 
 export default {
   mixins: [window],

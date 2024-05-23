@@ -12,13 +12,13 @@ export default defineConfig({
   plugins: [
     Vue(),
     ViteImages({
-      dirs: ["/src/assets/images"],
+      dirs: ["src/assets/images"],
     }),
   ],
   resolve: {
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue", ".css"],
     alias: {
-      '@': path.resolve(__dirname, './src/'),
+      "@": path.resolve(__dirname, "./src"),
     },
   },
   server: {

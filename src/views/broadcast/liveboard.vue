@@ -34,13 +34,13 @@
 <script>
 import axios from 'axios';
 import {OpenVidu} from 'openvidu-browser';
-import LiveBoardTime from "@/components/liveboard/liveboard-time.vue";
-import LiveBoardChat from "@/components/liveboard/liveboard-chat.vue";
+import LiveBoardTime from "@/components/LiveBoard/liveboard-time.vue";
+import LiveBoardChat from "@/components/LiveBoard/liveboard-chat.vue";
 import LiveboardBroad from "@/components/liveboard/liveboard-broad.vue";
-import LiveBoardStatistics from "@/components/liveboard/liveboard-statistics.vue";
-import LiveboardPrompt from "@/components/liveboard/liveboard-prompt.vue";
-import LiveboardSidebar from "@/components/liveboard/liveboard-sidebar.vue";
-import LiveboardProduct from "@/components/liveboard/liveboard-product.vue";
+import LiveBoardStatistics from "@/components/LiveBoard/liveboard-statistics.vue";
+import LiveboardPrompt from "@/components/LiveBoard/liveboard-prompt.vue";
+import LiveboardSidebar from "@/components/LiveBoard/liveboard-sidebar.vue";
+import LiveboardProduct from "@/components/LiveBoard/liveboard-product.vue";
 
 export default {
   components: {
