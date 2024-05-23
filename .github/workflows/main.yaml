@@ -23,7 +23,7 @@ jobs:
         run: yarn install
 
       - name: Build project
-        run: yarn build
+        run: yarn dev
 
       - name: Deploy to server
         env:
