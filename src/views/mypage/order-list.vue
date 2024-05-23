@@ -35,6 +35,21 @@ import axios from 'axios';
 import orderlist from '@/components/Order/order-list.vue';
 import reviewlist from '@/components/Order/review-list.vue';
 
+const user = ref(null);
+let userUUID = null;
+
+function checkLoginStatus() {
+  const storedUser = sessionStorage.getItem('user');
+  if (storedUser) {
+    user.value = JSON.parse(storedUser);
+    userUUID = user.value.userUuid;
+  }
+}
+
+onMounted(() => {
+  checkLoginStatus();
+});
+
 const buttons = ref([
   { title: "리뷰작성" },
   { title: "작성한 리뷰" }
@@ -42,7 +57,6 @@ const buttons = ref([
 
 const unreviewedOrders = ref([]);
 const reviewedOrders = ref([]);
-const userUUID = 'f23a72e0-1347-11ef-b085-f220affc9a21';
 
 const fetchOrders = async (userUuid) => {
   try {
