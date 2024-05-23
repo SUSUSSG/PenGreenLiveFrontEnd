@@ -6,7 +6,8 @@
     </div>
     <div class="row ml-3">
       <div class="broadcast-title">{{ boradcastTitle }}</div>
-      <div class="broadcast-time">{{ "라이브 일시 : " + formattedLiveDateTime.current + " ~ " + formattedLiveDateTime.oneHourLater }}</div>
+      <div class="broadcast-time">{{ "라이브 일시 : " + formattedLiveDateTime.current + " ~ " +
+        formattedLiveDateTime.oneHourLater }}</div>
     </div>
 
     <div class="right-content">
@@ -14,7 +15,7 @@
         <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
           <div class="time-card">
             <div>
-              <Icon :icon="`heroicons:clock`" class="icon-style"/>
+              <Icon :icon="`heroicons:clock`" class="icon-style" />
             </div>
             <div>
               <div class="item-title"> {{ item.title }} </div>
@@ -35,6 +36,8 @@
 import Card from "@/components/Card";
 import Icon from "@/components/Icon";
 import Button from "@/components/Button";
+
+import axios from "axios";
 
 export default {
   components: {
@@ -79,13 +82,35 @@ export default {
   },
   methods: {
     toggleBroadcast() {
-      if (this.isBroadcasting) {
-        this.$emit('stop-broadcast', this.elapsedTime);
-      } else {
-        this.$emit('start-broadcast');
+      const action = this.isBroadcasting ? 'end' : 'start';
+
+      //시간
+      const date = new Date();
+      const offset = date.getTimezoneOffset() * 60000; // 밀리초 단위로 변환
+      const localDate = new Date(date.getTime() - offset);
+      const time = localDate.toISOString().slice(0, 19);
+
+      const requestData = {
+        broadcastSeq: this.$route.params.broadcastId,
+        time: time,
+        action: action
       }
-      this.isBroadcasting = !this.isBroadcasting;
-      this.updateResultDisplayText();
+      console.log("과연 시간은?", requestData);
+
+      axios.patch('http://localhost:8090/update/broadcast-time', requestData)
+        .then((response) => {
+          console.log(response.data);
+          if (this.isBroadcasting) {
+            this.$emit('stop-broadcast', this.elapsedTime);
+          } else {
+            this.$emit('start-broadcast');
+          }
+          this.isBroadcasting = !this.isBroadcasting;
+          this.updateResultDisplayText();
+        })
+        .catch(error => {
+          console.error('시간 update 실패: ', error);
+        })
     },
     getCurrentTime() {
       let now = new Date();
@@ -215,7 +240,7 @@ export default {
 }
 
 .broadcast-controll-button {
-  display: inline-flex; 
+  display: inline-flex;
   flex-grow: 1;
   align-items: center;
   justify-content: flex-end;
@@ -234,7 +259,7 @@ export default {
 }
 
 .item-title {
-  font-size: 0.875rem; 
+  font-size: 0.875rem;
   color: #475569;
   margin-bottom: 6px;
 }
