@@ -105,7 +105,6 @@ import LiveBoardPurchase from "@/components/liveboard/liveboard-purchase.vue";
 import Live from "@/components/Video/live.vue";
 import ProductCard from "@/components/Card/product-card.vue";
 import Button from "@/components/Button";
-import PurchaseModal from "@/components/Modal/purchase-modal.vue";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
 
