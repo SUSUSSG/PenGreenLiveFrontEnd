@@ -267,7 +267,7 @@
 import axios from "axios";
 
 import Button from "@/components/Button";
-import Icon from "@/components/icon/index.vue";
+import Icon from "@/components/Icon/index.vue";
 import { ref } from "vue";
 import { useToast } from "vue-toastification";
 import Card from "@/components/Card";

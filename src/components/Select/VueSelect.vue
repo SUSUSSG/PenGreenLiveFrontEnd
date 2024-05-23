@@ -68,7 +68,7 @@
 <script>
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
-import Icon from "@/components/icon/index.vue";
+import Icon from "@/components/Icon/index.vue";
 export default {
   components: {
     vSelect,

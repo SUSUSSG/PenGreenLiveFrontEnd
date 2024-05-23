@@ -55,7 +55,7 @@
 <script>
 import nowImg from '@/assets/images/all-img/now.png';
 import Modal from "../Modal/Modal.vue";
-import Icon from "@/components/icon/index.vue";
+import Icon from "@/components/Icon/index.vue";
 
 export default {
   components: {

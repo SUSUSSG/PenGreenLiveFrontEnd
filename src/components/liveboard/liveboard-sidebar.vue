@@ -88,7 +88,7 @@
 </template>
 
 <script>
-import Icon from "@/components/icon/index.vue";
+import Icon from "@/components/Icon/index.vue";
 import Modal from "../Modal/Modal.vue";
 import Button from "@/components/Button";
 import LivePrepareModal from "@/components/Modal/live-prepare-modal.vue";

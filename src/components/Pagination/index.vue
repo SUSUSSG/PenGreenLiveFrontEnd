@@ -102,7 +102,7 @@
 </template>
 
 <script>
-import Icon from "@/components/icon/index.vue";
+import Icon from "@/components/Icon/index.vue";
 import Select from "@/components/Select";
 import { defineComponent } from "vue";
 export default defineComponent({

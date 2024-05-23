@@ -129,7 +129,7 @@
 <script>
 import axios from 'axios';
 import Card from "@/components/Card";
-import Icon from "@/components/icon/index.vue";
+import Icon from "@/components/Icon/index.vue";
 import Tooltip from "@/components/Tooltip";
 import Pagination from "@/components/Pagination";
 import { advancedTable } from "../../constant/basic-tablle-data";

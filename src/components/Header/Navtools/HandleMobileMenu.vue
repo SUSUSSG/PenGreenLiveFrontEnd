@@ -7,7 +7,7 @@
   </div>
 </template>
 <script setup>
-import Icon from "@/components/icon/index.vue";
+import Icon from "@/components/Icon/index.vue";
 import { useThemeSettingsStore } from "@/store/themeSettings";
 
 const themeSettingsStore = useThemeSettingsStore()
