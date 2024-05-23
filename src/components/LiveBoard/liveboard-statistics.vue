@@ -9,14 +9,28 @@
         <Icon icon="heroicons:user-16-solid" class="icon-style" />
         <div>
           <div class="title">실시간 접속자</div>
-          <div class="result">{{ liveViewers }}</div>
+          <div class="result">{{ liveViewers }} 명</div>
+        </div>
+      </div>
+      <div class="basic-card">
+        <Icon icon="heroicons:chart-bar-square-16-solid" class="icon-style" />
+        <div>
+          <div class="title">누적 주문 건수</div>
+          <div class="result">{{ totalOrders }} 건</div>
+        </div>
+      </div>
+      <div class="basic-long-card">
+        <Icon icon="heroicons:currency-dollar-20-solid" class="icon-style" />
+        <div>
+          <div class="title">누적 주문 금액</div>
+          <div class="result">{{ totalOrderAmount.toLocaleString() }} 원</div>
         </div>
       </div>
       <div class="basic-card">
         <Icon icon="heroicons:users-16-solid" class="icon-style" />
         <div>
           <div class="title">누적 접속자</div>
-          <div class="result">{{ totalViewers }}</div>
+          <div class="result">{{ totalViewers }} 명</div>
         </div>
       </div>
       <div class="basic-card">
@@ -26,24 +40,11 @@
           <div class="result">{{ totalLikes }}</div>
         </div>
       </div>
-      <div class="basic-card">
-        <Icon icon="heroicons:chart-bar-square-16-solid" class="icon-style" />
-        <div>
-          <div class="title">누적 주문 건수</div>
-          <div class="result">{{ totalOrders }}</div>
-        </div>
-      </div>
-      <div class="basic-card">
-        <Icon icon="heroicons:currency-dollar-20-solid" class="icon-style" />
-        <div>
-          <div class="title">누적 주문 금액</div>
-          <div class="result">{{ totalOrderAmount }}</div>
-        </div>
-      </div>
-      <div class="basic-card">
+      <div class="basic-long-card">
         <Icon icon="heroicons:building-storefront-16-solid" class="icon-style" />
         <div>
-          <div class="channel-name">{{ channelNm }}</div>
+          <div class="title">채널이름</div>
+          <div class="result">{{ channelNm }}</div>
         </div>
       </div>
     </div>
@@ -73,10 +74,10 @@ export default {
   data() {
     return {
       liveViewers: 0,
-      totalViewers: null,
-      totalLikes: null,
-      totalOrders: null,
-      totalOrderAmount: null,
+      totalViewers: 0,
+      totalLikes: 0,
+      totalOrders: 0,
+      totalOrderAmount: 0,
       viewersHistory: [],
       maxViewers: 0,
       averageViewers: 0,
@@ -184,12 +185,15 @@ export default {
 }
 
 .statistics-card {
-  display: grid;
+  /* display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr); */
+  margin: auto 15px;
+  
 }
 
-.basic-card {
+.basic-card,
+.basic-long-card {
   width: 200px;
   border: 0.5px solid #134010;
   margin: 10px auto;
@@ -200,21 +204,11 @@ export default {
   padding-left: 1.25rem;
   padding-right: 1rem;
   margin-bottom: 1rem;
+  margin-left: 25px;
 }
 
-.channel-name {
-  font-size: 1rem;
-  line-height: 1.75rem;
-  color: #1e293b;
-  font-weight: 500;
-  margin-bottom: 6px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  white-space: normal;
-  text-overflow: ellipsis;
-  max-width: 130px;
+.basic-long-card {
+  width: 280px;
 }
 
 .icon-style {
