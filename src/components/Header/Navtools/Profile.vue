@@ -48,7 +48,7 @@
 <script>
 import { MenuItem } from "@headlessui/vue";
 import Dropdown from "@/components/Dropdown";
-import Icon from "@/components/Icon";
+import Icon from "@/components/Icon/index.vue";
 import profileImg from "@/assets/images/all-img/user.png"
 export default {
   components: {

@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import Icon from "@/components/Icon";
+import Icon from "@/components/Icon/index.vue";
 import { computed, defineComponent, ref } from "vue";
 export default defineComponent({
   name: "Checkbox",

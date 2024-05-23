@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import Icon from "@/components/Icon";
+import Icon from "@/components/Icon/index.vue";
 import { Menu, MenuButton, MenuItems, MenuItem } from "@headlessui/vue";
 export default {
   components: {

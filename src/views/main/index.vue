@@ -209,7 +209,7 @@ import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
 import SkeletonCarousel from "@/components/Skeleton/Schedule-skeleton.vue";
 import SkeletonChance from "@/components/Skeleton/Main-chance-skeleton.vue";
-import CustomFooter from "@/components/footer/CustomFooter.vue";
+import CustomFooter from "@/components/Footer/CustomFooter.vue";
 import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import AIChatBot from "@/components/Chatbot/AIChatBot.vue";
 
