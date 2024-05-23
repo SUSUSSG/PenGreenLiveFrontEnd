@@ -9,7 +9,7 @@
       </div>
       <div class="flex-none text-slate-600 dark:text-white text-sm font-normal items-center lg:flex hidden overflow-hidden text-ellipsis whitespace-nowrap">
         <span class="overflow-hidden text-ellipsis whitespace-nowrap w-[85px] block" @click="isLoggedIn ? null : login()">          
-          {{ isLoggedIn ? user.userNm : '로그인하세요' }}
+          {{ isLoggedIn ? user.name : '로그인하세요' }}
         </span>
         <span class="text-base inline-block ltr:ml-[10px] rtl:mr-[10px]"
           ><Icon icon="heroicons-outline:chevron-down" ></Icon
@@ -45,8 +45,7 @@ import { MenuItem } from "@headlessui/vue";
 import Dropdown from "@/components/Dropdown";
 import Icon from "@/components/Icon";
 import profileImg from "@/assets/images/all-img/user.png";
-import defaultProfileImg from "@/assets/images/all-img/default-user.png"
-
+import defaultProfileImg from "@/assets/images/all-img/default-user.png";
 
 export default {
   components: {
@@ -118,7 +117,10 @@ export default {
       sessionStorage.removeItem('user');
       this.isLoggedIn = false;
       this.user = {};
-      this.$router.push("login");
+      this.$router.push("/");
+    },
+    login() {
+      this.$router.push("/member/login");
     },
   },
   mounted() {
@@ -131,6 +133,7 @@ export default {
   }
 };
 </script>
+
 
 <style lang="scss" scoped>
 /* 추가적인 스타일링이 필요하면 여기에 작성하세요 */
