@@ -94,10 +94,13 @@
 <script setup>    
     import {ref} from 'vue';
     import axios from 'axios';
+    import { useRoute, useRouter } from 'vue-router';
 
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
     import Textarea from "@/components/Textarea";
+
+    const router = useRouter();
 
     // 일반 로그인
     const username=ref(null);
@@ -115,6 +118,9 @@
                 console.log('login response', response);
             if (response.status === 200) {
                 console.log('Login successful:', response.data);
+                router.push("/");
+                alert("로그인 성공.");
+
             }
         } catch (error) {
             console.error('login error', error);
