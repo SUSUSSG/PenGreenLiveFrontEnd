@@ -12,7 +12,7 @@ export default defineConfig({
   plugins: [
     Vue(),
     ViteImages({
-      dirs: ["src/assets/images"],
+      dirs: ["/src/assets/images"],
     }),
   ],
   resolve: {
