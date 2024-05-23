@@ -12,6 +12,7 @@ module.exports = {
     parser: "@babel/eslint-parser",
   },
   rules: {
+    'import/no-unresolved': [2, { caseSensitive: false }],
     "no-console": import.meta.NODE_ENV === "production" ? "warn" : "off",
     "no-debugger": import.meta.NODE_ENV === "production" ? "warn" : "off",
     "vue/multi-word-component-names": 0,

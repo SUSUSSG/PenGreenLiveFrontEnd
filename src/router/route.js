@@ -72,23 +72,12 @@ const routes = [
       {
         path: "brandpay-test",
         name: "브랜드페이",
-        component: () =>
-          import("@/components/Pay/tosspayments-brandpay-module.vue"),
+        component: () => import("@/components/Pay/tosspayments-brandpay-module.vue"),
       },
       {
         path: "/live-viewing/:broadcastId",
         name: "방송시청",
         component: () => import("@/views/broadcast/live-viewing.vue"),
-      },
-      {
-        path: "test",
-        name: "테스트",
-        component: () => import("@/views/test/test-openvidu.vue"),
-      },
-      {
-        path: "test-viewer",
-        name: "테스트시청자",
-        component: () => import("@/views/test/test-viewer.vue"),
       },
     ],
   },
@@ -166,11 +155,6 @@ const routes = [
         path: "payment-register",
         name: "결제수단 등록",
         component: () => import("@/components/Pay/brandpay-register.vue"),
-      },
-      {
-        path: "callback-auth",
-        name: "결제수단 등록 성공",
-        component: () => import("@/components/Pay/callback-auth.vue"),
       },
       {
         path: "subscription-settings",

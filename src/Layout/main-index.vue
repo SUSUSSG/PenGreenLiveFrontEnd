@@ -36,12 +36,12 @@
   </main>
 </template>
 <script>
-import Footer from "../components/Footer";
+import Footer from "../components/footer";
 import Header from "../components/HeaderMain";
 import Sidebar from "../components/Sidebar/";
 import window from "@/mixins/window";
 import MobileSidebar from "@/components/Sidebar/MobileSidebar.vue";
-import FooterMenu from "@/components/Footer/FooterMenu.vue";
+import FooterMenu from "@/components/footer/FooterMenu.vue";
 
 export default {
   mixins: [window],
