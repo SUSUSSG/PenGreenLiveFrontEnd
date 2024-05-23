@@ -45,7 +45,7 @@
                 <p class="address-info__head">
                     <span class="flag">기본배송지</span>
                 </p>
-                <p class="address-info__contents" id="address">서울 강북구 도봉로 315 (수유동, 에피소드 수유 838)</p>
+                <p class="address-info__contents" id="address" >{{ address }}</p>
             </div>
             <button type="button" class="btn-text">변경</button>
         </div>
@@ -58,14 +58,45 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import Button from "@/components/Button";
-import { ref, computed, defineProps, provide } from 'vue';
+import { ref, computed, defineProps } from 'vue';
 import { useStore } from 'vuex';
+import axios from 'axios';
 
 const store = useStore();
 const emit = defineEmits(['update:isOpen', 'openTossPay']);
 const product = computed(() => store.getters.selectedProduct || {});
 
+const user = ref(null);
+const address = ref(null);
+
+function checkLoginStatus() {
+  const storedUser = sessionStorage.getItem('user');
+  if (storedUser) {
+    user.value = JSON.parse(storedUser);
+  }
+}
+
+async function getAddress() {
+  try {
+    const response = await axios.get(`/api/user/address/${user.value.userUuid}`);
+    if (response.data) {
+      address.value = response.data;
+    } else {
+      address.value = null;
+    } 
+  } catch(error) {
+    console.error("주소 로딩 실패", error);
+  }
+}
+
+onMounted(() => {
+  checkLoginStatus();
+  if (user.value) {
+    getAddress();
+  }
+});
 
 const close = () => {
   emit('update:isOpen', false);
@@ -97,6 +128,7 @@ const decreaseQuantity = () => {
 const formattedDiscountedPrice = computed(() => store.getters.discountedPrice.toLocaleString());
 const totalPrice = computed(() => (store.getters.discountedPrice * quantity.value));
 const formattedTotalPrice = computed(() => totalPrice.value.toLocaleString());
+
 </script>
 
 <style scoped>
