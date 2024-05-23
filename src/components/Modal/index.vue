@@ -68,7 +68,7 @@
 </template>
 
 <script>
-import Icon from '@/components/icon/index.vue';
+import Icon from "@/components/Icon/index.vue";
 
 import {
   TransitionRoot,
