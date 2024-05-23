@@ -4,14 +4,14 @@
 
     <div class="result-display" :class="[isBroadcasting ? 'red-style' : 'black-style']">{{ resultDispalyText }}
     </div>
-    <div class="row ml-3">
+    <div class="ml-3">
       <div class="broadcast-title">{{ boradcastTitle }}</div>
       <div class="broadcast-time">{{ "라이브 일시 : " + formattedLiveDateTime.current + " ~ " +
         formattedLiveDateTime.oneHourLater }}</div>
     </div>
 
     <div class="right-content">
-      <div class="row ml-10" id="times">
+      <div class="ml-10" id="times">
         <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
           <div class="time-card">
             <div>
@@ -181,14 +181,13 @@ export default {
 }
 
 .time-card {
-  width: 150px;
-  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  width: 170px;
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.05);
   display: inline-flex;
   background-color: #ffffff;
-  border-radius: 0.25rem;
+  border-radius: 0.5rem;
   padding-top: 0.75rem;
-  padding-right: 1rem;
-  padding-left: 0;
+  padding: 0.5rem;
 }
 
 .result-display {
@@ -198,7 +197,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-right: 4px;
+  margin-left: 10px;
+  margin-right: 5px;
+  margin-top: 15px;
 }
 
 .red-style {
@@ -261,7 +262,8 @@ export default {
 .item-title {
   font-size: 0.875rem;
   color: #475569;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
+  margin-top: 3px;
 }
 
 .item-time {
