@@ -11,7 +11,7 @@
                                     <div class="auth-box h-full flex flex-col justify-center">
                                         <div class="mobile-logo text-center mb-6 lg:hidden block">
                                             <a href="/">
-                                                <img src="/assets/logo.60c41eaa.svg" alt="" class="mx-auto">
+                                                <img src="@/assets/images/all-img/heart.png" alt="" class="mx-auto">
                                             </a>
                                         </div>
                                         <div class="text-left 2xl:mb-10 mb-4">
@@ -80,14 +80,14 @@
                                     <div class="auth-footer text-center">©  susussg, Co., Ltd.. All Rights Reserved</div>
                                 </div>
                             </div>
-                            <div class="left-column bg-cover bg-no-repeat bg-center " style="background-image: url(&quot;/assets/login-bg.4b614fc6.png&quot;);"><div class="flex flex-col h-full justify-center"><div class="flex-1 flex flex-col justify-center items-center"><a href="/"><img src="/assets/logo-white.5e389a51.svg" alt="" class="mb-10"></a></div><div><div class="black-500-title max-w-[525px] mx-auto pb-20 text-center">Unlock your Project<span class="text-white font-bold">performance</span></div></div></div></div>
+                            <div class="left-column bg-cover bg-no-repeat bg-center " style="background-image: url(&quot;/assets/login-bg.4b614fc6.png&quot;);"><div class="flex flex-col h-full justify-center"><div class="flex-1 flex flex-col justify-center items-center"><a href="/"><img src="@/assets/images/all-img/heart.png" alt="" class="mb-10"></a></div><div><div class="black-500-title max-w-[525px] mx-auto pb-20 text-center">Unlock your Project<span class="text-white font-bold">performance</span></div></div></div></div>
                             
                         </div>
                     </div>
                 </main>
             </div>
         </div>
-        <svg id="SvgjsSvg1335" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;"><defs id="SvgjsDefs1336"></defs><polyline id="SvgjsPolyline1337" points="0,0"></polyline><path id="SvgjsPath1338" d="M-1 88L-1 88C-1 88 6.857142857142857 88 6.857142857142857 88C6.857142857142857 88 13.714285714285714 88 13.714285714285714 88C13.714285714285714 88 20.57142857142857 88 20.57142857142857 88C20.57142857142857 88 27.428571428571427 88 27.428571428571427 88C27.428571428571427 88 34.285714285714285 88 34.285714285714285 88C34.285714285714285 88 41.14285714285714 88 41.14285714285714 88C41.14285714285714 88 48 88 48 88C48 88 48 88 48 88 "></path></svg>
+        <!-- <svg id="SvgjsSvg1335" width="2" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.dev" style="overflow: hidden; top: -100%; left: -100%; position: absolute; opacity: 0;"><defs id="SvgjsDefs1336"></defs><polyline id="SvgjsPolyline1337" points="0,0"></polyline><path id="SvgjsPath1338" d="M-1 88L-1 88C-1 88 6.857142857142857 88 6.857142857142857 88C6.857142857142857 88 13.714285714285714 88 13.714285714285714 88C13.714285714285714 88 20.57142857142857 88 20.57142857142857 88C20.57142857142857 88 27.428571428571427 88 27.428571428571427 88C27.428571428571427 88 34.285714285714285 88 34.285714285714285 88C34.285714285714285 88 41.14285714285714 88 41.14285714285714 88C41.14285714285714 88 48 88 48 88C48 88 48 88 48 88 "></path></svg> -->
     </div>
 </template>
 
