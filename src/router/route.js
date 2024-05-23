@@ -80,16 +80,6 @@ const routes = [
         name: "방송시청",
         component: () => import("@/views/broadcast/live-viewing.vue"),
       },
-      {
-        path: "test",
-        name: "테스트",
-        component: () => import("@/views/test/test-openvidu.vue"),
-      },
-      {
-        path: "test-viewer",
-        name: "테스트시청자",
-        component: () => import("@/views/test/test-viewer.vue"),
-      },
     ],
   },
   {
@@ -168,11 +158,6 @@ const routes = [
         component: () => import("@/components/Pay/brandpay-register.vue"),
       },
       {
-        path: "callback-auth",
-        name: "결제수단 등록 성공",
-        component: () => import("@/components/Pay/callback-auth.vue"),
-      },
-      {
         path: "subscription-settings",
         name: "채널 구독 관리",
         component: () => import("@/views/mypage/subscription-settings.vue"),
@@ -183,11 +168,6 @@ const routes = [
     path: "/liveboard/:broadcastId",
     name: "라이브보드",
     component: () => import("@/views/broadcast/liveboard.vue"),
-  },
-  {
-    path: "/chat",
-    name: "chat",
-    component: () => import("@/views/chat-view.vue"),
   },
   {
     path: "/daum-map",
