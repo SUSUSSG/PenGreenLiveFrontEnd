@@ -101,7 +101,7 @@ import { useRoute, useRouter } from 'vue-router';
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
-import LiveBoardPurchase from "@/components/liveboard/liveboard-purchase.vue";
+import LiveBoardPurchase from "/src/components/liveboard/liveboard-purchase.vue";
 import Live from "@/components/Video/live.vue";
 import ProductCard from "@/components/Card/product-card.vue";
 import Button from "@/components/Button";
