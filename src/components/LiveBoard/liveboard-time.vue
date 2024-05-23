@@ -4,14 +4,14 @@
 
     <div class="result-display" :class="[isBroadcasting ? 'red-style' : 'black-style']">{{ resultDispalyText }}
     </div>
-    <div class="row ml-3">
+    <div class="ml-3">
       <div class="broadcast-title">{{ boradcastTitle }}</div>
       <div class="broadcast-time">{{ "라이브 일시 : " + formattedLiveDateTime.current + " ~ " +
         formattedLiveDateTime.oneHourLater }}</div>
     </div>
 
     <div class="right-content">
-      <div class="row ml-10" id="times">
+      <div class="ml-10" id="times">
         <div v-for="(item, i) in statistics" :key="i" class="inline-flex ml-3">
           <div class="time-card">
             <div>
