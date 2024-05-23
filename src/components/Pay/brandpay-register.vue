@@ -6,25 +6,35 @@
 </template>
   
 <script setup>
-import { ref, onMounted, defineProps, defineEmits, computed} from 'vue';
+import { ref, onMounted, defineEmits, computed} from 'vue';
 import axios from 'axios';
-import { nanoid } from "nanoid"; 
 import { useStore } from 'vuex';
 import "@/components/Pay/style.css";
 
 const store = useStore();
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
-const customerKey = 'CUSTOMER_KEY';
+let customerKey;
+const user = ref(null);
+
+function checkLoginStatus() {
+  const storedUser = sessionStorage.getItem('user');
+  if (storedUser) {
+    user.value = JSON.parse(storedUser);
+    customerKey = user.value.userUuid;
+  }
+}
+
+
 let brandpay = ref(null);
 let paymentMethodsWidget;
 const product = computed(()=> (store.getters.selectedProduct)).value;
 const order = computed(()=> (store.getters.orderForm)).value;
 
-
 const emit = defineEmits(['paymentRequested']);
 
 onMounted(async () => {
   try {
+    checkLoginStatus();
     await loadTossPaymentsSDK();
     brandpay.value = window.BrandPay(clientKey, customerKey, {
       redirectUrl: 'http://localhost:8090/api/brandpay/callback-auth',
