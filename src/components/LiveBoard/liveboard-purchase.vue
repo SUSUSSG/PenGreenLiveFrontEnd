@@ -98,7 +98,7 @@
 </template>
 
 <script setup>
-    import { ref, computed, defineProps, onMounted } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
     import Button from "@/components/Button";
     import PurchaseModal from "@/components/Modal/purchase-modal.vue";
     import TossPay from "@/components/Pay/tosspayments-module.vue";
@@ -244,7 +244,7 @@
     font-weight: 400;
     line-height: 20px;
     color: #000;
-    overflow-wrap: break-all;
+    overflow-wrap: break-word;
 }
 
 .purchase-container .discounted-price {
