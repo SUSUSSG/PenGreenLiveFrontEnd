@@ -15,7 +15,7 @@
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-            <LiveboardPurchase class="purchase-section"/>
+            <liveboard-purchase class="purchase-section"/>
           </div>
         </div>
       </div>
@@ -96,7 +96,6 @@
 <script setup>
 import { ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import LiveboardPurchase from "/src/components/liveboard/liveboard-purchase.vue";
 import axios from 'axios';
 import { OpenVidu } from 'openvidu-browser';
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
@@ -105,6 +104,7 @@ import ProductCard from "@/components/Card/product-card.vue";
 import Button from "@/components/Button";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
+import LiveboardPurchase from "@/components/LiveBoard/liveboard-purchase.vue";
 
 
 // 라우트 및 환경변수 설정
