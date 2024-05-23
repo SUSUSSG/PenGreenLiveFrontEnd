@@ -12,7 +12,7 @@
         <LottieAnimation
           @click="toggleChatbot"
           class="fixed-lottie"
-          animationPath="src/assets/images/all-img/penguinLottie.json"
+          animationPath="/src/assets/images/all-img/penguinLottie.json"
         />
         <span>챗봇 슈슈슉</span>
       </div>
