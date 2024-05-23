@@ -31,13 +31,25 @@ import { ref, onMounted } from 'vue'
 import { TabGroup, TabList, Tab, TabPanel } from '@headlessui/vue'
 import BroadcastHistory from '@/components/Card/broadcast-historyCard.vue';
 
+
+let userUUID = null;
+
+onMounted(() => {
+    const storedUser = sessionStorage.getItem('user');
+    if (storedUser) {
+        userUUID = JSON.parse(storedUser).userUuid;
+        console.log("uuid ", userUUID);
+    }
+    fetchRecentBroadcasts(userUUID);
+});
+
+
 const buttons = ref([
     { title: "최근 본 방송" },
 ]);
 
 const broadcasthistoryData = ref([]);
 const producthistoryData = ref([]);
-const userUUID = 'f23a72e0-1347-11ef-b085-f220affc9a21';
 
 const fetchRecentBroadcasts = async (userUUID) => {
     try {
@@ -53,9 +65,6 @@ const fetchRecentBroadcasts = async (userUUID) => {
 };
 
 
-onMounted(() => {
-    fetchRecentBroadcasts(userUUID);
-});
 
 </script>
 
