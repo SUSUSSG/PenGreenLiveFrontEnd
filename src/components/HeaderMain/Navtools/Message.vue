@@ -89,7 +89,7 @@
 </template>
 <script>
 import Dropdown from "@/components/Dropdown";
-import Icon from "@/components/Icon";
+import Icon from "@/components/icon/index.vue";
 import { MenuItem } from "@headlessui/vue";
 import { message } from "../../../constant/data";
 export default {

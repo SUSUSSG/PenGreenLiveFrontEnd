@@ -111,7 +111,7 @@
 
 <script setup>
 import { ref, computed } from "vue";
-import Icon from "@/components/Icon";
+import Icon from "@/components/icon/index.vue";
 
 import {
   TransitionRoot,

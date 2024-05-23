@@ -87,7 +87,7 @@ import Alert from "@/components/Alert";
 import Button from "@/components/Button";
 import Modal from "@/components/Modal/index.vue";
 import Textinput from "@/components/Textinput/index.vue";
-import Icon from "@/components/Icon";
+import Icon from "@/components/icon/index.vue";
 import { Client } from "@stomp/stompjs";
 
 export default {

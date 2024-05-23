@@ -34,7 +34,7 @@
 
 <script>
 import Card from "@/components/Card";
-import Icon from "@/components/Icon";
+import Icon from "@/components/icon/index.vue";
 import Button from "@/components/Button";
 
 import axios from "axios";
