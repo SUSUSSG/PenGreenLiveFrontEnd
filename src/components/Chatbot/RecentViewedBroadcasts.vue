@@ -48,17 +48,25 @@ export default {
   data() {
     return {
       broadcasts: [],
+      user: {},
     };
   },
   
   mounted() {
+    this.getUserInfo();
     this.fetchBroadcasts();
   },
   methods: {
+    getUserInfo() {
+      const storedUser = sessionStorage.getItem('user');
+      if (storedUser) {
+        this.user = JSON.parse(storedUser);
+      }
+    },
     fetchBroadcasts() {
       axios
         .get(`http://localhost:8090/recently-viewed/broadcasts`, {
-          params: { userUUID }
+          params: { userUUID : this.user.uuid }
         })
         .then((response) => {
           console.log("Broadcasts response:", response.data);
