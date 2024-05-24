@@ -223,12 +223,12 @@ export default {
       return this.createSession(sessionId).then(sessionId => this.createToken(sessionId));
     },
     createSession(sessionId) {
-      return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions`, {customSessionId: sessionId}, {
+      return axios.post(`http://localhost:8090/api/sessions`, {customSessionId: sessionId}, {
         headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
     createToken(sessionId) {
-      return axios.post(`${process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/'}api/sessions/${sessionId}/connections`, {}, {
+      return axios.post(`http://localhost:8090/api/sessions/${sessionId}/connections`, {}, {
         headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
@@ -266,14 +266,6 @@ export default {
         console.error('Error calculating and deleting watch time:', error.response ? error.response.data : error.message);
       }
     },
-    // async createProductClicks(broadcastSeq) {
-    //   try {
-    //     const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}`);
-    //     console.log('Product clicks created:', response.data);
-    //   } catch (error) {
-    //     console.error('Error creating product clicks:', error.response ? error.response.data : error.message);
-    //   }
-    // },
     async updateProductClicks(broadcastSeq){
       try{
         const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/update-average-clicks`)

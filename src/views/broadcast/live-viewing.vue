@@ -112,7 +112,7 @@ import { useStore } from 'vuex';
 // 라우트 및 환경변수 설정
 const route = useRoute();
 const router = useRouter();
-const APPLICATION_SERVER_URL = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:8090/';
+const APPLICATION_SERVER_URL = 'http://localhost:8090/';
 
 //채팅 방 번호
 const chattingId = ref(route.params.broadcastId);
