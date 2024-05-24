@@ -19,27 +19,23 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Clear cache
-        run: yarn cache clean
+      # - name: Clear cache
+      #   run: yarn cache clean
 
       - name: Install dependencies
         run: yarn install
 
       - name: Set up environment variables
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL_PRODUCTION }}" > .env.production
-          else
-            echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL_DEVELOPMENT }}" > .env.development
-          fi
+          echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE_URL_PRODUCTION }}" > .env.production
 
       - name: Build project
+        run: yarn build --mode production
+
+      - name: Install sshpass
         run: |
-          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
-            yarn build --mode production
-          else
-            yarn build --mode development
-          fi
+          sudo apt-get update
+          sudo apt-get install -y sshpass
 
       - name: Deploy to server
         env:
@@ -48,7 +44,5 @@ jobs:
           SERVER_PORT: ${{ secrets.SERVER_PORT }}
           SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
         run: |
-          sudo apt-get update
-          sudo apt-get install -y sshpass
           sshpass -p "$SERVER_PASSWORD" ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST -p $SERVER_PORT "rm -rf /var/www/pengreen.live/*"
           sshpass -p "$SERVER_PASSWORD" rsync -avz -e "ssh -p $SERVER_PORT" --delete dist/ $SERVER_USER@$SERVER_HOST:/var/www/pengreen.live
