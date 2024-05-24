@@ -9,11 +9,7 @@
           gap: 1rem;
         "
       >
-        <LottieAnimation
-          @click="toggleChatbot"
-          class="fixed-lottie"
-          animationPath="https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/penguinLottie.json"
-        />
+        <img class="image-susussg" src="https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/pengreenlive-logo.png"/>
         <span>챗봇 슈슈슉</span>
       </div>
       <button @click="toggleChatbot" class="close-button">
@@ -58,7 +54,6 @@
 import axios from "axios";
 import { markRaw } from "vue"; // markRaw 가져오기
 import Icon from "@/components/Icon/index.vue";
-import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import OrderHistory from "@/components/Chatbot/OrderHistory.vue";
 import Profile from "@/components/Chatbot/Profile.vue";
 import Refund from "@/components/Chatbot/Refund.vue";
@@ -68,7 +63,6 @@ import Payment from "@/components/Chatbot/Payment.vue";
 export default {
   components: {
     Icon: markRaw(Icon),
-    LottieAnimation: markRaw(LottieAnimation),
     OrderHistory: markRaw(OrderHistory),
     Profile: markRaw(Profile),
     Refund: markRaw(Refund),
@@ -478,6 +472,12 @@ export default {
   align-items: center;
   padding: 0 30px;
   padding-bottom: 30px;
+}
+.image-susussg{
+  width:60px;
+  height:60px;
+  aspect-ratio:1/1;
+  object-fit: cover;
 }
 .chatbot-input input {
   flex: 1;
