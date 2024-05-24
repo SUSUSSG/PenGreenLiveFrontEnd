@@ -205,7 +205,6 @@
     import Checkbox from "@/components/Checkbox";
     import Textarea from "@/components/Textarea";
     import Map from "@/components/Map/map.vue";
-    import { NIL } from 'uuid';
 
     const router = useRouter();
 
