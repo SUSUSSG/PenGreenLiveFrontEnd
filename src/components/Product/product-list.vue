@@ -36,7 +36,7 @@
               style="max-width: 100px">
           </div>
           <template v-slot:footer>
-            <Button text="등록" btnClass="btn-dark btn-sm" @click="registerProduct" />
+            <Button text="등록" btnClass="btn-dark btn-sm" @click="registerProduct"/>
             <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal()" />
           </template>
         </Modal>
@@ -75,7 +75,7 @@
           </div>
           <template v-slot:footer>
             <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="closeEditModal" />
-            <Button text="저장" btnClass="btn-dark btn-sm" @click="updateProductDetails" />
+            <Button text="저장" btnClass="btn-dark btn-sm" @click="updateProductDetails" :disabled="!prodRsstValid" />
           </template>
         </Modal>
       </div>
@@ -240,6 +240,7 @@ export default {
           width: '130px',
         },
       ],
+      prodRsstValid: false,
     };
   },
   computed: {
@@ -353,6 +354,7 @@ export default {
         productImage: row.productImage,
         previewImage: row.productImage
       };
+      this.prodRsstValid = row.brand === "01";
       console.log(this.editModalData.productSeq);
       this.$refs.editModal.openModal();
     },
@@ -373,6 +375,15 @@ export default {
       this.customer.splice(index, 1);
     },
     updateProductDetails() {
+      console.log(this.prodRsstValid);
+
+      if (this.prodRsstValid === false) {
+        alert("녹색제품 통합ID 인증이 필요합니다.");
+        console.log(this.prodRsstValid);
+
+        return;
+      }
+
       const url = `http://localhost:8090/${this.editModalData.productSeq}`;
       const productData = {
         productCd: this.editModalData.productCd,
@@ -412,6 +423,14 @@ export default {
       });
     },
     registerProduct() {
+      console.log("녹색인증 : " + this.prodRsstValid);
+
+      if (this.prodRsstValid === false) {
+        console.log("녹색인증 : " + this.prodRsstValid);
+        alert("녹색제품 통합ID 인증이 필요합니다.");
+        return;
+      }
+
       const url = `http://localhost:8090/products?vendorSeq=${this.addModalData.vendorSeq}&channelSeq=${this.addModalData.channelSeq}`;
       const productData = {
         productCd: this.addModalData.productCd,
@@ -444,16 +463,32 @@ export default {
         .then(response => {
           console.log("Product authentication response:", response.data);
           const productInfo = response.data.productInfo; // productInfo 객체로 변경
+
+          if (productInfo.prodRsst !== "01") {
+            alert("인증할 수 없는 제품입니다.");
+            this.prodRsstValid = false;
+            console.log("녹색인증 : " + this.prodRsstValid);
+
+            return;
+          }
+
+          this.prodRsstValid = true;
+          console.log("녹색인증 : " + this.prodRsstValid);
+
           if (modalType === 'add') {
             this.addModalData.productNm = productInfo.prodPrnm;
             this.addModalData.categoryCd = productInfo.prodCfgb;
             this.addModalData.listPrice = productInfo.prodRedt;
+            this.addModalData.brand = productInfo.prodRsst;
             this.addModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
+            this.addModalData.imageSrc = response.data.productImage;
           } else {
             this.editModalData.productNm = productInfo.prodPrnm;
             this.editModalData.categoryCd = productInfo.prodCfgb;
             this.editModalData.listPrice = productInfo.prodRedt;
+            this.editModalData.brand = productInfo.prodRsst;
             this.editModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
+            this.addModalData.imageSrc = response.data.productImage;
           }
         })
         .catch(error => {
