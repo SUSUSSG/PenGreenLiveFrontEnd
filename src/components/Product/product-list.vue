@@ -12,7 +12,7 @@
               <Textinput label="녹색제품 통합ID" type="text" name="greenProductId" v-model="addModalData.greenProductId"
                 placeholder="KR232148" class="mb-2 flex-grow" />
               <button
-                class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5"><span>인증하기</span></button>
+                class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5" @click="authenticateProduct('add')"><span>인증하기</span></button>
             </div>
             <Textinput label="상품명" type="text" name="productNm" v-model="addModalData.productNm"
               placeholder="상품명을 입력하세요" class="mb-2" />
@@ -52,7 +52,7 @@
             <div class="flex items-center">
               <Textinput label="녹색제품 통합ID" type="text" name="greenProductId" v-model="editModalData.greenProductId"
                 class="mb-2 flex-grow" />
-              <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5">
+              <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5" @click="authenticateProduct('edit')">
                 <span>인증하기</span></button>
             </div>
             <Textinput label="상품명" type="text" name="editproductname" v-model="editModalData.productNm" class="mb-2" />
@@ -437,9 +437,29 @@ export default {
           alert("Failed to register product: " + error.response.data.message);
         });
     },
-    formatNumber(value) {
-      if (!value) return '0';
-      return value.toLocaleString();
+    authenticateProduct(modalType) {
+      const greenProductId = modalType === 'add' ? this.addModalData.greenProductId : this.editModalData.greenProductId;
+      console.log("Authenticating product with ID:", greenProductId);
+      axios.get(`http://localhost:8090/green-product?prodIxid=${greenProductId}`)
+        .then(response => {
+          console.log("Product authentication response:", response.data);
+          const productInfo = response.data.productInfo; // productInfo 객체로 변경
+          if (modalType === 'add') {
+            this.addModalData.productNm = productInfo.prodPrnm;
+            this.addModalData.categoryCd = productInfo.prodCfgb;
+            this.addModalData.listPrice = productInfo.prodRedt;
+            this.addModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
+          } else {
+            this.editModalData.productNm = productInfo.prodPrnm;
+            this.editModalData.categoryCd = productInfo.prodCfgb;
+            this.editModalData.listPrice = productInfo.prodRedt;
+            this.editModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
+          }
+        })
+        .catch(error => {
+          console.error("Error during product authentication:", error);
+          alert("Failed to authenticate product: " + error.response.data.message);
+        });
     }
   }
 };
@@ -463,5 +483,4 @@ export default {
   justify-content: flex-end;
   margin-bottom: 16px;
 }
-
 </style>
