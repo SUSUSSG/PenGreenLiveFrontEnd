@@ -180,9 +180,10 @@ export default {
   },
   methods: {
     connect() {
-      const url = "ws://223.130.147.232:8090/ws/init";
+      // const url = "ws://223.130.147.232:8090/ws/init";
       // const url = "ws://localhost:8090/ws/init";
-      // const url = "http://127.0.0.1:8090/ws/init";
+      const url = "wss://pengreen.live/ws/init";
+
 
       this.websocketClient = new Client({
         brokerURL: url,
