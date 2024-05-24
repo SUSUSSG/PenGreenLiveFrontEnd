@@ -35,38 +35,38 @@ export default {
     return {
       categories: [
         {
-          imgSrc: "http://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-all.png",
+          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-all.png",
           name: "전체",
           categoryCd: null,
         },
         {
-          imgSrc: "http://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-cosmetic.png",
+          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-cosmetic.png",
           name: "뷰티",
           categoryCd: "BCT-CTG-001",
         },
         {
           imgSrc:
-            "http://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-organic-food.png",
+            "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-organic-food.png",
           name: "식품",
           categoryCd: "BCT-CTG-002",
         },
         {
-          imgSrc: "http://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-furniture.png",
+          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-furniture.png",
           name: "생활용품",
           categoryCd: "BCT-CTG-003",
         },
         {
-          imgSrc: "http://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-kids.png",
+          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-kids.png",
           name: "유아동",
           categoryCd: "BCT-CTG-004",
         },
         {
-          imgSrc: "http://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-tech.png",
+          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-tech.png",
           name: "테크",
           categoryCd: "BCT-CTG-005",
         },
         {
-          imgSrc: "http://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-hoodie.png",
+          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-hoodie.png",
           name: "패션",
           categoryCd: "BCT-CTG-006",
         },
