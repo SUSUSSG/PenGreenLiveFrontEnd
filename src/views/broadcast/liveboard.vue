@@ -8,7 +8,7 @@
         <div className="flex-col">
           <div className="flex-row">
             <LiveboardBroad :stream-manager="mainStreamManager"
-                            :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage" class="card-radius"/>
+                            :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage" />
             <LiveBoardChat :current-room="{ id: broadcastId }" :current-writer="'판매자'" class="card-radius"/>
           </div>
         </div>
