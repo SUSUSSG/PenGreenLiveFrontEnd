@@ -17,14 +17,21 @@ export default {
     this.loadAnimation();
   },
   methods: {
-    loadAnimation() {
-      lottie.loadAnimation({
-        container: this.$refs.lottieContainer,
-        renderer: "svg",
-        loop: true,
-        autoplay: true,
-        path: this.animationPath,
-      });
+    async loadAnimation() {
+      try {
+        const response = await fetch(this.animationPath);
+        const animationData = await response.json();
+
+        lottie.loadAnimation({
+          container: this.$refs.lottieContainer,
+          renderer: "svg",
+          loop: true,
+          autoplay: true,
+          animationData: animationData,
+        });
+      } catch (error) {
+        console.error("Error loading Lottie animation:", error);
+      }
     },
   },
 };

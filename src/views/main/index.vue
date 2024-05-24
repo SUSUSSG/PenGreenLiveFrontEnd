@@ -185,11 +185,7 @@
     <CustomFooter />
     <AIChatBot ref="chatbot" style="border-radius: 2rem 2rem 0 0" />
     <div class="chatbot-wrapper">
-      <LottieAnimation
-        @click="toggleChatbot"
-        class="fixed-lottie"
-        animationPath="src/assets/images/all-img/penguinLottie.json"
-      />
+      <img class="fixed-lottie" @click="toggleChatbot" src="https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/pengreenlive-logo.png"/>
       <div class="lottie-title">
         <p>궁금한 것은 AI 슈슈슉에게 물어보세요!</p>
       </div>
@@ -661,9 +657,13 @@ export default {
   transition: width 2s ease-in-out; /* 애니메이션 추가 */
 }
 .fixed-lottie {
-  width: 80px;
-  height: 80px;
+  width: 64px;
+  height: 64px;
   cursor: pointer;
+  border-radius:100%;
+  aspect-ratio: 1/1;
+  object-fit:cover;
+  margin: 0.5rem;
 }
 
 .lottie-title {
