@@ -85,7 +85,7 @@ const address = ref(null);
 
 async function getAddress() {
   try {
-    const response = await axios.get(`/api/user/address/${user.value.userUuid}`);
+    const response = await axios.get(`/api/user/address/${user.value.uuid}`);
     if (response.data) {
       address.value = response.data;
     } else {
