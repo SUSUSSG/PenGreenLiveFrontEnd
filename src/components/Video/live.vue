@@ -48,7 +48,7 @@ import shareIcon from "@/assets/images/all-img/share.png";
 import soundIcon from "@/assets/images/all-img/speaker.png";
 import redheart from "@/assets/images/all-img/redheart.png";
 import { onMounted, onBeforeMount } from 'vue';
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
   setup() {
@@ -153,18 +153,18 @@ export default {
           });
     },
     incrementLike(count) {
-      axios.patch(`http://localhost:8090/broadcasts/statistics/${this.broadcastId}/likes/increment`, { count })
+      axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/increment`, { count })
           .then(response => console.log("좋아요 수 증가"))
           .catch(error => console.log("좋아요 증가 실패: " + error));
     },
     decrementLike(count) {
-      axios.patch(`http://localhost:8090/broadcasts/statistics/${this.broadcastId}/likes/decrement`, { count })
+      axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/decrement`, { count })
           .then(response => console.log("좋아요 수 감소"))
           .catch(error => console.log("좋아요 감소 실패: " + error));
     },
     async fetchLikes() {
       try {
-        const response = await axios.get(`http://localhost:8090/broadcasts/statistics/${this.broadcastId}`);
+        const response = await axios.get(`/broadcasts/statistics/${this.broadcastId}`);
         console.log('좋아요수 들고옴:', response.data);
         return response.data;
       } catch (error) {

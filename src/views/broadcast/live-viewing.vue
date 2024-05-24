@@ -98,7 +98,7 @@
 <script setup>
 import { ref, onMounted, computed, watch, onBeforeUnmount} from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
+import axios from "@/axios";
 import { OpenVidu } from 'openvidu-browser';
 import LiveboardChat from "@/components/liveboard/liveboard-chat.vue";
 import LiveBoardPurchase from "@/components/liveboard/liveboard-purchase.vue";
@@ -207,14 +207,14 @@ const sendWatchTime = async () => {
   };
 
   try {
-    const response = await axios.post(`${APPLICATION_SERVER_URL}api/watch-times`, watchTime);
+    const response = await axios.post(`/watch-times`, watchTime);
     console.log('Watch time successfully sent:', response.data);
   } catch (error) {
     console.error('Error adding watch time:', error);
   }
 };
 const incrementProductClicks = async (broadcastSeq, productSeq) => {
-  await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/product/${productSeq}/increment-click`)
+  await axios.post(`/product-clicks/broadcast/${broadcastSeq}/product/${productSeq}/increment-click`)
 }
 
 const cleanSessionProperties = () => {
@@ -229,12 +229,12 @@ const getToken = async (sessionId) => {
 };
 
 const createSession = async (sessionId) => {
-  const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions`, { customSessionId: sessionId });
+  const response = await axios.post(`/sessions`, { customSessionId: sessionId });
   return response.data;
 };
 
 const createToken = async (sessionId) => {
-  const response = await axios.post(`${APPLICATION_SERVER_URL}api/sessions/${sessionId}/connections`);
+  const response = await axios.post(`/sessions/${sessionId}/connections`);
   return response.data;
 };
 
@@ -248,7 +248,7 @@ const loadLiveBroadcastInfo = async () => {
   const broadcastId = route.params.broadcastId;
   console.log("해당 방송 id : " + broadcastId);
   try {
-    const response = await axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}`);
+    const response = await axios.get(`/live-broadcast-info/${broadcastId}`);
     console.log(response.data);
     liveBroadcastInfo.value = response.data;
     console.log("broadcast info data : ", liveBroadcastInfo.value);
@@ -263,7 +263,7 @@ const loadBroadcastProduct = async () => {
   const broadcastId = route.params.broadcastId;
   console.log("해당 방송 id : " + broadcastId);
   try {
-    const response = await axios.get(`http://localhost:8090/live-broadcast-product/${broadcastId}`);
+    const response = await axios.get(`/live-broadcast-product/${broadcastId}`);
     console.log(response.data);
     productList.value = response.data.map(product => {
       const labelImagesArray = product.labelImages.split(',').map(image => image.trim());
@@ -288,7 +288,7 @@ const loadBroadcastProduct = async () => {
 const loadLiveBroadcastDetails = async () => {
   const broadcastId = route.params.broadcastId;
   try {
-    const response = await axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}/details`);
+    const response = await axios.get(`/live-broadcast-info/${broadcastId}/details`);
     liveBroadcastInfo.value.notices = response.data.notices;
     liveBroadcastInfo.value.faqs = response.data.faqs;
   } catch (error) {
@@ -320,7 +320,7 @@ const handleDiscountedPrice = (discountedPrice, product) => {
 };
 const incrementViewsCount = async (sessionId) => {
   console.log("세션 id", sessionId);
-  await axios.patch(`${APPLICATION_SERVER_URL}broadcasts/statistics/${sessionId}/viewsCount`);
+  await axios.patch(`/broadcasts/statistics/${sessionId}/viewsCount`);
 };
 
 const onClickRedirect = () => {

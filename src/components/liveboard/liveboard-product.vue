@@ -4,58 +4,58 @@
       상품 목록
     </div>
 
-      <div class="table-header">
-        <span class="header-cell">이미지</span>
-        <span class="header-cell badge-cell">인증배지</span>
-        <span class="header-cell name-cell">이름</span>
-        <span class="header-cell">원가</span>
-        <span class="header-cell">판매가</span>
-      </div>
-      <div v-for="(product, index) in products" :key="index" class="table-row cursor-pointer"
-        @click="openDetailProductModal(index)">
-        <span class="cell">
-          <div class="image-container">
-            <img :src="product.productImage" alt="Product Image" class="product-image" />
-          </div>
-        </span>
-        <div class="badge-container cell badge-cell">
-          <img v-for="(image, imgIndex) in getLabelImageArray(product.labelImages)" :key="imgIndex" :src="image"
-            alt="label Image" class="label-image" />
-        </div>
-        <span class="cell name-cell">{{ product.productNm }}</span>
-        <span class="cell price-cell">
-          <div class="list-price">{{ product.listPrice.toLocaleString() }}원</div>
-          <div class="discount-rate">{{ product.discountRate }}%</div>
-        </span>
-        <span class="cell discount-price">{{ product.discountPrice.toLocaleString() }}원</span>
-      </div>
-      <!-- 상품 상세정보 모달 -->
-      <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
-        <div class="modal-content">
-          <div class="product-info">
-            <img :src="selectedProduct.productImg" alt="Product Image" class="product-image" />
-            <div class="product-details">
-              <div class="modal-title">{{ selectedProduct.productName }}</div>
-              <p>상품 코드: {{ selectedProduct.productCode }}</p>
-            </div>
-          </div>
-          <!-- 후에 추가 구현 -->
-          <div class="real-time-info">
-            <p>상품 재고: {{ selectedProduct.productStock }}</p>
-            <p>남은 재고: {{ realTimeStock }}</p>
-            <p>주문 건수: {{ orderCount }}</p>
-            <p>주문 금액: {{ orderAmount }}</p>
-          </div>
-        </div>
-      </Modal>
+    <div class="table-header">
+      <span class="header-cell">이미지</span>
+      <span class="header-cell badge-cell">인증배지</span>
+      <span class="header-cell name-cell">이름</span>
+      <span class="header-cell">원가</span>
+      <span class="header-cell">판매가</span>
     </div>
-
+    <div v-for="(product, index) in products" :key="index" class="table-row cursor-pointer"
+      @click="openDetailProductModal(index)">
+      <span class="cell">
+        <div class="image-container">
+          <img :src="product.productImage" alt="Product Image" class="product-image" />
+        </div>
+      </span>
+      <div class="badge-container cell badge-cell">
+        <img v-for="(image, imgIndex) in getLabelImageArray(product.labelImages)" :key="imgIndex" :src="image"
+          alt="label Image" class="label-image" />
+      </div>
+      <span class="cell name-cell">{{ product.productNm }}</span>
+      <span class="cell price-cell">
+        <div class="list-price">{{ product.listPrice.toLocaleString() }}원</div>
+        <div class="discount-rate">{{ product.discountRate }}%</div>
+      </span>
+      <span class="cell discount-price">{{ product.discountPrice.toLocaleString() }}원</span>
+    </div>
+    <!-- 상품 상세정보 모달 -->
+    <Modal title="상품 상세 정보" ref="showProductInfo" :showButtons="false">
+      <div class="modal-content">
+        <div class="product-info">
+          <img :src="selectedProduct.productImg" alt="Product Image" class="product-image" />
+          <div class="product-details">
+            <div class="modal-title">{{ selectedProduct.productName }}</div>
+            <p>상품 코드: {{ selectedProduct.productCode }}</p>
+          </div>
+        </div>
+        <!-- 후에 추가 구현 -->
+        <div class="real-time-info">
+          <p>상품 재고: {{ selectedProduct.productStock }}원</p>
+          <p>남은 재고: {{ remainingStock }}원</p>
+          <p>주문 건수: {{ totalOrders }}건</p>
+          <p>주문 금액: {{ totalOrderAmount.toLocaleString() }}원</p>
+        </div>
+      </div>
+    </Modal>
+  </div>
 </template>
 
 <script>
 import nowImg from '@/assets/images/all-img/now.png';
 import Modal from "../Modal/Modal.vue";
 import Icon from "@/components/Icon/index.vue";
+import axios from "@/axios";
 
 export default {
   components: {
@@ -69,7 +69,10 @@ export default {
     return {
       nowImg,
       selectedProduct: null,
-    }
+      remainingStock: '',
+      totalOrders: '',
+      totalOrderAmount: '',
+    };
   },
   methods: {
     getLabelImageArray(labelImages) {
@@ -89,11 +92,21 @@ export default {
         productStock: selectedProduct.productStock
       };
 
-      this.$refs.showProductInfo.openModal();
-      this.$refs.showProductInfo.open();
-    },
-    showProductInfo() {
-      this.isOpen = true;
+      const broadcastId = this.$route.params.broadcastId;
+
+      axios.post(`/live-product-stats/${broadcastId}/${selectedProduct.productSeq}`)
+        .then(response => {
+          console.log(response.data);
+          this.remainingStock = response.data.remainingStock;
+          this.totalOrders = response.data.totalOrders;
+          this.totalOrderAmount = response.data.totalOrderAmount;
+          
+          // 모달 열기
+          this.$refs.showProductInfo.openModal();
+        })
+        .catch(error => {
+          console.log("실시간 방송 상품 stats 에러 : ", error);
+        });
     }
   }
 }

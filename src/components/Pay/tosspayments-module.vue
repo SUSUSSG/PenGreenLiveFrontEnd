@@ -262,7 +262,7 @@
 <script setup>
 import { ref, onMounted , computed } from 'vue';
 import { nanoid } from "nanoid"; 
-import axios from 'axios';
+import axios from "@/axios";
 import BrandPay from "@/components/Pay/brandpay-register.vue";
 import {useRoute, useRouter} from 'vue-router';
 import "@/components/Pay/style.css";

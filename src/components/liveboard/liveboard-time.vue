@@ -37,7 +37,7 @@ import Card from "@/components/Card";
 import Icon from "@/components/Icon/index.vue";
 import Button from "@/components/Button";
 
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
   components: {
@@ -97,7 +97,7 @@ export default {
       }
       console.log("과연 시간은?", requestData);
 
-      axios.patch('http://localhost:8090/update/broadcast-time', requestData)
+      axios.patch('/update/broadcast-time', requestData)
         .then((response) => {
           console.log(response.data);
           if (this.isBroadcasting) {

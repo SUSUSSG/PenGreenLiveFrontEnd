@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 import { useRouter } from "vue-router";
 
 export default {
@@ -56,7 +56,7 @@ export default {
   methods: {
     fetchOrders() {
       axios
-        .get(`http://localhost:8090/openai/recent-orders`)
+        .get(`/openai/recent-orders`)
         .then((response) => {
           this.orders = response.data;
         })

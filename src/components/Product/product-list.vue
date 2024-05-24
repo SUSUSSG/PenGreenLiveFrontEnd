@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "@/axios";
 import Card from "@/components/Card";
 import Icon from "@/components/Icon/index.vue";
 import Tooltip from "@/components/Tooltip";
@@ -267,7 +267,7 @@ export default {
       }
     },
     fetchProducts(vendorSeq) {
-      axios.get(`http://localhost:8090/product-list/${vendorSeq}`)
+      axios.get(`/product-list/${vendorSeq}`)
         .then(response => {
           console.log(response.data);
           this.products = response.data;
@@ -278,7 +278,7 @@ export default {
         });
     },
     fetchCategories() {
-      const url = `http://localhost:8090/categorycodes`;
+      const url = `/categorycodes`;
       axios.get(url)
         .then(response => {
           this.categories = response.data.map(category => {
@@ -383,8 +383,9 @@ export default {
 
         return;
       }
+      
+      const url = `/${this.editModalData.productSeq}`;
 
-      const url = `http://localhost:8090/${this.editModalData.productSeq}`;
       const productData = {
         productCd: this.editModalData.productCd,
         greenProductId: this.editModalData.greenProductId,
@@ -411,7 +412,7 @@ export default {
     deleteSelectedProducts() {
       const vendorSeq = 1;
       this.selectedProducts.forEach(productSeq => {
-        axios.delete(`http://localhost:8090/product/${vendorSeq}/${productSeq}`)
+        axios.delete(`/product/${vendorSeq}/${productSeq}`)
           .then(response => {
             alert("Product successfully deleted");
             this.fetchProductsByVendorSeq();
@@ -430,8 +431,9 @@ export default {
         alert("녹색제품 통합ID 인증이 필요합니다.");
         return;
       }
+  
+      const url = `/products?vendorSeq=${this.addModalData.vendorSeq}&channelSeq=${this.addModalData.channelSeq}`;
 
-      const url = `http://localhost:8090/products?vendorSeq=${this.addModalData.vendorSeq}&channelSeq=${this.addModalData.channelSeq}`;
       const productData = {
         productCd: this.addModalData.productCd,
         greenProductId: this.addModalData.greenProductId,

@@ -93,7 +93,7 @@
 
 <script setup>    
     import {ref} from 'vue';
-    import axios from 'axios';
+    import axios from "@/axios";
     import { useRoute, useRouter } from 'vue-router';
 
     import Button from "@/components/Button";

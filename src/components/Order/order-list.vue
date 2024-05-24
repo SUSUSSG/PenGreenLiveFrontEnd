@@ -81,7 +81,7 @@
 
 <script setup lang="ts">
 import { defineProps, withDefaults, ref, getCurrentInstance } from "vue";
-import axios from "axios";
+import axios from "@/axios";
 import Modal from "../Modal/Modal.vue";
 import Button from "@/components/Button/index.vue";
 
@@ -133,7 +133,7 @@ const submitReview = async () => {
   try {
     // 유해성 검사 요청
     const checkResponse = await axios.post(
-      "http://localhost:8090/openai/review-check",
+      "/openai/review-check",
       { reviewContent: reviewContent.value }
     );
     console.log("유해성 검사 응답:", checkResponse.data);
@@ -152,7 +152,7 @@ const submitReview = async () => {
       userUUID: props.userUUID,
     };
 
-    await axios.post("http://localhost:8090/reviews", reviewData);
+    await axios.post("/reviews", reviewData);
     alert("리뷰 등록이 완료되었습니다.");
     reviewContent.value = "";
     closeModal();

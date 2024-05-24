@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios';
+import axios from "@/axios";
 import { defineProps, withDefaults, defineEmits } from 'vue';
 import Modal from "../Modal/Modal.vue";
 import Button from "@/components/Button/index.vue";
@@ -92,7 +92,7 @@ const deleteReview = async () => {
     if (props.reviewSeq === 0) {
       throw new Error('Invalid reviewSeq');
     }
-    await axios.delete(`http://localhost:8090/reviews/${props.userUUID}/${props.reviewSeq}`);
+    await axios.delete(`/reviews/${props.userUUID}/${props.reviewSeq}`);
     alert('리뷰 삭제가 완료되었습니다.');
     emit('review-deleted', props.reviewSeq);
   } catch (error) {

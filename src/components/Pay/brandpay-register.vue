@@ -7,7 +7,7 @@
   
 <script setup>
 import { ref, onMounted, defineProps, defineEmits, computed} from 'vue';
-import axios from 'axios';
+import axios from "@/axios";
 import { nanoid } from "nanoid"; 
 import { useStore } from 'vuex';
 import "@/components/Pay/style.css";
@@ -55,7 +55,7 @@ async function getBrandPayMethods() {
   const ls = brandpay.value.BrandPayMethod(cards);
 
   try {
-    const response = await axios.get('/api/brandpay/access-token', {
+    const response = await axios.get('/brandpay/access-token', {
       headers: header
     });
     submittedData.value = response.data;
