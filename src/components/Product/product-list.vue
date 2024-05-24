@@ -11,8 +11,8 @@
             <div class="flex items-center">
               <Textinput label="녹색제품 통합ID" type="text" name="greenProductId" v-model="addModalData.greenProductId"
                 placeholder="KR232148" class="mb-2 flex-grow" />
-              <button
-                class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5" @click="authenticateProduct('add')"><span>인증하기</span></button>
+              <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5"
+                @click="authenticateProduct('add')"><span>인증하기</span></button>
             </div>
             <Textinput label="상품명" type="text" name="productNm" v-model="addModalData.productNm"
               placeholder="상품명을 입력하세요" class="mb-2" />
@@ -36,7 +36,7 @@
               style="max-width: 100px">
           </div>
           <template v-slot:footer>
-            <Button text="등록" btnClass="btn-dark btn-sm" @click="registerProduct"/>
+            <Button text="등록" btnClass="btn-dark btn-sm" @click="registerProduct" />
             <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal()" />
           </template>
         </Modal>
@@ -52,7 +52,8 @@
             <div class="flex items-center">
               <Textinput label="녹색제품 통합ID" type="text" name="greenProductId" v-model="editModalData.greenProductId"
                 class="mb-2 flex-grow" />
-              <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5" @click="authenticateProduct('edit')">
+              <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5"
+                @click="authenticateProduct('edit')">
                 <span>인증하기</span></button>
             </div>
             <Textinput label="상품명" type="text" name="editproductname" v-model="editModalData.productNm" class="mb-2" />
@@ -89,7 +90,7 @@
             <span v-if="props.column.field === 'productCd'" @click="openEditModal(props.row)" class="cursor-pointer">
               {{ props.row.productCd }}
             </span>
-            <span v-if="props.column.field === 'greenProductId'" >
+            <span v-if="props.column.field === 'greenProductId'">
               {{ props.row.greenProductId }}
             </span>
             <span v-if="props.column.field === 'productNm'" class="ellipsis">
@@ -163,7 +164,10 @@ export default {
         vendorSeq: 1,
         channelSeq: 1,
         categories: [],
-        selectedCategory: ''
+        selectedCategory: '',
+        labelIdSeq:0,
+        certificationReason:'',
+        certificationExpirationDate:''
       },
       editModalData: {
         productSeq: null,
@@ -383,7 +387,7 @@ export default {
 
         return;
       }
-      
+
       const url = `/${this.editModalData.productSeq}`;
 
       const productData = {
@@ -395,6 +399,9 @@ export default {
         productStock: this.editModalData.productStock,
         brand: this.editModalData.brand,
         base64Image: this.editModalData.imageSrc,
+        labelIdSeq:this.editModalData.labelIdSeq,
+        certificationReason:this.editModalData.certificationReason,
+        certificationExpirationDate:this.editModalData.certificationExpirationDate
       };
 
       axios.put(url, productData)
@@ -431,7 +438,7 @@ export default {
         alert("녹색제품 통합ID 인증이 필요합니다.");
         return;
       }
-  
+
       const url = `/products?vendorSeq=${this.addModalData.vendorSeq}&channelSeq=${this.addModalData.channelSeq}`;
 
       const productData = {
@@ -443,6 +450,9 @@ export default {
         productStock: this.addModalData.productStock,
         brand: this.addModalData.brand,
         base64Image: this.addModalData.imageSrc,
+        labelIdSeq: this.addModalData.labelIdSeq,
+        certificationReason: this.addModalData.certificationReason,
+        certificationExpirationDate: this.addModalData.certificationExpirationDate
       };
 
       console.log("Sending product data to server:", productData);
@@ -461,7 +471,7 @@ export default {
     authenticateProduct(modalType) {
       const greenProductId = modalType === 'add' ? this.addModalData.greenProductId : this.editModalData.greenProductId;
       console.log("Authenticating product with ID:", greenProductId);
-      axios.get(`http://localhost:8090/green-product?prodIxid=${greenProductId}`)
+      axios.get(`/green-product?prodIxid=${greenProductId}`)
         .then(response => {
           console.log("Product authentication response:", response.data);
           const productInfo = response.data.productInfo; // productInfo 객체로 변경
@@ -484,13 +494,20 @@ export default {
             this.addModalData.brand = productInfo.prodRsst;
             this.addModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
             this.addModalData.imageSrc = response.data.productImage;
+            this.addModalData.labelIdSeq = productInfo.prodCfgb;
+            this.addModalData.certificationReason = productInfo.prodInrs;
+            this.addModalData.certificationExpirationDate = productInfo.prodRedt;
+
           } else {
             this.editModalData.productNm = productInfo.prodPrnm;
             this.editModalData.categoryCd = productInfo.prodCfgb;
             this.editModalData.listPrice = productInfo.prodRedt;
             this.editModalData.brand = productInfo.prodRsst;
             this.editModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
-            this.addModalData.imageSrc = response.data.productImage;
+            this.editModalData.imageSrc = response.data.productImage;
+            this.editModalData.labelIdSeq = productInfo.labelIdSeq;
+            this.editModalData.certificationReason = productInfo.prodInrs;
+            this.editModalData.certificationExpirationDate = productInfo.prodRedt;
           }
         })
         .catch(error => {
