@@ -15,6 +15,9 @@ export default defineConfig({
       dirs: ["src/assets/images"],
     }),
   ],
+  define: {
+    'process.env': process.env
+  },
   resolve: {
     extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue", ".css"],
     alias: {
