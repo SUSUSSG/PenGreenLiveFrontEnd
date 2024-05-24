@@ -76,7 +76,7 @@ import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
 import DataTab from "@/components/HeaderMain/date-tab.vue";
 import ScrollTopButton from "@/components/Button/ScrollTopButton.vue";
 import SkeletonCard from "@/components/Skeleton/Schedule-skeleton.vue";
-import CustomFooter from "@/components/footer/CustomFooter.vue";
+import CustomFooter from "@/components/Footer/CustomFooter.vue";
 import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import AIChatBot from "@/components/Chatbot/AIChatBot.vue";
 

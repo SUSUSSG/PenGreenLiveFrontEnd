@@ -12,7 +12,7 @@
         <LottieAnimation
           @click="toggleChatbot"
           class="fixed-lottie"
-          animationPath="src/assets/images/all-img/penguinLottie.json"
+          animationPath="/src/assets/images/all-img/penguinLottie.json"
         />
         <span>챗봇 슈슈슉</span>
       </div>
@@ -57,7 +57,7 @@
 <script>
 import axios from "axios";
 import { markRaw } from "vue"; // markRaw 가져오기
-import Icon from "@/components/icon";
+import Icon from "@/components/Icon/index.vue";
 import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import OrderHistory from "@/components/Chatbot/OrderHistory.vue";
 import Profile from "@/components/Chatbot/Profile.vue";

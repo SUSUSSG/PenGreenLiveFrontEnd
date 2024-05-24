@@ -14,7 +14,7 @@
     <div class="footer-content">
       <div class="footer-logo">
         <img
-          src="src/assets/images/logo/pengreenlive-logo-white.png"
+          src="/src/assets/images/logo/pengreenlive-logo-white.png"
           alt="Logo"
         />
       </div>
