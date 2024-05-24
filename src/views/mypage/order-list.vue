@@ -15,14 +15,18 @@
       <TabPanel>
         <orderlist v-for="(item, index) in unreviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
                    :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
-                   :orderProductPrice="item.orderProductPrice" :productSeq="item.productSeq" :userUUID="user.uuid" @review-submitted="handleReviewSubmitted" />
+                   :orderProductPrice="item.orderProductPrice" :productSeq="item.productSeq" :userUUID="user.uuid" 
+                   :orderSeq="item.orderSeq"
+                   @review-submitted="handleReviewSubmitted" />
       </TabPanel>
 
       <TabPanel>
         <reviewlist v-for="(item, index) in reviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
                     :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
                     :orderProductPrice="item.orderProductPrice" :reviewContent="item.reviewContent"
-                    :reviewSeq="item.reviewSeq" :userUUID="user.uuid" @review-deleted="handleReviewDeleted"/>
+                    :reviewSeq="item.reviewSeq" :userUUID="user.uuid" :orderSeq="item.orderSeq" 
+                    :productSeq="item.productSeq"
+                    @review-deleted="handleReviewDeleted"/>
       </TabPanel>
     </TabGroup>
   </div>
@@ -63,8 +67,12 @@ const fetchOrders = async () => {
     console.log('Unreviewed Orders:', unreviewedResponse.data); 
     unreviewedOrders.value = unreviewedResponse.data;
 
+    console.log("unreviewedOrders.value", unreviewedOrders.value);
+
     const reviewedResponse = await axios.get(`http://localhost:8090/reviewed-orders/${user.value.uuid}`);
     reviewedOrders.value = reviewedResponse.data;
+    console.log("reviewedOrders.value", reviewedOrders.value);
+
   } catch (error) {
     console.error("Error fetching orders:", error);
   }

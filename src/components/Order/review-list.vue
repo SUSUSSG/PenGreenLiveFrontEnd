@@ -65,6 +65,8 @@ const props = withDefaults(defineProps<{
   reviewContent: string;
   reviewSeq: number;
   userUUID: string;
+  productSeq: number;
+  orderSeq: number;
 }>(), {
   deliveryStatus: 'default-status',
   productImage: 'default-img-url',
@@ -72,7 +74,9 @@ const props = withDefaults(defineProps<{
   productNm: 'default-product',
   orderProductPrice: 0,
   reviewSeq: 0,
-  userUUID: ''
+  userUUID: '',
+  productSeq: 0,
+  orderSeq:0,
 });
 
 const emit = defineEmits(['review-deleted']);
@@ -87,13 +91,15 @@ const formatDate = (dateString: string): string => {
 };
 
 const deleteReview = async () => {
+  console.log("삭제 정보 ", props.productSeq, props.orderSeq )
   try {
     console.log('Deleting review with reviewSeq:', props.reviewSeq);
     if (props.reviewSeq === 0) {
       throw new Error('Invalid reviewSeq');
     }
-    await axios.delete(`http://localhost:8090/reviews/${props.userUUID}/${props.reviewSeq}`);
-    alert('리뷰 삭제가 완료되었습니다.');
+    await axios.delete(`http://localhost:8090/reviews/${props.userUUID}/${props.reviewSeq}`, {
+      params: { productSeq: props.productSeq, orderSeq: props.orderSeq }
+    });    alert('리뷰 삭제가 완료되었습니다.');
     emit('review-deleted', props.reviewSeq);
   } catch (error) {
     alert('리뷰 삭제에 실패했습니다: ' + error.message);

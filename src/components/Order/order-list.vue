@@ -94,6 +94,7 @@ const props = withDefaults(
     orderProductPrice: number;
     userUUID: string;
     productSeq: number;
+    orderSeq: number;
   }>(),
   {
     deliveryStatus: "default-status",
@@ -103,6 +104,7 @@ const props = withDefaults(
     orderProductPrice: 0,
     userUUID: "",
     productSeq: 0,
+    orderSeq: 0,
   }
 );
 
@@ -150,6 +152,7 @@ const submitReview = async () => {
       reviewContent: reviewContent.value,
       reviewTime: new Date().toISOString(),
       userUUID: props.userUUID,
+      orderSeq: props.orderSeq,
     };
 
     await axios.post("http://localhost:8090/reviews", reviewData);
