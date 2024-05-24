@@ -31,7 +31,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import { TabGroup, TabList, Tab, TabPanel } from '@headlessui/vue';
-import axios from 'axios';
+import axios from "@/axios";
 import orderlist from '@/components/Order/order-list.vue';
 import reviewlist from '@/components/Order/review-list.vue';
 
@@ -46,11 +46,11 @@ const userUUID = 'f23a72e0-1347-11ef-b085-f220affc9a21';
 
 const fetchOrders = async (userUuid) => {
   try {
-    const unreviewedResponse = await axios.get(`http://localhost:8090/unreviewed-orders/${userUuid}`);
+    const unreviewedResponse = await axios.get(`/unreviewed-orders/${userUuid}`);
     console.log('Unreviewed Orders:', unreviewedResponse.data); 
     unreviewedOrders.value = unreviewedResponse.data;
 
-    const reviewedResponse = await axios.get(`http://localhost:8090/reviewed-orders/${userUuid}`);
+    const reviewedResponse = await axios.get(`/reviewed-orders/${userUuid}`);
     reviewedOrders.value = reviewedResponse.data;
   } catch (error) {
     console.error("Error fetching orders:", error);

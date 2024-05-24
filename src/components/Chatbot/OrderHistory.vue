@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 import { useRouter } from "vue-router";
 
 export default {
@@ -58,7 +58,7 @@ export default {
     fetchOrders() {
       const userUuid = "f23a72e0-1347-11ef-b085-f220affc9a21";
       axios
-        .get(`http://localhost:8090/unreviewed-orders/${userUuid}`)
+        .get(`/unreviewed-orders/${userUuid}`)
         .then((response) => {
           this.orders = response.data;
         })

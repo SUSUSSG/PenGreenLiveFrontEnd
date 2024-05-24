@@ -199,7 +199,7 @@
 
 <script setup>    
     import { ref, watch } from 'vue';
-    import axios from 'axios';
+    import axios from "@/axios";
     import { useRoute, useRouter } from 'vue-router';
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
@@ -258,7 +258,7 @@
 
         try {
             responseAuth.value = true;
-            const response = await axios.post(`/api/sms/request-authcode`, null, {params});
+            const response = await axios.post(`/sms/request-authcode`, null, {params});
 
             if (response.status===200) {
                 console.log(response.statusText);
@@ -288,7 +288,7 @@
         }
 
         try {
-            const response = await axios.post('/api/sms/verify', null, {params});
+            const response = await axios.post('/sms/verify', null, {params});
             if (response.status === 200) {
                 console.log(response.data);
                 alert("인증되었습니다.");
@@ -304,7 +304,7 @@
                 } else if(error.response.status === 410) {  // 인증시간 만료
                     alert(error.response.data);
                     initPhoneNumberInput();
-                } 
+                }
                 else {
                     alert(`서버 오류: ${error.response.tbody}`);
                     responseAuth.value = false;
@@ -332,11 +332,11 @@
             return;
         }
         try {
-            const response = await axios.post(`/api/check-id`, {id});
+            const response = await axios.post(`/check-id`, {id});
             if (response.data==='available') {
                 alert("사용 가능한 아이디입니다.");
-                userIdVerify.value = true; 
-            } 
+                userIdVerify.value = true;
+            }
             else alert("이미 사용 중인 아이디입니다.");
         } catch (error) {
             console.error('Error checking id:', error);
@@ -344,14 +344,14 @@
     }
 
     function onInputChangeId() {
-        userIdVerify.value = false; 
+        userIdVerify.value = false;
     }
 
     // 아이디 형식 검사
     function validateUserId() {
         const pattern = /^[a-zA-Z0-9]{5,12}$/;
         return pattern.test(form.value.userId);
-    }   
+    }
 
 
     // 비밀번호 일치 체크
@@ -375,7 +375,7 @@
     }
 
     // 우편번호 찾기
-    const showMapModal =ref(false); 
+    const showMapModal =ref(false);
     const postalCode = ref('');
     const addressForm = ref({
         address: null,
@@ -385,7 +385,7 @@
 
     function openAddressPopup(data) {
         const popup = window.open('/daum-map', 'popup', 'width=500px,height=505px');
-    
+
         window.addEventListener('message', (event) => {
             if (event.origin !== window.location.origin) return;
 
@@ -407,20 +407,20 @@
 
     function onAllAgreedChange(newValue) {
         allAgreed.value = newValue;
-        termsAgreed.value = newValue; 
-        privacyAgreed.value = newValue; 
+        termsAgreed.value = newValue;
+        privacyAgreed.value = newValue;
     }
 
     function onIndividualChange() {
         if (!termsAgreed.value || !privacyAgreed.value) {
-            allAgreed.value = false; 
+            allAgreed.value = false;
         } else {
             allAgreed.value = true;
         }
     }
 
     watch([termsAgreed, privacyAgreed], ([newTerms, newPrivacy]) => {
-        allAgreed.value = newTerms && newPrivacy; 
+        allAgreed.value = newTerms && newPrivacy;
     }, { immediate: true });
 
 
@@ -474,7 +474,7 @@
         if (emailValid && userIdValid && userPwValid && passwordsMatch) {
             console.log("유효성 검사 통과");
             try {
-                const response = await axios.post('/api/signup', form.value);
+                const response = await axios.post('/signup', form.value);
                 if (response.data === 'success') {
                     router.push('/');
                 }

@@ -65,7 +65,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 import Categories from "@/components/Category/Categories.vue";
 import CardSchedule from "@/components/Card/schedule-card.vue";
 import MenuHeaderNav from "@/components/HeaderMain/menu-header-nav.vue";
@@ -121,7 +121,7 @@ export default {
       this.loading = true;
       this.liveData = []; // 데이터 초기화
       try {
-        const response = await axios.get("http://localhost:8090/schedule", {
+        const response = await axios.get("/schedule", {
           params: {
             scheduledDate: this.selectedDate,
             categoryCd: this.selectedCategory,

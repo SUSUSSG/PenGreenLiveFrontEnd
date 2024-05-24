@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import axios from 'axios';
+import axios from "@/axios";
 import { ref, onMounted } from 'vue'
 import { TabGroup, TabList, Tab, TabPanel } from '@headlessui/vue'
 import BroadcastHistory from '@/components/Card/broadcast-historyCard.vue';
@@ -41,7 +41,7 @@ const userUUID = 'f23a72e0-1347-11ef-b085-f220affc9a21';
 
 const fetchRecentBroadcasts = async (userUUID) => {
     try {
-        const recentlyViewedResponse = await axios.get(`http://localhost:8090/recently-viewed/broadcasts`, {
+        const recentlyViewedResponse = await axios.get(`/recently-viewed/broadcasts`, {
             params: { userUUID: userUUID }
         });
         console.log('Recently Viewed Broadcasts:', recentlyViewedResponse.data);

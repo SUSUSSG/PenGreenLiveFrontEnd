@@ -29,14 +29,14 @@
 </template>
 <script setup>
 import { ref, onMounted } from "vue";
-import axios from "axios";
+import axios from "@/axios";
 
 const subscribedChannels = ref([]);
 
 const fetchSubscribedChannels = async () => {
   try {
     const response = await axios.get(
-      "http://localhost:8090/subscribed-channels"
+      "/subscribed-channels"
     );
     if (response.status === 200) {
       subscribedChannels.value = response.data;
@@ -49,7 +49,7 @@ const fetchSubscribedChannels = async () => {
 const unsubscribe = async (channelSeq) => {
   try {
     const response = await axios.post(
-      "http://localhost:8090/notification-channel/remove",
+      "/notification-channel/remove",
       null,
       {
         params: { channelSeq },

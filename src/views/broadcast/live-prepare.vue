@@ -17,7 +17,7 @@
 
 <script>
 import SellerBroadcastSchedule from "@/components/Card/seller-broadcast-schedule.vue";
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
   name: "live-prepare",
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     loadUpcomingBroadcastInfo() {
-      axios.get("http://localhost:8090/prepare-broadcasts")
+      axios.get("/prepare-broadcasts")
         .then((response) => {
           console.log(response.data);
           this.broadcastInfo = response.data;

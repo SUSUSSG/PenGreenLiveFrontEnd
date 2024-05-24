@@ -55,7 +55,7 @@
 import nowImg from '@/assets/images/all-img/now.png';
 import Modal from "../Modal/Modal.vue";
 import Icon from "@/components/Icon/index.vue";
-import axios from 'axios';
+import axios from "@/axios";
 
 export default {
   components: {
@@ -94,7 +94,7 @@ export default {
 
       const broadcastId = this.$route.params.broadcastId;
 
-      axios.post(`http://localhost:8090/live-product-stats/${broadcastId}/${selectedProduct.productSeq}`)
+      axios.post(`/live-product-stats/${broadcastId}/${selectedProduct.productSeq}`)
         .then(response => {
           console.log(response.data);
           this.remainingStock = response.data.remainingStock;

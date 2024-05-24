@@ -80,7 +80,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "@/axios";
 import Card from "@/components/Card/analytics-card.vue";
 import Button from "@/components/Button";
 import { Line } from 'vue-chartjs'
@@ -180,25 +180,25 @@ export default {
         const startDate = this.startDate || "2000-01-01";
         const endDate = this.endDate || "2099-12-31";
 
-        const avgBroadcastDurationResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-broadcast-duration`, {
+        const avgBroadcastDurationResponse = await axios.get(`/broadcasts/statistics/average-broadcast-duration`, {
           params: { vendorSeq, startDate, endDate }
         });
-        const avgViewerCountResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-viewer-count`, {
+        const avgViewerCountResponse = await axios.get(`/broadcasts/statistics/average-viewer-count`, {
           params: { vendorSeq, startDate, endDate }
         });
-        const avgPurchaseQuantityResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-purchase-quantity`, {
+        const avgPurchaseQuantityResponse = await axios.get(`/broadcasts/statistics/average-purchase-quantity`, {
           params: { vendorSeq, startDate, endDate }
         });
-        const avgProductClicksResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-product-clicks`, {
+        const avgProductClicksResponse = await axios.get(`/broadcasts/statistics/average-product-clicks`, {
           params: { vendorSeq, startDate, endDate }
         });
-        const avgViewingTimeResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-viewing-time`, {
+        const avgViewingTimeResponse = await axios.get(`/broadcasts/statistics/average-viewing-time`, {
           params: { vendorSeq, startDate, endDate }
         });
-        const avgLikesCountResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-likes-count`, {
+        const avgLikesCountResponse = await axios.get(`/broadcasts/statistics/average-likes-count`, {
           params: { vendorSeq, startDate, endDate }
         });
-        const avgPurchaseAmountResponse = await axios.get(`http://localhost:8090/broadcasts/statistics/average-purchase-amount`, {
+        const avgPurchaseAmountResponse = await axios.get(`/broadcasts/statistics/average-purchase-amount`, {
           params: { vendorSeq, startDate, endDate }
         });
 
@@ -256,7 +256,7 @@ export default {
         const startDate = this.startDate || "2000-01-01";
         const endDate = this.endDate || "2099-12-31";
 
-        const response = await axios.get(`http://localhost:8090/vendor/${vendorSeq}/broadcasts`, {
+        const response = await axios.get(`/vendor/${vendorSeq}/broadcasts`, {
           params: { startDate, endDate }
         });
 
@@ -280,7 +280,7 @@ export default {
       try {
         const broadcastSeq = this.selectedBroadcastTitleOption;
 
-        const response = await axios.get(`http://localhost:8090/broadcasts/statistics/${broadcastSeq}`);
+        const response = await axios.get(`/broadcasts/statistics/${broadcastSeq}`);
         const broadcastStatistics = response.data;
 
         this.searchResultCardDataList = [
@@ -351,7 +351,7 @@ export default {
 
       try {
         const broadcastSeq = this.selectedBroadcastTitleOption;
-        const response = await axios.get(`http://localhost:8090/broadcast-viewer-count/${broadcastSeq}`);
+        const response = await axios.get(`/broadcast-viewer-count/${broadcastSeq}`);
 
         const viewerCountData = response.data;
 
@@ -366,7 +366,7 @@ export default {
       const broadcastId = this.selectedBroadcastTitleOption;
       console.log("해당 방송 id : " + broadcastId);
       try {
-        const response = await axios.get(`http://localhost:8090/live-broadcast-product/${broadcastId}`);
+        const response = await axios.get(`/live-broadcast-product/${broadcastId}`);
         console.log(response.data);
         this.products = response.data.map(product => {
           return {

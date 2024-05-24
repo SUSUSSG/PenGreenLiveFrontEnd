@@ -60,7 +60,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
   props: {
@@ -140,7 +140,7 @@ export default {
   methods: {
     checkSubscription() {
       axios
-        .get("http://localhost:8090/notification-channel", {
+        .get("/notification-channel", {
           params: {
             channelSeq: this.channelSeq,
           },
@@ -156,7 +156,7 @@ export default {
       if (this.isSubscribed) {
         // 구독 해제
         axios
-          .post("http://localhost:8090/notification-channel/remove", null, {
+          .post("/notification-channel/remove", null, {
             params: {
               channelSeq: this.channelSeq,
             },
@@ -172,7 +172,7 @@ export default {
       } else {
         // 구독
         axios
-          .post("http://localhost:8090/notification-channel", null, {
+          .post("/notification-channel", null, {
             params: {
               channelSeq: this.channelSeq,
             },

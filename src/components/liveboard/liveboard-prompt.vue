@@ -35,7 +35,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 export default {
   props: {
     broadcastSeq: {
@@ -66,7 +66,7 @@ export default {
       this.loading = true;
       try {
         const response = await axios.get(
-          "http://localhost:8090/openai/generate-prompt",
+          "/openai/generate-prompt",
           {
             params: { broadcastSeq: this.broadcastSeq }, // 여기에서 broadcastSeq 값을 설정합니다.
           }
