@@ -33,6 +33,7 @@ import { format } from 'date-fns';
 
 import "@/components/Pay/style.css";
 
+const user = ref(null);
 const route = useRoute();
 const router = useRouter();
 const confirmed = ref(false);
@@ -76,7 +77,7 @@ async function confirmPayment(requestData) {
       };
 
       let orderForm = JSON.parse(localStorage.getItem(response.data.orderId));
-      orderForm = {...orderForm, ...orderResponse};
+      orderForm = {...orderForm, ...orderResponse, ...{userUUID:user.value.uuid}};
 
       await saveOrder(orderForm);
 
@@ -85,7 +86,7 @@ async function confirmPayment(requestData) {
       console.log(`Unexpected status code: ${response.status}`);
     }
   } catch (error) {
-    console.error('Confirmation failed:', error);
+    console.error('결제 승인 실패:', error);
     router.push(`/fail?message=${error.response.data.message}&code=${error.response.status}`);
   }
 }
@@ -103,6 +104,7 @@ async function saveOrder(paymentData) {
     }
   } catch (error) {
     console.error('Order saving failed:', error);
+    router.push(`/fail?message=${error.response.data.message}&code=${error.response.status}`);
   }
 }
 
@@ -111,14 +113,21 @@ function goBack() {
 };
 
 onMounted(async () => {
+  const storedUser = sessionStorage.getItem('user');
+  let customerKey;
+
+  if (storedUser) {
+    user.value = JSON.parse(storedUser);
+    customerKey = user.value.uuid;
+  }
   const { orderId, amount, paymentKey } = route.query;
 
   if (!orderId || !amount || !paymentKey) {
-    console.error('Missing query parameters:', { orderId, amount, paymentKey });
+    console.error('Missing query parameters:', { orderId, amount, paymentKey, customerKey });
     return;
   }
   
-  const requestData = { orderId, amount, paymentKey };
+  const requestData = { orderId, amount, paymentKey, customerKey };
   console.log("brandpay success ", requestData);
 
   if (await verifyPayment(requestData)) {

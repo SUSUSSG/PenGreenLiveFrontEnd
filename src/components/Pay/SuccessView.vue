@@ -32,6 +32,7 @@ import Button from '@/components/Button';
 import { format } from 'date-fns';
 import "@/components/Pay/style.css";
 
+const user = ref(null);
 const route = useRoute();
 const router = useRouter();
 const confirmed = ref(false);
@@ -74,10 +75,10 @@ async function confirmPayment(requestData) {
       };
 
       let orderForm = JSON.parse(localStorage.getItem(response.data.orderId));
-      orderForm = {...orderForm, ...orderResponse};
+      let userUuid=user.value.uuid;
+      orderForm = {...orderForm, ...orderResponse, ...{userUUID:userUuid}};
 
       await saveOrder(orderForm);
-
 
       console.log('Payment confirmed:', jsonData.value);
     } else {
@@ -102,6 +103,7 @@ async function saveOrder(paymentData) {
     }
   } catch (error) {
     console.error('Order saving failed:', error);
+    router.push(`/fail?message=${error.response.data.message}&code=${error.response.status}`);
   }
 }
 
@@ -110,6 +112,12 @@ function goBack() {
 };
 
 onMounted(async () => {
+  const storedUser = sessionStorage.getItem('user');
+
+  if (storedUser) {
+    user.value = JSON.parse(storedUser);
+  }
+
   const { orderId, amount, paymentKey } = route.query;
   if (!orderId || !amount || !paymentKey) {
     console.error('Missing query parameters:', { orderId, amount, paymentKey });
