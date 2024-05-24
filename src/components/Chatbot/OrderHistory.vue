@@ -49,16 +49,23 @@ export default {
   data() {
     return {
       orders: [],
+      user: {},
     };
   },
   mounted() {
+    this.getUserInfo();
     this.fetchOrders();
   },
   methods: {
+    getUserInfo() {
+      const storedUser = sessionStorage.getItem('user');
+      if (storedUser) {
+        this.user = JSON.parse(storedUser);
+      }
+    },
     fetchOrders() {
-      const userUuid = "f23a72e0-1347-11ef-b085-f220affc9a21";
       axios
-        .get(`http://localhost:8090/unreviewed-orders/${userUuid}`)
+        .get(`http://localhost:8090/unreviewed-orders/${this.user.uuid}`)
         .then((response) => {
           this.orders = response.data;
         })
