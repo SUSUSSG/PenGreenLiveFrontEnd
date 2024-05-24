@@ -223,7 +223,7 @@ export default {
       return this.createSession(sessionId).then(sessionId => this.createToken(sessionId));
     },
     createSession(sessionId) {
-      return axios.post(`http://localhost:8090/api/sessions`, {customSessionId: sessionId}, {
+      return axios.post(`${import.meta.env.VITE_API_BASE_URL}/sessions`, {customSessionId: sessionId}, {
         headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
