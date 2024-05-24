@@ -27,7 +27,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import axios from 'axios';
+import axios from "@/axios";
 import Button from '@/components/Button';
 import { format } from 'date-fns';
 
@@ -43,7 +43,7 @@ const totalAmount = ref(null);
 // 결제 검증
 async function verifyPayment(requestData) {
   try {
-    const response = await axios.post("/api/payments/verify", requestData);
+    const response = await axios.post("/payments/verify", requestData);
     console.log("검증 결과 ", response.data);
     if (response.data === "denied") {
       router.push(`/fail?message=Payment verification failed&code=401`);
@@ -60,7 +60,7 @@ async function verifyPayment(requestData) {
 // 결제 승인 요청
 async function confirmPayment(requestData) {
   try {
-    const response = await axios.post('/api/brandpay/confirm', requestData, {
+    const response = await axios.post('/brandpay/confirm', requestData, {
       headers: { "Content-Type": "application/json",  }
     });
     if (response.status === 200) {
@@ -92,7 +92,7 @@ async function confirmPayment(requestData) {
 
 async function saveOrder(paymentData) {
   try {
-    const orderResponse = await axios.post('/api/order', paymentData, {
+    const orderResponse = await axios.post('/order', paymentData, {
       headers: { "Content-Type": "application/json" }
     });
     if (orderResponse.status === 200) {

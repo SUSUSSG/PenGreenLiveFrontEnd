@@ -10,7 +10,7 @@
 </template>
 
 <script setup>
-import axios from 'axios';
+import axios from "@/axios";
 import subscribe from '@/components/Subscription/subscription-channel.vue';
 
 

@@ -55,7 +55,7 @@
 import Card from "@/components/Card";
 import Icon from "@/components/Icon/index.vue";
 import Button from "@/components/Button";
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
   components: {
@@ -103,7 +103,7 @@ export default {
     // 현재 시청자 수를 가져옴
     getViewers(sessionId) {
       console.log(sessionId);
-      return axios.get(`http://localhost:8090/api/sessions/${sessionId}/connections/count`)
+      return axios.get(`/sessions/${sessionId}/connections/count`)
         .then(response => {
           console.log('현재 시청자 수:', response.data);
           return response.data;
@@ -115,7 +115,7 @@ export default {
     },
     // 방송 통계 정보를 가져오는 메서드 추가
     getStatistics(broadcastSeq) {
-      return axios.get(`http://localhost:8090/broadcasts/statistics/${broadcastSeq}`)
+      return axios.get(`/broadcasts/statistics/${broadcastSeq}`)
         .then(response => {
           console.log('방송 통계:', response.data);
           return response.data;

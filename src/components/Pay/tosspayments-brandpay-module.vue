@@ -28,7 +28,7 @@
     
     PaymentWidget(clientKey, customerKey, {
       brandpay: {
-        redirectUrl: 'http://localhost:8090/api/brandpay/callback-auth',
+        redirectUrl: '/brandpay/callback-auth',
       },
     });
 

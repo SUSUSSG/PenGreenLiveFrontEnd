@@ -144,7 +144,7 @@
 
     const fetchReviews = async () => {
         try {
-            const response = await axios.get(`http://localhost:8090/broadcast/review`, {
+            const response = await axios.get(`/broadcast/review`, {
                 params: {
                     productSeq: product.value.productSeq 
                 }
@@ -162,7 +162,7 @@
     const fetchReviewSummary = async (productSeq) => {
         try {
             const response = await axios.post(
-                "http://localhost:8090/review/summarize",
+                "/review/summarize",
                 null,
                 {
                     params: { productSeq: productSeq },
@@ -191,7 +191,7 @@
 <script>
     import Card from "@/components/Card";
     import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
-    import axios from 'axios';
+    import axios from "@/axios";
     
     export default {
         components: {

@@ -210,7 +210,7 @@ import LottieAnimation from "@/components/UI/LottieAnimation.vue";
 import AIChatBot from "@/components/Chatbot/AIChatBot.vue";
 
 import SkeletonMainCarousel from "@/components/Skeleton/Main-Carou-skeleton.vue";
-import axios from "axios";
+import axios from "@/axios";
 
 SwiperCore.use([Navigation, Pagination, Autoplay]);
 
@@ -257,7 +257,7 @@ export default {
   methods: {
     fetchMainCarousels() {
       axios
-        .get("http://localhost:8090/main-carousels")
+        .get("/main-carousels")
         .then((response) => {
           this.carousels = response.data;
           this.loadingCarousels = false; // 데이터 로드 완료 후 로딩 상태 false
@@ -275,7 +275,7 @@ export default {
         params.categoryCd = categoryCode;
       }
       axios
-        .get("http://localhost:8090/schedule", { params: params })
+        .get("/schedule", { params: params })
         .then((response) => {
           this.cardsData = response.data;
           console.log("Scheduled broadcasts data:", this.cardsData);
@@ -319,7 +319,7 @@ export default {
         params.categoryCd = categoryCode;
       }
       axios
-        .get("http://localhost:8090/live-chance", { params: params })
+        .get("/live-chance", { params: params })
         .then((response) => {
           this.liveItems = response.data;
           console.log("Live chance carousels data:", this.liveItems);

@@ -95,7 +95,7 @@ import LivePrepareModal from "@/components/Modal/live-prepare-modal.vue";
 import Textarea from "@/components/Textarea";
 
 import { useToast } from "vue-toastification";
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
   components: {
@@ -182,7 +182,7 @@ export default {
 
       console.log(requestData)
 
-      axios.post('http://localhost:8090/live-notice/add', requestData)
+      axios.post('/live-notice/add', requestData)
         .then(response => {
           // 아래 목록에 추가
           const newNotice = response.data;
@@ -196,7 +196,7 @@ export default {
         })
     },
     removeNotice(noticeId) {
-      axios.delete(`http://localhost:8090/live-notice/delete/${noticeId}`)
+      axios.delete(`/live-notice/delete/${noticeId}`)
         .then(response => {
           const index = this.notices.findIndex(notice => notice.noticeSeq === noticeId);
           if (index !== -1) {
@@ -217,7 +217,7 @@ export default {
         questionAnswer: this.questionAnswer
       }
 
-      axios.post('http://localhost:8090/live-faq/add', requestData)
+      axios.post('/live-faq/add', requestData)
         .then(response => {
           const newFaq = response.data;
           console.log("newFaq", newFaq);
@@ -231,7 +231,7 @@ export default {
         })
     },
     removeFaq(faqId) {
-      axios.delete(`http://localhost:8090/live-faq/delete/${faqId}`)
+      axios.delete(`/live-faq/delete/${faqId}`)
         .then(response => {
           const index = this.faqs.findIndex(faq => faq.faqSeq === faqId);
           if (index !== -1) {

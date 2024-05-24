@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "@/axios";
 import {OpenVidu} from 'openvidu-browser';
 import LiveBoardTime from "@/components/liveboard/liveboard-time.vue";
 import LiveBoardChat from "@/components/liveboard/liveboard-chat.vue";
@@ -223,18 +223,18 @@ export default {
       return this.createSession(sessionId).then(sessionId => this.createToken(sessionId));
     },
     createSession(sessionId) {
-      return axios.post(`${import.meta.env.VITE_API_BASE_URL}/sessions`, {customSessionId: sessionId}, {
+      return axios.post(`/sessions`, {customSessionId: sessionId}, {
         headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
     createToken(sessionId) {
-      return axios.post(`http://localhost:8090/api/sessions/${sessionId}/connections`, {}, {
+      return axios.post(`/sessions/${sessionId}/connections`, {}, {
         headers: {'Content-Type': 'application/json'}
       }).then(response => response.data);
     },
     async updateConversionRate(broadcastSeq){
       try{
-        const response = axios.post(`http://localhost:8090/product-clicks/updateConversionRates/${broadcastSeq}`)
+        const response = axios.post(`/product-clicks/updateConversionRates/${broadcastSeq}`)
       }catch (error){
         console.log("구매 전환률 업데이트 실패", error);
       }
@@ -248,7 +248,7 @@ export default {
       });
 
       try {
-        const response = await axios.patch(`http://localhost:8090/broadcasts/statistics/${this.mySessionId}`, {
+        const response = await axios.patch(`/broadcasts/statistics/${this.mySessionId}`, {
           maxViewerCount,
           avgViewerCount,
           broadcastDuration
@@ -260,7 +260,7 @@ export default {
     },
     async calculateAndDeleteWatchTime(broadcastSeq) {
       try {
-        const response = await axios.post(`http://localhost:8090/api/watch-times/calculate/${broadcastSeq}`);
+        const response = await axios.post(`/watch-times/calculate/${broadcastSeq}`);
         console.log('Watch time calculated and deleted:', response.data);
       } catch (error) {
         console.error('Error calculating and deleting watch time:', error.response ? error.response.data : error.message);
@@ -268,7 +268,7 @@ export default {
     },
     async updateProductClicks(broadcastSeq){
       try{
-        const response = await axios.post(`http://localhost:8090/product-clicks/broadcast/${broadcastSeq}/update-average-clicks`)
+        const response = await axios.post(`/product-clicks/broadcast/${broadcastSeq}/update-average-clicks`)
         console.log(`성공적 클릭수 업데이트`);
       } catch (error){
         console.error('클릭수 업데이트 실패', error.response ? error.response.data : error.message);
@@ -286,7 +286,7 @@ export default {
     loadLiveBroadcastInfo() {
       const broadcastId = this.$route.params.broadcastId;
       console.log("해당 방송 id : " + broadcastId);
-      axios.get(`http://localhost:8090/live-broadcast-info/${broadcastId}`)
+      axios.get(`/live-broadcast-info/${broadcastId}`)
         .then((response) => {
           console.log(response.data);
           this.liveBroadcastInfo = response.data;
@@ -303,7 +303,7 @@ export default {
     loadLiveBroadcastProduct() {
       const broadcastId = this.$route.params.broadcastId;
       console.log("해당 방송 id : " + broadcastId);
-      axios.get(`http://localhost:8090/live-broadcast-product/${broadcastId}`)
+      axios.get(`/live-broadcast-product/${broadcastId}`)
         .then((response) => {
           console.log(response.data);
           this.liveBoradcastProduct = response.data;

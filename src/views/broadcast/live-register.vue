@@ -264,7 +264,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 
 import Button from "@/components/Button";
 import Icon from "@/components/Icon/index.vue";
@@ -370,7 +370,7 @@ export default {
   methods: {
     // 카테고리 목록을 가져오는 API
     loadCategories() {
-      const url = `http://localhost:8090/broadcast-category`;
+      const url = `/broadcast-category`;
 
       axios.get(url)
         .then(response => {
@@ -391,7 +391,7 @@ export default {
 
     // 판매자 판매 상품 목록을 가져오는 API
     loadChannelSalesProduct() {
-      const url = `http://localhost:8090/channel-sales-product`;
+      const url = `/channel-sales-product`;
 
       axios.get(url)
         .then(response => {
@@ -534,7 +534,7 @@ export default {
       console.log(requestData);
 
       // JSON 형식의 데이터를 백엔드로 전송
-      axios.post('http://localhost:8090/register-broadcast', requestData)
+      axios.post('/register-broadcast', requestData)
         .then(response => {
           this.loading = false;
           toast.success("방송 정보가 등록되었습니다.", {

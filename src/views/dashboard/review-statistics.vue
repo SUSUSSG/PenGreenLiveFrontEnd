@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 import productlist from "@/components/Table/statistics-review-product-table.vue";
 import productdetail from "@/components/Card/product-statistics-card.vue";
 import reviewchart from "@/components/reivew/reviewchart.vue";
@@ -94,7 +94,7 @@ export default {
     async fetchAllProducts() {
       try {
         const response = await axios.get(
-          "http://localhost:8090/products/statistics/all-products",
+          "/products/statistics/all-products",
           {
             params: { channelSeq: 1 }, // TODO : 로그인 상태 채널 시퀀스 받아오도록 교체
           }
@@ -112,7 +112,7 @@ export default {
     async fetchProductDetails(productCd) {
       try {
         const response = await axios.get(
-          "http://localhost:8090/products/statistics/product-details",
+          "/products/statistics/product-details",
           {
             params: { productCd },
           }
@@ -138,7 +138,7 @@ export default {
     async fetchReviewImage(productSeq) {
       try {
         const response = await axios.post(
-          "http://223.130.147.232:8090/api/review-semantic",
+          "/review-semantic",
           null,
           {
             params: { productSeq: productSeq },
@@ -197,7 +197,7 @@ export default {
     async fetchReviewSummary(productSeq) {
       try {
         const response = await axios.post(
-          "http://localhost:8090/review/summarize",
+          "/review/summarize",
           null,
           {
             params: { productSeq: productSeq },
@@ -211,7 +211,7 @@ export default {
     },
     async fetchReviewsList(productSeq) {
       try {
-        const response = await axios.get("http://localhost:8090/reviewlist", {
+        const response = await axios.get("/reviewlist", {
           params: { productSeq: productSeq },
         });
         this.reviewsList = response.data;
@@ -223,7 +223,7 @@ export default {
     async fetchDailySentiments(productSeq) {
       try {
         const response = await axios.get(
-          "http://localhost:8090/review/sentiment/daily",
+          "/review/sentiment/daily",
           {
             params: { productSeq: productSeq },
           }

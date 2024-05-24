@@ -51,7 +51,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import axios from "@/axios";
 import { markRaw } from "vue"; // markRaw 가져오기
 import Icon from "@/components/Icon/index.vue";
 import OrderHistory from "@/components/Chatbot/OrderHistory.vue";
@@ -134,7 +134,7 @@ export default {
 
         try {
           const response = await axios.post(
-            "http://localhost:8090/openai/message",
+            "/openai/message",
             {
               message: this.inputMessage,
             }

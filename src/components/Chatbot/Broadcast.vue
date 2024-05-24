@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import axios from "@/axios";
 
 export default {
   data() {
@@ -69,7 +69,7 @@ export default {
       }
       console.log("Fetching broadcasts for keyword:", keyword);
       axios
-        .get(`http://localhost:8090/openai/broadcast-keyword`, {
+        .get(`/openai/broadcast-keyword`, {
           params: { keyword }
         })
         .then((response) => {

@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "@/axios";
 import Textinput from "@/components/Textinput";
 import Textarea from "@/components/Textarea";
 
@@ -59,7 +59,7 @@ export default {
       return path.split('/').pop();
     },
     loadShopInfo() {
-      const url = `http://localhost:8090/shop/${this.shopInfo.channelSeq}`;
+      const url = `/shop/${this.shopInfo.channelSeq}`;
       axios.get(url)
         .then(response => {
           this.shopInfo.channelNM = response.data.channelNM;
@@ -79,7 +79,7 @@ export default {
         });
     },
     saveShopInfo() {
-      const url = `http://localhost:8090/shop/${this.shopInfo.channelSeq}`;
+      const url = `/shop/${this.shopInfo.channelSeq}`;
       const shopInfoToSend = {
         ...this.shopInfo,
         channelImage: this.shopInfo.channelImage || null, 

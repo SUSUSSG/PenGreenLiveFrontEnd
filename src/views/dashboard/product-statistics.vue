@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "@/axios";
 import AnalyticsCard from "@/components/Card/analytics-card.vue";
 import StatsTable from "@/components/Table/statistics-default-table.vue";
 import ProductCard from "@/components/Card/product-statistics-card.vue";
@@ -108,7 +108,7 @@ export default {
   methods: {
     async fetchAnalyticsData() {
       try {
-        const response = await axios.get('http://localhost:8090/products/statistics/sales-data', {
+        const response = await axios.get('/products/statistics/sales-data', {
           params: { channelSeq: 1 }
         });
         const data = response.data;
@@ -123,7 +123,7 @@ export default {
     },
     async fetchTopProducts() {
       try {
-        const response = await axios.get('http://localhost:8090/products/statistics/top-products', {
+        const response = await axios.get('/products/statistics/top-products', {
           params: { channelSeq: 1 }
         });
         this.topProducts = response.data.map((product, index) => [
@@ -137,7 +137,7 @@ export default {
     },
     async fetchAllProducts() {
       try {
-        const response = await axios.get('http://localhost:8090/products/statistics/all-products', {
+        const response = await axios.get('/products/statistics/all-products', {
           params: { channelSeq: 1 }
         });
         this.allProducts = response.data.map((product) => [
@@ -151,7 +151,7 @@ export default {
     },
     async fetchProductDetails(productCd) {
       try {
-        const response = await axios.get('http://localhost:8090/products/statistics/product-details', {
+        const response = await axios.get('/products/statistics/product-details', {
           params: { productCd }
         });
         const product = response.data;
