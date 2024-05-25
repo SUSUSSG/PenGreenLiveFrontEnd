@@ -14,8 +14,8 @@
         </div>
         <div className="flex-col">
           <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck"
-            @update-statistics="updateStatistics" 
-            :channelNm="liveBroadcastInfo.broadcast.channelNm"/>
+                               @update-statistics="updateStatistics"
+                               :channelNm="liveBroadcastInfo.broadcast.channelNm"/>
           <LiveboardProduct :products="liveBoradcastProduct" />
           <LiveboardPrompt :broadcastSeq="broadcastId" />
         </div>
@@ -34,6 +34,7 @@
 <script>
 import axios from "@/axios";
 import {OpenVidu} from 'openvidu-browser';
+import { Client } from '@stomp/stompjs';
 import LiveBoardTime from "@/components/liveboard/liveboard-time.vue";
 import LiveBoardChat from "@/components/liveboard/liveboard-chat.vue";
 import LiveboardBroad from "@/components/liveboard/liveboard-broad.vue";
@@ -41,6 +42,7 @@ import LiveBoardStatistics from "@/components/liveboard/liveboard-statistics.vue
 import LiveboardPrompt from "@/components/liveboard/liveboard-prompt.vue";
 import LiveboardSidebar from "@/components/liveboard/liveboard-sidebar.vue";
 import LiveboardProduct from "@/components/liveboard/liveboard-product.vue";
+
 
 export default {
   components: {
@@ -72,7 +74,10 @@ export default {
       // 방송 판매 상품
       liveBoradcastProduct: [],
       // 방송 아이디
-      broadcastId: this.$route.params.broadcastId
+      broadcastId: this.$route.params.broadcastId,
+      recognition: null,
+      subtitleWs: null,
+      subtitles: []
     };
   },
   methods: {
@@ -125,6 +130,68 @@ export default {
         console.error('Publisher is not initialized');
       }
     },
+    startRecognition() {
+      if (!('webkitSpeechRecognition' in window)) {
+        alert('WebkitSpeechRecognition is not supported in this browser.');
+        return;
+      }
+      this.recognition = new webkitSpeechRecognition();
+      this.recognition.continuous = true;
+      this.recognition.interimResults = false;
+      this.recognition.lang = 'ko-KR';
+      this.recognition.onresult = (event) => {
+        const transcript = event.results[event.results.length - 1][0].transcript.trim();
+        this.sendSubtitle(transcript);
+      };
+      this.recognition.onerror = (event) => {
+        console.error('Recognition error:', event.error);
+      };
+      this.recognition.start();
+    },
+    stopRecognition() {
+      if (this.recognition) {
+        this.recognition.stop();
+      }
+    },
+    setupWebSocket() {
+      this.stompClient = new Client({
+        brokerURL: 'ws://pengreen.live/ws-stomp/websocket',  // WebSocket 엔드포인트 URL
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+      });
+
+      this.stompClient.onConnect = (frame) => {
+        console.log('Connected: ' + frame);
+        this.stompClient.subscribe(`/sub/subtitles/${this.broadcastId}`, (message) => {
+          const subtitle = JSON.parse(message.body);
+          this.subtitles.push(subtitle);
+          console.log('Received subtitle:', subtitle);
+        });
+      };
+
+      this.stompClient.onStompError = (frame) => {
+        console.error('Broker reported error: ' + frame.headers['message']);
+        console.error('Additional details: ' + frame.body);
+      };
+
+      this.stompClient.activate();
+    },
+    sendSubtitle(text) {
+      if (this.stompClient && this.stompClient.connected) {
+        const subtitle = {
+          broadcastId: this.broadcastId,
+          text,
+          timestamp: Date.now(),
+        };
+        this.stompClient.publish({
+          destination: `/pub/subtitles/${this.broadcastId}`,
+          body: JSON.stringify(subtitle),
+        });
+        console.log("자막 성공", subtitle);
+      }
+    },
+
     //세션을 생성하고 publisher 입장에서 방송을 송출합니다.
     joinSession() {
       if (this.isSessionActive) {
@@ -162,6 +229,7 @@ export default {
               });
               this.mainStreamManager = this.publisher;
               this.session.publish(this.publisher);
+              this.startRecognition(); // 방송 시작 시 자막 인식 시작
             })
             .catch(error => {
               console.log("There was an error connecting to the session:", error.code, error.message);
@@ -215,6 +283,7 @@ export default {
       // Remove beforeunload listener
       window.removeEventListener("beforeunload", this.leaveSession);
       this.isSessionActive = false;
+      this.stopRecognition(); // 방송 종료 시 자막 인식 중지
       this.readyToCheck = false;  // 방송을 중지할 때 false로 설정
       this.$router.push('/broadcast-statistics');
     },
@@ -287,16 +356,16 @@ export default {
       const broadcastId = this.$route.params.broadcastId;
       console.log("해당 방송 id : " + broadcastId);
       axios.get(`/live-broadcast-info/${broadcastId}`)
-        .then((response) => {
-          console.log(response.data);
-          this.liveBroadcastInfo = response.data;
-          this.loading = false;
-          console.log("broadcast info data : ", this.liveBroadcastInfo);
-        })
-        .catch(error => {
-          console.error('방송 예정 목록 load 실패 : ', error);
-          this.loading = false;
-        })
+          .then((response) => {
+            console.log(response.data);
+            this.liveBroadcastInfo = response.data;
+            this.loading = false;
+            console.log("broadcast info data : ", this.liveBroadcastInfo);
+          })
+          .catch(error => {
+            console.error('방송 예정 목록 load 실패 : ', error);
+            this.loading = false;
+          })
     },
 
     // 라이브 판매상품 불러오기
@@ -304,14 +373,14 @@ export default {
       const broadcastId = this.$route.params.broadcastId;
       console.log("해당 방송 id : " + broadcastId);
       axios.get(`/live-broadcast-product/${broadcastId}`)
-        .then((response) => {
-          console.log(response.data);
-          this.liveBoradcastProduct = response.data;
-          console.log("product info data : ", this.liveBoradcastProduct);
-        })
-        .catch(error => {
-          console.error('방송 판매 상품 load 실패 : ', error);
-        })
+          .then((response) => {
+            console.log(response.data);
+            this.liveBoradcastProduct = response.data;
+            console.log("product info data : ", this.liveBoradcastProduct);
+          })
+          .catch(error => {
+            console.error('방송 판매 상품 load 실패 : ', error);
+          })
     }
   },
   //컴포넌트가 생성될 시 mySessionId변수에 현재 url정보(방송id)를 할당합니다.
@@ -319,6 +388,7 @@ export default {
     this.mySessionId = this.$route.params.broadcastId || 'defaultSessionId';
     this.loadLiveBroadcastInfo();
     this.loadLiveBroadcastProduct();
+    this.setupWebSocket(); // 웹소켓 설정
   }
 };
 </script>
