@@ -1,5 +1,8 @@
 <template>
-  <div class="live-container" :style="{ height: computedHeight + 'px' }">
+  <div v-if="!isBroadcasting" class="broadcast-ended">
+      방송이 종료되었습니다.
+    </div>
+  <div class="live-container" :style="{ height: computedHeight + 'px' }" v-else>
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: chattingId }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
@@ -91,7 +94,6 @@
         </main>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -108,6 +110,26 @@ import Button from "@/components/Button";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
 
+
+const isBroadcasting = ref(true);
+
+const subscribeToBroadcastEnd = () => {
+  console.log("subscribeToBroadcastEnd 함수 호출됨"); // 로그 추가
+  const eventSource = new EventSource('http://localhost:8090/api/subscribe');
+  eventSource.addEventListener('broadcast-end', () => {
+    console.log("Broadcast end event received"); // 로그 추가
+    isBroadcasting.value = false;
+  });
+
+  eventSource.onerror = (error) => {
+    console.error('SSE error:', error);
+    eventSource.close();
+  };
+
+  onBeforeUnmount(() => {
+    eventSource.close();
+  });
+};
 
 // 라우트 및 환경변수 설정
 const route = useRoute();
@@ -341,6 +363,7 @@ onMounted(() => {
 
   intervalId = setInterval(loadLiveBroadcastDetails, 30000); // 15초
 
+  subscribeToBroadcastEnd();
 });
 
 onBeforeUnmount(() => {
@@ -349,6 +372,10 @@ onBeforeUnmount(() => {
 
   if (intervalId) {
     clearInterval(intervalId);
+  }
+
+  if (eventSource) {
+    eventSource.close();
   }
 });
 

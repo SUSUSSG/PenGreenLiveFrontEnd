@@ -82,36 +82,48 @@ export default {
   },
   methods: {
     toggleBroadcast() {
-      const action = this.isBroadcasting ? 'end' : 'start';
+    const action = this.isBroadcasting ? 'end' : 'start';
 
-      //시간
-      const date = new Date();
-      const offset = date.getTimezoneOffset() * 60000; // 밀리초 단위로 변환
-      const localDate = new Date(date.getTime() - offset);
-      const time = localDate.toISOString().slice(0, 19);
+    // 시간
+    const date = new Date();
+    const offset = date.getTimezoneOffset() * 60000; // 밀리초 단위로 변환
+    const localDate = new Date(date.getTime() - offset);
+    const time = localDate.toISOString().slice(0, 19);
 
-      const requestData = {
-        broadcastSeq: this.$route.params.broadcastId,
-        time: time,
-        action: action
-      }
-      console.log("과연 시간은?", requestData);
+    const requestData = {
+      broadcastSeq: this.$route.params.broadcastId,
+      time: time,
+      action: action
+    };
+    console.log("과연 시간은?", requestData);
 
-      axios.patch('/update/broadcast-time', requestData)
-        .then((response) => {
-          console.log(response.data);
-          if (this.isBroadcasting) {
-            this.$emit('stop-broadcast', this.elapsedTime);
-          } else {
-            this.$emit('start-broadcast');
-          }
-          this.isBroadcasting = !this.isBroadcasting;
-          this.updateResultDisplayText();
-        })
-        .catch(error => {
-          console.error('시간 update 실패: ', error);
-        })
-    },
+    axios.patch('/update/broadcast-time', requestData)
+      .then((response) => {
+        console.log(response.data);
+
+        // 방송 종료 이벤트 전송 요청
+        if (this.isBroadcasting) {
+          axios.get('/broadcast-end')
+            .then(() => {
+              console.log("Broadcast end event sent successfully");
+            })
+            .catch(error => {
+              console.error("Failed to send broadcast end event:", error);
+            });
+        }
+
+        if (this.isBroadcasting) {
+          this.$emit('stop-broadcast', this.elapsedTime);
+        } else {
+          this.$emit('start-broadcast');
+        }
+        this.isBroadcasting = !this.isBroadcasting;
+        this.updateResultDisplayText();
+      })
+      .catch(error => {
+        console.error('시간 update 실패: ', error);
+      });
+  },
     getCurrentTime() {
       let now = new Date();
       this.statistics[0].time = this.addZero(now.getHours()) + ":" + this.addZero(now.getMinutes()) + ":" + this.addZero(now.getSeconds());
