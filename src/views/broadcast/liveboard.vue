@@ -155,7 +155,7 @@ export default {
     },
     setupWebSocket() {
       this.stompClient = new Client({
-        brokerURL: 'ws://pengreen.live/ws-stomp/websocket',  // WebSocket 엔드포인트 URL
+        brokerURL: 'wss://pengreen.live/ws-stomp/websocket',  // WebSocket 엔드포인트 URL
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
