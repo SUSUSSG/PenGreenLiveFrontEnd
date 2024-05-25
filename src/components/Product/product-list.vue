@@ -165,9 +165,9 @@ export default {
         channelSeq: 1,
         categories: [],
         selectedCategory: '',
-        labelIdSeq:0,
-        certificationReason:'',
-        certificationExpirationDate:''
+        labelIdSeq: 0,
+        certificationReason: '',
+        certificationExpirationDate: ''
       },
       editModalData: {
         productSeq: null,
@@ -341,9 +341,10 @@ export default {
         reader.readAsDataURL(file);
       } else {
         this.editModalData.previewImage = null;
-        this.editModalData.imageSrc = null;
+        this.editModalData.imageSrc = this.editModalData.productImage;
       }
     },
+
     openEditModal(row) {
       this.editModalData = {
         productSeq: row.productSeq,
@@ -354,12 +355,15 @@ export default {
         listPrice: row.listPrice,
         productStock: row.productStock,
         brand: row.brand,
-        imageSrc: row.productImage ? row.productImage : null,
-        productImage: row.productImage,
-        previewImage: row.productImage
+        productImage: row.productImage, // 불러온 이미지 데이터
+        // previewImage: row.productImage ? `data:image/jpeg;base64,${row.productImage}` : null,
+        imageSrc: null, // 이미지가 있을 경우 설정
+        labelIdSeq: row.labelIdSeq,
+        certificationReason: row.certificationReason,
+        certificationExpirationDate: row.certificationExpirationDate,
       };
+
       this.prodRsstValid = row.brand === "01";
-      console.log(this.editModalData.productSeq);
       this.$refs.editModal.openModal();
     },
     closeEditModal() {
@@ -379,16 +383,12 @@ export default {
       this.customer.splice(index, 1);
     },
     updateProductDetails() {
-      console.log(this.prodRsstValid);
-
       if (this.prodRsstValid === false) {
         alert("녹색제품 통합ID 인증이 필요합니다.");
-        console.log(this.prodRsstValid);
-
         return;
       }
 
-      const url = `/${this.editModalData.productSeq}`;
+      const url = `/product/${this.editModalData.productSeq}`;
 
       const productData = {
         productCd: this.editModalData.productCd,
@@ -398,10 +398,10 @@ export default {
         listPrice: this.editModalData.listPrice,
         productStock: this.editModalData.productStock,
         brand: this.editModalData.brand,
-        base64Image: this.editModalData.imageSrc,
-        labelIdSeq:this.editModalData.labelIdSeq,
-        certificationReason:this.editModalData.certificationReason,
-        certificationExpirationDate:this.editModalData.certificationExpirationDate
+        base64Image: this.editModalData.base64Image,
+        labelIdSeq: this.editModalData.labelIdSeq,
+        certificationReason: this.editModalData.certificationReason,
+        certificationExpirationDate: this.editModalData.certificationExpirationDate
       };
 
       axios.put(url, productData)
@@ -409,13 +409,13 @@ export default {
           alert("Product successfully updated");
           this.$refs.editModal.closeModal();
           this.fetchProductsByVendorSeq();
-          console.log(productData.value)
         })
         .catch(error => {
           console.error("Failed to update product:", error.response.data);
           alert("Failed to update product: " + error.response.data.message);
         });
     },
+
     deleteSelectedProducts() {
       const vendorSeq = 1;
       this.selectedProducts.forEach(productSeq => {
@@ -505,7 +505,7 @@ export default {
             this.editModalData.brand = productInfo.prodRsst;
             this.editModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
             this.editModalData.imageSrc = response.data.productImage;
-            this.editModalData.labelIdSeq = productInfo.labelIdSeq;
+            this.editModalData.labelIdSeq = productInfo.prodCfgb;
             this.editModalData.certificationReason = productInfo.prodInrs;
             this.editModalData.certificationExpirationDate = productInfo.prodRedt;
           }
