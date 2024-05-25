@@ -135,7 +135,7 @@
               />
               <div class="live-info">
                 <div class="live-title">{{ item.productNm }}</div>
-                <div class="live-discount">{{ item.discountPrice }}</div>
+                <div class="live-discount">{{ formatPrice(item.discountPrice) }}원</div>
               </div>
             </div>
           </swiper-slide>
