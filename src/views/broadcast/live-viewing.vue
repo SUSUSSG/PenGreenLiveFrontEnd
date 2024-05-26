@@ -115,9 +115,10 @@ import Button from "@/components/Button";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
 
-// 방송 종료 감지
+// 방송 종료 여부
 const isBroadcasting = ref(true);
 
+// 방송 종료 이벤트 구독
 const subscribeToBroadcastEnd = () => {
   console.log("subscribeToBroadcastEnd 함수 호출됨");
   const eventSource = new EventSource('http://localhost:8090/api/subscribe');
@@ -322,6 +323,32 @@ const loadLiveBroadcastDetails = async () => {
   }
 }
 
+// 유저 시청 기록 저장
+const saveUserBroadcastHistory = async () => {
+  const broadcastId = route.params.broadcastId;
+  const userUUid = "f23a72e0-1347-11ef-b085-f220affc9a21";
+  
+  const date = new Date();
+  const offset = date.getTimezoneOffset() * 60000; // 밀리초 단위로 변환
+  const localDate = new Date(date.getTime() - offset);
+  const viewedDate = localDate.toISOString().slice(0, 19);
+
+  const requestData = {
+    userUUID: userUUid,
+    broadcastSeq: broadcastId,
+    viewedDate: viewedDate
+  }
+
+  console.log("시청정보!!!" + JSON.stringify(requestData, null, 2));
+
+  try {
+    const response = await axios.post(`user/view-history`, requestData)
+    console.log(response.data);
+  } catch (error) {
+    console.error("시청 기록 저장 실패: ", error);
+  }
+}
+
 // 모달 및 제품 선택 제어
 const openModal = () => {
   isOpen.value = true;
@@ -368,6 +395,7 @@ onMounted(() => {
   intervalId = setInterval(loadLiveBroadcastDetails, 30000); // 15초
 
   subscribeToBroadcastEnd();
+  saveUserBroadcastHistory();
 });
 
 onBeforeUnmount(() => {
