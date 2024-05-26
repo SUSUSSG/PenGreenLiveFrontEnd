@@ -39,7 +39,7 @@
 import axios from "@/axios";
 import AnalyticsCard from "@/components/Card/analytics-card.vue";
 import StatsTable from "@/components/Table/statistics-default-table.vue";
-import ProductCard from "@/components/Card/product-statistics-card.vue";
+import ProductCard from "@/components/Card/product-statistics-product-card.vue";
 
 export default {
   components: {
