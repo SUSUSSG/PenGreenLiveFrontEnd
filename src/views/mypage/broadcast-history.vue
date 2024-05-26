@@ -37,13 +37,10 @@ const buttons = ref([
 
 const broadcasthistoryData = ref([]);
 const producthistoryData = ref([]);
-const userUUID = 'f23a72e0-1347-11ef-b085-f220affc9a21';
 
-const fetchRecentBroadcasts = async (userUUID) => {
+const fetchRecentBroadcasts = async () => {
     try {
-        const recentlyViewedResponse = await axios.get(`/recently-viewed/broadcasts`, {
-            params: { userUUID: userUUID }
-        });
+        const recentlyViewedResponse = await axios.get(`/api/recently-viewed/broadcasts`);
         console.log('Recently Viewed Broadcasts:', recentlyViewedResponse.data);
         broadcasthistoryData.value = recentlyViewedResponse.data;
 
@@ -54,7 +51,7 @@ const fetchRecentBroadcasts = async (userUUID) => {
 
 
 onMounted(() => {
-    fetchRecentBroadcasts(userUUID);
+    fetchRecentBroadcasts();
 });
 
 </script>
