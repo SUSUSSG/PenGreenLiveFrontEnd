@@ -350,7 +350,7 @@ const incrementViewsCount = async (sessionId) => {
 };
 
 const onClickRedirect = () => {
-  router.push('/');
+  router.push({ name: 'home' });
 };
 
 onMounted(() => {
