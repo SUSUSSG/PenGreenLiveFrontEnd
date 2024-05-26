@@ -14,9 +14,21 @@
         />
       </div>
     </div>
-    <div class="mt-3 mb-3">
-      <Alert class="green-alert" dismissible>{{ notice }}</Alert>
+
+    <!-- 공지사항 부분 시작 -->
+    <div class="mt-3 mb-3" style="display:flex;justify-content:center; flex-direction:column;">
+      <button
+        @click="toggleNotice"
+        class="text-sm text-blue-500 focus:outline-none notice-button"
+      >
+        {{ showNotice ? "공지사항 접기" : "공지사항 펼치기" }}
+      </button>
+      <Alert v-if="showNotice" class="green-alert" dismissible>{{
+        notice
+      }}</Alert>
     </div>
+    <!-- 공지사항 부분 끝 -->
+
     <div v-if="alertMessage" class="mt-3 mb-3">
       <Alert class="red-alert" dismissible>{{ alertMessage }}</Alert>
     </div>
@@ -259,6 +271,7 @@ export default {
       messageTimestamps: [],
       isTTSEnabled: true,
       showOverlay: false, // 오버레이 표시 여부를 제어하는 변수 추가
+      showNotice: false, // 공지사항 표시 여부를 제어하는 변수 추가
     };
   },
   computed: {
@@ -479,6 +492,9 @@ export default {
       const container = this.$el.querySelector(".scroll-wrapper");
       this.showOverlay = container.scrollHeight > container.clientHeight;
     },
+    toggleNotice() {
+      this.showNotice = !this.showNotice;
+    },
   },
 };
 </script>
@@ -580,7 +596,16 @@ export default {
   background-color: #134010;
   color: white;
 }
-
+.notice-button{
+  color:#134010;
+  background-color: rgb(231, 236, 231);
+  width:30%;
+  align-self: center;
+  justify-self: center;
+  margin-bottom: 0.5rem;
+  border-radius: 10rem;
+  height: 30px;
+}
 .green-alert {
   color: #134010;
   background-color: rgba(19, 64, 16, 0.2);
