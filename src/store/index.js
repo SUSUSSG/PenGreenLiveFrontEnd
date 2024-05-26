@@ -2,6 +2,8 @@
 import { createStore } from "vuex";
 import userModule from "./modules/user";
 import orderModule from "./modules/order";
+import authModule from './modules/auth';
+import createPersistedState from 'vuex-persistedstate';
 
 export default createStore({
   state: {
@@ -23,5 +25,10 @@ export default createStore({
   modules: {
     user: userModule, // user 모듈을 등록합니다
     order: orderModule,
+    auth : authModule
   },
+  plugins: [createPersistedState({
+    key: 'myApp',
+    paths: ['auth'], 
+  })],
 });
