@@ -15,14 +15,16 @@
       <TabPanel>
         <orderlist v-for="(item, index) in unreviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
                    :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
-                   :orderProductPrice="item.orderProductPrice" :productSeq="item.productSeq" :userUUID="userUUID" @review-submitted="handleReviewSubmitted" />
+                   :orderProductPrice="item.orderProductPrice" :productSeq="item.productSeq" :orderSeq="item.orderSeq"
+                   @review-submitted="handleReviewSubmitted" />
       </TabPanel>
 
       <TabPanel>
         <reviewlist v-for="(item, index) in reviewedOrders" :key="index" :deliveryStatus="item.deliveryStatus"
                     :productImage="item.productImage" :orderDate="item.orderDate" :productNm="item.productNm"
                     :orderProductPrice="item.orderProductPrice" :reviewContent="item.reviewContent"
-                    :reviewSeq="item.reviewSeq" :userUUID="userUUID" @review-deleted="handleReviewDeleted"/>
+                    :productSeq="item.productSeq" :reviewSeq="item.reviewSeq" :orderSeq="item.orderSeq" 
+                    @review-deleted="handleReviewDeleted"/>
       </TabPanel>
     </TabGroup>
   </div>
@@ -42,15 +44,14 @@ const buttons = ref([
 
 const unreviewedOrders = ref([]);
 const reviewedOrders = ref([]);
-const userUUID = 'f23a72e0-1347-11ef-b085-f220affc9a21';
 
-const fetchOrders = async (userUuid) => {
+const fetchOrders = async () => {
   try {
-    const unreviewedResponse = await axios.get(`/unreviewed-orders/${userUuid}`);
+    const unreviewedResponse = await axios.get(`/api/unreviewed-orders`);
     console.log('Unreviewed Orders:', unreviewedResponse.data); 
     unreviewedOrders.value = unreviewedResponse.data;
 
-    const reviewedResponse = await axios.get(`/reviewed-orders/${userUuid}`);
+    const reviewedResponse = await axios.get(`/api/reviewed-orders`);
     reviewedOrders.value = reviewedResponse.data;
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -76,7 +77,7 @@ const handleReviewDeleted = (reviewSeq) => {
 };
 
 onMounted(() => {
-  fetchOrders(userUUID);
+  fetchOrders();
 });
 </script>
 
