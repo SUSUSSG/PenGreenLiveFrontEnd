@@ -635,7 +635,7 @@ ul.benefits-list li {
   height: 40px;
   background-color: #134010;
   border-radius: 5px;
-  padding: 4px;
+  padding: 7px;
 }
 
 .home-button a {
