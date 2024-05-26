@@ -76,7 +76,7 @@
           </div>
           <template v-slot:footer>
             <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="closeEditModal" />
-            <Button text="저장" btnClass="btn-dark btn-sm" @click="updateProductDetails" :disabled="!prodRsstValid" />
+            <Button text="저장" btnClass="btn-dark btn-sm" @click="updateProductDetails" />
           </template>
         </Modal>
       </div>
@@ -181,6 +181,7 @@ export default {
         imageSrc: null,
         productImage: null,
         previewImage: null,
+        initialGreenProductId: '', // 초기 녹색제품 통합ID 저장
       },
       advancedTable,
       current: 1,
@@ -341,10 +342,9 @@ export default {
         reader.readAsDataURL(file);
       } else {
         this.editModalData.previewImage = null;
-        this.editModalData.imageSrc = this.editModalData.productImage;
+        this.editModalData.imageSrc = null;
       }
     },
-
     openEditModal(row) {
       this.editModalData = {
         productSeq: row.productSeq,
@@ -356,11 +356,12 @@ export default {
         productStock: row.productStock,
         brand: row.brand,
         productImage: row.productImage, // 불러온 이미지 데이터
-        // previewImage: row.productImage ? `data:image/jpeg;base64,${row.productImage}` : null,
+        previewImage: row.productImage ? `data:image/jpeg;base64,${row.productImage}` : null,
         imageSrc: null, // 이미지가 있을 경우 설정
         labelIdSeq: row.labelIdSeq,
         certificationReason: row.certificationReason,
         certificationExpirationDate: row.certificationExpirationDate,
+        initialGreenProductId: row.greenProductId, // 초기 녹색제품 통합ID 저장
       };
 
       this.prodRsstValid = row.brand === "01";
@@ -383,7 +384,7 @@ export default {
       this.customer.splice(index, 1);
     },
     updateProductDetails() {
-      if (this.prodRsstValid === false) {
+      if (this.editModalData.greenProductId !== this.editModalData.initialGreenProductId && !this.prodRsstValid) {
         alert("녹색제품 통합ID 인증이 필요합니다.");
         return;
       }
@@ -415,7 +416,6 @@ export default {
           alert("Failed to update product: " + error.response.data.message);
         });
     },
-
     deleteSelectedProducts() {
       const vendorSeq = 1;
       this.selectedProducts.forEach(productSeq => {
