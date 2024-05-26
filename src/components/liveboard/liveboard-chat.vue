@@ -1,10 +1,17 @@
 <template>
   <div class="chat-card bg-white p-4">
-    <div class="inline-flex justify-between items-center" :style="{ width: cardWidth }">
+    <div
+      class="inline-flex justify-between items-center"
+      :style="{ width: cardWidth }"
+    >
       <div class="text-base flex-grow">채팅</div>
       <div>
-        <Button v-if="showEditButton" icon="fluent:add-48-filled" @click="editChatting"
-          btnClass="btn-green rounded-full p-0 h-8 w-8 flex items-center justify-center" />
+        <Button
+          v-if="showEditButton"
+          icon="fluent:add-48-filled"
+          @click="editChatting"
+          btnClass="btn-green rounded-full p-0 h-8 w-8 flex items-center justify-center"
+        />
       </div>
     </div>
     <div class="mt-3 mb-3">
@@ -16,18 +23,32 @@
     <div class="scroll-wrapper">
       <div class="chat-container flex flex-col justify-end">
         <ul class="chat-messages">
-          <div class="enter-message" style="display: none;">
-            -- 채팅방에 입장했습니다 --<br>
+          <div class="enter-message" style="display: none">
+            -- 채팅방에 입장했습니다 --<br />
             바람직한 채팅 문화를 위해 바른 언어를 사용해요😉🐧
           </div>
-          <li v-for="message in chatMessages" :key="message.seq" class="chat-message flex">
+          <li
+            v-for="message in chatMessages"
+            :key="message.seq"
+            class="chat-message flex"
+          >
             <div class="mr-2 flex items-center">
-              <Icon v-if="showDeleteIcon" icon="heroicons:x-mark-20-solid" @click="deleteMessage(message.seq)"></Icon>
+              <Icon
+                v-if="showDeleteIcon"
+                icon="heroicons:x-mark-20-solid"
+                @click="deleteMessage(message.seq)"
+              ></Icon>
             </div>
             <div class="flex flex-row">
               <span class="chat-time">{{ message.time }}</span>
               <span class="chat-user-id">{{ message.writer }}</span>
-              <span :class="{'chat-text': true, 'text-gray': message.message === '비속어가 포함된 채팅입니다.'}">
+              <span
+                :class="{
+                  'chat-text': true,
+                  'text-gray':
+                    message.message === '비속어가 포함된 채팅입니다.',
+                }"
+              >
                 {{ message.message }}
               </span>
             </div>
@@ -37,41 +58,92 @@
     </div>
     <div class="chat-input-container">
       <button @click="toggleTTS" class="mr-2 focus:outline-none">
-        <Icon :icon="isTTSEnabled ? 'heroicons-solid:volume-up' : 'heroicons-solid:volume-off'" class="w-6 h-6" />
+        <Icon
+          :icon="
+            isTTSEnabled
+              ? 'heroicons-solid:volume-up'
+              : 'heroicons-solid:volume-off'
+          "
+          class="w-6 h-6"
+        />
       </button>
-      <input type="text" :placeholder="isBlocked ? `채팅이 비활성화됨 (${remainingTime})` : '채팅을 입력하세요'" v-model="newMessage" class="chat-input-field"
-        @keyup.enter.prevent="sendChat" :disabled="isBlocked" />
-      <button type="button" class="chat-send-button" @click="sendChat" :disabled="isBlocked">
-        <Icon icon="heroicons-outline:paper-airplane" class="transform rotate-[60deg]" />
+      <input
+        type="text"
+        :placeholder="
+          isBlocked
+            ? `채팅이 비활성화됨 (${remainingTime})`
+            : '채팅을 입력하세요'
+        "
+        v-model="newMessage"
+        class="chat-input-field"
+        @keyup.enter.prevent="sendChat"
+        :disabled="isBlocked"
+      />
+      <button
+        type="button"
+        class="chat-send-button"
+        @click="sendChat"
+        :disabled="isBlocked"
+      >
+        <Icon
+          icon="heroicons-outline:paper-airplane"
+          class="transform rotate-[60deg]"
+        />
       </button>
     </div>
     <!-- 모달 컴포넌트 추가 -->
     <Modal title="채팅 관리" :activeModal="isOpen" @close="isOpen = false">
       <template v-slot:default>
         <div class="flex flex-col space-y-2 mb-2">
-          <label for="addChatNotice" class="text-sm font-medium text-gray-700">한줄 공지사항</label>
+          <label for="addChatNotice" class="text-sm font-medium text-gray-700"
+            >한줄 공지사항</label
+          >
           <div class="flex items-center space-x-2">
-            <input id="addChatNotice" type="text" name="addChatNotice" v-model="chatNotice" placeholder="공지사항을 입력하세요."
-              class="flex-1 block w-full min-w-0 rounded-l-md border-gray-300 focus:ring-blue-500 focus:border-blue-500" />
-            <Button btnClass="btn-primary btn-sm" @click="submitNotice">등록</Button>
+            <input
+              id="addChatNotice"
+              type="text"
+              name="addChatNotice"
+              v-model="chatNotice"
+              placeholder="공지사항을 입력하세요."
+              class="flex-1 block w-full min-w-0 rounded-l-md border-gray-300 focus:ring-blue-500 focus:border-blue-500"
+            />
+            <Button btnClass="btn-primary btn-sm" @click="submitNotice"
+              >등록</Button
+            >
           </div>
         </div>
         <!-- 금칙어 설정 입력 필드 -->
         <div class="flex flex-col space-y-2 mb-4 mt-7">
-          <label for="addChatOption" class="text-sm font-medium text-gray-700">금칙어 설정</label>
+          <label for="addChatOption" class="text-sm font-medium text-gray-700"
+            >금칙어 설정</label
+          >
           <div class="flex items-center space-x-2">
-            <input id="addChatOption" type="text" name="addChatOption" v-model="forbiddenword" placeholder="금칙어 입력"
-              class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md" />
-            <Button btnClass="btn-primary btn-sm" @click="submitForbiddenword">등록</Button>
+            <input
+              id="addChatOption"
+              type="text"
+              name="addChatOption"
+              v-model="forbiddenword"
+              placeholder="금칙어 입력"
+              class="flex-grow block w-full min-w-0 border-gray-300 focus:ring-blue-500 focus:border-blue-500 rounded-l-md"
+            />
+            <Button btnClass="btn-primary btn-sm" @click="submitForbiddenword"
+              >등록</Button
+            >
           </div>
         </div>
 
         <!-- 금칙어 목록 -->
         <div class="space-y-2">
-          <div v-for="(word, index) in forbiddenwordList" :key="index"
-            class="flex items-center justify-between bg-gray-100 p-2 rounded">
+          <div
+            v-for="(word, index) in forbiddenwordList"
+            :key="index"
+            class="flex items-center justify-between bg-gray-100 p-2 rounded"
+          >
             <span>{{ word }}</span>
-            <button @click="removeForbiddenword(index)" class="bg-red-500 hover:bg-red-600 text-white rounded p-1">
+            <button
+              @click="removeForbiddenword(index)"
+              class="bg-red-500 hover:bg-red-600 text-white rounded p-1"
+            >
               <Icon icon="heroicons-outline:x" />
             </button>
           </div>
@@ -89,6 +161,7 @@ import Modal from "@/components/Modal/index.vue";
 import Textinput from "@/components/Textinput/index.vue";
 import Icon from "@/components/Icon/index.vue";
 import { Client } from "@stomp/stompjs";
+import axios from "@/axios";
 
 export default {
   components: {
@@ -97,7 +170,7 @@ export default {
     Button,
     Modal,
     Textinput,
-    Icon
+    Icon,
   },
   props: {
     showEditButton: {
@@ -112,16 +185,16 @@ export default {
     },
     showDeleteIcon: {
       type: Boolean,
-      default: true
+      default: true,
     },
     currentRoom: {
       type: Object,
-      default: () => ({ id: 1 })
+      default: () => ({ id: 1 }),
     },
     currentWriter: {
       type: String,
-      default: 'user'
-    }
+      default: "user",
+    },
   },
   watch: {
     chatMessages: {
@@ -138,19 +211,18 @@ export default {
     this.speechSynthesis = window.speechSynthesis;
 
     this.connect();
-    
-    this.$nextTick(() => {
-    const enterMessage = this.$el.querySelector('.enter-message');
-    enterMessage.style.display = 'block';
 
-    setTimeout(() => {
-      
-      enterMessage.classList.add('fade-out');
+    this.$nextTick(() => {
+      const enterMessage = this.$el.querySelector(".enter-message");
+      enterMessage.style.display = "block";
+
       setTimeout(() => {
-        enterMessage.style.display = 'none';
-      },1000);
-    }, 5000);
-  });
+        enterMessage.classList.add("fade-out");
+        setTimeout(() => {
+          enterMessage.style.display = "none";
+        }, 1000);
+      }, 5000);
+    });
   },
 
   beforeUnmount() {
@@ -160,30 +232,29 @@ export default {
     return {
       notice: "채팅 공지사항이 올라올 곳입니다.",
       isOpen: false,
-      chatNotice: '',
-      forbiddenword: '',
+      chatNotice: "",
+      forbiddenword: "",
       forbiddenwordList: [],
-      newMessage: '',
+      newMessage: "",
       chatMessages: [],
       websocketClient: null,
       messageIdCounter: 1,
-      lastMessage: '',
+      lastMessage: "",
       repeatCount: 0,
       isBlocked: false,
       remainingTime: 10,
       spamTimeout: null,
       countdownInterval: null,
-      alertMessage: '',
+      alertMessage: "",
       messageTimestamps: [],
       isTTSEnabled: true,
-    }
+    };
   },
   methods: {
     connect() {
       // const url = "ws://223.130.147.232:8090/ws/init";
       // const url = "ws://localhost:8090/ws/init";
       const url = "wss://pengreen.live/ws/init";
-
 
       this.websocketClient = new Client({
         brokerURL: url,
@@ -192,46 +263,51 @@ export default {
             `/sub/room/${this.currentRoom.id}/notice`,
             (msg) => {
               const noticeData = JSON.parse(msg.body);
-              this.notice = noticeData.message;  // 공지사항 업데이트
+              this.notice = noticeData.message; // 공지사항 업데이트
             }
           );
           this.websocketClient.subscribe(
-          `/sub/room/${this.currentRoom.id}`,
-          (msg) => {
-            try {
-              console.log("메시지 파싱 전");
-              const parsedMessage = JSON.parse(msg.body); // JSON 파싱
-              this.speakMessage(parsedMessage.message); // TTS로 메시지 읽기
+            `/sub/room/${this.currentRoom.id}`,
+            (msg) => {
+              try {
+                console.log("메시지 파싱 전");
+                const parsedMessage = JSON.parse(msg.body); // JSON 파싱
+                this.speakMessage(parsedMessage.message); // TTS로 메시지 읽기
 
-              console.log("메시지 파싱 후", parsedMessage);
+                console.log("메시지 파싱 후", parsedMessage);
 
-              // 메시지 객체에 작성자와 메시지 내용을 분리하여 추가
-              this.chatMessages.push({
-              seq: this.messageIdCounter++,
-              writer: parsedMessage.writer, // 작성자 ID
-              message: parsedMessage.message, // 메시지 내용
-              time: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }) // 현재 시간 정보
-            }); 
-
-            } catch (e) {
-              console.error("메시지 파싱 중 에러 발생:", e);
-              // 파싱 에러 발생 시 기본 정보로 메시지 추가
-              this.chatMessages.push({
-                seq: this.messageIdCounter++,
-                writer: "System",
-                message: "메시지를 파싱할 수 없습니다."
-              });
+                // 메시지 객체에 작성자와 메시지 내용을 분리하여 추가
+                this.chatMessages.push({
+                  seq: this.messageIdCounter++,
+                  writer: parsedMessage.writer, // 작성자 ID
+                  message: parsedMessage.message, // 메시지 내용
+                  time: new Date().toLocaleTimeString("ko-KR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }), // 현재 시간 정보
+                });
+              } catch (e) {
+                console.error("메시지 파싱 중 에러 발생:", e);
+                // 파싱 에러 발생 시 기본 정보로 메시지 추가
+                this.chatMessages.push({
+                  seq: this.messageIdCounter++,
+                  writer: "System",
+                  message: "메시지를 파싱할 수 없습니다.",
+                });
+              }
             }
-          }
-        );
+          );
 
           this.websocketClient.publish({
             destination: `/pub/room/${this.currentRoom.id}/entered`,
-            body: JSON.stringify({ message: "입장했습니다.", writer: this.currentWriter }),
+            body: JSON.stringify({
+              message: "입장했습니다.",
+              writer: this.currentWriter,
+            }),
           });
         },
         onWebSocketError: (error) => {
-          console.error('WebSocket Error:', error);
+          console.error("WebSocket Error:", error);
         },
       });
       this.websocketClient.activate();
@@ -252,7 +328,9 @@ export default {
       this.messageTimestamps.push(now);
 
       // Check for spamming within 3 seconds
-      this.messageTimestamps = this.messageTimestamps.filter(timestamp => now - timestamp <= 3000);
+      this.messageTimestamps = this.messageTimestamps.filter(
+        (timestamp) => now - timestamp <= 3000
+      );
       if (this.messageTimestamps.length >= 5) {
         this.isBlocked = true;
         this.remainingTime = 10;
@@ -294,7 +372,10 @@ export default {
 
       this.websocketClient.publish({
         destination: `/pub/room/${this.currentRoom.id}`,
-        body: JSON.stringify({ message: this.newMessage, writer: this.currentWriter }),
+        body: JSON.stringify({
+          message: this.newMessage,
+          writer: this.currentWriter,
+        }),
       });
       this.newMessage = ""; // 입력 필드 초기화
     },
@@ -302,9 +383,9 @@ export default {
     resetSpamBlock() {
       this.isBlocked = false;
       this.repeatCount = 0;
-      this.lastMessage = '';
+      this.lastMessage = "";
       this.messageTimestamps = [];
-      this.alertMessage = '';
+      this.alertMessage = "";
       clearInterval(this.countdownInterval);
     },
 
@@ -316,23 +397,36 @@ export default {
       if (this.chatNotice.trim()) {
         this.notice = this.chatNotice;
         const noticeMessage = {
-          type: 'NOTICE',
+          type: "NOTICE",
           message: this.chatNotice,
-          writer: 'System'
+          writer: "System",
         };
         this.websocketClient.publish({
           destination: `/pub/room/${this.currentRoom.id}/notice`,
           body: JSON.stringify(noticeMessage),
         });
-        this.chatNotice = '';  // 입력 필드 초기화
+        this.chatNotice = ""; // 입력 필드 초기화
       }
     },
-
 
     submitForbiddenword() {
       if (this.forbiddenword.trim()) {
         this.forbiddenwordList.push(this.forbiddenword);
-        this.forbiddenword = '';
+        console.log("현재 방송 번호 :" + this.currentRoom.id);
+        axios
+          .post("/forbidden-words", null, {
+            params: {
+              broadcastSeq: this.currentRoom.id,
+              forbiddenWord: this.forbiddenword,
+            },
+          })
+          .then((response) => {
+            console.log("금칙어 등록 성공:", response);
+            this.forbiddenword = ""; // 입력 필드 초기화
+          })
+          .catch((error) => {
+            console.error("금칙어 등록 실패:", error);
+          });
       }
     },
 
@@ -341,7 +435,9 @@ export default {
     },
 
     deleteMessage(seq) {
-      this.chatMessages = this.chatMessages.filter(message => message.seq !== seq);
+      this.chatMessages = this.chatMessages.filter(
+        (message) => message.seq !== seq
+      );
     },
     toggleTTS() {
       this.isTTSEnabled = !this.isTTSEnabled;
@@ -349,14 +445,13 @@ export default {
     speakMessage(message) {
       if (this.isTTSEnabled) {
         const utterance = new SpeechSynthesisUtterance(message);
-        utterance.lang = 'ko-KR';
+        utterance.lang = "ko-KR";
         utterance.rate = 1.3;
         this.speechSynthesis.speak(utterance);
       }
+    },
   },
-  }
-}
-
+};
 </script>
 
 <style>
@@ -388,7 +483,7 @@ export default {
 .chat-user-id {
   font-weight: bold;
   font-size: 16px;
-  color: #23A100;
+  color: #23a100;
   margin-left: 8px;
   text-wrap: nowrap;
 }
@@ -424,7 +519,7 @@ export default {
 }
 
 .chat-input-field::after {
-  border-color: #1C6D16;
+  border-color: #1c6d16;
 }
 
 .chat-input-field::-webkit-scrollbar-track {
@@ -434,7 +529,7 @@ export default {
 .chat-send-button {
   width: 2.5rem;
   height: 2.5rem;
-  background: #1C6D16;
+  background: #1c6d16;
   color: white;
   border: none;
   border-radius: 50%;
@@ -444,8 +539,8 @@ export default {
   justify-content: center;
 }
 .text-gray {
-    color: #c3c3c3;
-  }
+  color: #c3c3c3;
+}
 .chat-send-button:hover {
   background: #265d8a;
 }
@@ -461,7 +556,7 @@ export default {
 }
 
 .red-alert {
-  color: #D32F2F;
+  color: #d32f2f;
   background-color: rgba(211, 47, 47, 0.2);
 }
 
@@ -479,8 +574,8 @@ export default {
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
-  text-align:center; 
-  font-weight:bold; 
+  text-align: center;
+  font-weight: bold;
   opacity: 1;
   transition: opacity 1s ease-out;
 }
