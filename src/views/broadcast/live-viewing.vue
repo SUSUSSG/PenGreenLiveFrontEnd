@@ -94,9 +94,7 @@
     <div v-if="!isBroadcasting" class="modal-overlay">
       <div class="modal-content">
         <p>방송이 종료되었습니다.</p>
-        <div class="home-button">
-          <a href="/">홈으로 이동</a>
-        </div>
+        <Button class="exit-button" @click="onClickRedirect()">홈으로 이동</Button>
       </div>
     </div>
   </div>
@@ -377,7 +375,7 @@ const incrementViewsCount = async (sessionId) => {
 };
 
 const onClickRedirect = () => {
-  router.push({ name: 'home' });
+  window.location.href = "/";
 };
 
 onMounted(() => {
