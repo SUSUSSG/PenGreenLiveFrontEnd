@@ -94,7 +94,9 @@
     <div v-if="!isBroadcasting" class="modal-overlay">
       <div class="modal-content">
         <p>방송이 종료되었습니다.</p>
-        <Button text="홈으로 이동" @click="redirectToHome" />
+        <div class="home-button">
+          <a href="/">홈으로 이동</a>
+        </div>
       </div>
     </div>
   </div>
@@ -113,7 +115,7 @@ import Button from "@/components/Button";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
 
-
+// 방송 종료 감지
 const isBroadcasting = ref(true);
 
 const subscribeToBroadcastEnd = () => {
@@ -348,7 +350,7 @@ const incrementViewsCount = async (sessionId) => {
 };
 
 const onClickRedirect = () => {
-  router.push({ name: 'home' });
+  router.push('/');
 };
 
 onMounted(() => {
@@ -608,6 +610,7 @@ ul.benefits-list li {
   z-index: 1000;
 }
 
+/* 방송 종료 시 */
 .modal-content {
   background: white;
   width: 600px;
@@ -625,5 +628,17 @@ ul.benefits-list li {
   font-weight: bold;
   margin-bottom: 20px;
   font-size: 20px;
+}
+
+.home-button {
+  width: 100px;
+  height: 40px;
+  background-color: #134010;
+  border-radius: 5px;
+  padding: 4px;
+}
+
+.home-button a {
+  color: white;
 }
 </style>
