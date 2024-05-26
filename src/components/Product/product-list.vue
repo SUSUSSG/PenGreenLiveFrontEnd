@@ -11,8 +11,8 @@
             <div class="flex items-center">
               <Textinput label="녹색제품 통합ID" type="text" name="greenProductId" v-model="addModalData.greenProductId"
                 placeholder="KR232148" class="mb-2 flex-grow" />
-              <button
-                class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5"><span>인증하기</span></button>
+              <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5"
+                @click="authenticateProduct('add')"><span>인증하기</span></button>
             </div>
             <Textinput label="상품명" type="text" name="productNm" v-model="addModalData.productNm"
               placeholder="상품명을 입력하세요" class="mb-2" />
@@ -52,7 +52,8 @@
             <div class="flex items-center">
               <Textinput label="녹색제품 통합ID" type="text" name="greenProductId" v-model="editModalData.greenProductId"
                 class="mb-2 flex-grow" />
-              <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5">
+              <button class="btn inline-flex justify-center btn-outline-dark btn-sm ml-2 mt-5"
+                @click="authenticateProduct('edit')">
                 <span>인증하기</span></button>
             </div>
             <Textinput label="상품명" type="text" name="editproductname" v-model="editModalData.productNm" class="mb-2" />
@@ -75,7 +76,7 @@
           </div>
           <template v-slot:footer>
             <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="closeEditModal" />
-            <Button text="저장" btnClass="btn-dark btn-sm" @click="updateProductDetails" />
+            <Button text="저장" btnClass="btn-dark btn-sm" @click="updateProductDetails" :disabled="!prodRsstValid" />
           </template>
         </Modal>
       </div>
@@ -89,7 +90,7 @@
             <span v-if="props.column.field === 'productCd'" @click="openEditModal(props.row)" class="cursor-pointer">
               {{ props.row.productCd }}
             </span>
-            <span v-if="props.column.field === 'greenProductId'" >
+            <span v-if="props.column.field === 'greenProductId'">
               {{ props.row.greenProductId }}
             </span>
             <span v-if="props.column.field === 'productNm'" class="ellipsis">
@@ -107,9 +108,9 @@
             <span v-if="props.column.field === 'brand'">
               {{ props.row.brand }}
             </span>
-            <span v-if="props.column.field === 'customer'" class="flex">
-              <img v-for="entry in props.row.customer" :key="entry.name" :src="entry.image" :alt="entry.name"
-                class="object-cover w-full h-full rounded-full" style="width: 24px; margin-right: 5px;" />
+            <span v-if="props.column.field === 'labels'" class="flex">
+              <img v-for="label in props.row.labels" :key="label.labelIdSeq" :src="label.labelImage"
+                :alt="label.labelNm" class="object-cover w-6 h-6 rounded-full mr-2" />
             </span>
           </template>
           <template #pagination-bottom="props">
@@ -163,7 +164,10 @@ export default {
         vendorSeq: 1,
         channelSeq: 1,
         categories: [],
-        selectedCategory: ''
+        selectedCategory: '',
+        labelIdSeq: 0,
+        certificationReason: '',
+        certificationExpirationDate: ''
       },
       editModalData: {
         productSeq: null,
@@ -236,10 +240,11 @@ export default {
         },
         {
           label: "인증",
-          field: "customer",
+          field: "labels",
           width: '130px',
         },
       ],
+      prodRsstValid: false,
     };
   },
   computed: {
@@ -266,10 +271,10 @@ export default {
       }
     },
     fetchProducts(vendorSeq) {
-      axios.get(`/product-list/${vendorSeq}`)
+      axios.get(`/product-list-label?vendorSeq=${vendorSeq}`)
         .then(response => {
-          console.log(response.data);
           this.products = response.data;
+          console.log("products@@@", JSON.stringify(this.products, null, 2));
           console.log("Vendor-specific products loaded", this.products);
         })
         .catch(error => {
@@ -336,9 +341,10 @@ export default {
         reader.readAsDataURL(file);
       } else {
         this.editModalData.previewImage = null;
-        this.editModalData.imageSrc = null;
+        this.editModalData.imageSrc = this.editModalData.productImage;
       }
     },
+
     openEditModal(row) {
       this.editModalData = {
         productSeq: row.productSeq,
@@ -349,11 +355,15 @@ export default {
         listPrice: row.listPrice,
         productStock: row.productStock,
         brand: row.brand,
-        imageSrc: row.productImage ? row.productImage : null,
-        productImage: row.productImage,
-        previewImage: row.productImage
+        productImage: row.productImage, // 불러온 이미지 데이터
+        // previewImage: row.productImage ? `data:image/jpeg;base64,${row.productImage}` : null,
+        imageSrc: null, // 이미지가 있을 경우 설정
+        labelIdSeq: row.labelIdSeq,
+        certificationReason: row.certificationReason,
+        certificationExpirationDate: row.certificationExpirationDate,
       };
-      console.log(this.editModalData.productSeq);
+
+      this.prodRsstValid = row.brand === "01";
       this.$refs.editModal.openModal();
     },
     closeEditModal() {
@@ -373,7 +383,13 @@ export default {
       this.customer.splice(index, 1);
     },
     updateProductDetails() {
-      const url = `/${this.editModalData.productSeq}`;
+      if (this.prodRsstValid === false) {
+        alert("녹색제품 통합ID 인증이 필요합니다.");
+        return;
+      }
+
+      const url = `/product/${this.editModalData.productSeq}`;
+
       const productData = {
         productCd: this.editModalData.productCd,
         greenProductId: this.editModalData.greenProductId,
@@ -382,7 +398,10 @@ export default {
         listPrice: this.editModalData.listPrice,
         productStock: this.editModalData.productStock,
         brand: this.editModalData.brand,
-        base64Image: this.editModalData.imageSrc,
+        base64Image: this.editModalData.base64Image,
+        labelIdSeq: this.editModalData.labelIdSeq,
+        certificationReason: this.editModalData.certificationReason,
+        certificationExpirationDate: this.editModalData.certificationExpirationDate
       };
 
       axios.put(url, productData)
@@ -390,13 +409,13 @@ export default {
           alert("Product successfully updated");
           this.$refs.editModal.closeModal();
           this.fetchProductsByVendorSeq();
-          console.log(productData.value)
         })
         .catch(error => {
           console.error("Failed to update product:", error.response.data);
           alert("Failed to update product: " + error.response.data.message);
         });
     },
+
     deleteSelectedProducts() {
       const vendorSeq = 1;
       this.selectedProducts.forEach(productSeq => {
@@ -412,7 +431,16 @@ export default {
       });
     },
     registerProduct() {
+      console.log("녹색인증 : " + this.prodRsstValid);
+
+      if (this.prodRsstValid === false) {
+        console.log("녹색인증 : " + this.prodRsstValid);
+        alert("녹색제품 통합ID 인증이 필요합니다.");
+        return;
+      }
+
       const url = `/products?vendorSeq=${this.addModalData.vendorSeq}&channelSeq=${this.addModalData.channelSeq}`;
+
       const productData = {
         productCd: this.addModalData.productCd,
         greenProductId: this.addModalData.greenProductId,
@@ -422,6 +450,9 @@ export default {
         productStock: this.addModalData.productStock,
         brand: this.addModalData.brand,
         base64Image: this.addModalData.imageSrc,
+        labelIdSeq: this.addModalData.labelIdSeq,
+        certificationReason: this.addModalData.certificationReason,
+        certificationExpirationDate: this.addModalData.certificationExpirationDate
       };
 
       console.log("Sending product data to server:", productData);
@@ -437,9 +468,52 @@ export default {
           alert("Failed to register product: " + error.response.data.message);
         });
     },
-    formatNumber(value) {
-      if (!value) return '0';
-      return value.toLocaleString();
+    authenticateProduct(modalType) {
+      const greenProductId = modalType === 'add' ? this.addModalData.greenProductId : this.editModalData.greenProductId;
+      console.log("Authenticating product with ID:", greenProductId);
+      axios.get(`/green-product?prodIxid=${greenProductId}`)
+        .then(response => {
+          console.log("Product authentication response:", response.data);
+          const productInfo = response.data.productInfo; // productInfo 객체로 변경
+
+          if (productInfo.prodRsst !== "01") {
+            alert("인증할 수 없는 제품입니다.");
+            this.prodRsstValid = false;
+            console.log("녹색인증 : " + this.prodRsstValid);
+
+            return;
+          }
+
+          this.prodRsstValid = true;
+          console.log("녹색인증 : " + this.prodRsstValid);
+
+          if (modalType === 'add') {
+            this.addModalData.productNm = productInfo.prodPrnm;
+            this.addModalData.categoryCd = productInfo.prodCfgb;
+            this.addModalData.listPrice = productInfo.prodRedt;
+            this.addModalData.brand = productInfo.prodRsst;
+            this.addModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
+            this.addModalData.imageSrc = response.data.productImage;
+            this.addModalData.labelIdSeq = productInfo.prodCfgb;
+            this.addModalData.certificationReason = productInfo.prodInrs;
+            this.addModalData.certificationExpirationDate = productInfo.prodRedt;
+
+          } else {
+            this.editModalData.productNm = productInfo.prodPrnm;
+            this.editModalData.categoryCd = productInfo.prodCfgb;
+            this.editModalData.listPrice = productInfo.prodRedt;
+            this.editModalData.brand = productInfo.prodRsst;
+            this.editModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
+            this.editModalData.imageSrc = response.data.productImage;
+            this.editModalData.labelIdSeq = productInfo.prodCfgb;
+            this.editModalData.certificationReason = productInfo.prodInrs;
+            this.editModalData.certificationExpirationDate = productInfo.prodRedt;
+          }
+        })
+        .catch(error => {
+          console.error("Error during product authentication:", error);
+          alert("Failed to authenticate product: " + error.response.data.message);
+        });
     }
   }
 };
@@ -463,5 +537,4 @@ export default {
   justify-content: flex-end;
   margin-bottom: 16px;
 }
-
 </style>
