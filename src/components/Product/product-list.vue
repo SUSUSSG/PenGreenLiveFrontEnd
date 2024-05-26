@@ -108,9 +108,9 @@
             <span v-if="props.column.field === 'brand'">
               {{ props.row.brand }}
             </span>
-            <span v-if="props.column.field === 'customer'" class="flex">
-              <img v-for="entry in props.row.customer" :key="entry.name" :src="entry.image" :alt="entry.name"
-                class="object-cover w-full h-full rounded-full" style="width: 24px; margin-right: 5px;" />
+            <span v-if="props.column.field === 'labels'" class="flex">
+              <img v-for="label in props.row.labels" :key="label.labelIdSeq" :src="label.labelImage"
+                :alt="label.labelNm" class="object-cover w-6 h-6 rounded-full mr-2" />
             </span>
           </template>
           <template #pagination-bottom="props">
@@ -240,7 +240,7 @@ export default {
         },
         {
           label: "인증",
-          field: "customer",
+          field: "labels",
           width: '130px',
         },
       ],
@@ -271,10 +271,10 @@ export default {
       }
     },
     fetchProducts(vendorSeq) {
-      axios.get(`/product-list/${vendorSeq}`)
+      axios.get(`/product-list-label?vendorSeq=${vendorSeq}`)
         .then(response => {
-          console.log(response.data);
           this.products = response.data;
+          console.log("products@@@", JSON.stringify(this.products, null, 2));
           console.log("Vendor-specific products loaded", this.products);
         })
         .catch(error => {
