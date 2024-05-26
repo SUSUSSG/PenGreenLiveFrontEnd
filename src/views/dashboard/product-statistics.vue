@@ -84,6 +84,7 @@ export default {
       topProducts: [],
       allProducts: [],
       productData: {
+        productNm: "",
         imageUrl: "",
         productCode: "",
         greenCode: "",
@@ -156,6 +157,7 @@ export default {
         });
         const product = response.data;
         this.productData = {
+          productNm: product.productNm,
           imageUrl: product.productImage,
           productCode: product.productCd,
           greenCode: product.greenProductId,
