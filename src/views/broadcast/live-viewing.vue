@@ -114,21 +114,20 @@ import { useStore } from 'vuex';
 const isBroadcasting = ref(true);
 
 const subscribeToBroadcastEnd = () => {
-  console.log("subscribeToBroadcastEnd 함수 호출됨"); // 로그 추가
+  console.log("subscribeToBroadcastEnd 함수 호출됨");
   const eventSource = new EventSource('http://localhost:8090/api/subscribe');
-  eventSource.addEventListener('broadcast-end', () => {
-    console.log("Broadcast end event received"); // 로그 추가
-    isBroadcasting.value = false;
+  const broadcastId = route.params.broadcastId;
+  eventSource.addEventListener('broadcast-end', (event) => {
+    if(event.data === broadcastId){
+      isBroadcasting.value = false;
+      console.log("Broadcast end event received for broadcastId:", broadcastId);
+    }
   });
 
   eventSource.onerror = (error) => {
     console.error('SSE error:', error);
     eventSource.close();
   };
-
-  onBeforeUnmount(() => {
-    eventSource.close();
-  });
 };
 
 // 라우트 및 환경변수 설정
