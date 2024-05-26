@@ -121,7 +121,7 @@ const isBroadcasting = ref(true);
 // 방송 종료 이벤트 구독
 const subscribeToBroadcastEnd = () => {
   console.log("subscribeToBroadcastEnd 함수 호출됨");
-  const eventSource = new EventSource('http://localhost:8090/api/subscribe');
+  const eventSource = new EventSource(`${import.meta.env.VITE_API_BASE_URL}/subscribe`);
   const broadcastId = route.params.broadcastId;
   eventSource.addEventListener('broadcast-end', (event) => {
     if(event.data === broadcastId){
