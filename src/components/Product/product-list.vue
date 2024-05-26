@@ -398,7 +398,7 @@ export default {
         listPrice: this.editModalData.listPrice,
         productStock: this.editModalData.productStock,
         brand: this.editModalData.brand,
-        base64Image: this.editModalData.base64Image,
+        base64Image: this.editModalData.imageSrc,
         labelIdSeq: this.editModalData.labelIdSeq,
         certificationReason: this.editModalData.certificationReason,
         certificationExpirationDate: this.editModalData.certificationExpirationDate
