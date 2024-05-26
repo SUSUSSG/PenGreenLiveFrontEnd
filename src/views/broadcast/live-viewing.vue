@@ -1,8 +1,5 @@
 <template>
-  <div v-if="!isBroadcasting" class="broadcast-ended">
-      방송이 종료되었습니다.
-    </div>
-  <div class="live-container" :style="{ height: computedHeight + 'px' }" v-else>
+  <div class="live-container" :style="{ height: computedHeight + 'px' }">
     <LiveboardChat class="live-section" :card-width="'30vw'" :card-height="'98vh'" :current-room="{ id: chattingId }"
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
@@ -92,6 +89,12 @@
             </TabGroup>
           </div>
         </main>
+      </div>
+    </div>
+    <div v-if="!isBroadcasting" class="modal-overlay">
+      <div class="modal-content">
+        <p>방송이 종료되었습니다.</p>
+        <Button text="홈으로 이동" @click="redirectToHome" />
       </div>
     </div>
   </div>
@@ -590,5 +593,37 @@ ul.benefits-list li {
 .tab-active {
   border-color: #134010;
   color: #134010;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  width: 600px;
+  height: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content p {
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-size: 20px;
 }
 </style>
