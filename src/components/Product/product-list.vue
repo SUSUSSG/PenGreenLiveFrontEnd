@@ -356,7 +356,7 @@ export default {
         productStock: row.productStock,
         brand: row.brand,
         productImage: row.productImage, // 불러온 이미지 데이터
-        previewImage: row.productImage ? `data:image/jpeg;base64,${row.productImage}` : null,
+        previewImage: row.productImage,
         imageSrc: null, // 이미지가 있을 경우 설정
         labelIdSeq: row.labelIdSeq,
         certificationReason: row.certificationReason,
@@ -399,11 +399,16 @@ export default {
         listPrice: this.editModalData.listPrice,
         productStock: this.editModalData.productStock,
         brand: this.editModalData.brand,
-        base64Image: this.editModalData.imageSrc,
+        productImage: this.editModalData.productImage, // 기존 이미지를 유지
         labelIdSeq: this.editModalData.labelIdSeq,
         certificationReason: this.editModalData.certificationReason,
         certificationExpirationDate: this.editModalData.certificationExpirationDate
       };
+
+      // 이미지가 수정된 경우에만 base64Image를 추가
+      if (this.editModalData.imageSrc) {
+        productData.base64Image = this.editModalData.imageSrc;
+      }
 
       axios.put(url, productData)
         .then(response => {
