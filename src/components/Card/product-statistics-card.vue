@@ -2,15 +2,15 @@
   <div class="card">
     <div class="row">
       <div class="row fs">
-        <div class="product-category" style="font-weight: bold">
+        <div class="product-category" style="font-weight: 400; color:gray">
           {{ category }} > {{ brand }}
         </div>
       </div>
       <div class="row fe">
-        <div class="product-code">{{ productCode }}</div>
+        <div class="product-code" style="color:gray">{{ productCode }}</div>
       </div>
     </div>
-    <div class="row" style="margin-top:0.5rem;">
+    <div class="row" style="margin-top:0.5rem; font-weight:500">
       <div class="product-name">{{ productNm }}</div>
     </div>
     <div class="row">
