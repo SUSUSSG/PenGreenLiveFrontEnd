@@ -91,7 +91,14 @@
         </main>
       </div>
     </div>
-
+    <div v-if="!isBroadcasting" class="modal-overlay">
+      <div class="modal-content">
+        <p>방송이 종료되었습니다.</p>
+        <div class="home-button">
+          <a href="/">홈으로 이동</a>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -108,6 +115,25 @@ import Button from "@/components/Button";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
 
+// 방송 종료 감지
+const isBroadcasting = ref(true);
+
+const subscribeToBroadcastEnd = () => {
+  console.log("subscribeToBroadcastEnd 함수 호출됨");
+  const eventSource = new EventSource('http://localhost:8090/api/subscribe');
+  const broadcastId = route.params.broadcastId;
+  eventSource.addEventListener('broadcast-end', (event) => {
+    if(event.data === broadcastId){
+      isBroadcasting.value = false;
+      console.log("Broadcast end event received for broadcastId:", broadcastId);
+    }
+  });
+
+  eventSource.onerror = (error) => {
+    console.error('SSE error:', error);
+    eventSource.close();
+  };
+};
 
 // 라우트 및 환경변수 설정
 const route = useRoute();
@@ -324,7 +350,7 @@ const incrementViewsCount = async (sessionId) => {
 };
 
 const onClickRedirect = () => {
-  router.push({ name: 'home' });
+  router.push('/');
 };
 
 onMounted(() => {
@@ -341,6 +367,7 @@ onMounted(() => {
 
   intervalId = setInterval(loadLiveBroadcastDetails, 30000); // 15초
 
+  subscribeToBroadcastEnd();
 });
 
 onBeforeUnmount(() => {
@@ -349,6 +376,10 @@ onBeforeUnmount(() => {
 
   if (intervalId) {
     clearInterval(intervalId);
+  }
+
+  if (eventSource) {
+    eventSource.close();
   }
 });
 
@@ -564,5 +595,50 @@ ul.benefits-list li {
 .tab-active {
   border-color: #134010;
   color: #134010;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* 방송 종료 시 */
+.modal-content {
+  background: white;
+  width: 600px;
+  height: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content p {
+  font-weight: bold;
+  margin-bottom: 20px;
+  font-size: 20px;
+}
+
+.home-button {
+  width: 100px;
+  height: 40px;
+  background-color: #134010;
+  border-radius: 5px;
+  padding: 7px;
+}
+
+.home-button a {
+  color: white;
 }
 </style>

@@ -84,7 +84,7 @@ export default {
     toggleBroadcast() {
       const action = this.isBroadcasting ? 'end' : 'start';
 
-      //시간
+      // 시간
       const date = new Date();
       const offset = date.getTimezoneOffset() * 60000; // 밀리초 단위로 변환
       const localDate = new Date(date.getTime() - offset);
@@ -94,12 +94,24 @@ export default {
         broadcastSeq: this.$route.params.broadcastId,
         time: time,
         action: action
-      }
+      };
       console.log("과연 시간은?", requestData);
 
       axios.patch('/update/broadcast-time', requestData)
         .then((response) => {
           console.log(response.data);
+
+          // 방송 종료 이벤트 전송 요청
+          if (this.isBroadcasting) {
+            axios.get(`/broadcast-end/${this.$route.params.broadcastId}`)
+              .then(() => {
+                console.log("Broadcast end event sent successfully");
+              })
+              .catch(error => {
+                console.error("Failed to send broadcast end event:", error);
+              });
+          }
+
           if (this.isBroadcasting) {
             this.$emit('stop-broadcast', this.elapsedTime);
           } else {
@@ -110,7 +122,7 @@ export default {
         })
         .catch(error => {
           console.error('시간 update 실패: ', error);
-        })
+        });
     },
     getCurrentTime() {
       let now = new Date();
