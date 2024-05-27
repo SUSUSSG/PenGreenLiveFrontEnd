@@ -65,6 +65,7 @@
     "vue3-dropzone": "^2.0.1",
     "vuedraggable": "^4.1.0",
     "vuex": "^4.0.2",
+    "vuex-persistedstate": "^4.1.0",
     "webstomp-client": "^1.2.6",
     "yup": "^0.32.11"
   },

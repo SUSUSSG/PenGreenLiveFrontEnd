@@ -1,9 +1,9 @@
 <template>
   <div class="video-wrapper">
     <video ref="videoElement" :muted="isMuted" autoPlay class="video"></video>
-  </div>
-  <div v-if="subtitles.length" class="subtitles">
-    <p v-for="subtitle in subtitles" :key="subtitle.timestamp">{{ subtitle.text }}</p>
+    <div v-if="subtitlesActive && subtitles.length" class="subtitles">
+      <p v-for="subtitle in subtitles" :key="subtitle.timestamp">{{ subtitle.text }}</p>
+    </div>
   </div>
 </template>
 
@@ -19,6 +19,10 @@ export default {
     isPublisher: {
       type: Boolean,
       default: false
+    },
+    subtitlesActive: {
+      type: Boolean,
+      default: true
     }
   },
 
@@ -47,50 +51,35 @@ export default {
     setupWebSocket() {
       const broadcastId = this.$route.params.broadcastId;
       this.websocketClient = new Client({
-        brokerURL: 'wss://pengreen.live/ws/init',  // WebSocket 엔드포인트 URL
+        brokerURL: 'wss://pengreen.live/ws/init',
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
 
       this.websocketClient.onConnect = () => {
-        console.log("WebSocket 연결 성공");
-
-        // 자막 메시지 구독
         this.websocketClient.subscribe(
             `/sub/subtitles/${broadcastId}`,
             (msg) => {
               try {
-                console.log("자막 메시지 파싱 전");
-                const parsedMessage = JSON.parse(msg.body); // JSON 파싱
-
-                console.log("자막 메시지 파싱 후", parsedMessage);
-
-                // 자막 메시지를 자막 배열에 추가
+                const parsedMessage = JSON.parse(msg.body);
                 const subtitle = {
-                  text: parsedMessage.text, // 자막 내용
-                  timestamp: parsedMessage.timestamp // 타임스탬프
+                  text: parsedMessage.text,
+                  timestamp: parsedMessage.timestamp
                 };
                 this.subtitles.push(subtitle);
-
-                // 일정 시간 후 자막 제거
                 setTimeout(() => {
                   this.subtitles = this.subtitles.filter(sub => sub.timestamp !== subtitle.timestamp);
-                }, 5000); // 5초 후 자막 제거
-
+                }, 5000);
               } catch (e) {
-                console.error("자막 메시지 파싱 중 에러 발생:", e);
-                // 파싱 에러 발생 시 기본 정보로 자막 추가
                 const errorSubtitle = {
                   text: "자막을 파싱할 수 없습니다.",
                   timestamp: Date.now()
                 };
                 this.subtitles.push(errorSubtitle);
-
-                // 일정 시간 후 에러 자막 제거
                 setTimeout(() => {
                   this.subtitles = this.subtitles.filter(sub => sub.timestamp !== errorSubtitle.timestamp);
-                }, 5000); // 5초 후 자막 제거
+                }, 5000);
               }
             }
         );
@@ -110,7 +99,7 @@ export default {
       videoElement.play().then(() => {
         setTimeout(() => {
           videoElement.muted = false;
-        }, 1000); // 1초 지연 후 소리 켜기
+        }, 1000);
       }).catch(error => {
         console.error("음소거된 비디오 재생 실패:", error);
       });
@@ -130,15 +119,17 @@ export default {
 <style scoped>
 .video-wrapper {
   width: 100%;
-  aspect-ratio: 9 / 16;
+  height: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 .video {
   width: 100%;
-  height: auto;
-  display: block;
+  height: 100%;
+  object-fit: cover;
 }
+
 
 .subtitles {
   position: absolute;
@@ -152,3 +143,4 @@ export default {
   border-radius: 5px;
 }
 </style>
+

@@ -205,12 +205,10 @@
     import Checkbox from "@/components/Checkbox";
     import Textarea from "@/components/Textarea";
     import Map from "@/components/Map/map.vue";
-    import { NIL } from 'uuid';
 
     const router = useRouter();
 
     const form = ref({
-        userUuid: null,
         userNm: "",
         userGender: "",
         userBirthDt: null,
@@ -427,7 +425,7 @@
     // 공백 및 null 검사
     function validateFormFields() {
         for (const key in form.value) {
-            if (['userUuid', 'optionalAgreementYn', 'userBirthDt', 'userNm'].includes(key)) {
+            if (['optionalAgreementYn', 'userBirthDt', 'userNm'].includes(key)) {
                 continue;
             }
             const value = form.value[key];
