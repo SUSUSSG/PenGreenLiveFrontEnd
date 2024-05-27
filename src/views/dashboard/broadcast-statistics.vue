@@ -40,7 +40,7 @@
       </div>
     </div>
     <div id="detail-result-container" class="w-full p-5 flex flex-col items-center" v-if="!totalStats">
-      <line-chart :chartData="lineChartData" :options="lineChartOptions" :style="{ width: '30%', height: '400px' }"></line-chart>
+      <apexchart type="line" :options="lineChartOptions" :series="lineChartData" width="1600px" height="600px"></apexchart>
     </div>
 
     <!-- 방송 이름별 상세 통계 -->
@@ -64,6 +64,7 @@
         <Button btnClass="btn-primary btn-sm" @click="toggleResult">확인</Button>
       </div>
     </div>
+
     <!-- 방송 이름 선택 -->
     <div id="broadcast-name-container" class="w-full flex justify-center mt-4" v-else>
       <div id="broadcast-name" class="inline-flex items-center gap-4 w-full p-2">
@@ -82,16 +83,13 @@
 import axios from "@/axios";
 import Card from "@/components/Card/analytics-card.vue";
 import Button from "@/components/Button";
-import { Line } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement } from 'chart.js'
-
-ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement)
+import VueApexCharts from "vue3-apexcharts";
 
 export default {
   components: {
     Card,
     Button,
-    LineChart: Line
+    apexchart: VueApexCharts,
   },
   data() {
     return {
@@ -106,58 +104,38 @@ export default {
       resultTitle: "전체 통계",
       searchResultCardDataList: [],
       products: [],
-      lineChartData: {
-        labels: [],
-        datasets: [
-          {
-            label: '시청자 수',
-            backgroundColor: '#f87979',
-            borderColor: '#f87979',
-            fill: false,
-            data: [],
-            pointRadius: 0,
-            pointHoverRadius: 0
-          }
-        ]
-      },
+      lineChartData: [
+        {
+          name: '시청자 수',
+          data: []
+        }
+      ],
       lineChartOptions: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: {
-            type: 'time',
-            time: {
-              unit: 'minute',
-              displayFormats: {
-                minute: 'HH:mm'
-              }
-            },
-            title: {
-              display: true,
-              text: '시간'
-            }
-          },
-          y: {
-            title: {
-              display: true,
-              text: '시청자 수'
-            }
+        chart: {
+          type: 'line',
+          height: 350,
+          zoom: {
+            enabled: false
           }
         },
-        plugins: {
-          legend: {
-            display: true,
-            labels: {
-              color: 'black'
-            }
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        title: {
+          text: '시청자 수',
+          align: 'left'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'],
+            opacity: 0.5
           },
-          tooltip: {
-            callbacks: {
-              title: (tooltipItems) => {
-                return tooltipItems[0].label.replace('T', ' ').substring(0, 16);
-              }
-            }
-          }
+        },
+        xaxis: {
+          categories: []
         }
       }
     };
@@ -357,8 +335,8 @@ export default {
 
         const viewerCountData = response.data;
 
-        this.lineChartData.labels = viewerCountData.map(data => new Date(data.recordTime).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }));
-        this.lineChartData.datasets[0].data = viewerCountData.map(data => data.viewerCount);
+        this.lineChartOptions.xaxis.categories = viewerCountData.map(data => new Date(data.recordTime).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }));
+        this.lineChartData[0].data = viewerCountData.map(data => data.viewerCount);
       } catch (error) {
         console.error("Error fetching viewer count data:", error);
       }
@@ -405,6 +383,7 @@ export default {
 </script>
 
 <style>
+
 #content {
   width: 100%;
 }
@@ -458,19 +437,11 @@ export default {
   margin: auto 0;
 }
 
-#broadcast-name {
-  width: 100%;
-}
-
-.productCard {
+#productCard {
   background: #fafafa;
-  width: 300px;
-  height: 100%;
+  width: 250px;
+  height: 100px;
   padding: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 .card-title {
@@ -490,7 +461,7 @@ export default {
   color: #111111;
 }
 
-.product-image {
+.product-image{
   width: 50px;
   height: 50px;
 }
