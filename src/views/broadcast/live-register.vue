@@ -182,10 +182,10 @@
             <div class="section mt-7">
               <div class="mb-4">
                 <div class="mb-2"> <!-- 질문 -->
-                  <Textinput label="질문" type="text" v-model="newQuestion" placeholder="질문을 입력해주세요" />
+                  <Textinput label="자주묻는 질문" type="text" v-model="newQuestion" placeholder="질문을 입력해주세요" />
                 </div>
                 <div class="mb-2"> <!-- 답변 -->
-                  <Textarea label="답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
+                  <Textarea label="자주묻는 답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
                 </div>
                 <div class="text-center mb-2">
                   <Button @click="addAnswer" type="button" btnClass="btn-sm ml-2 mt-5 btn-outline-dark" text="추가" />
@@ -476,10 +476,6 @@ export default {
     registerBroadcast() {
       const toast = useToast();
 
-      toast.clear();
-      this.loading = true;
-      toast.info("방송 정보를 저장 중입니다");
-
       // JSON 형식의 데이터 구성
       const requestData = {
         broadcastTitle: this.liveTitle,
@@ -492,6 +488,42 @@ export default {
         benefits: this.benefits,
         image: this.imageSrc
       };
+
+      // 필수 필드가 비어 있는지 확인
+      const requiredFields = [
+        'broadcastTitle',
+        'broadcastSummary',
+        'broadcastScheduledTime',
+        'categoryCd',
+        'registeredProducts',
+        'notices',
+        'qa',
+        'benefits',
+        'image'
+      ];
+
+      // 필드 이름과 한글 이름 매핑
+      const fieldNamesInKorean = {
+        broadcastTitle: '라이브 제목',
+        broadcastSummary: '라이브 한줄 소개',
+        broadcastScheduledTime: '라이브 예정 시간',
+        categoryCd: '카테고리 ',
+        registeredProducts: '판매할 상품',
+        notices: '공지사항',
+        qa: '자주묻는 질문과 답변',
+        benefits: '라이브 혜택',
+        image: '썸네일'
+      };
+
+      for (const field of requiredFields) {
+        if (!requestData[field]) {
+          this.loading = false;
+          toast.info(`${fieldNamesInKorean[field]} 정보가 비어 있습니다.`, {
+            timeout: 2000,
+          });
+          return;
+        }
+      }
 
       console.log(requestData);
 
