@@ -1,30 +1,32 @@
 <template>
   <div className="main-wrapper">
-    <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast"
-                   :boradcast-title="liveBroadcastInfo.broadcast.broadcastTitle"
-                   :live-date-time="liveBroadcastInfo.broadcast.broadcastScheduledTime"/>
-    <div className="content-wrapper">
-      <div className="flex-row">
-        <div className="flex-col">
-          <div className="flex-row">
-            <LiveboardBroad :stream-manager="mainStreamManager"
-                            :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage" />
-            <LiveBoardChat :current-room="{ id: broadcastId }" :current-writer="'판매자'" class="card-radius"/>
+    <div v-if="liveBroadcastInfo.broadcast">
+      <LiveBoardTime @start-broadcast="joinSession" @stop-broadcast="handleStopBroadcast"
+                    :broadcast-title="liveBroadcastInfo.broadcast.broadcastTitle"
+                    :live-date-time="liveBroadcastInfo.broadcast.broadcastScheduledTime"/>
+      <div className="content-wrapper">
+        <div className="flex-row">
+          <div className="flex-col">
+            <div className="flex-row">
+              <LiveboardBroad :stream-manager="mainStreamManager"
+                              :broadcast-image="liveBroadcastInfo.broadcast.broadcastImage" />
+              <LiveBoardChat :current-room="{ id: broadcastId }" :current-writer="'판매자'" class="card-radius"/>
+            </div>
           </div>
-        </div>
-        <div className="flex-col">
-          <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck"
-                               @update-statistics="updateStatistics"
-                               :channelNm="liveBroadcastInfo.broadcast.channelNm"/>
-          <LiveboardProduct :products="liveBoradcastProduct" />
-          <LiveboardPrompt :broadcastSeq="broadcastId" />
-        </div>
-        <div className="flex-col">
-          <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio" :broadcast-title="무야호"
-                            @broadcast-device-selected="handleDeviceChange"
-                            :notices="liveBroadcastInfo.notices"
-                            :faqs="liveBroadcastInfo.faqs"
-                            :broadcast-id="broadcastId"/>
+          <div className="flex-col">
+            <LiveBoardStatistics ref="liveBoardStatistics" :session-id="mySessionId" :start-check="readyToCheck"
+                                @update-statistics="updateStatistics"
+                                :channelNm="liveBroadcastInfo.broadcast.channelNm"/>
+            <LiveboardProduct :products="liveBoradcastProduct" />
+            <LiveboardPrompt :broadcastSeq="broadcastId" />
+          </div>
+          <div className="flex-col">
+            <LiveboardSidebar @toggle-video="toggleVideo" @toggle-audio="toggleAudio"
+                              @broadcast-device-selected="handleDeviceChange"
+                              :notices="liveBroadcastInfo.notices"
+                              :faqs="liveBroadcastInfo.faqs"
+                              :broadcast-id="broadcastId"/>
+          </div>
         </div>
       </div>
     </div>
