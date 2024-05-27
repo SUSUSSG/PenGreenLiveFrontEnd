@@ -1,19 +1,17 @@
 <template>
   <div class="broadcast-section">
     <p class="ai-card-title">나의 최근 시청기록</p>
-    <div class="broadcast-list">
+    <div v-if="broadcasts.length" class="broadcast-list">
       <div
         class="broadcast-card"
         v-for="broadcast in broadcasts"
         :key="broadcast.broadcastSeq"
         @click="navigateToBroadcast(broadcast.broadcastSeq)"
-
       >
-      <div class="row">
-        <img :src="broadcast.channelImage? broadcast.channelImage
-                    : 'https://placehold.co/80x80'" alt="채널 이미지" class="channel-image"/>
-        <p class="channel-name"> {{ broadcast.channelNm }}</p>
-      </div>
+        <div class="row">
+          <img :src="broadcast.channelImage ? broadcast.channelImage : 'https://placehold.co/80x80'" alt="채널 이미지" class="channel-image" />
+          <p class="channel-name">{{ broadcast.channelNm }}</p>
+        </div>
         <img
           :src="broadcast.broadcastImage"
           alt="방송 이미지"
@@ -34,6 +32,25 @@
         </div>
       </div>
     </div>
+    <div v-else class="no-broadcasts">
+      <div
+        style="
+          width: 50px;
+          height: 50px;
+          text-align: center;
+          line-height: 2.5rem;
+          font-size: 2rem;
+          color: lightgray;
+          margin: 1rem auto;
+          margin-top: 2rem;
+          border-radius: 100%;
+          border: 2px solid lightgray;
+        "
+      >
+        !
+      </div>
+      <p>현재 조회된 시청기록이 없습니다.</p>
+    </div>
     <div class="card-button" @click="goToBroadcastHistory">
       <p class="card-text">자세히 보러가기</p>
     </div>
@@ -49,7 +66,7 @@ export default {
       broadcasts: [],
     };
   },
-  
+
   mounted() {
     this.fetchBroadcasts();
   },
@@ -85,36 +102,36 @@ export default {
 };
 </script>
 
-
 <style scoped>
-.row{
+.row {
   display: flex;
   flex-direction: row;
   width: 100%;
-  height:fit-content;
-  justify-content:flex-start;
+  height: fit-content;
+  justify-content: flex-start;
   align-items: center;
-  margin-bottom:1rem;
+  margin-bottom: 1rem;
   gap: 1rem;
 }
 
-.channel-image{
+.channel-image {
   border-radius: 100%;
   object-fit: cover;
   aspect-ratio: 1/1;
   width: 60px;
   height: 60px;
-  border : 0.5px solid gray;
+  border: 0.5px solid gray;
 }
 
-.channel-name{
+.channel-name {
   font-size: 1.2rem;
   font-weight: bold;
-  width:180px;
+  width: 180px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
 .broadcast-section {
   background-color: #f9f9f9;
   padding: 20px;
@@ -223,5 +240,12 @@ export default {
 
 .card-text {
   font-size: 1.2rem;
+}
+
+.no-broadcasts {
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  margin: 20px 0;
 }
 </style>
