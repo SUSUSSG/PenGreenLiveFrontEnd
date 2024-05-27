@@ -285,7 +285,7 @@ export default {
       this.isSessionActive = false;
       this.stopRecognition(); // 방송 종료 시 자막 인식 중지
       this.readyToCheck = false;  // 방송을 중지할 때 false로 설정
-      this.$router.push('/broadcast-statistics');
+      window.location.href = "/broadcast-statistics";
     },
     // 비동기 요청으로 세션을 만들고 세션 접속에 필요한 토큰을 가져옵니다.
     getToken(sessionId) {
