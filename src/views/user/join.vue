@@ -389,11 +389,8 @@
             const { address, zonecode, buildingName } = event.data;
             addressForm.value.address = address;
             addressForm.value.zonecode = zonecode;
-            addressForm.value.detailAddress = `(${buildingName}) `;
-            form.value.userAddress = ` ${zonecode} ${address} ${addressForm.value.detailAddress}`;
+            addressForm.value.detailAddress = buildingName ? `(${buildingName}) `: '';
         });
-
-        console.log(form.value.userAddress);
     };
 
 
@@ -471,6 +468,8 @@
         if (emailValid && userIdValid && userPwValid && passwordsMatch) {
             console.log("유효성 검사 통과");
             try {
+                form.value.userAddress = `[${addressForm.value.zonecode}] ${addressForm.value.address} ${addressForm.value.detailAddress}`;
+
                 const response = await axios.post('/signup', form.value);
                 if (response.data === 'success') {
                     router.push('/');
