@@ -6,10 +6,10 @@
                     <div class="vgt-inner-wrap">
                         <div class="vgt-fixed-header"></div>
                         <div class="vgt-responsive">
-                            <div class="d-flex justify-content-center" style="margin-bottom: 3rem">
+                            <div class="flex justify-center my-[2rem]">
                                 <div class="text-center">
                                 <div class="user-img">
-                                    <img :src="form.userProfileImg ? form.userProfileImg : defaultImage" alt="Profile Picture"
+                                    <img :src="user.userProfileImg ? user.userProfileImg : defaultImage" alt="Profile Picture"
                                         class="profile profile-image-preview"
                                         style="cursor: pointer;" @click="toggleModal"/>
                                 </div>
@@ -17,11 +17,15 @@
                                 </div>
                             </div>
 
-             
-                            <div class="modify-button-group">
-                                <div class="modify-btn-group-vertical">
-                                    <button class="btn modify-btn" @click="selectImage" type="button">사진 선택</button>
-                                    <button class="btn modify-btn" @click="changeDefaultImg" type="button">기본 이미지로 변경</button>
+                            <div class="flex justify-center mb-[1rem] items-center">
+                                <div class="modify-btn-group-vertical flex justify-center items-center">
+                                    <div class="btn modify-btn" @click="selectImage" type="button">
+                                        <p class="change-img-btn">사진 변경</p>
+                                    </div>
+                                    <div class="div">|</div>
+                                    <div class="btn modify-btn" @click="changeDefaultImg" type="button">
+                                        <p class="change-default-img-btn">기본 이미지로 변경</p>
+                                    </div>
                                 </div>
                             </div>
         
@@ -167,7 +171,7 @@
         userEmail: "",
         userAddress: "",
         userPw: "",
-        userProfileImg: null,
+        userProfileImgFile: null,
     });
     
     const user = ref({});
@@ -314,21 +318,21 @@
 
 
     async function updateUserProfile() {
-        console.log(addressForm.value);
-        console.log(form.value.userAddress);
+        console.log(form.value);
+  
 
-        try {
-            const response = await axios.patch(`/user/address`, {
-                form
-            });
-            if (response.data) {
-            address.value = response.data;
-            } else {
-            address.value = null;
-            } 
-        } catch(error) {
-            console.error("회원정보 변경 실패", error);
-        }
+        // try {
+        //     const response = await axios.patch(`/user/address`, {
+        //         form
+        //     });
+        //     if (response.data) {
+        //     address.value = response.data;
+        //     } else {
+        //     address.value = null;
+        //     } 
+        // } catch(error) {
+        //     console.error("회원정보 변경 실패", error);
+        // }
     }
 
     function openAddressPopup(data) {
@@ -372,7 +376,6 @@
     const fileInput = ref(null);
     const profilePic = ref(null);
 
-
     const show = ref(false);
     const toggleModal = () => {
         show.value = !show.value;
@@ -383,43 +386,31 @@ function selectImage() {
 }
 
 function changeDefaultImg() {
-    form.value.userProfileImg = defaultImage;
+    form.value.userProfileImgFile = defaultImage;
 }
 
 function onFileChange(event) {
-  const file = event.target.files[0];
-  if (file) {
-    if (!file.type.match("image/*")) {
-      alert("이미지 파일만 업로드할 수 있습니다.");
-      return;
-    }
+    const file = event.target.files[0];
+    if (file) {
+        if (!file.type.match("image/*")) {
+        alert("이미지 파일만 업로드할 수 있습니다.");
+        return;
+        }
 
-    compressImage(file).then(compressedFile => {
-      if (compressedFile) {
         const reader = new FileReader();
         reader.onload = function (e) {
-          form.value.userProfileImg = e.target.result;
+            form.value.userProfileImgFile = e.target.result;
+            const base64String = e.target.result.split(',')[1];
+            form.value.userProfileImgFile = base64String;
         };
-        reader.readAsDataURL(compressedFile);
-      }
-    }).catch(error => {
-      console.error("이미지 압축 오류:", error);
-    });
-  }
+        reader.readAsDataURL(file);
+    } else {
+        this.addModalData.previewImage = null;
+        this.addModalData.imageSrc = null;
+    }
 }
 
-async function compressImage(inputFile) {
-  try {
-    const options = {
-      maxSizeMB: 0.5,
-      maxWidthOrHeight: 1000,
-    };
-    return await imageCompression(inputFile, options);
-  } catch (error) {
-    console.error("이미지 압축 오류", error);
-    return null;
-  }
-}
+
 </script>
   
 <style scoped>
@@ -452,8 +443,8 @@ async function compressImage(inputFile) {
 
 img.profile-image-preview {
     border-radius: 50%;
-    height: 10rem;
-    width: 10rem;
+    height: 8rem;
+    width: 8rem;
     object-fit: cover;
     object-position: center;
 }
@@ -477,11 +468,22 @@ img.profile-image-preview {
 }
 
 .modify-btn {
-    width: 100%;
     height: 90%;
     background: white;
     text-align: left;
-    font-size: 1rem;
+    font-size: 14px;
 }
 
+.change-img-btn {
+    color : #0066ff;
+    font-weight: 500;
+}
+
+.change-default-img-btn {
+    font-weight: 500;
+}
+
+.div {
+    font-size: 14px;
+}
 </style>
