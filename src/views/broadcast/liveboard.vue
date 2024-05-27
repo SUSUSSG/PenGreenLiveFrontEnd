@@ -401,6 +401,7 @@ export default {
   height: 100%;
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
 }
 
 .content-wrapper {
