@@ -271,6 +271,8 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const product = computed(() => (store.getters.selectedProduct));
+const userName = computed(() => store.getters.userName);
+
 
 const emit = defineEmits(['openTossPay']);
 
@@ -388,6 +390,12 @@ const brandPayComponent = ref(null);
 
 // 결제 요청 
 async function requestPayment() {
+
+    if (!checked.value) {
+        alert('결제 약관에 동의하세요');
+        return;
+    }
+
     const totalAmount = computed(() => store.getters.orderForm.orderPayedPrice).value;
     const orderId = generateOrderId();
     await store.dispatch('setOrderId', orderId);
@@ -406,7 +414,7 @@ async function requestPayment() {
                 amount: totalAmount,
                 orderId: orderId,
                 orderName: product.value.productName,
-                customerName: "김토스",
+                customerName: userName.value,
                 successUrl: window.location.origin + '/success',
                 failUrl: window.location.origin + '/fail',
                 flowMode: selectedPayment.value.flowMode,
