@@ -14,16 +14,29 @@
         />
       </div>
     </div>
-    <div class="mt-3 mb-3">
-      <Alert class="green-alert" dismissible>{{ notice }}</Alert>
+
+    <!-- 공지사항 부분 시작 -->
+    <div class="mt-3 mb-3" style="display:flex;justify-content:center; flex-direction:column;">
+      <button
+        @click="toggleNotice"
+        class="text-sm text-blue-500 focus:outline-none notice-button"
+      >
+        {{ showNotice ? "공지사항 접기" : "공지사항 펼치기" }}
+      </button>
+      <Alert v-if="showNotice" class="green-alert" dismissible>{{
+        notice
+      }}</Alert>
     </div>
+    <!-- 공지사항 부분 끝 -->
+
     <div v-if="alertMessage" class="mt-3 mb-3">
       <Alert class="red-alert" dismissible>{{ alertMessage }}</Alert>
     </div>
-    <div class="scroll-wrapper">
+
+    <div class="scroll-wrapper relative" @scroll="handleScroll">
       <div class="chat-container flex flex-col justify-end">
         <ul class="chat-messages">
-          <div class="enter-message" style="display: none">
+          <div class="enter-message" style="display: none; z-index: 9999">
             -- 채팅방에 입장했습니다 --<br />
             바람직한 채팅 문화를 위해 바른 언어를 사용해요😉🐧
           </div>
@@ -41,7 +54,11 @@
             </div>
             <div class="flex flex-row">
               <span class="chat-time">{{ message.time }}</span>
-              <span class="chat-user-id">{{ message.writer }}</span>
+              <span
+                class="chat-user-id"
+                :style="{ color: getUserColor(message.writer) }"
+                >{{ message.writer }}</span
+              >
               <span
                 :class="{
                   'chat-text': true,
@@ -55,6 +72,9 @@
           </li>
         </ul>
       </div>
+    </div>
+    <div class="text-center text-sm text-gray-500">
+      {{ remainingCharacters }}자 입력 가능
     </div>
     <div class="chat-input-container">
       <button @click="toggleTTS" class="mr-2 focus:outline-none">
@@ -78,7 +98,9 @@
         class="chat-input-field"
         @keyup.enter.prevent="sendChat"
         :disabled="isBlocked"
+        maxlength="50"
       />
+
       <button
         type="button"
         class="chat-send-button"
@@ -248,8 +270,16 @@ export default {
       alertMessage: "",
       messageTimestamps: [],
       isTTSEnabled: true,
+      showOverlay: false, // 오버레이 표시 여부를 제어하는 변수 추가
+      showNotice: false, // 공지사항 표시 여부를 제어하는 변수 추가
     };
   },
+  computed: {
+    remainingCharacters() {
+      return 50 - this.newMessage.length;
+    },
+  },
+
   methods: {
     connect() {
       // const url = "ws://223.130.147.232:8090/ws/init";
@@ -450,6 +480,21 @@ export default {
         this.speechSynthesis.speak(utterance);
       }
     },
+    getUserColor(username) {
+      const hash = Array.from(username).reduce(
+        (acc, char) => char.charCodeAt(0) + ((acc << 5) - acc),
+        0
+      );
+      const color = `hsl(${hash % 360}, 95%, 35%)`;
+      return color;
+    },
+    handleScroll() {
+      const container = this.$el.querySelector(".scroll-wrapper");
+      this.showOverlay = container.scrollHeight > container.clientHeight;
+    },
+    toggleNotice() {
+      this.showNotice = !this.showNotice;
+    },
   },
 };
 </script>
@@ -469,6 +514,7 @@ export default {
   flex-grow: 1;
   overflow-y: auto;
   height: 100%;
+  position: relative; /* 부모 요소에 상대 위치 지정 */
 }
 
 .chat-container {
@@ -483,7 +529,6 @@ export default {
 .chat-user-id {
   font-weight: bold;
   font-size: 16px;
-  color: #23a100;
   margin-left: 8px;
   text-wrap: nowrap;
 }
@@ -538,9 +583,11 @@ export default {
   align-items: center;
   justify-content: center;
 }
+
 .text-gray {
   color: #c3c3c3;
 }
+
 .chat-send-button:hover {
   background: #265d8a;
 }
@@ -549,7 +596,16 @@ export default {
   background-color: #134010;
   color: white;
 }
-
+.notice-button{
+  color:#134010;
+  background-color: rgb(231, 236, 231);
+  width:30%;
+  align-self: center;
+  justify-self: center;
+  margin-bottom: 0.5rem;
+  border-radius: 10rem;
+  height: 30px;
+}
 .green-alert {
   color: #134010;
   background-color: rgba(19, 64, 16, 0.2);
