@@ -130,40 +130,24 @@
                       <th class="px-6">상품 코드</th>
                       <th class="px-9">정가</th>
                       <th class="px-20">할인율 (%)</th>
-                      <th class="px-6">할인된 가격</th>
-                      <th class="px-10 py-3">추가</th>
+                      <th class="px-6">판매가</th>
+                      <th class="px-10 py-3">삭제</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <tr v-for="(product, index) in productsToRegister" :key="index">
-                      <td class="px-6 py-4">{{ product.name }}</td>
-                      <td class="px-6 py-4">{{ product.code }}</td>
-                      <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
-                      <td class="px-6 py-4">
-                        <input type="number" v-model.number="product.discountRate" class="input-control" max="100">
-                        <Button @click="applyDiscount(index)"
-                          :disabled="product.discountRate > 100 || product.discountRate <= 0"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" type="button"
-                          text="적용" />
-                      </td>
-                      <td class="px-6 py-4">{{ formatCurrency(product.discountPrice) }}</td>
-                      <td class="px-6 py-4">
-                        <Button @click="registerProduct(index)"
-                          :disabled="product.discountRate > 100 || product.discountRate <= 0"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5  btn-outline-dark" type="button"
-                          text="추가" />
-                      </td>
-                    </tr>
-                  </tbody>
                 </table>
                 <br>
                 <ul>
-                  <li v-for="(registered, idx) in registeredProducts" :key="idx"
-                    class="list-item flex items-center justify-between mt-1">
-                    <div class="bg-gray-100 p-2 rounded">
-                      <span class="registered-name">{{ registered.name }}</span>
-                      <span class="registered-code">({{ registered.code }})</span>
-                      방송 판매가 : <span class="registered-price"> {{ formatCurrency(registered.discountPrice) }}</span>
+                  <li v-for="(product, idx) in registeredProducts" :key="idx" class="list-item flex items-center justify-between mt-1">
+                  <div class="bg-gray-100 p-2 rounded">
+                    <span class="registered-name">{{ product.name }}</span>
+                    <span class="registered-code">[{{ product.code }}]</span>
+                    <span class="registered-code">{{ product.originalPrice }}</span>
+                    <input type="number" v-model.number="product.discountRate" class="input-control" max="100">
+                    <Button @click="applyDiscount(idx)"
+                    :disabled="product.discountRate > 100 || product.discountRate <= 0"
+                    btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" type="button"
+                    text="적용" />
+                    <span class="registered-price"> {{ formatCurrency(product.discountPrice) }}</span>
                       <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" style="float: right;"
                         class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
                     </div>
@@ -352,7 +336,7 @@ export default {
           originalPrice: ''
         }],
       selectedRows: [], //모달에서 선택된 상품
-      productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
+      // productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
       registeredProducts: [], // 할인율이 적용된 상품들
 
       //step3
@@ -429,13 +413,9 @@ export default {
       this.modalOpen = true;
 
       this.selectedRows.forEach(product => {
-        // 이미 productsToRegister 배열에 존재하는지 확인
-        const isDuplicateInProductsToRegister = this.productsToRegister.some(item => item.code === product.productCode);
-        // 이미 registeredProducts 배열에 존재하는지 확인
         const isDuplicateInRegisteredProducts = this.registeredProducts.some(item => item.code === product.productCode);
-        if (!isDuplicateInProductsToRegister && !isDuplicateInRegisteredProducts) {
-          // productsToRegister 배열에 추가
-          this.productsToRegister.push({
+        if (!isDuplicateInRegisteredProducts) {
+          this.registeredProducts.push({
             productSeq: product.productSeq,
             name: product.productName,
             code: product.productCode,
@@ -445,14 +425,14 @@ export default {
       });
 
       // 선택된 결과를 콘솔에 출력
-      console.log('선택된 상품 목록:', this.productsToRegister);
+      console.log('선택된 상품 목록:', this.registeredProducts);
 
       this.isOpen = true;
       this.$refs.salesProductModal.openModal();
     },
 
     applyDiscount(index) {
-      const product = this.productsToRegister[index];
+      const product = this.registeredProducts[index];
       const discount = (product.originalPrice * product.discountRate) / 100;
       product.discountPrice = Math.round((product.originalPrice - discount) / 10) * 10;
     },
@@ -478,21 +458,6 @@ export default {
     formatCurrency(value) {
       if (!value) return '';
       return `${parseInt(value).toLocaleString('ko-KR')}원`;
-    },
-    registerProduct(index) {
-      const product = this.productsToRegister[index];
-      const discount = (product.originalPrice * product.discountRate) / 100;
-      let discountPrice = product.originalPrice - discount;
-
-      // 10원 단위로 반올림
-      discountPrice = Math.round(discountPrice / 10) * 10;
-
-      product.discountPrice = discountPrice;
-      this.registeredProducts.push(product);
-      this.productsToRegister.splice(index, 1);
-    },
-    deleteRegisteredProduct(index) {
-      this.registeredProducts.splice(index, 1);
     },
     addNotice() {
       if (this.newNotice.trim()) {
