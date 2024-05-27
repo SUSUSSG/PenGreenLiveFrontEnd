@@ -37,7 +37,7 @@
           </div>
           <template v-slot:footer>
             <Button text="등록" btnClass="btn-dark btn-sm" @click="registerProduct" />
-            <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal()" />
+            <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="$refs.modal1.closeModal(); resetAddModalData();" />
           </template>
         </Modal>
 
@@ -532,7 +532,27 @@ export default {
           console.error("Error during product authentication:", error);
           alert("Failed to authenticate product: " + error.response.data.message);
         });
-    }
+    },
+    resetAddModalData() {
+    this.addModalData = {
+      productCd: '',
+      greenProductId: '',
+      productNm: '',
+      categoryCd: '',
+      listPrice: null,
+      productStock: null,
+      brand: '',
+      imageSrc: null,
+      previewImage: null,
+      vendorSeq: 1,
+      channelSeq: 1,
+      categories: [],
+      selectedCategory: '',
+      labelIdSeq: 0,
+      certificationReason: '',
+      certificationExpirationDate: ''
+    };
+  }
   }
 };
 </script>
