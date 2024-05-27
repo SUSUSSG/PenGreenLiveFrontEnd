@@ -95,16 +95,16 @@
                     <thead>
                       <tr>
                         <th class="px-4">선택</th>
-                        <!-- <th class="px-3">상품 이미지</th> -->
+                        <th class="px-3">상품 이미지</th>
                         <th class="px-6">상품 이름</th>
                         <th class="px-5">상품 코드</th>
-                        <th class="px-8 py-2">원가</th>
+                        <th class="px-8 py-2">정가</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr v-for="(product, index) in channelSalesProduct" :key="index">
                         <td class="px-6"><input type="checkbox" v-model="selectedRows" :value="product"></td>
-                        <!-- <td class="px-7"><img :src="'data:image/png;base64,' + product.productImg"></td> -->
+                        <td class="px-7"><img :src="product.productImg" class="channel-sales-product-img"></td>
                         <td class="px-6">{{ product.productName }}</td>
                         <td class="px-6">{{ product.productCode }}</td>
                         <td class="px-6">{{ formatCurrency(product.originalPrice) }}</td>
@@ -593,5 +593,10 @@ thead {
 
 label {
   color: black;
+}
+
+.channel-sales-product-img {
+  width: 100px;
+  height: 100px;
 }
 </style>
