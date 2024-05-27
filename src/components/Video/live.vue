@@ -31,7 +31,6 @@
           </div>
         </div>
       </div>
-      <!-- 방송 시작전 썸네일 -->
       <div v-else class="broadcast-image">
         <img :src="broadcastImage">
         <div class="overlay">
@@ -44,6 +43,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import axios from "@/axios";
 import VideoPlayer from "@/components/Video/videoplayer.vue";
@@ -84,7 +84,7 @@ export default {
       broadcastId: undefined,
       isLiked: false,
       likesCount: 0,
-      isMuted: false,
+      isMuted: true,
       subtitlesActive: true,
       announceIconSrc: announceIcon,
       heartIconSrc: heartIcon,
@@ -108,35 +108,29 @@ export default {
     setInterval(async () => {
       await this.updateLikes();
     }, 15000);
+    await this.checkLikes();
   },
   beforeUnmount() {
     clearInterval(this.likesUpdateInterval);
   },
   methods: {
-    toggleLike() {
+    async toggleLike() {
       this.isLiked = !this.isLiked;
       if (this.isLiked) {
         this.likesCount += 1;
-        this.likeQueue.push(1);
+        await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
+          params: {
+            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
+          }
+        });
       } else {
         this.likesCount -= 1;
-        this.likeQueue.push(-1);
+        await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
+          params: {
+            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
+          }
+        });
       }
-      this.processLikeQueue();
-    },
-    processLikeQueue() {
-      if (this.likeTimeout) {
-        clearTimeout(this.likeTimeout);
-      }
-      this.likeTimeout = setTimeout(() => {
-        const totalLikes = this.likeQueue.reduce((acc, val) => acc + val, 0);
-        this.likeQueue = [];
-        if (totalLikes > 0) {
-          this.incrementLike(totalLikes);
-        } else if (totalLikes < 0) {
-          this.decrementLike(-totalLikes);
-        }
-      }, 5000);
     },
     toggleMute() {
       this.isMuted = !this.isMuted;
@@ -148,7 +142,6 @@ export default {
       this.showLanguageMenu = !this.showLanguageMenu;
     },
     setLanguage(language) {
-      // Implement translation functionality here
       alert(`Language set to ${language}`);
       this.showLanguageMenu = false;
     },
@@ -163,31 +156,28 @@ export default {
             console.error("Failed to copy text: ", err);
           });
     },
-    incrementLike(count) {
-      axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/increment`, { count })
-          .then(response => console.log("좋아요 수 증가"))
-          .catch(error => console.log("좋아요 증가 실패: " + error));
-    },
-    decrementLike(count) {
-      axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/decrement`, { count })
-          .then(response => console.log("좋아요 수 감소"))
-          .catch(error => console.log("좋아요 감소 실패: " + error));
-    },
     async fetchLikes() {
       try {
-        const response = await axios.get(`/broadcasts/statistics/${this.broadcastId}`);
+        const response = await axios.get(`/broadcasts/statistics/${this.broadcastId}`, {
+          params:{
+            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
+          }
+        });
         return response.data;
       } catch (error) {
-        console.error('좋아요를 가져오지 못했습니다.', error);
+        console.error('Failed to fetch likes:', error);
         throw error;
       }
+    },
+    async checkLikes(){
+      this.isLiked = axios.get(`/broadcasts/statistics/${this.$route.params.broadcastId}/likes/check`)
     },
     async updateLikes() {
       try {
         const statistics = await this.fetchLikes();
         this.likesCount = statistics.likesCount;
       } catch (error) {
-        console.error('업데이트 실패:', error);
+        console.error('Failed to update likes:', error);
       }
     }
   },
@@ -196,6 +186,7 @@ export default {
   }
 };
 </script>
+
 <style scoped>
 .video-component {
   display: flex;
@@ -227,7 +218,6 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-end;
   width: 100%;
   height: 100%;
   position: absolute;

@@ -48,13 +48,13 @@
       <div id="detailResultName" class="ml-3">판매 상품</div>
       <div class="row inline-flex mt-5" id="product">
         <div v-for="(product, i) in products" :key="i" class="inline-flex ml-3">
-          <div class="inline-flex rounded pt-3 px-4 pl-0" id="productCard">
+          <div class="productCard inline-flex rounded p-3">
             <div class="flex items-center justify-center">
               <img :src="product.img" class="product-image" alt="Product Image" />
             </div>
             <div class="ml-3 flex flex-col justify-center">
               <div class="text-lg text-slate-900 dark:text-white font-medium mb-[6px]">{{ product.nm }}</div>
-              <div class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]">{{ product.price }}원 ({{ product.discountRate }}%)</div>
+              <div class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]">{{ formatPrice(product.price) }}원 ({{ product.discountRate }}%)</div>
               <div class="text-xl text-slate-900 dark:text-white font-bold mb-[6px]">구매 전환률 : {{product.conversionRate}}%</div>
             </div>
           </div>
@@ -64,12 +64,11 @@
         <Button btnClass="btn-primary btn-sm" @click="toggleResult">확인</Button>
       </div>
     </div>
-
     <!-- 방송 이름 선택 -->
-    <div v-else>
-      <div class="inline-flex inline-flex items-center gap-4">
+    <div id="broadcast-name-container" class="w-full flex justify-center mt-4" v-else>
+      <div id="broadcast-name" class="inline-flex items-center gap-4 w-full p-2">
         <div id="searchTitle" class="mr-5">방송 목록</div>
-        <select v-model="selectedBroadcastTitleOption">
+        <select v-model="selectedBroadcastTitleOption" class="flex-grow">
           <option :value="null">제목</option>
           <option v-for="option in broadcastOptions" :key="option.value" :value="option.value">{{ option.label }}</option>
         </select>
@@ -242,7 +241,7 @@ export default {
           {
             icon: "heroicons:circle-stack",
             analyticsTitle: "평균 구매 금액",
-            analyticsResult: `${avgPurchaseAmountResponse.data}원`,
+            analyticsResult: `${this.formatPrice(avgPurchaseAmountResponse.data)}원`,
             cardTitle: "구매 금액",
           },
         ];
@@ -299,7 +298,7 @@ export default {
           {
             icon: "heroicons:circle-stack",
             analyticsTitle: "평균 구매 금액",
-            analyticsResult: `${broadcastStatistics.avgPurchaseAmount}원`,
+            analyticsResult: `${this.formatPrice(broadcastStatistics.avgPurchaseAmount)}원`,
             cardTitle: "금액",
           },
           {
@@ -321,7 +320,7 @@ export default {
           {
             icon: "heroicons:circle-stack",
             analyticsTitle: "총 판매 금액/수량",
-            analyticsResult: `${broadcastStatistics.totalSalesAmount}/${broadcastStatistics.totalSalesQty}`,
+            analyticsResult: `${this.formatPrice(broadcastStatistics.totalSalesAmount)}/${broadcastStatistics.totalSalesQty}`,
           },
           {
             icon: "heroicons:hand-thumb-up",
@@ -345,6 +344,9 @@ export default {
       const minutes = Math.floor((seconds % 3600) / 60);
       const secs = seconds % 60;
       return `${hours}시간 ${minutes}분 ${secs}초`;
+    },
+    formatPrice(price) {
+      return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     },
     async fetchViewerCountData() {
       if (!this.selectedBroadcastTitleOption) return;
@@ -370,7 +372,7 @@ export default {
         console.log(response.data);
         this.products = response.data.map(product => {
           return {
-            name: product.productNm,
+            nm: product.productNm,
             price: product.listPrice,
             discountRate: product.discountRate,
             img: product.productImage,
@@ -402,14 +404,13 @@ export default {
 };
 </script>
 
-
 <style>
-
 #content {
   width: 100%;
 }
 
-#search-container {
+#search-container,
+#broadcast-name-container {
   padding: 10px;
   border-radius: 0.5rem;
   background: white;
@@ -457,11 +458,19 @@ export default {
   margin: auto 0;
 }
 
-#productCard {
+#broadcast-name {
+  width: 100%;
+}
+
+.productCard {
   background: #fafafa;
-  width: 250px;
-  height: 100px;
+  width: 300px;
+  height: 100%;
   padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .card-title {
@@ -481,7 +490,7 @@ export default {
   color: #111111;
 }
 
-.product-image{
+.product-image {
   width: 50px;
   height: 50px;
 }

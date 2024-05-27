@@ -369,7 +369,9 @@ const handleDiscountedPrice = (discountedPrice, product) => {
 };
 const incrementViewsCount = async (sessionId) => {
   console.log("세션 id", sessionId);
-  await axios.patch(`/broadcasts/statistics/${sessionId}/viewsCount`);
+  await axios.patch(`/broadcasts/statistics/${sessionId}/viewsCount`,
+      { withCredentials: true }
+  );
 };
 
 const onClickRedirect = () => {

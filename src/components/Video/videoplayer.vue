@@ -15,7 +15,7 @@ export default {
 
   props: {
     streamManager: Object,
-    isMuted: Boolean,
+    isMuted: true,
     isPublisher: {
       type: Boolean,
       default: false
@@ -36,7 +36,7 @@ export default {
   mounted() {
     this.streamManager.addVideoElement(this.$refs.videoElement);
     if (!this.isPublisher) {
-      this.unmuteVideo();
+      // this.unmuteVideo();
       this.setupWebSocket();
     }
   },
@@ -93,17 +93,17 @@ export default {
       this.websocketClient.activate();
     },
 
-    unmuteVideo() {
-      const videoElement = this.$refs.videoElement;
-      videoElement.muted = true;
-      videoElement.play().then(() => {
-        setTimeout(() => {
-          videoElement.muted = false;
-        }, 1000);
-      }).catch(error => {
-        console.error("음소거된 비디오 재생 실패:", error);
-      });
-    },
+    // unmuteVideo() {
+    //   const videoElement = this.$refs.videoElement;
+    //   videoElement.muted = true;
+    //   videoElement.play().then(() => {
+    //     setTimeout(() => {
+    //       videoElement.muted = false;
+    //     }, 1000);
+    //   }).catch(error => {
+    //     console.error("음소거된 비디오 재생 실패:", error);
+    //   });
+    // },
   },
 
   watch: {
