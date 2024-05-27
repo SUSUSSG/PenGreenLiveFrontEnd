@@ -56,9 +56,8 @@ export default {
   },
   methods: {
     fetchOrders() {
-      const userUuid = "f23a72e0-1347-11ef-b085-f220affc9a21";
       axios
-        .get(`/unreviewed-orders/${userUuid}`)
+        .get(`/unreviewed-orders`)
         .then((response) => {
           this.orders = response.data;
         })

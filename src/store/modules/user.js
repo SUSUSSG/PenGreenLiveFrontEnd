@@ -29,7 +29,7 @@ const mutations = {
 const actions = {
   async loadRooms(context) {
 
-    let response = await fetch(`/api/v1/room`, {
+    let response = await fetch(`/v1/room`, {
         method: "GET"
     });
 
@@ -55,7 +55,7 @@ const actions = {
 async loadEnteredRooms(context) {
     const userId = 2;
 
-    let response = await fetch(`/api/v1/room/joined?userId=${userId}`, {
+    let response = await fetch(`/v1/room/joined?userId=${userId}`, {
         method: "GET",
     });
 

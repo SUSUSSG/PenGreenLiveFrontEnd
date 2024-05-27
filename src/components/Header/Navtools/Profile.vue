@@ -3,27 +3,24 @@
     <div class="flex items-center">
       <div class="flex-1 ltr:mr-[10px] rtl:ml-[10px]">
         <div class="lg:h-8 lg:w-8 h-7 w-7 rounded-full">
-          <img
-            :src= "profileImg"
-            alt=""
-            class="block w-full h-full object-cover rounded-full"
-          />
+          <img v-if="isAuthenticated" :src="profileImg" alt="Profile Image" class="block w-full h-full object-cover rounded-full"/>
+          <Icon v-else icon="heroicons-outline:login"/>
         </div>
       </div>
       <div
         class="flex-none text-slate-600 dark:text-white text-sm font-normal items-center lg:flex hidden overflow-hidden text-ellipsis whitespace-nowrap"
       >
         <span
-          class="overflow-hidden text-ellipsis whitespace-nowrap w-[85px] block"
-          >여진구민석</span
-        >
+          class="overflow-hidden text-ellipsis whitespace-nowrap w-[85px] block">          
+            {{ isAuthenticated ? userName : '로그인하세요' }}
+          </span>
         <span class="text-base inline-block ltr:ml-[10px] rtl:mr-[10px]"
           ><Icon icon="heroicons-outline:chevron-down"></Icon
         ></span>
       </div>
     </div>
     <template #menus>
-      <MenuItem v-slot="{ active }" v-for="(item, i) in ProfileMenu" :key="i">
+      <MenuItem v-slot="{ active }" v-for="(item, i) in filteredMenu" :key="i">
         <div
           type="button"
           :class="`${
@@ -45,54 +42,84 @@
     </template>
   </Dropdown>
 </template>
-<script>
+<script setup>
+import { computed, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
+import { useStore } from 'vuex';
 import { MenuItem } from "@headlessui/vue";
 import Dropdown from "@/components/Dropdown";
-import Icon from "@/components/Icon/index.vue";
-import profileImg from "@/assets/images/all-img/user.png"
-export default {
-  components: {
-    Icon,
-    Dropdown,
-    MenuItem,
-  },
-  data() {
-  return {
-    profileImg,
-    ProfileMenu: [
-      {
-        label: "프로필",
-        icon: "heroicons-outline:user", // 프로필을 나타내는 아이콘
-        link: () => {
-          this.$router.push("profile");
-        },
-      },
-      {
-        label: "주문 내역",
-        icon: "heroicons-outline:clipboard-list", // 주문 내역을 나타내는 아이콘
-        link: () => {
-          this.$router.push("chat");
-        },
-      },
-      {
-        label: "설정",
-        icon: "heroicons-outline:cog", // 설정을 나타내는 아이콘
-        link: () => {
-          this.$router.push("email");
-        },
-      },
-      {
-        label: "Logout",
-        icon: "heroicons-outline:logout", // 로그아웃을 나타내는 아이콘
-        link: () => {
-          this.$router.push("/");
-          localStorage.removeItem("activeUser");
-        },
-      },
-    ],
-  };
-},
+import Icon from "@/components/Icon";
+import defaultProfileImg from "@/assets/images/all-img/user.png";  // 기본 이미지 경로
 
-};
+const router = useRouter();
+const store = useStore();
+
+const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
+const userName = computed(() => store.getters['auth/userName']);
+const userUUID = computed(() => store.getters['auth/userUUID']);
+const profileImg = ref(defaultProfileImg);
+
+watch([userUUID, isAuthenticated], ([newUUID, isAuth]) => {
+  console.log("isAuthenticated ", isAuthenticated.value);
+  console.log("userUUID ", userUUID.value);
+  console.log("userName ", userName.value);
+
+  if (isAuth && newUUID) {
+    profileImg.value = `/src/assets/images/users/user-1.jpg`; 
+  } else {
+    profileImg.value = defaultProfileImg;
+  }
+}, { immediate: true });
+
+const filteredMenu = computed(() => {
+  return [
+    {
+      label: "프로필",
+      icon: "heroicons-outline:user",
+      link: () => {
+        router.push("profile");
+      },
+      requiresAuth: true,
+    },
+    {
+      label: "주문 내역",
+      icon: "heroicons-outline:clipboard-list",
+      link: () => {
+        router.push("order-list");
+      },
+      requiresAuth: true,
+    },
+    {
+      label: "설정",
+      icon: "heroicons-outline:cog",
+      link: () => {
+        router.push("settings");
+      },
+      requiresAuth: true,
+    },
+    {
+      label: "대시보드",
+      icon: "heroicons-outline:home",
+      link: () => {
+        router.push("dashboard");
+      },
+      requiresAuth: true,
+    },
+    {
+      label: "Logout",
+      icon: "heroicons-outline:logout",
+      link: () => {
+        store.dispatch('auth/logout');
+        router.push("/");
+      },
+      requiresAuth: true,
+    },
+  ].filter(item => item.requiresAuth === isAuthenticated.value);
+});
+
+function handleLogin() {
+  router.push("/member/login");
+}
+
 </script>
 <style lang=""></style>
