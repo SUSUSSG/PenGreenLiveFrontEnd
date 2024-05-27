@@ -66,6 +66,7 @@ export default {
     return {
       allProducts: [],
       productData: {
+        productNm: "",
         productSeq: null,
         imageUrl: "",
         productCode: "",
@@ -119,6 +120,7 @@ export default {
         );
         const product = response.data;
         this.productData = {
+          productNm: product.productNm,
           imageUrl: product.productImage,
           productCode: product.productCd,
           productSeq: product.productSeq,

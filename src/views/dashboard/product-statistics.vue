@@ -39,7 +39,7 @@
 import axios from "@/axios";
 import AnalyticsCard from "@/components/Card/analytics-card.vue";
 import StatsTable from "@/components/Table/statistics-default-table.vue";
-import ProductCard from "@/components/Card/product-statistics-card.vue";
+import ProductCard from "@/components/Card/product-statistics-product-card.vue";
 
 export default {
   components: {
@@ -84,6 +84,7 @@ export default {
       topProducts: [],
       allProducts: [],
       productData: {
+        productNm: "",
         imageUrl: "",
         productCode: "",
         greenCode: "",
@@ -156,6 +157,7 @@ export default {
         });
         const product = response.data;
         this.productData = {
+          productNm: product.productNm,
           imageUrl: product.productImage,
           productCode: product.productCd,
           greenCode: product.greenProductId,

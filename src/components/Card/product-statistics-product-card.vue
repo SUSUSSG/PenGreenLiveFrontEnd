@@ -1,5 +1,20 @@
 <template>
   <div class="card">
+    <div class="card-image">
+        <img :src="imageUrl" alt="Product Image" />
+      </div>
+
+
+
+
+
+
+
+
+
+
+
+
     <div class="row">
       <div class="row fs">
         <div class="product-category" style="font-weight: 400; color:gray">
@@ -14,9 +29,7 @@
       <div class="product-name">{{ productNm }}</div>
     </div>
     <div class="row">
-      <div class="card-image">
-        <img :src="imageUrl" alt="Product Image" />
-      </div>
+      
       <div class="stats-card-content">
         <div class="row">
           <p class="info-description">상품 가격</p>
@@ -124,8 +137,8 @@ export default {
 
 .card-image {
   flex: 0 0 auto;
-  width: 170px; /* 이미지 너비를 조절할 수 있습니다. */
-  height: 170px; /* 이미지 높이를 조절할 수 있습니다. */
+  width: 100%; /* 이미지 너비를 조절할 수 있습니다. */
+  height: 200px; /* 이미지 높이를 조절할 수 있습니다. */
   margin-right: 1rem;;
 }
 
