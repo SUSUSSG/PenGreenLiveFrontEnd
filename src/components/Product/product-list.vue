@@ -71,12 +71,12 @@
             <label class="ltr:inline-block rtl:block input-label">상품이미지</label><br>
             <input type="file" id="imageUpload" @change="handleEditImageUpload"
               accept="image/jpeg, image/png, image/gif" class="mt-2 text-base text-slate-600 dark:text-slate-300" />
-            <img v-if="editModalData.previewImage" :src="editModalData.previewImage" alt="대표 이미지 미리보기"
-              style="max-width: 100px">
+            <img v-if="editModalData.previewImage" :src="decodeBase64(editModalData.previewImage)" alt="대표 이미지 미리보기"
+              style="max-width: 100px;">
           </div>
           <template v-slot:footer>
             <Button text="닫기" btnClass="btn-outline-dark btn-sm" @click="closeEditModal" />
-            <Button text="저장" btnClass="btn-dark btn-sm" @click="updateProductDetails" :disabled="!prodRsstValid" />
+            <Button text="저장" btnClass="btn-dark btn-sm" @click="updateProductDetails" />
           </template>
         </Modal>
       </div>
@@ -181,6 +181,7 @@ export default {
         imageSrc: null,
         productImage: null,
         previewImage: null,
+        initialGreenProductId: '', // 초기 녹색제품 통합ID 저장
       },
       advancedTable,
       current: 1,
@@ -320,6 +321,7 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.addModalData.previewImage = e.target.result;
+          console.log("Loaded Image Data:", this.addModalData.previewImage);
           const base64String = e.target.result.split(',')[1];
           this.addModalData.imageSrc = base64String;
         };
@@ -335,16 +337,25 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.editModalData.previewImage = e.target.result;
+          console.log("Loaded Image Data for Edit:", this.editModalData.previewImage);
           const base64String = e.target.result.split(',')[1];
           this.editModalData.imageSrc = base64String;
         };
         reader.readAsDataURL(file);
       } else {
-        this.editModalData.previewImage = null;
-        this.editModalData.imageSrc = this.editModalData.productImage;
+        this.editModalData.previewImage = this.editModalData.productImage;
+        console.log("No new image selected for edit, using existing image.");
+        this.editModalData.imageSrc = null;
       }
     },
-
+    decodeBase64(encodedString) {
+      try {
+        return atob(encodedString);
+      } catch (e) {
+        console.error("Failed to decode Base64 string:", e);
+        return encodedString; // fallback to original string
+      }
+    },
     openEditModal(row) {
       this.editModalData = {
         productSeq: row.productSeq,
@@ -355,15 +366,16 @@ export default {
         listPrice: row.listPrice,
         productStock: row.productStock,
         brand: row.brand,
-        productImage: row.productImage, // 불러온 이미지 데이터
-        // previewImage: row.productImage ? `data:image/jpeg;base64,${row.productImage}` : null,
-        imageSrc: null, // 이미지가 있을 경우 설정
+        previewImage: row.productImage, // 이미지 URL이 있으면 사용, 없으면 null
+        productImage: row.productImage, // 참조를 할당
+        imageSrc: null, // 새로운 이미지 업로드 시 사용될 변수
         labelIdSeq: row.labelIdSeq,
         certificationReason: row.certificationReason,
         certificationExpirationDate: row.certificationExpirationDate,
+        initialGreenProductId: row.greenProductId,
       };
-
       this.prodRsstValid = row.brand === "01";
+      console.log("Edit modal opened for product with image data: ", this.editModalData.previewImage);
       this.$refs.editModal.openModal();
     },
     closeEditModal() {
@@ -383,7 +395,7 @@ export default {
       this.customer.splice(index, 1);
     },
     updateProductDetails() {
-      if (this.prodRsstValid === false) {
+      if (this.editModalData.greenProductId !== this.editModalData.initialGreenProductId && !this.prodRsstValid) {
         alert("녹색제품 통합ID 인증이 필요합니다.");
         return;
       }
@@ -398,11 +410,19 @@ export default {
         listPrice: this.editModalData.listPrice,
         productStock: this.editModalData.productStock,
         brand: this.editModalData.brand,
-        base64Image: this.editModalData.base64Image,
         labelIdSeq: this.editModalData.labelIdSeq,
         certificationReason: this.editModalData.certificationReason,
-        certificationExpirationDate: this.editModalData.certificationExpirationDate
+        certificationExpirationDate: this.editModalData.certificationExpirationDate,
+        productImage: this.editModalData.productImage
       };
+
+      if (this.editModalData.imageSrc) {
+        // 이미지가 수정된 경우 base64 인코딩된 이미지 전송
+        productData.base64Image = this.editModalData.imageSrc;
+      } else {
+        // 이미지가 수정되지 않은 경우 productImage 필드를 추가하지 않음
+        delete productData.base64Image;
+      }
 
       axios.put(url, productData)
         .then(response => {
