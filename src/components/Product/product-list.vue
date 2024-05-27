@@ -181,7 +181,8 @@ export default {
         imageSrc: null,
         productImage: null,
         previewImage: null,
-        initialGreenProductId: '', // 초기 녹색제품 통합ID 저장
+        initialGreenProductId: ''
+       
       },
       advancedTable,
       current: 1,
@@ -373,6 +374,7 @@ export default {
         certificationReason: row.certificationReason,
         certificationExpirationDate: row.certificationExpirationDate,
         initialGreenProductId: row.greenProductId,
+        certificationCode: row.certificationCode
       };
       this.prodRsstValid = row.brand === "01";
       console.log("Edit modal opened for product with image data: ", this.editModalData.previewImage);
@@ -509,9 +511,6 @@ export default {
 
           if (modalType === 'add') {
             this.addModalData.productNm = productInfo.prodPrnm;
-            this.addModalData.categoryCd = productInfo.prodCfgb;
-            this.addModalData.listPrice = productInfo.prodRedt;
-            this.addModalData.brand = productInfo.prodRsst;
             this.addModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
             this.addModalData.imageSrc = response.data.productImage;
             this.addModalData.labelIdSeq = productInfo.prodCfgb;
@@ -520,14 +519,13 @@ export default {
 
           } else {
             this.editModalData.productNm = productInfo.prodPrnm;
-            this.editModalData.categoryCd = productInfo.prodCfgb;
-            this.editModalData.listPrice = productInfo.prodRedt;
-            this.editModalData.brand = productInfo.prodRsst;
             this.editModalData.previewImage = `data:image/jpeg;base64,${response.data.productImage}`;
             this.editModalData.imageSrc = response.data.productImage;
             this.editModalData.labelIdSeq = productInfo.prodCfgb;
             this.editModalData.certificationReason = productInfo.prodInrs;
             this.editModalData.certificationExpirationDate = productInfo.prodRedt;
+            this.editModalData.certificationCode = productInfo.prodRsst;
+
           }
         })
         .catch(error => {
