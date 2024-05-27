@@ -158,8 +158,7 @@
                   class="list-item flex items-center justify-between mt-1">
                   <div class="bg-gray-100 p-2 rounded">
                     <span>{{ notice }}</span>
-                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" style="float: right;"
-                      class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" class="icon-delete"/>
                   </div>
                 </li>
               </ul>
@@ -177,8 +176,7 @@
                   class="list-item flex items-center justify-between mt-1">
                   <div class="bg-gray-100 p-2 rounded">
                     <span>{{ item }}</span>
-                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" style="float: right;"
-                      class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" class="icon-delete"/>
                   </div>
                 </li>
               </ul>
@@ -201,8 +199,7 @@
               <dl>
                 <div v-for="(item, index) in qa" :key="index" class="faq-item mt-1">
                   <div class="bg-gray-100 p-2 rounded">
-                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" style="float: right;"
-                      class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" class="icon-delete"/>
                     <dt class="question">{{ item.questionTitle }}</dt>
                     <dd class="answer">{{ item.questionAnswer }}</dd>
                   </div>
