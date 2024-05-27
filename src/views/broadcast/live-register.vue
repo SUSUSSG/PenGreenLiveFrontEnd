@@ -52,7 +52,7 @@
             <br>
 
             <label>대표 이미지 등록</label>
-            <div style="display: flex; align-items: center;">
+            <div style="display: flex; align-items: center;" class="mt-2">
               <div style="flex-shrink: 0;">
                 <img :src="previewImage" alt="previewImage" style="width: 180px; height: 320px" />
               </div>
@@ -64,17 +64,18 @@
               </div>
             </div>
             <br>
-
-            <Textinput label="라이브 예정일/시간" type="datetime-local" name="liveDateTime" v-model="liveDateTime" />
+            <div>
+              <label for="liveDateTime" class="mr-12">라이브 예정일/시간</label>
+              <input type="datetime-local" id="liveDateTime" name="liveDateTime" v-model="liveDateTime"
+                :min="minDateTime" />
+            </div>
             <div class="mt-5">
-              <label>방송 카테고리 선택</label>
-              <div class="mt-2">
-                <select v-model="selectedCategory" @change="handleCategoryChange">
-                  <option value="" disabled selected hidden>선택하기</option>
-                  <option v-for="category in categories" :key="category.value" :value="category.value">{{
-                    category.label }}</option>
-                </select>
-              </div>
+              <label class="mr-12">방송 카테고리 선택</label>
+              <select v-model="selectedCategory" @change="handleCategoryChange">
+                <option value="" disabled selected hidden>선택하기</option>
+                <option v-for="category in categories" :key="category.value" :value="category.value">{{
+                  category.label }}</option>
+              </select>
             </div>
           </Card>
         </div>
@@ -86,8 +87,8 @@
             <div class="box">
               <div class="right-content">
                 <!-- 모달 -->
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark" ref="salesProductModal" modal-class="modal-position"
-                  :sizeClass="'max-w-4xl'">
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark" ref="salesProductModal"
+                  modal-class="modal-position" :sizeClass="'max-w-4xl'">
                   <div class="modal-content">
                     <table class="modal-table">
                       <thead>
@@ -306,6 +307,7 @@ export default {
       liveTitle: '',
       liveSummary: '',
       liveDateTime: '',
+      minDateTime: '',
       imageFile: null,
       previewImage: "https://via.placeholder.com/90x160",
       categories: [], // 카테고리 목록을 담을 배열
@@ -336,6 +338,7 @@ export default {
   created() {
     this.loadCategories(); // 카테고리 목록 가져오기
     this.loadChannelSalesProduct(); // 판매자가 판매하는 제품 목록 가져오기
+    this.setMinDateTime();
   },
   methods: {
     // 카테고리 목록을 가져오는 API
@@ -358,7 +361,15 @@ export default {
     handleCategoryChange() {
       console.log(this.selectedCategory); //확인용
     },
-
+    setMinDateTime() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      this.minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    },
     toggleSelection(product) {
       const index = this.selectedRows.indexOf(product);
       if (index === -1) {
