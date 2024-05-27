@@ -9,7 +9,9 @@
 
     <div class="video-and-sidebar-wrapper">
       <div v-if="streamManager">
-        <VideoPlayer :stream-manager="streamManager" :is-muted="isMuted" :subtitles-active="subtitlesActive"></VideoPlayer>
+        <div class="video-player-wrapper" v-if="streamManager">
+          <VideoPlayer :stream-manager="streamManager" :is-muted="isMuted" :subtitles-active="subtitlesActive"></VideoPlayer>
+        </div>
         <div class="icons-sidebar" v-if="showIconSideBar">
           <div class="icon-wrapper" @click="toggleLike">
             <img ref="heartIcon" :src="isLiked ? activeHeartIconSrc : heartIconSrc" class="heart-icon" />
@@ -230,6 +232,16 @@ export default {
   width: 100%;
   height: 100%;
   position: absolute;
+}
+
+.video-player-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
 
 .icons-sidebar {

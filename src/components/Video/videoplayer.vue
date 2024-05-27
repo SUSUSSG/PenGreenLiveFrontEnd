@@ -119,15 +119,17 @@ export default {
 <style scoped>
 .video-wrapper {
   width: 100%;
-  aspect-ratio: 9 / 16;
+  height: 100%;
   position: relative;
+  overflow: hidden;
 }
 
 .video {
   width: 100%;
-  height: auto;
-  display: block;
+  height: 100%;
+  object-fit: cover;
 }
+
 
 .subtitles {
   position: absolute;
@@ -141,3 +143,4 @@ export default {
   border-radius: 5px;
 }
 </style>
+
