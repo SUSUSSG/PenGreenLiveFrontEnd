@@ -11,7 +11,7 @@
                                 <div class="user-img">
                                     <img :src="user.userProfileImg ? user.userProfileImg : defaultImage" alt="Profile Picture"
                                         class="profile profile-image-preview"
-                                        style="cursor: pointer;" @click="toggleModal"/>
+                                        @click="toggleModal"/>
                                 </div>
                                 <input type="file" ref="fileInput" accept="image/*" style="display: none;" @change="onFileChange">
                                 </div>
@@ -19,11 +19,11 @@
 
                             <div class="flex justify-center mb-[1rem] items-center">
                                 <div class="modify-btn-group-vertical flex justify-center items-center">
-                                    <div class="btn modify-btn" @click="selectImage" type="button">
+                                    <div class="btn modify-btn" @click="selectImage" style="cursor: pointer;" type="button">
                                         <p class="change-img-btn">사진 변경</p>
                                     </div>
                                     <div class="div">|</div>
-                                    <div class="btn modify-btn" @click="changeDefaultImg" type="button">
+                                    <div class="btn modify-btn" @click="changeDefaultImg" style="cursor: pointer;" type="button">
                                         <p class="change-default-img-btn">기본 이미지로 변경</p>
                                     </div>
                                 </div>
