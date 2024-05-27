@@ -27,7 +27,7 @@ onMounted(async () => {
   try {
     await loadTossPaymentsSDK();
     brandpay.value = window.BrandPay(clientKey, customerKey, {
-      redirectUrl: 'http://localhost:8090/api/brandpay/callback-auth',
+      redirectUrl: '/brandpay/callback-auth',
     });
 
     const totalAmount = order.orderPayedPrice ? order.orderPayedPrice : 1;
