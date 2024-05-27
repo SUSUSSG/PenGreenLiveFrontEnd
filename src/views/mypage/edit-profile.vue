@@ -372,7 +372,7 @@
     }
 
     // 프로필 이미지 변경
-    const defaultImage = '/src/assets/images/users/default-img.png';
+    const defaultImage = 'https://kr.object.ncloudstorage.com/susussg-img-bucket/user-profile/default-img.png';
     const fileInput = ref(null);
     const profilePic = ref(null);
 
@@ -386,7 +386,7 @@ function selectImage() {
 }
 
 function changeDefaultImg() {
-    form.value.userProfileImgFile = defaultImage;
+    form.value.userProfileImg = defaultImage;
 }
 
 function onFileChange(event) {
@@ -399,7 +399,7 @@ function onFileChange(event) {
 
         const reader = new FileReader();
         reader.onload = function (e) {
-            form.value.userProfileImgFile = e.target.result;
+            user.value.userProfileImg = e.target.result;
             const base64String = e.target.result.split(',')[1];
             form.value.userProfileImgFile = base64String;
         };
@@ -409,7 +409,6 @@ function onFileChange(event) {
         this.addModalData.imageSrc = null;
     }
 }
-
 
 </script>
   
