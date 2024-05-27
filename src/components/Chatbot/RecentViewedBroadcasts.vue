@@ -42,7 +42,6 @@
 
 <script>
 import axios from "@/axios";
-const userUUID = "f23a72e0-1347-11ef-b085-f220affc9a21";
 
 export default {
   data() {
@@ -57,9 +56,7 @@ export default {
   methods: {
     fetchBroadcasts() {
       axios
-        .get(`/recently-viewed/broadcasts`, {
-          params: { userUUID }
-        })
+        .get(`/recently-viewed/broadcasts`)
         .then((response) => {
           console.log("Broadcasts response:", response.data);
           this.broadcasts = response.data;
