@@ -53,7 +53,6 @@ import muteIcon from "@/assets/images/all-img/mute.png";
 import shareIcon from "@/assets/images/all-img/share.png";
 import soundIcon from "@/assets/images/all-img/speaker.png";
 import redheart from "@/assets/images/all-img/redheart.png";
-import languageIcon from "@/assets/images/all-img/language.png";
 
 export default {
   components: {
@@ -95,7 +94,7 @@ export default {
       shareIconSrc: shareIcon,
       subtitlesActiveIconSrc: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/broadcast-icon/free-icon-subtitles-active.png',
       subtitlesInactiveIconSrc: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/broadcast-icon/free-icon-subtitles-inactive.png',
-      languageIconSrc: languageIcon,
+      languageIconSrc: undefined,
       showLanguageMenu: false,
       OV: null,
       session: null,
