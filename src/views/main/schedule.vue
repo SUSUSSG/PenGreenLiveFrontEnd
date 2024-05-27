@@ -6,7 +6,7 @@
     <div class="border-container">
       <MenuHeaderNav />
       <hr />
-      <DataTab @date-selected="handleDateSelect" />
+      <DataTab ref="dataTab" @date-selected="handleDateSelect" />
       <hr />
       <div
         style="
@@ -16,10 +16,7 @@
           background-color: white;
         "
       >
-        <Categories
-          @category-selected="handleCategorySelect"
-          style="padding-bottom: 1rem"
-        />
+        <Categories ref="categories" @category-selected="handleCategorySelect" style="padding-bottom: 1rem" />
         <hr />
       </div>
       <div class="content-wrapper">
@@ -117,10 +114,11 @@ export default {
     };
   },
   created() {
-    this.fetchLiveData();
+    // fetchLiveData는 created에서 호출하지 않음.
   },
   mounted() {
     this.startHideTitleTimer();
+    this.initializeSelections();
   },
   watch: {
     selectedDate() {
@@ -138,6 +136,11 @@ export default {
       this.selectedCategory = categoryCd;
     },
     async fetchLiveData() {
+      // 선택된 날짜가 없으면 요청을 보내지 않음
+      if (!this.selectedDate) {
+        return;
+      }
+
       this.loading = true;
       this.liveData = []; // 데이터 초기화
       try {
@@ -194,6 +197,16 @@ export default {
           }, 7500);
         }
       }, 15000); // 5초 후에 3초 간격으로 반복
+    },
+    initializeSelections() {
+      // 첫 번째 날짜 선택
+      const firstDate = this.$refs.dataTab.dates[0].date;
+      this.selectedDate = firstDate;
+      this.$refs.dataTab.selectDate(firstDate);
+      
+      // '전체' 카테고리 선택
+      this.selectedCategory = null;
+      this.$refs.categories.selectCategory(null);
     },
   },
 };
