@@ -18,7 +18,7 @@
                                             <h4 class="font-medium">PenGreenLive 판매자 로그인</h4>
                                             <div class="text-slate-500 dark:text-slate-400 text-base">로그인 후 대시보드를 이용할 수 있습니다.</div>
                                         </div>
-                                        <form class="space-y-4 ">
+                                        <form class="space-y-4 "  @submit.prevent="handleLogin">
                                             <div class="fromGroup       ">
                                                 <div class="relative">
                                                     <div class="flex items-center space-x-2">
@@ -26,14 +26,14 @@
                                                             class="form-control py-2 h-[48px]"
                                                             placeholder="사업자번호1"
                                                             type="text"
-                                                            v-model="partOne"
+                                                            v-model="businessNumber.partOne"
                                                             @input="moveFocus($event, 3, 'inputTwo')"
                                                             maxlength="3">
                                                         <input 
                                                             class="form-control py-2 h-[48px]"
                                                             placeholder="사업자번호2"
                                                             type="text"
-                                                            v-model="partTwo"
+                                                            v-model="businessNumber.partTwo"
                                                             @input="moveFocus($event, 2, 'inputThree')"
                                                             maxlength="2"
                                                             ref="inputTwo">
@@ -41,16 +41,16 @@
                                                             class="form-control py-2 h-[48px]"
                                                             placeholder="사업자번호3"
                                                             type="text"
-                                                            v-model="partThree"
+                                                            v-model="businessNumber.partThree"
                                                             maxlength="5"
-                                                        ref="inputThree">
+                                                            ref="inputThree">
                                                     </div>
                                                 </div>
                                                 <label class="block capitalize form-label  ">사업자번호를 입력하세요</label>
                                             </div>
                                             <div class="fromGroup       ">
                                                 <div class="relative ">
-                                                    <input type="password" name="password" class="form-control py-2 h-[48px]  " placeholder="비밀번호">
+                                                    <input v-model="password" type="password" name="password" class="form-control py-2 h-[48px]  " placeholder="비밀번호">
                                                     <div class="flex text-xl absolute ltr:right-[14px] rtl:left-[14px] top-1/2 -translate-y-1/2  space-x-1 rtl:space-x-reverse"></div>
                                                 </div>
                                                 <label class="block capitalize form-label  ">비밀번호를 입력하세요</label>
@@ -91,9 +91,17 @@
 
 <script setup> 
     import { ref, reactive } from 'vue';
+    import { useRouter } from 'vue-router';
+    import { useStore } from 'vuex';
+    import axios from '@/axios'
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
     import creditCard from "@/components/InputGroup";
+
+    const router = useRouter();
+    const store = useStore();
+    
+    const password = ref(null);
 
     const businessNumber = reactive({
         partOne: '',
@@ -110,6 +118,42 @@
                 inputTwo.value.focus();
             } else if (nextInputRef === 'inputThree') {
                 inputThree.value.focus();
+            }
+        }
+    }
+
+    function loginValidate() {
+        return username.value && password.value;
+    }
+
+    async function handleLogin() {
+
+        if (!loginValidate()) {
+            alert("아이디 또는 비밀번호를 입력해주세요.");
+            return;
+        }
+        
+        const username = `${businessNumber.partOne}${businessNumber.partTwo}${businessNumber.partThree}`;
+
+        console.log("username ", username, password);
+
+        try {
+            console.log(username, password.value);
+            await store.dispatch('auth/loginVendor', 
+            { username: username, password: password.value }, 
+            // {
+            //     headers: { 'Content-Type': 'application/json' }
+            // }
+            );
+            router.push("/");
+            alert("로그인 성공.");
+        } catch (error) {
+            console.error('login error', error);
+            if (error.response && error.response.status === 401) {
+                console.error('Authentication failed:', error.response.data);
+                alert("아이디 또는 비밀번호가 잘못되었습니다.");
+            } else {
+                alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
             }
         }
     }

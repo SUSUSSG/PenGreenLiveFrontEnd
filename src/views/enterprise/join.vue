@@ -12,8 +12,10 @@
                     <div>
                         <div class="relative flex-1">
                             <Checkbox
+                                v-model="agreement"
                                 label="개인정보의 수집 및 이용 동의 (필수)"
-                                name="tc" value="1" :checked="false" />
+                                name="tc" value="1" :checked="false" 
+                                />
                             <textarea class="form-control py-2 h-[100px] my-3" name="pd" readonly>당사는 다음과 같이 개인 정보를 수집하고 있습니다.
 수집항목 : (필수) [기본 정보] 사업자번호(ID), 비밀번호, 담당자 연락처, 담당자 성명, 담당자 이메일 [협력사 정보] 대표자명, 법인번호(생년월일), 주소, 전화번호
 이용목적 : 상품 입점 제안 관련 제안 채택 여부 통지 및 채택 후 협의, 협력사 만족도 조사
@@ -26,6 +28,7 @@
                             label="개인정보의 수집 및 이용 동의 (선택)"
                             name="tc"
                             value="1"
+                            v-model="formData.optionalAgreementConsent"
                             :checked="false"
                         />
                             <textarea class="form-control py-2 h-[100px] my-3" name="pd" readonly>당사는 다음과 같이 개인 정보를 수집하고 있습니다.
@@ -59,9 +62,9 @@
                             
                                     <td class="vgt-left-align">
                                         <div class="flex items-center space-x-3">
-                                            <input type="text" name="pn1" class="classinput input-control flex-item block focus:outline-none w-full h-[40px]">
-                                            <input type="text" name="pn2" class="classinput input-control flex-item block focus:outline-none w-full h-[40px]">
-                                            <input type="text" name="pn3" class="classinput input-control flex-item block focus:outline-none w-full h-[40px]">
+                                            <input v-model="businessId1" type="text" class="classinput input-control flex-item block focus:outline-none w-full h-[40px]">
+                                            <input v-model="businessId2" type="text" class="classinput input-control flex-item block focus:outline-none w-full h-[40px]">
+                                            <input v-model="businessId3" type="text" class="classinput input-control flex-item block focus:outline-none w-full h-[40px]">
                                             <div class="button-container">
                                                 <Button text="조회" btnClass="btn-primary"/>
                                             </div>
@@ -72,7 +75,7 @@
                                     </td>
                                     <td class="vgt-left-align">
                                         <div class="relative">
-                                            <input type="text" name="pn4" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn4">
+                                            <input v-model="formData.vendorNm" type="text" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn4">
                                         </div>                                    
                                     </td>
                                 </tr>
@@ -82,7 +85,7 @@
                                     </td>
                                     <td class="vgt-left-align">
                                         <div class="relative">
-                                            <input type="password" name="pn5" placeholder="비밀번호 (8~20자 영문+숫자)" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn5">
+                                            <input v-model="formData.vendorPw" type="password" placeholder="비밀번호 (8~20자 영문+숫자)" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn5">
                                         </div>
                                     </td>
                                     <td class="vgt-left-align"></td>
@@ -94,7 +97,7 @@
                                     </td>
                                     <td class="vgt-left-align">
                                         <div class="relative">
-                                            <input type="password" name="pn6" placeholder="비밀번호 확인 (8~20자 영문+숫자)" class="classinput input-control block focus:outline-none w-full h-[40px]" id="pn6">
+                                            <input v-model="vendorPwCheck" type="password" placeholder="비밀번호 확인 (8~20자 영문+숫자)" class="classinput input-control block focus:outline-none w-full h-[40px]" id="pn6">
                                         </div>
                                     </td>
                                     <td class="vgt-left-align"></td>
@@ -106,8 +109,7 @@
                                     </td>
                                     <td class="vgt-left-align">
                                         <div class="flex items-center space-x-3">
-                                            <input type="text" name="pn7" value="010" class="input-control focus:outline-none block w-[50px] h-[40px]" id="pn7" readonly>
-                                            <input type="text" name="pn8" placeholder="휴대폰번호 (-없이 입력)" class="input-control w-full focus:outline-none block h-[40px]" id="pn8">
+                                            <input v-model="formData.vendorTel" type="text" placeholder="휴대폰번호 (-없이 입력)" class="input-control w-full focus:outline-none block h-[40px]" id="pn8">
                                         </div>
                                     </td>
                                     <td class="vgt-left-align essential">
@@ -115,7 +117,7 @@
                                     </td>
                                     <td class="vgt-left-align">
                                         <div class="relative">
-                                            <input type="email" name="pn9" placeholder="이메일 입력" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn9">
+                                            <input v-model="formData.vendorEmail" type="email" placeholder="이메일 입력" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn9">
                                         </div>
                                     </td>
                                 </tr>
@@ -144,21 +146,26 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" name="pn" class="classinput input-control w-full block focus:outline-none h-[40px]">
+                                        <input v-model="formData.companyNm" type="text" class="classinput input-control w-full block focus:outline-none h-[40px]">
                                     </div>
                                 </td>
                                 <td class="vgt-left-align essential">
-                                    <span>거래협력사구분</span>
+                                    <span>기업타입</span>
                                 </td>
                                 <td class="vgt-left-align">
-                                    <div data-v-33d05f57="" class="relative">
-                                        <select data-v-33d05f57="" class="classinput input-control block w-full focus:outline-none min-h-[40px]" formatter="a=>a">
-                                            <option data-v-33d05f57="" value="">선택</option>
-                                            <option data-v-33d05f57="" value="">제조사</option>
-                                            <option data-v-33d05f57="" value="">벤더</option>
-                                        </select>
+                                    <div class="grid-cols-1 grid mb-5 last:mb-0">
+                                        <div data-v-33d05f57="" class="relative">
+                                            <select v-model="formData.enterpriseType" class="classinput input-control block w-full focus:outline-none min-h-[40px]">
+                                                <option value="">선택</option>
+                                                <option value="대기업">대기업</option>
+                                                <option value="중소기업">중소기업</option>
+                                                <option value="수입기업">수입기업</option>
+                                                <option value="모바일전용">모바일전용</option>
+                                            </select>
+                                        </div>
                                     </div>
                                 </td>
+                                
                             </tr>
                             <tr>
                                 <td class="vgt-left-align essential">
@@ -166,7 +173,7 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" name="pn" class="classinput input-control w-full block focus:outline-none h-[40px]">
+                                        <input v-model="formData.industry" type="text" class="classinput input-control w-full block focus:outline-none h-[40px]">
                                     </div>
                                 </td>
                                 <td class="vgt-left-align essential">
@@ -174,7 +181,7 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" name="pn" class="classinput input-control w-full block focus:outline-none h-[40px]">
+                                        <input v-model="formData.businessType" type="text" class="classinput input-control w-full block focus:outline-none h-[40px]">
                                     </div>
                                 </td>
                             </tr>
@@ -184,7 +191,7 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" name="pn" class="classinput input-control w-full block focus:outline-none h-[40px]">
+                                        <input v-model="formData.representativeNm" type="text" class="classinput input-control w-full block focus:outline-none h-[40px]">
                                     </div>
                                 </td>
                                 <td class="vgt-left-align essential">
@@ -192,7 +199,12 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" placeholder="YYYY-MM-DD" class="  form-control py-2">                                       
+                                        <input
+                                            type="date"
+                                            name="establishmentDate"
+                                            class="form-control py-2"
+                                            v-model="formData.establishmentDt"
+                                        />
                                     </div>
                                 </td>
                             </tr>
@@ -202,7 +214,7 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" name="pn" class="classinput input-control w-full block focus:outline-none h-[40px]">
+                                        <input v-model="formData.handledItems" type="text" class="classinput input-control w-full block focus:outline-none h-[40px]">
                                     </div>
                                 </td>
                                 <td class="vgt-left-align essential">
@@ -211,31 +223,7 @@
                                 <td class="vgt-left-align">
                                     <div class="grid-cols-1 grid mb-5 last:mb-0">
                                         <div class="flex items-center space-x-4">
-                                            <div data-v-33d05f57="" class="relative">
-                                                <select data-v-33d05f57="" class="classinput input-control block w-[80px] focus:outline-none min-h-[40px]" formatter="a=>a">
-                                                    <option data-v-33d05f57="" value="">선택</option>
-                                                    <option data-v-33d05f57="" value="">02</option>
-                                                    <option data-v-33d05f57="" value="">031</option>
-                                                    <option data-v-33d05f57="" value="">032</option>
-                                                    <option data-v-33d05f57="" value="">033</option>
-                                                    <option data-v-33d05f57="" value="">041</option>
-                                                    <option data-v-33d05f57="" value="">042</option>
-                                                    <option data-v-33d05f57="" value="">043</option>
-                                                    <option data-v-33d05f57="" value="">044</option>
-                                                    <option data-v-33d05f57="" value="">051</option>
-                                                    <option data-v-33d05f57="" value="">052</option>
-                                                    <option data-v-33d05f57="" value="">053</option>
-                                                    <option data-v-33d05f57="" value="">054</option>
-                                                    <option data-v-33d05f57="" value="">055</option>
-                                                    <option data-v-33d05f57="" value="">061</option>
-                                                    <option data-v-33d05f57="" value="">062</option>
-                                                    <option data-v-33d05f57="" value="">063</option>
-                                                    <option data-v-33d05f57="" value="">064</option>
-                                                    <option data-v-33d05f57="" value="">070</option>
-                                                </select>
-                                            </div>
-                                            <input type="text" name="pn" class="input-control w-full focus:outline-none h-[40px]">
-                                            <input type="text" name="pn" class="input-control w-full focus:outline-none h-[40px]">
+                                            <input v-model="formData.companyTel" type="text" class="input-control w-full focus:outline-none h-[40px]">
                                         </div>                                    
                                     </div>
                                 </td>
@@ -246,7 +234,7 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" name="pn" placeholder="법인번호 (개인 사업자는 생년월일 6자리 입력)" class="input-control w-full block focus:outline-none h-[40px]"/>
+                                        <input v-model="formData.corporateNumber" type="text" placeholder="법인번호 (개인 사업자는 생년월일 6자리 입력)" class="input-control w-full block focus:outline-none h-[40px]"/>
                                     </div>
                                 </td>
                                 <td class="vgt-left-align essential">
@@ -254,27 +242,16 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" placeholder="YYYY-MM-DD" class="  form-control py-2" >                                        
+                                        <input
+                                            type="date"
+                                            name="establishmentDate"
+                                            class="form-control py-2"
+                                        />
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <td class="vgt-left-align essential">
-                                    <span>기업타입</span>
-                                </td>
-                                <td class="vgt-left-align">
-                                    <div class="grid-cols-1 grid mb-5 last:mb-0">
-                                        <div data-v-33d05f57="" class="relative">
-                                            <select data-v-33d05f57="" class="classinput input-control block w-full focus:outline-none min-h-[40px]" formatter="a=>a">
-                                                <option data-v-33d05f57="" value="">선택</option>
-                                                <option data-v-33d05f57="" value="">대기업</option>
-                                                <option data-v-33d05f57="" value="">중소기업</option>
-                                                <option data-v-33d05f57="" value="">수입기업</option>
-                                                <option data-v-33d05f57="" value="">모바일전용</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </td>
+                                
                             </tr>
                             <tr>
                                 <td class="vgt-left-align essential">
@@ -282,8 +259,8 @@
                                 </td>
                                 <td class="vgt-left-align">
                                         <div class="flex items-center space-x-4">
-                                        <input type="text" name="pn" class="classinput input-control w-full block focus:outline-none h-[40px]">
-                                        <Button text="우편번호 찾기" btnClass="btn-primary"/>
+                                        <input v-model="addressForm.address" type="text" class="classinput input-control w-full block focus:outline-none h-[40px]">
+                                        <Button @click="openAddressPopup" text="우편번호 찾기" btnClass="btn-primary"/>
                                     </div>
                                 </td>
                                 <td class="vgt-left-align essential">
@@ -291,7 +268,7 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" name="pn" placeholder="상세주소" class="classinput input-control w-full block focus:outline-none h-[40px]">
+                                        <input v-model="addressForm.detailAddress" type="text" placeholder="상세주소" class="classinput input-control w-full block focus:outline-none h-[40px]">
                                     </div>
                                 </td>
                             </tr>
@@ -302,13 +279,13 @@
                                 <td class="vgt-left-align">
                                     <div class="grid-cols-1 grid mb-5 last:mb-0">
                                         <div data-v-33d05f57="" class="relative">
-                                            <select data-v-33d05f57="" class="classinput input-control block w-full focus:outline-none min-h-[40px]" formatter="a=>a">
-                                                <option data-v-33d05f57="" value="">선택</option>
-                                                <option data-v-33d05f57="" value="">법인사업자</option>
-                                                <option data-v-33d05f57="" value="">일반과세자</option>
-                                                <option data-v-33d05f57="" value="">면세사업자</option>
-                                                <option data-v-33d05f57="" value="">간이과세자</option>
-                                                <option data-v-33d05f57="" value="">주민등록자</option>
+                                            <select v-model="formData.businessClassification" class="classinput input-control block w-full focus:outline-none min-h-[40px]">
+                                                <option value="">선택</option>
+                                                <option value="법인사업자">법인사업자</option>
+                                                <option value="일반과세자">일반과세자</option>
+                                                <option value="면세사업자">면세사업자</option>
+                                                <option value="간이과세자">간이과세자</option>
+                                                <option value="주민등록자">주민등록자</option>
                                             </select>
                                         </div>
                                     </div>
@@ -318,7 +295,7 @@
                                 </td>
                                 <td class="vgt-left-align">
                                     <div class="relative">
-                                        <input type="text" name="pn" placeholder="10억/100억" class="classinput input-control w-full block focus:outline-none h-[40px]">
+                                        <input v-model="formData.revenue" type="text" placeholder="10억/100억" class="classinput input-control w-full block focus:outline-none h-[40px]">
                                     </div>
                                 </td>
                             </tr>
@@ -329,31 +306,7 @@
                                 <td class="vgt-left-align">
                                     <div class="grid-cols-1 grid mb-5 last:mb-0">
                                         <div class="flex items-center space-x-4">
-                                            <div data-v-33d05f57="" class="relative">
-                                                <select data-v-33d05f57="" class="classinput input-control block w-[80px] focus:outline-none min-h-[40px]" formatter="a=>a">
-                                                    <option data-v-33d05f57="" value="">선택</option>
-                                                    <option data-v-33d05f57="" value="">02</option>
-                                                    <option data-v-33d05f57="" value="">031</option>
-                                                    <option data-v-33d05f57="" value="">032</option>
-                                                    <option data-v-33d05f57="" value="">033</option>
-                                                    <option data-v-33d05f57="" value="">041</option>
-                                                    <option data-v-33d05f57="" value="">042</option>
-                                                    <option data-v-33d05f57="" value="">043</option>
-                                                    <option data-v-33d05f57="" value="">044</option>
-                                                    <option data-v-33d05f57="" value="">051</option>
-                                                    <option data-v-33d05f57="" value="">052</option>
-                                                    <option data-v-33d05f57="" value="">053</option>
-                                                    <option data-v-33d05f57="" value="">054</option>
-                                                    <option data-v-33d05f57="" value="">055</option>
-                                                    <option data-v-33d05f57="" value="">061</option>
-                                                    <option data-v-33d05f57="" value="">062</option>
-                                                    <option data-v-33d05f57="" value="">063</option>
-                                                    <option data-v-33d05f57="" value="">064</option>
-                                                    <option data-v-33d05f57="" value="">070</option>
-                                                </select>
-                                            </div>
-                                            <input type="text" name="pn" class="input-control w-full focus:outline-none h-[40px]">
-                                            <input type="text" name="pn" class="input-control w-full focus:outline-none h-[40px]">
+                                            <input v-model="formData.faxNumber" type="text" class="input-control w-full focus:outline-none h-[40px]">
                                         </div>                                    
                                     </div>
                                 </td>
@@ -361,8 +314,8 @@
                                     <span>홈페이지</span>
                                 </td>
                                 <td class="vgt-left-align">
-                                    <div data-v-33d05f57="" class="relative">
-                                        <input type="text" name="pn" class="input-control w-full focus:outline-none h-[40px]">
+                                    <div class="relative">
+                                        <input v-model="formData.websiteUrl" type="text" class="input-control w-full focus:outline-none h-[40px]">
                                     </div>
                                 </td>
                             </tr>
@@ -372,8 +325,8 @@
                 
                 <main class="py-10">
                     <div class="text-center space-x-2">
-                        <Button class="px-20" text="회원가입" btnClass="btn-primary"/>
-                        <Button class="px-20" text="취소" btnClass="btn-primary"/>
+                        <Button @click="submitForm" type="button" class="px-20" text="회원가입" btnClass="btn-primary"/>
+                        <Button class="px-20" text="취소" type="button" btnClass="btn-primary"/>
                     </div>
                 </main>
                 
@@ -382,12 +335,133 @@
     </div>
 </template>
 
-<script setup>    
-    import Button from "@/components/Button";
-    import Checkbox from "@/components/Checkbox";
-    import Textarea from "@/components/Textarea";
+<script setup>
+import { ref } from 'vue';
+import axios from "@/axios";
+import Button from '@/components/Button';
+import Checkbox from '@/components/Checkbox';
+import Textarea from '@/components/Textarea';
+import Map from '@/components/Map/map.vue';
 
+// const formData = ref({
+//     vendorSeq: null,
+//     channelSeq: null,
+//     businessId: '',
+//     vendorNm: '',
+//     vendorPw: '',
+//     vendorTel: '',
+//     vendorEmail: '',
+//     companyNm: '',
+//     industry: '',
+//     businessType: '',
+//     representativeNm: '',
+//     establishmentDt: '',
+//     handledItems: '',
+//     companyTel: '',
+//     corporateNumber: '',
+//     enterpriseType: '',
+//     companyAddress: '',
+//     businessClassification: '',
+//     revenue: null,
+//     faxNumber: '',
+//     websiteUrl: '',
+//     optionalAgreementConsent: false
+// });
+
+
+const formData = ref({
+    businessClassification: "일반과세자",
+    businessId: "1234567890",
+    businessType: "전자상거래업",
+    channelSeq: null,
+    companyAddress: "[01073] 서울 강북구 도봉로 315 (에피소드 수유 838)",
+    companyNm: "그린컴퍼니",
+    companyTel: "021234567",
+    corporateNumber: "980316",
+    enterpriseType: "중소기업",
+    establishmentDt: "2024-05-02",
+    faxNumber: "021234567",
+    handledItems: "친환경 가정용품",
+    industry: "제조업",
+    optionalAgreementConsent: true,
+    representativeNm: "장서윤",
+    revenue: 10,
+    vendorEmail: "seoy316@naver.com",
+    vendorNm: "장서윤",
+    vendorPw: "123456",
+    vendorTel: "01096543115",
+    websiteUrl: "http://green.com"
+});
+
+// 예제: Axios를 사용하여 서버로 데이터 전송
+axios.post('/vendor/signup', formData)
+    .then(response => {
+        console.log('Form submitted successfully:', response.data);
+    })
+    .catch(error => {
+        console.error('Failed to submit the form:', error);
+    });
+
+
+const vendorPwCheck = ref(null);
+const agreement = ref(false);
+
+// 우편번호 찾기
+const showMapModal = ref(false);
+const postalCode = ref('');
+const addressForm = ref({
+    address: null,
+    zonecode: null,
+    detailAddress: null
+});
+
+function openAddressPopup(data) {
+    const popup = window.open('/daum-map', 'popup', 'width=500px,height=505px');
+
+    window.addEventListener('message', (event) => {
+        if (event.origin !== window.location.origin) return;
+
+        const { address, zonecode, buildingName } = event.data;
+        addressForm.value.address = `[${zonecode}] ${address}`;
+        addressForm.value.detailAddress = `(${buildingName}) `;
+    });
+};
+
+const businessId1 = ref(null);
+const businessId2 = ref(null);
+const businessId3 = ref(null);
+
+function checkValidate() {
+    if (formData.value.vendorPw !== vendorPwCheck.value) {
+        alert('비밀번호가 다릅니다.');
+        return false;
+    }
+
+    if (agreement.value === false) {
+        alert('필수 동의 체크하세요.');
+        return false;
+    }
+
+    return true;
+}
+
+async function submitForm() {
+    if (!checkValidate()) {
+        return;
+    }
+
+    try {
+        formData.value.companyAddress = `${addressForm.value.address} ${addressForm.value.detailAddress}`;
+        formData.value.businessId = `${businessId1.value}${businessId2.value}${businessId3.value}`;
+        console.log('회원가입 폼 ', formData.value);
+        const response = await axios.post('/vendor/signup', formData.value);
+        alert('Form submitted successfully.');
+    } catch (error) {
+        alert('Failed to submit the form. Please try again.');
+    }
+}
 </script>
+
   
 <style scoped>
 
