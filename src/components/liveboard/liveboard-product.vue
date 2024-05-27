@@ -8,7 +8,7 @@
       <span class="header-cell">이미지</span>
       <span class="header-cell badge-cell">인증배지</span>
       <span class="header-cell name-cell">이름</span>
-      <span class="header-cell">원가</span>
+      <span class="header-cell">정가</span>
       <span class="header-cell">판매가</span>
     </div>
     <div v-for="(product, index) in products" :key="index" class="table-row cursor-pointer"
