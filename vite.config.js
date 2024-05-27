@@ -36,10 +36,6 @@ export default defineConfig({
         changeOrigin: false,
         ws: true,
       },
-      '/login': {
-        target: `http://${host}:${port}`,
-        changeOrigin: true,
-      },
     }
   }
 });
