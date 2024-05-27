@@ -79,9 +79,7 @@
                         
                                     <div class="auth-footer text-center">©  susussg, Co., Ltd.. All Rights Reserved</div>
                                 </div>
-                            </div>
-                            <div class="left-column bg-cover bg-no-repeat bg-center " style="background-image: url(&quot;/assets/login-bg.4b614fc6.png&quot;);"><div class="flex flex-col h-full justify-center"><div class="flex-1 flex flex-col justify-center items-center"><a href="/"><img src="@/assets/images/all-img/heart.png" alt="" class="mb-10"></a></div><div><div class="black-500-title max-w-[525px] mx-auto pb-20 text-center">Unlock your Project<span class="text-white font-bold">performance</span></div></div></div></div>
-                            
+                            </div>                            
                         </div>
                     </div>
                 </main>
