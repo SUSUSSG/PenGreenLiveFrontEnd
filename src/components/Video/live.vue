@@ -218,7 +218,6 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: center;
-  align-items: flex-end;
   width: 100%;
   height: 100%;
   position: absolute;
