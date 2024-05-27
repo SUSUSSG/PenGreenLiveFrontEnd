@@ -324,7 +324,6 @@ const loadLiveBroadcastDetails = async () => {
 // 유저 시청 기록 저장
 const saveUserBroadcastHistory = async () => {
   const broadcastId = route.params.broadcastId;
-  const userUUid = "f23a72e0-1347-11ef-b085-f220affc9a21";
   
   const date = new Date();
   const offset = date.getTimezoneOffset() * 60000; // 밀리초 단위로 변환
@@ -332,7 +331,6 @@ const saveUserBroadcastHistory = async () => {
   const viewedDate = localDate.toISOString().slice(0, 19);
 
   const requestData = {
-    userUUID: userUUid,
     broadcastSeq: broadcastId,
     viewedDate: viewedDate
   }
@@ -340,7 +338,7 @@ const saveUserBroadcastHistory = async () => {
   console.log("시청정보!!!" + JSON.stringify(requestData, null, 2));
 
   try {
-    const response = await axios.post(`user/view-history`, requestData)
+    const response = await axios.post(`/user/view-history`, requestData)
     console.log(response.data);
   } catch (error) {
     console.error("시청 기록 저장 실패: ", error);

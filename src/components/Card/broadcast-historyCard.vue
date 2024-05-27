@@ -29,7 +29,6 @@ const props = withDefaults(defineProps<{
   productImage: string;
   productNm: string;
   listPrice: number;
-  userUUID: string;
   channelNm: string;
   viewedDate: Date;
   channelImage: string;
@@ -39,7 +38,6 @@ const props = withDefaults(defineProps<{
   productImage: 'default-img-url',
   productNm: 'default-product',
   listPrice: 0,
-  userUUID: '',
   channelNm:'',
   channelImage:''
 });

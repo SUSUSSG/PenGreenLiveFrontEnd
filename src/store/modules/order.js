@@ -57,7 +57,7 @@ export default {
   actions: {
     async saveOrder({ state }) {
       try {
-        const response = await axios.post("/api/order/save", state.orderForm, {
+        const response = await axios.post("/order/save", state.orderForm, {
           headers: { "Content-Type": "application/json" },
         });
         if (response.status === 200) {

@@ -92,8 +92,8 @@ const props = withDefaults(
     orderDate: string;
     productNm: string;
     orderProductPrice: number;
-    userUUID: string;
     productSeq: number;
+    orderSeq: number;
   }>(),
   {
     deliveryStatus: "default-status",
@@ -101,8 +101,8 @@ const props = withDefaults(
     orderDate: new Date().toISOString(),
     productNm: "default-product",
     orderProductPrice: 0,
-    userUUID: "",
     productSeq: 0,
+    orderSeq: 0,
   }
 );
 
@@ -133,7 +133,7 @@ const submitReview = async () => {
   try {
     // 유해성 검사 요청
     const checkResponse = await axios.post(
-      "/openai/review-check",
+      "/api/openai/review-check",
       { reviewContent: reviewContent.value }
     );
     console.log("유해성 검사 응답:", checkResponse.data);
@@ -149,10 +149,10 @@ const submitReview = async () => {
       productSeq: props.productSeq,
       reviewContent: reviewContent.value,
       reviewTime: new Date().toISOString(),
-      userUUID: props.userUUID,
+      orderSeq: props.orderSeq,
     };
 
-    await axios.post("/reviews", reviewData);
+    await axios.post("/api/reviews", reviewData);
     alert("리뷰 등록이 완료되었습니다.");
     reviewContent.value = "";
     closeModal();
