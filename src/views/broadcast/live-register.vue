@@ -31,51 +31,47 @@
 
     <div class="basic-card">
       <form @submit.prevent="submit">
-        <div v-for="(step, index) in steps" :key="index">
-          <div v-if="stepNumber === index">
-            <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
-              <div class="lg:col-span-3 md:col-span-2 col-span-1">
-                <h4 class="text-base text-slate-800 dark:text-slate-300 mb-6">
-                  {{ step.title }}
-                </h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Step1 -->
         <div v-if="stepNumber === 0">
           <Card>
-            <Textinput label="라이브 제목" placeholder="라이브 제목을 입력하세요" name="liveTitle" v-model="liveTitle" />
-            <br>
-            <Textinput label="라이브 한줄 요약" placeholder="라이브 한줄 요약을 입력하세요" name="liveSummary" v-model="liveSummary" />
-            <br>
-
-            <label>대표 이미지 등록</label>
-            <div style="display: flex; align-items: center;" class="mt-2">
-              <div style="flex-shrink: 0;">
-                <img :src="previewImage" alt="previewImage" style="width: 180px; height: 320px" />
-              </div>
-              <div style="margin-left: 20px;">
-                <p>최대 용량 : 1mb</p>
-                <p>권장 사이즈 : 720 x 1280</p>
-                <input type="file" id="imageUpload" @change="handleImageUpload"
-                  accept="image/jpeg, image/png, image/gif" class="mb-2" />
-              </div>
+            <div class="form-group">
+              <label>라이브 제목</label>
+              <Textinput placeholder="여기에 입력하세요" name="liveTitle" v-model="liveTitle" class="wide-input" />
             </div>
-            <br>
-            <div>
-              <label for="liveDateTime" class="mr-12">라이브 예정일/시간</label>
+
+            <div class="form-group">
+              <label>라이브 한줄 소개</label>
+              <Textinput placeholder="여기에 입력하세요" name="liveSummary" v-model="liveSummary" class="wide-input" />
+            </div>
+
+            <div class="form-group">
+              <label for="liveDateTime">라이브 예정일/시간</label>
               <input type="datetime-local" id="liveDateTime" name="liveDateTime" v-model="liveDateTime"
                 :min="minDateTime" />
             </div>
-            <div class="mt-5">
-              <label class="mr-12">방송 카테고리 선택</label>
+
+            <div class="form-group">
+              <label>방송 카테고리 선택</label>
               <select v-model="selectedCategory" @change="handleCategoryChange">
                 <option value="" disabled selected hidden>선택하기</option>
                 <option v-for="category in categories" :key="category.value" :value="category.value">{{
                   category.label }}</option>
               </select>
+            </div>
+
+            <div class="form-group">
+              <label>대표 이미지 등록</label>
+              <div style="display: flex; align-items: center;" class="mt-2">
+                <div style="flex-shrink: 0;">
+                  <img :src="previewImage" alt="previewImage" style="width: 180px; height: 320px" />
+                </div>
+                <div style="margin-left: 20px;">
+                  <p>최대 용량 : 1mb</p>
+                  <p>권장 사이즈 : 720 x 1280</p>
+                  <input type="file" id="imageUpload" @change="handleImageUpload"
+                    accept="image/jpeg, image/png, image/gif" class="mb-2" />
+                </div>
+              </div>
             </div>
           </Card>
         </div>
@@ -556,6 +552,22 @@ label {
   width: 100%;
   justify-content: flex-end;
 }
+
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2em;
+}
+
+.form-group label {
+  margin-right: 12px;
+  width: 200px;
+}
+
+.wide-input {
+  width: 1000px;
+}
+
 
 .modal-content {
   display: flex;
