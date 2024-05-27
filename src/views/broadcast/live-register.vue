@@ -149,16 +149,14 @@
               <div class="flex items-center justify-between">
                 <Textinput label="공지 사항" type="text" name="newNotice" v-model="newNotice" placeholder="공지사항 입력"
                   class="mb-2 flex-grow" />
-                <Button @click="addNotice" type="button"
-                  btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark"
-                  text="추가"></Button>
+                <Button @click="addNotice" type="button" btnClass="btn-sm ml-2 mt-5 btn-outline-dark" text="추가" />
               </div>
               <ul>
                 <li v-for="(notice, index) in notices" :key="index"
                   class="list-item flex items-center justify-between mt-1">
                   <div class="bg-gray-100 p-2 rounded">
                     <span>{{ notice }}</span>
-                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" class="icon-delete"/>
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" class="list-icon-delete" />
                   </div>
                 </li>
               </ul>
@@ -168,15 +166,14 @@
               <div class="flex items-center justify-between">
                 <Textinput label="라이브 혜택" type="text" name="newBenefit" v-model="newBenefit" placeholder="라이브 혜택 입력"
                   class="mb-2 flex-grow" />
-                <Button @click="addBenefit" type="button"
-                  btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" text="추가"></Button>
+                <Button @click="addBenefit" type="button" btnClass="btn-sm ml-2 mt-5 btn-outline-dark" text="추가" />
               </div>
               <ul>
                 <li v-for="(item, index) in benefits" :key="index"
                   class="list-item flex items-center justify-between mt-1">
                   <div class="bg-gray-100 p-2 rounded">
                     <span>{{ item }}</span>
-                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" class="icon-delete"/>
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" class="list-icon-delete" />
                   </div>
                 </li>
               </ul>
@@ -190,16 +187,14 @@
                 <div class="mb-2"> <!-- 답변 -->
                   <Textarea label="답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
                 </div>
-                <div class="text-center mb-2"> <!-- 추가하기 버튼을 오른쪽 중간에 위치시키기 위해 text-center 추가 -->
-                  <Button @click="addAnswer" type="button"
-                    btnClass="btn inline-flex justify-center btn-sm justify-between btn-outline-dark"
-                    text="추가"></Button>
+                <div class="text-center mb-2">
+                  <Button @click="addAnswer" type="button" btnClass="btn-sm ml-2 mt-5 btn-outline-dark" text="추가" />
                 </div>
               </div>
               <dl>
                 <div v-for="(item, index) in qa" :key="index" class="faq-item mt-1">
                   <div class="bg-gray-100 p-2 rounded">
-                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" class="icon-delete"/>
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" class="list-icon-delete" />
                     <dt class="question">{{ item.questionTitle }}</dt>
                     <dd class="answer">{{ item.questionAnswer }}</dd>
                   </div>
@@ -208,8 +203,6 @@
             </div>
           </Card>
         </div>
-
-
 
 
         <!-- 하단 버튼 모음 -->
@@ -698,7 +691,8 @@ label {
   border-radius: 0.45rem;
 }
 
-.icon-delete {
+.icon-delete,
+.list-icon-delete {
   float: right;
   background-color: #f56565;
   color: white;
@@ -706,6 +700,10 @@ label {
   padding: 0.25rem;
   transition: background-color 0.2s;
   margin-right: 40px;
+}
+
+.list-icon-delete {
+  margin: 0;
 }
 
 .question {
