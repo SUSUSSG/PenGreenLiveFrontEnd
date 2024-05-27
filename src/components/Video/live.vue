@@ -3,13 +3,15 @@
     <div class="title-bar w-full flex items-center justify-between" v-if="showTitleBar">
       <div class="flex items-center">
         <img :src="announceIconSrc" class="logo" style="width: 50%" />
-        <p class="broadcast-title"> {{ broadcastTitle }} </p>
+        <p class="broadcast-title">{{ broadcastTitle }}</p>
       </div>
     </div>
 
     <div class="video-and-sidebar-wrapper">
       <div v-if="streamManager">
-        <VideoPlayer :stream-manager="streamManager" :is-muted="isMuted"></VideoPlayer>
+        <div class="video-player-wrapper" v-if="streamManager">
+          <VideoPlayer :stream-manager="streamManager" :is-muted="isMuted" :subtitles-active="subtitlesActive"></VideoPlayer>
+        </div>
         <div class="icons-sidebar" v-if="showIconSideBar">
           <div class="icon-wrapper" @click="toggleLike">
             <img ref="heartIcon" :src="isLiked ? activeHeartIconSrc : heartIconSrc" class="heart-icon" />
@@ -17,11 +19,15 @@
           </div>
           <div class="icon-wrapper" @click="toggleMute">
             <img :src="isMuted ? muteIconSrc : soundIconSrc" class="mute-icon" />
-            <span class="icon-label">Mute</span>
+            <span class="icon-label">음소거</span>
           </div>
           <div class="icon-wrapper" @click="share">
             <img :src="shareIconSrc" class="share-icon" />
-            <span class="icon-label">Share</span>
+            <span class="icon-label">공유하기</span>
+          </div>
+          <div class="icon-wrapper" @click="toggleSubtitles">
+            <img :src="subtitlesActive ? subtitlesActiveIconSrc : subtitlesInactiveIconSrc" class="subtitles-icon" />
+            <span class="icon-label">자막</span>
           </div>
         </div>
       </div>
@@ -29,17 +35,17 @@
       <div v-else class="broadcast-image">
         <img :src="broadcastImage">
         <div class="overlay">
-        <div class="overlay-text">
-          방송 시작 전입니다. <br>
-          잠시만 기다려 주세요.
+          <div class="overlay-text">
+            방송 시작 전입니다. <br>
+            잠시만 기다려 주세요.
+          </div>
         </div>
-      </div>
       </div>
     </div>
   </div>
 </template>
-
 <script>
+import axios from "@/axios";
 import VideoPlayer from "@/components/Video/videoplayer.vue";
 import announceIcon from "@/assets/images/all-img/announce.png";
 import heartIcon from "@/assets/images/all-img/heart.png";
@@ -47,18 +53,8 @@ import muteIcon from "@/assets/images/all-img/mute.png";
 import shareIcon from "@/assets/images/all-img/share.png";
 import soundIcon from "@/assets/images/all-img/speaker.png";
 import redheart from "@/assets/images/all-img/redheart.png";
-import { onMounted, onBeforeMount } from 'vue';
-import axios from "@/axios";
 
 export default {
-  setup() {
-    onMounted(() => {
-
-    });
-    onBeforeMount(() =>{
-
-    });
-  },
   components: {
     VideoPlayer,
   },
@@ -87,14 +83,19 @@ export default {
     return {
       broadcastId: undefined,
       isLiked: false,
-      likesCount: 0,  // 초기값 설정
+      likesCount: 0,
       isMuted: false,
+      subtitlesActive: true,
       announceIconSrc: announceIcon,
       heartIconSrc: heartIcon,
       activeHeartIconSrc: redheart,
       muteIconSrc: muteIcon,
       soundIconSrc: soundIcon,
       shareIconSrc: shareIcon,
+      subtitlesActiveIconSrc: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/broadcast-icon/free-icon-subtitles-active.png',
+      subtitlesInactiveIconSrc: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/broadcast-icon/free-icon-subtitles-inactive.png',
+      languageIconSrc: undefined,
+      showLanguageMenu: false,
       OV: null,
       session: null,
       likeQueue: [],
@@ -109,7 +110,7 @@ export default {
     }, 15000);
   },
   beforeUnmount() {
-    clearInterval(this.likesUpdateInterval); // 타이머 정리
+    clearInterval(this.likesUpdateInterval);
   },
   methods: {
     toggleLike() {
@@ -128,7 +129,6 @@ export default {
         clearTimeout(this.likeTimeout);
       }
       this.likeTimeout = setTimeout(() => {
-        console.log("좋아요 수 집계 중");
         const totalLikes = this.likeQueue.reduce((acc, val) => acc + val, 0);
         this.likeQueue = [];
         if (totalLikes > 0) {
@@ -136,20 +136,31 @@ export default {
         } else if (totalLikes < 0) {
           this.decrementLike(-totalLikes);
         }
-      }, 5000); // 5초 동안 클릭을 모아서 처리
+      }, 5000);
     },
     toggleMute() {
       this.isMuted = !this.isMuted;
     },
+    toggleSubtitles() {
+      this.subtitlesActive = !this.subtitlesActive;
+    },
+    toggleLanguageMenu() {
+      this.showLanguageMenu = !this.showLanguageMenu;
+    },
+    setLanguage(language) {
+      // Implement translation functionality here
+      alert(`Language set to ${language}`);
+      this.showLanguageMenu = false;
+    },
     share() {
-      const currentUrl = window.location.href; // 현재 페이지의 URL을 가져옴
+      const currentUrl = window.location.href;
       navigator.clipboard
           .writeText(currentUrl)
           .then(() => {
-            alert("Video URL copied to clipboard!"); // 성공 메시지
+            alert("Video URL copied to clipboard!");
           })
           .catch((err) => {
-            console.error("Failed to copy text: ", err); // 오류 처리
+            console.error("Failed to copy text: ", err);
           });
     },
     incrementLike(count) {
@@ -165,7 +176,6 @@ export default {
     async fetchLikes() {
       try {
         const response = await axios.get(`/broadcasts/statistics/${this.broadcastId}`);
-        console.log('좋아요수 들고옴:', response.data);
         return response.data;
       } catch (error) {
         console.error('좋아요를 가져오지 못했습니다.', error);
@@ -186,7 +196,6 @@ export default {
   }
 };
 </script>
-
 <style scoped>
 .video-component {
   display: flex;
@@ -224,6 +233,16 @@ export default {
   position: absolute;
 }
 
+.video-player-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
 .icons-sidebar {
   display: flex;
   flex-direction: column;
@@ -244,7 +263,9 @@ export default {
 
 .heart-icon,
 .mute-icon,
-.share-icon {
+.share-icon,
+.subtitles-icon,
+.language-icon {
   width: 50px;
   height: 50px;
   margin-bottom: 1px;
@@ -266,8 +287,7 @@ export default {
   position: relative;
 }
 
-
-.broadcast-image img{
+.broadcast-image img {
   width: 1000px;
   height: 849px;
 }
@@ -278,7 +298,7 @@ export default {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3); 
+  background-color: rgba(0, 0, 0, 0.3);
   justify-content: center;
   align-items: center;
 }
@@ -288,7 +308,27 @@ export default {
   font-size: 2rem;
   font-weight: bold;
   margin-top: 350px;
-  text-align: center; /* 텍스트 가운데 정렬 */
+  text-align: center;
+}
+
+.language-menu {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 30;
+}
+
+.language-option {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.language-option:hover {
+  background-color: #f0f0f0;
 }
 
 @media (max-width: 600px) {
@@ -311,7 +351,9 @@ export default {
 
   .heart-icon,
   .mute-icon,
-  .share-icon {
+  .share-icon,
+  .subtitles-icon,
+  .language-icon {
     margin: 0 5px;
   }
 }
