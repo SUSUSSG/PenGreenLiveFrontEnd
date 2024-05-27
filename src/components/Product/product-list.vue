@@ -428,7 +428,7 @@ export default {
 
       axios.put(url, productData)
         .then(response => {
-          alert("Product successfully updated");
+          alert("상품 정보가 수정되었습니다.");
           this.$refs.editModal.closeModal();
           this.fetchProductsByVendorSeq();
         })
