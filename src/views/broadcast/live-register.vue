@@ -29,7 +29,7 @@
       </div>
     </div>
 
-    <div class="conten-box mt-14 border-t border-slate-100 dark:border-slate-700 -mx-6 px-6 pt-6">
+    <div class="basic-card">
       <form @submit.prevent="submit">
         <div v-for="(step, index) in steps" :key="index">
           <div v-if="stepNumber === index">
@@ -84,9 +84,6 @@
           <Card>
             <!-- 라이브에 사용할 상품 등록 -->
             <div class="box">
-              <div class="left-content">
-                <label>상품 등록</label>
-              </div>
               <div class="right-content">
                 <!-- 모달 -->
                 <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal"
@@ -119,42 +116,31 @@
                 </Modal>
               </div>
             </div>
-            <div class="card rounded-md bg-white dark:bg-slate-800">
-              <div class="card-body flex flex-col p-6 overflow-auto">
-                <!-- <p>판매 상품 등록</p> -->
-                <!-- <hr class="section-divider"> -->
-                <table class="min-w-full">
-                  <thead>
-                    <tr class="text-left">
-                      <th class="px-6">상품 이름</th>
-                      <th class="px-6">상품 코드</th>
-                      <th class="px-9">정가</th>
-                      <th class="px-20">할인율 (%)</th>
-                      <th class="px-6">판매가</th>
-                      <th class="px-10 py-3">삭제</th>
-                    </tr>
-                  </thead>
-                </table>
-                <br>
-                <ul>
-                  <li v-for="(product, idx) in registeredProducts" :key="idx" class="list-item flex items-center justify-between mt-1">
-                  <div class="bg-gray-100 p-2 rounded">
-                    <span class="registered-name">{{ product.name }}</span>
-                    <span class="registered-code">[{{ product.code }}]</span>
-                    <span class="registered-code">{{ product.originalPrice }}</span>
-                    <input type="number" v-model.number="product.discountRate" class="input-control" max="100">
-                    <Button @click="applyDiscount(idx)"
-                    :disabled="product.discountRate > 100 || product.discountRate <= 0"
-                    btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" type="button"
-                    text="적용" />
-                    <span class="registered-price"> {{ formatCurrency(product.discountPrice) }}</span>
-                      <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" style="float: right;"
-                        class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <table class="min-w-full mt-7">
+              <thead>
+                <tr class="text-left">
+                  <th class="column-code">상품 코드</th>
+                  <th class="column-name">상품 이름</th>
+                  <th class="column-original-price">정가</th>
+                  <th class="column-discount-rate">할인율 (%)</th>
+                  <th class="column-sale-price">판매가</th>
+                  <th class="column-delete">삭제</th>
+                </tr>
+              </thead>
+            </table>
+            <br>
+            <ul>
+              <li v-for="(product, idx) in registeredProducts" :key="idx" class="registered-list">
+                <a class="registered-code">[{{ product.code }}]</a>
+                <a class="registered-name">{{ product.name }}</a>
+                <a class="registered-code">{{ product.originalPrice.toLocaleString() }}원</a>
+                <input type="number" v-model.number="product.discountRate" class="input-control" max="100">
+                <div class="discount-button" @click="applyDiscount(idx)" :disabled="isDisabled(product.discountRate)">
+                  적용</div>
+                <a class="registered-price"> {{ formatCurrency(product.discountPrice) }}</a>
+                <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" class="icon-delete" />
+              </li>
+            </ul>
           </Card>
         </div>
 
@@ -332,12 +318,11 @@ export default {
           productSeq: '',
           productImg: '',
           productName: '',
-          productCode: '', //상품번호 추가
+          productCode: '',
           originalPrice: ''
         }],
       selectedRows: [], //모달에서 선택된 상품
-      // productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
-      registeredProducts: [], // 할인율이 적용된 상품들
+      registeredProducts: [],
 
       //step3
       notices: [],
@@ -430,7 +415,9 @@ export default {
       this.isOpen = true;
       this.$refs.salesProductModal.openModal();
     },
-
+    isDisabled(discountRate) {
+      return discountRate > 100 || discountRate <= 0;
+    },
     applyDiscount(index) {
       const product = this.registeredProducts[index];
       const discount = (product.originalPrice * product.discountRate) / 100;
@@ -537,8 +524,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#span {
+span {
   color: black;
+}
+
+label {
+  color: black;
+}
+
+.basic-card {
+  margin-top: 3.5rem;
+  border-top: 1px solid #f1f5f9;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1.5rem;
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
 }
 
 .box {
@@ -546,33 +547,6 @@ export default {
   justify-content: space-between;
   width: 100%;
   margin-top: 20px;
-}
-
-.question {
-  font-weight: bold;
-}
-
-.registered-code,
-.registered-price {
-  margin-right: 30px;
-}
-
-.registered-name {
-  margin-right: 5px;
-  font-weight: bold;
-  color: #134010;
-}
-
-.registered-price {
-  font-weight: bold;
-}
-
-thead {
-  margin-bottom: 20px;
-}
-
-label {
-  color: black;
 }
 
 .modal-content {
@@ -624,5 +598,100 @@ label {
 
 .row-list-price {
   padding-left: 40px;
+}
+
+.column-code {
+  width: 130px;
+  text-align: center;
+  padding-right: 5rem;
+}
+
+.column-name {
+  width: 200px;
+  font-weight: bold;
+  text-align: center;
+  padding-left: 1.5rem;
+  padding-right: 7rem;
+}
+
+.column-original-price {
+  width: 130px;
+  text-align: center;
+  padding-left: 3rem;
+  padding-right: 1.5rem;
+}
+
+.column-discount-rate {
+  width: 130px;
+  text-align: center;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.column-sale-price {
+  width: 100px;
+  text-align: right;
+  font-weight: bold;
+  padding-left: 5rem;
+  padding-right: 0.5rem;
+}
+
+.column-delete {
+  width: 100px;
+  text-align: center;
+  padding-left: 3.5rem;
+  // padding-right: rem;
+}
+
+.registered-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  background-color: #FAFAFA;
+  padding: 1rem;
+}
+
+.registered-code {
+  width: 130px;
+  text-align: center;
+}
+
+.registered-name {
+  font-weight: bold;
+  width: 450px
+}
+
+.registered-price {
+  width: 100px;
+  text-align: right;
+  font-weight: bold;
+}
+
+.discount-button {
+  display: inline-flex;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  background-color: #ECE6CC;
+  color: #111111;
+  width: 80px;
+  height: 30px;
+  border-radius: 0.45rem;
+}
+
+.icon-delete {
+  float: right;
+  background-color: #f56565;
+  color: white;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  transition: background-color 0.2s;
+  margin-right: 40px;
+}
+
+.question {
+  font-weight: bold;
 }
 </style>
