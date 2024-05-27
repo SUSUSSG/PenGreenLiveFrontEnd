@@ -91,26 +91,28 @@
                 <!-- 모달 -->
                 <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal"
                   :sizeClass="'max-w-4xl'">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th class="px-4">선택</th>
-                        <th class="px-3">상품 이미지</th>
-                        <th class="px-6">상품 이름</th>
-                        <th class="px-5">상품 코드</th>
-                        <th class="px-8 py-2">정가</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(product, index) in channelSalesProduct" :key="index">
-                        <td class="px-6"><input type="checkbox" v-model="selectedRows" :value="product"></td>
-                        <td class="px-7"><img :src="product.productImg" class="channel-sales-product-img"></td>
-                        <td class="px-6">{{ product.productName }}</td>
-                        <td class="px-6">{{ product.productCode }}</td>
-                        <td class="px-6">{{ formatCurrency(product.originalPrice) }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                  <div class="modal-content">
+                    <table class="modal-table">
+                      <thead>
+                        <tr>
+                          <th class="px-7">이미지</th>
+                          <th class="row-img">상품 이름</th>
+                          <th class="row-product">상품 코드</th>
+                          <th class="row-list-price">정가</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(product, index) in channelSalesProduct" :key="index"
+                          @click="toggleSelection(product)" :v-model="selectedRows"
+                          :class="{ 'selected-row': isSelected(product) }" class="pointer">
+                          <td><img :src="product.productImg" class="channel-sales-product-img"></td>
+                          <td class="px-6">{{ product.productName }}</td>
+                          <td class="px-6">{{ product.productCode }}</td>
+                          <td class="px-6">{{ formatCurrency(product.originalPrice) }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                   <template v-slot:footer>
                     <Button text="상품 등록" btnClass="btn-primary btn-sm" @click="addSelectedProductsToTable" />
                   </template>
@@ -149,7 +151,7 @@
                         <Button @click="registerProduct(index)"
                           :disabled="product.discountRate > 100 || product.discountRate <= 0"
                           btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5  btn-outline-dark" type="button"
-                          text="등록" />
+                          text="추가" />
                       </td>
                     </tr>
                   </tbody>
@@ -389,6 +391,19 @@ export default {
       console.log(this.selectedCategory); //확인용
     },
 
+    toggleSelection(product) {
+      const index = this.selectedRows.indexOf(product);
+      if (index === -1) {
+        this.selectedRows.push(product);
+      } else {
+        this.selectedRows.splice(index, 1);
+      }
+    },
+
+    isSelected(product) {
+      return this.selectedRows.includes(product);
+    },
+
     // 판매자 판매 상품 목록을 가져오는 API
     loadChannelSalesProduct() {
       const url = `/channel-sales-product`;
@@ -595,8 +610,54 @@ label {
   color: black;
 }
 
+.modal-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal-table {
+  border-collapse: separate;
+  border-spacing: 0 15px;
+}
+
 .channel-sales-product-img {
   width: 100px;
   height: 100px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.selected-row {
+  background-color: rgba(28, 109, 22, 0.3);
+  color: black;
+}
+
+.selected-row td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  margin-bottom: 5px;
+}
+
+.selected-row td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.row-img {
+  padding-left: 130px;
+}
+
+.row-product {
+  padding-left: 60px;
+}
+
+.row-list-price {
+  padding-left: 40px;
 }
 </style>
