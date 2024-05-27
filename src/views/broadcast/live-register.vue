@@ -86,7 +86,7 @@
             <div class="box">
               <div class="right-content">
                 <!-- 모달 -->
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal"
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark" ref="salesProductModal" modal-class="modal-position"
                   :sizeClass="'max-w-4xl'">
                   <div class="modal-content">
                     <table class="modal-table">
@@ -542,9 +542,8 @@ label {
 
 .box {
   display: flex;
-  justify-content: space-between;
   width: 100%;
-  margin-top: 20px;
+  justify-content: flex-end;
 }
 
 .modal-content {
@@ -615,7 +614,7 @@ label {
 .column-original-price {
   width: 130px;
   text-align: center;
-  padding-left: 3rem;
+  padding-left: 4rem;
   padding-right: 1.5rem;
 }
 
