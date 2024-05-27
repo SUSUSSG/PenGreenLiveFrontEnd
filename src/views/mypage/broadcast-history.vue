@@ -40,7 +40,7 @@ const producthistoryData = ref([]);
 
 const fetchRecentBroadcasts = async () => {
     try {
-        const recentlyViewedResponse = await axios.get(`/api/recently-viewed/broadcasts`);
+        const recentlyViewedResponse = await axios.get(`/recently-viewed/broadcasts`);
         console.log('Recently Viewed Broadcasts:', recentlyViewedResponse.data);
         broadcasthistoryData.value = recentlyViewedResponse.data;
 

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from '@/axios';
 
 const state = {
   isAuthenticated: false,
@@ -43,7 +43,7 @@ const actions = {
   },
   async fetchUserRole({ commit }) {
     try {
-      const response = await axios.get('/api/user-role', { withCredentials: true });
+      const response = await axios.get('/user-role', { withCredentials: true });
       
       commit('setAuth', { 
         isAuthenticated: true, 
