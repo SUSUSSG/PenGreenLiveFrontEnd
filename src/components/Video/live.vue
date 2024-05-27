@@ -84,7 +84,7 @@ export default {
       broadcastId: undefined,
       isLiked: false,
       likesCount: 0,
-      isMuted: false,
+      isMuted: true,
       subtitlesActive: true,
       announceIconSrc: announceIcon,
       heartIconSrc: heartIcon,
