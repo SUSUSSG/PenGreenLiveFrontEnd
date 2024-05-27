@@ -6,7 +6,7 @@
     <div class="border-container">
       <MenuHeaderNav />
       <hr />
-      <DataTab @date-selected="handleDateSelect" />
+      <DataTab ref="dataTab" @date-selected="handleDateSelect" />
       <hr />
       <div
         style="
@@ -16,10 +16,7 @@
           background-color: white;
         "
       >
-        <Categories
-          @category-selected="handleCategorySelect"
-          style="padding-bottom: 1rem"
-        />
+        <Categories ref="categories" @category-selected="handleCategorySelect" style="padding-bottom: 1rem" />
         <hr />
       </div>
       <div class="content-wrapper">
@@ -47,6 +44,22 @@
             />
           </template>
           <template v-else>
+            <div
+              style="
+                width: 50px;
+                height: 50px;
+                text-align: center;
+                line-height: 2.5rem;
+                font-size: 2rem;
+                color: lightgray;
+                margin: 1rem auto;
+                margin-top: 4rem;
+                border-radius: 100%;
+                border: 2px solid lightgray;
+              "
+            >
+              !
+            </div>
             <p class="no-data-message">선택한 조건에 맞는 방송이 없습니다.</p>
           </template>
         </template>
@@ -54,7 +67,11 @@
         <hr />
       </div>
       <div class="chatbot-wrapper">
-        <img class="fixed-lottie" @click="toggleChatbot" src="https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/pengreenlive-logo.png"/>
+        <img
+          class="fixed-lottie"
+          @click="toggleChatbot"
+          src="https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/pengreenlive-logo.png"
+        />
         <div class="lottie-title">
           <p>궁금한 것은 AI 슈슈슉에게 물어보세요!</p>
         </div>
@@ -97,10 +114,11 @@ export default {
     };
   },
   created() {
-    this.fetchLiveData();
+    // fetchLiveData는 created에서 호출하지 않음.
   },
-  mounted(){
+  mounted() {
     this.startHideTitleTimer();
+    this.initializeSelections();
   },
   watch: {
     selectedDate() {
@@ -118,6 +136,11 @@ export default {
       this.selectedCategory = categoryCd;
     },
     async fetchLiveData() {
+      // 선택된 날짜가 없으면 요청을 보내지 않음
+      if (!this.selectedDate) {
+        return;
+      }
+
       this.loading = true;
       this.liveData = []; // 데이터 초기화
       try {
@@ -175,6 +198,16 @@ export default {
         }
       }, 15000); // 5초 후에 3초 간격으로 반복
     },
+    initializeSelections() {
+      // 첫 번째 날짜 선택
+      const firstDate = this.$refs.dataTab.dates[0].date;
+      this.selectedDate = firstDate;
+      this.$refs.dataTab.selectDate(firstDate);
+      
+      // '전체' 카테고리 선택
+      this.selectedCategory = null;
+      this.$refs.categories.selectCategory(null);
+    },
   },
 };
 </script>
@@ -196,7 +229,7 @@ export default {
   text-align: center;
   font-size: 1.2rem;
   color: #666;
-  margin-top: 5rem;
+  margin-top: 1rem;
   height: 100vh;
 }
 .under-category-section::-webkit-scrollbar {
@@ -223,9 +256,9 @@ export default {
   width: 64px;
   height: 64px;
   cursor: pointer;
-  border-radius:100%;
+  border-radius: 100%;
   aspect-ratio: 1/1;
-  object-fit:cover;
+  object-fit: cover;
   margin: 0.5rem;
 }
 

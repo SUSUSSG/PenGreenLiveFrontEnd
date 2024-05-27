@@ -4,8 +4,6 @@
       <div class="text-base mb-3">프롬프터</div>
       <button
         @click="fetchPrompt"
-        @mouseover="showOverlay"
-        @mouseleave="hideOverlay"
         :disabled="loading"
         class="animated-button"
         :class="{ 'loading-button': loading }"
@@ -24,13 +22,6 @@
         <div class="spinner"></div>
       </div>
     </div>
-    <div
-      ref="overlay"
-      class="overlay"
-      :class="{ 'overlay-visible': isOverlayVisible }"
-      :style="{ display: isOverlayVisible || isFadingOut ? 'block' : 'none' }"
-      @transitionend="handleTransitionEnd"
-    ></div>
   </div>
 </template>
 
@@ -47,8 +38,6 @@ export default {
     return {
       promptText: "",
       loading: false,
-      isOverlayVisible: false,
-      isFadingOut: false,
     };
   },
   mounted() {
@@ -77,52 +66,13 @@ export default {
         alert("프롬프트를 불러오는 중 오류가 발생했습니다.");
       } finally {
         this.loading = false;
-        this.hideOverlay();
-      }
-    },
-    showOverlay() {
-      this.isFadingOut = false;
-      this.isOverlayVisible = true;
-      this.$nextTick(() => {
-        this.$refs.overlay.style.opacity = "1";
-      });
-    },
-    hideOverlay() {
-      this.isFadingOut = true;
-      this.$refs.overlay.style.opacity = "0";
-    },
-    handleTransitionEnd() {
-      if (this.isFadingOut) {
-        this.isOverlayVisible = false;
-        this.isFadingOut = false;
       }
     },
   },
 };
 </script>
 
-<style>
-.overlay-container {
-  position: relative;
-}
-
-.overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0);
-  opacity: 0;
-  transition: opacity 1s ease-in-out;
-  z-index: 9;
-  display: none; /* 기본적으로 display: none 설정 */
-}
-
-.overlay-visible {
-  background: rgba(0, 0, 0, 0.5);
-  display: block !important; /* 보일 때는 display: block 설정 */
-}
+<style scoped>
 
 .row {
   display: flex;
@@ -188,9 +138,23 @@ textarea {
 }
 
 .animated-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(106, 90, 205, 0.5);
+  transform: scale(1.1);
+  box-shadow: 0 0 40px rgba(106, 90, 205, 1);
 }
+
+@keyframes gradient-animation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+
 
 @keyframes gradient-animation {
   0% {

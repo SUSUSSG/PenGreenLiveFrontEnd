@@ -2,7 +2,7 @@
   <div>
     <div class="order-history">
       <p class="ai-card-title">나의 주문 내역</p>
-      <ul>
+      <ul v-if="orders.length">
         <li v-for="(order, index) in orders" :key="order.orderSeq">
           <div class="row">
             <div class="img-wrapper">
@@ -34,6 +34,25 @@
           <hr v-if="index < orders.length - 1" class="divider" />
         </li>
       </ul>
+      <div v-else class="no-orders">
+        <div
+        style="
+          width: 50px;
+          height: 50px;
+          text-align: center;
+          line-height: 2.5rem;
+          font-size: 2rem;
+          color: lightgray;
+          margin: 1rem auto;
+          margin-top: 2rem;
+          border-radius: 100%;
+          border: 2px solid lightgray;
+        "
+      >
+        !
+      </div>
+        <p>현재 조회된 주문 내역이 없습니다.</p>
+      </div>
     </div>
     <div class="card-button" @click="goToOrderList">
       <p class="card-text">자세히 보러가기</p>
@@ -186,5 +205,12 @@ export default {
   width: 100%;
   border: 0.5px solid #ccc;
   margin: 1rem 0;
+}
+
+.no-orders {
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  margin: 20px 0;
 }
 </style>

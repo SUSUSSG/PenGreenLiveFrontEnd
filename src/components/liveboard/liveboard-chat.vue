@@ -45,13 +45,6 @@
             :key="message.seq"
             class="chat-message flex"
           >
-            <div class="mr-2 flex items-center">
-              <Icon
-                v-if="showDeleteIcon"
-                icon="heroicons:x-mark-20-solid"
-                @click="deleteMessage(message.seq)"
-              ></Icon>
-            </div>
             <div class="flex flex-row">
               <span class="chat-time">{{ message.time }}</span>
               <span

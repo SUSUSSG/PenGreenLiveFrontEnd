@@ -135,11 +135,32 @@
               />
               <div class="live-info">
                 <div class="live-title">{{ item.productNm }}</div>
-                <div class="live-discount">{{ formatPrice(item.discountPrice) }}원</div>
+                <div class="live-discount">
+                  {{ formatPrice(item.discountPrice) }}원
+                </div>
               </div>
             </div>
           </swiper-slide>
         </swiper>
+        <div v-else-if="!liveItems.length" class="no-data-container">
+          <div
+            style="
+              width: 50px;
+              height: 50px;
+              text-align: center;
+              line-height: 2.5rem;
+              font-size: 2rem;
+              color: lightgray;
+              margin: 1rem auto;
+              margin-top: 2rem;
+              border-radius: 100%;
+              border: 2px solid lightgray;
+            "
+          >
+            !
+          </div>
+          <p>해당 조건에 맞는 데이터가 없습니다.</p>
+        </div>
         <div v-else class="skeleton-container">
           <SkeletonChance v-for="n in 3" :key="n" />
         </div>
@@ -177,6 +198,25 @@
           />
         </swiper-slide>
       </swiper>
+      <div v-else-if="!liveItems.length" class="no-data-container">
+        <div
+          style="
+            width: 50px;
+            height: 50px;
+            text-align: center;
+            line-height: 2.5rem;
+            font-size: 2rem;
+            color: lightgray;
+            margin: 1rem auto;
+            margin-top: 2rem;
+            border-radius: 100%;
+            border: 2px solid lightgray;
+          "
+        >
+          !
+        </div>
+        <p>해당 조건에 맞는 데이터가 없습니다.</p>
+      </div>
       <div v-else class="skeleton-container">
         <SkeletonChance v-for="n in 4" :key="n" />
       </div>
@@ -185,7 +225,11 @@
     <CustomFooter />
     <AIChatBot ref="chatbot" style="border-radius: 2rem 2rem 0 0" />
     <div class="chatbot-wrapper">
-      <img class="fixed-lottie" @click="toggleChatbot" src="https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/pengreenlive-logo.png"/>
+      <img
+        class="fixed-lottie"
+        @click="toggleChatbot"
+        src="https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/pengreenlive-logo.png"
+      />
       <div class="lottie-title">
         <p>궁금한 것은 AI 슈슈슉에게 물어보세요!</p>
       </div>
@@ -300,9 +344,8 @@ export default {
             chatbotWrapper.classList.remove("collapsed");
             if (lottieTitle) {
               setTimeout(() => {
-
-              lottieTitle.style.display = "block";
-              },1500);
+                lottieTitle.style.display = "block";
+              }, 1500);
               setTimeout(() => {
                 lottieTitle.classList.remove("opacity");
               }, 1500); // 1.5초 뒤에 천천히 나타나도록 함
@@ -660,9 +703,9 @@ export default {
   width: 64px;
   height: 64px;
   cursor: pointer;
-  border-radius:100%;
+  border-radius: 100%;
   aspect-ratio: 1/1;
-  object-fit:cover;
+  object-fit: cover;
   margin: 0.5rem;
 }
 
@@ -678,5 +721,13 @@ export default {
 }
 .collapsed {
   width: 80px; /* 너비를 80px로 줄이기 */
+}
+
+.no-data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 200px;
+  margin-top: 3rem;
 }
 </style>

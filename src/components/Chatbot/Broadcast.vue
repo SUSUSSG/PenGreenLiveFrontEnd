@@ -1,13 +1,12 @@
 <template>
   <div class="broadcast-section">
     <p class="ai-card-title">{{ keyword }} 관련 방송</p>
-    <div class="broadcast-list">
+    <div v-if="broadcasts.length" class="broadcast-list">
       <div
         class="broadcast-card"
         v-for="broadcast in broadcasts"
         :key="broadcast.broadcastSeq"
         @click="navigateToBroadcast(broadcast.broadcastSeq)"
-
       >
         <img
           :src="broadcast.broadcastImage"
@@ -32,6 +31,25 @@
           <p class="original-price">{{ formatPrice(broadcast.listPrice) }}원</p>
         </div>
       </div>
+    </div>
+    <div v-else class="no-broadcasts">
+      <div
+        style="
+          width: 50px;
+          height: 50px;
+          text-align: center;
+          line-height: 2.5rem;
+          font-size: 2rem;
+          color: lightgray;
+          margin: 1rem auto;
+          margin-top: 2rem;
+          border-radius: 100%;
+          border: 2px solid lightgray;
+        "
+      >
+        !
+      </div>
+      <p style="height: 20px">현재 조회된 방송이 없습니다.</p>
     </div>
     <div class="card-button" @click="goToOrderList">
       <p class="card-text">다른 방송도 보러가기</p>
@@ -70,7 +88,7 @@ export default {
       console.log("Fetching broadcasts for keyword:", keyword);
       axios
         .get(`/openai/broadcast-keyword`, {
-          params: { keyword }
+          params: { keyword },
         })
         .then((response) => {
           console.log("Broadcasts response:", response.data);
@@ -99,7 +117,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .broadcast-section {
@@ -210,5 +227,12 @@ export default {
 
 .card-text {
   font-size: 1.2rem;
+}
+
+.no-broadcasts {
+  text-align: center;
+  color: #888;
+  font-size: 1.2rem;
+  margin: 20px 0;
 }
 </style>

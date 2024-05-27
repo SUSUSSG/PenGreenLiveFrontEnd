@@ -9,7 +9,10 @@
           gap: 1rem;
         "
       >
-        <img class="image-susussg" src="https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/pengreenlive-logo.png"/>
+        <img
+          class="image-susussg"
+          src="https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/pengreenlive-logo.png"
+        />
         <span>챗봇 슈슈슉</span>
       </div>
       <button @click="toggleChatbot" class="close-button">
@@ -34,10 +37,13 @@
     <div class="chatbot-input">
       <input
         v-model="inputMessage"
+        :placeholder="
+          isListening ? '음성 인식 작동 중...' : '메시지를 입력하세요...'
+        "
         @keyup.enter.prevent="sendMessage"
         type="text"
-        placeholder="메시지를 입력하세요..."
       />
+
       <button @click="sendMessage">
         <Icon icon="mdi:send" class="chat-icon" />
       </button>
@@ -67,14 +73,15 @@ export default {
     Profile: markRaw(Profile),
     Refund: markRaw(Refund),
     BroadcastCard: markRaw(BroadcastCard),
-    RecentViewedBroadcasts : markRaw(RecentViewedBroadcasts),
-    Payment : markRaw(Payment),
+    RecentViewedBroadcasts: markRaw(RecentViewedBroadcasts),
+    Payment: markRaw(Payment),
   },
   data() {
     return {
       isOpen: false,
       inputMessage: "",
       isSending: false,
+      isListening: false, // 음성 인식 상태를 나타내는 변수 추가
       messages: [
         { id: 1, text: "안녕하세요! 펭귄 슈슈슉이에요!", type: "bot" },
         {
@@ -102,8 +109,12 @@ export default {
       this.recognition.onerror = (event) => {
         console.error("Speech recognition error", event);
       };
+      this.recognition.onstart = () => {
+        this.isListening = true; // 음성 인식 시작 시 상태 변경
+      };
 
       this.recognition.onend = () => {
+        this.isListening = false; // 음성 인식 종료 시 상태 변경
         if (this.isOpen) {
           this.recognition.start();
         }
@@ -133,12 +144,9 @@ export default {
         this.scrollToBottom();
 
         try {
-          const response = await axios.post(
-            "/openai/message",
-            {
-              message: this.inputMessage,
-            }
-          );
+          const response = await axios.post("/openai/message", {
+            message: this.inputMessage,
+          });
           let botMessageText = response.data.response;
           if (botMessageText.includes("@주문내역")) {
             const botMessage = {
@@ -417,6 +425,7 @@ export default {
     startVoiceRecognition() {
       if (this.recognition) {
         this.recognition.start();
+        this.isListening = true; // 음성 인식 시작 시 상태 변경
       } else {
         console.error("Speech recognition not initialized.");
       }
@@ -473,10 +482,10 @@ export default {
   padding: 0 30px;
   padding-bottom: 30px;
 }
-.image-susussg{
-  width:60px;
-  height:60px;
-  aspect-ratio:1/1;
+.image-susussg {
+  width: 60px;
+  height: 60px;
+  aspect-ratio: 1/1;
   object-fit: cover;
 }
 .chatbot-input input {

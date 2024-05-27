@@ -35,12 +35,14 @@ export default {
     return {
       categories: [
         {
-          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-all.png",
+          imgSrc:
+            "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-all.png",
           name: "전체",
           categoryCd: null,
         },
         {
-          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-cosmetic.png",
+          imgSrc:
+            "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-cosmetic.png",
           name: "뷰티",
           categoryCd: "BCT-CTG-001",
         },
@@ -51,47 +53,37 @@ export default {
           categoryCd: "BCT-CTG-002",
         },
         {
-          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-furniture.png",
+          imgSrc:
+            "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-furniture.png",
           name: "생활용품",
           categoryCd: "BCT-CTG-003",
         },
         {
-          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-kids.png",
+          imgSrc:
+            "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-kids.png",
           name: "유아동",
           categoryCd: "BCT-CTG-004",
         },
         {
-          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-tech.png",
+          imgSrc:
+            "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-tech.png",
           name: "테크",
           categoryCd: "BCT-CTG-005",
         },
         {
-          imgSrc: "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-hoodie.png",
+          imgSrc:
+            "https://kr.object.ncloudstorage.com/susussg-img-bucket/category-icon/icon-hoodie.png",
           name: "패션",
           categoryCd: "BCT-CTG-006",
         },
       ],
       selectedCategory: null,
-            categoryCodes: {
-        전체: null,
-        뷰티: "BCT-CTG-001",
-        식품: "BCT-CTG-002",
-        생활용품: "BCT-CTG-003",
-        유아동: "BCT-CTG-004",
-        테크: "BCT-CTG-005",
-        패션: "BCT-CTG-006",
-      },
     };
   },
   methods: {
-    handleSelect(name) {
-      this.selectedCategory = name;
-    },
     selectCategory(categoryCd) {
       this.$emit("category-selected", categoryCd);
-    console.log("Selected Category Code: ", categoryCd);
-    this.selectedCategory = categoryCd;
-
+      this.selectedCategory = categoryCd;
     },
   },
 };
