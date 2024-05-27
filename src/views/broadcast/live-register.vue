@@ -134,9 +134,9 @@
                 <a class="registered-code">[{{ product.code }}]</a>
                 <a class="registered-name">{{ product.name }}</a>
                 <a class="registered-code">{{ product.originalPrice.toLocaleString() }}원</a>
-                <input type="number" v-model.number="product.discountRate" class="input-control" max="100">
-                <div class="discount-button" @click="applyDiscount(idx)" :disabled="isDisabled(product.discountRate)">
-                  적용</div>
+                <input type="number" v-model.number="product.discountRate" class="input-control"
+                  @input="validateDiscountRate(product.discountRate)">
+                <div class="discount-button" @click="applyDiscount(idx)">적용</div>
                 <a class="registered-price"> {{ formatCurrency(product.discountPrice) }}</a>
                 <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" class="icon-delete" />
               </li>
@@ -279,7 +279,6 @@ export default {
         title: "공지사항 등록",
       },
     ];
-    const toast = useToast();
     let stepNumber = ref(0);
 
     const prev = () => {
@@ -408,15 +407,14 @@ export default {
           });
         }
       });
-
-      // 선택된 결과를 콘솔에 출력
       console.log('선택된 상품 목록:', this.registeredProducts);
-
       this.isOpen = true;
       this.$refs.salesProductModal.openModal();
     },
-    isDisabled(discountRate) {
-      return discountRate > 100 || discountRate <= 0;
+    validateDiscountRate(rate) {
+      if (rate < 1 || rate > 99) {
+        alert("할인율은 1~99사이로 입력해주세요.")
+      }
     },
     applyDiscount(index) {
       const product = this.registeredProducts[index];
@@ -632,15 +630,14 @@ label {
   width: 100px;
   text-align: right;
   font-weight: bold;
-  padding-left: 5rem;
-  padding-right: 0.5rem;
+  padding-left: 6rem;
+  // padding-right: 0.5rem;
 }
 
 .column-delete {
   width: 100px;
   text-align: center;
   padding-left: 3.5rem;
-  // padding-right: rem;
 }
 
 .registered-list {
@@ -666,6 +663,7 @@ label {
   width: 100px;
   text-align: right;
   font-weight: bold;
+  padding-right: 2rem;
 }
 
 .discount-button {
