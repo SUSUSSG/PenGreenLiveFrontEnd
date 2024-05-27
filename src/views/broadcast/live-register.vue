@@ -29,51 +29,48 @@
       </div>
     </div>
 
-    <div class="conten-box mt-14 border-t border-slate-100 dark:border-slate-700 -mx-6 px-6 pt-6">
+    <div class="basic-card">
       <form @submit.prevent="submit">
-        <div v-for="(step, index) in steps" :key="index">
-          <div v-if="stepNumber === index">
-            <div class="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-5">
-              <div class="lg:col-span-3 md:col-span-2 col-span-1">
-                <h4 class="text-base text-slate-800 dark:text-slate-300 mb-6">
-                  {{ step.title }}
-                </h4>
-              </div>
-            </div>
-          </div>
-        </div>
-
         <!-- Step1 -->
         <div v-if="stepNumber === 0">
           <Card>
-            <Textinput label="라이브 제목" placeholder="라이브 제목을 입력하세요" name="liveTitle" v-model="liveTitle" />
-            <br>
-            <Textinput label="라이브 한줄 요약" placeholder="라이브 한줄 요약을 입력하세요" name="liveSummary" v-model="liveSummary" />
-            <br>
-
-            <label>대표 이미지 등록</label>
-            <div style="display: flex; align-items: center;">
-              <div style="flex-shrink: 0;">
-                <img :src="previewImage" alt="previewImage" style="width: 180px; height: 320px" />
-              </div>
-              <div style="margin-left: 20px;">
-                <p>최대 용량 : 1mb</p>
-                <p>권장 사이즈 : 720 x 1280</p>
-                <input type="file" id="imageUpload" @change="handleImageUpload"
-                  accept="image/jpeg, image/png, image/gif" class="mb-2" />
-              </div>
+            <div class="form-group">
+              <label>라이브 제목</label>
+              <Textinput placeholder="여기에 입력하세요" name="liveTitle" v-model="liveTitle" class="wide-input" />
             </div>
-            <br>
 
-            <Textinput label="라이브 예정일/시간" type="datetime-local" name="liveDateTime" v-model="liveDateTime" />
-            <div class="mt-5">
+            <div class="form-group">
+              <label>라이브 한줄 소개</label>
+              <Textinput placeholder="여기에 입력하세요" name="liveSummary" v-model="liveSummary" class="wide-input" />
+            </div>
+
+            <div class="form-group">
+              <label for="liveDateTime">라이브 예정일/시간</label>
+              <input type="datetime-local" id="liveDateTime" name="liveDateTime" v-model="liveDateTime"
+                :min="minDateTime" />
+            </div>
+
+            <div class="form-group">
               <label>방송 카테고리 선택</label>
-              <div class="mt-2">
-                <select v-model="selectedCategory" @change="handleCategoryChange">
-                  <option value="" disabled selected hidden>선택하기</option>
-                  <option v-for="category in categories" :key="category.value" :value="category.value">{{
-                    category.label }}</option>
-                </select>
+              <select v-model="selectedCategory" @change="handleCategoryChange">
+                <option value="" disabled selected hidden>선택하기</option>
+                <option v-for="category in categories" :key="category.value" :value="category.value">{{
+                  category.label }}</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>대표 이미지 등록</label>
+              <div style="display: flex; align-items: center;" class="mt-2">
+                <div style="flex-shrink: 0;">
+                  <img :src="previewImage" alt="previewImage" style="width: 180px; height: 320px" />
+                </div>
+                <div style="margin-left: 20px;">
+                  <p>최대 용량 : 1mb</p>
+                  <p>권장 사이즈 : 720 x 1280</p>
+                  <input type="file" id="imageUpload" @change="handleImageUpload"
+                    accept="image/jpeg, image/png, image/gif" class="mb-2" />
+                </div>
               </div>
             </div>
           </Card>
@@ -84,91 +81,63 @@
           <Card>
             <!-- 라이브에 사용할 상품 등록 -->
             <div class="box">
-              <div class="left-content">
-                <label>상품 등록</label>
-              </div>
               <div class="right-content">
                 <!-- 모달 -->
-                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark btn-sm" ref="salesProductModal"
-                  :sizeClass="'max-w-4xl'">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th class="px-4">선택</th>
-                        <!-- <th class="px-3">상품 이미지</th> -->
-                        <th class="px-6">상품 이름</th>
-                        <th class="px-5">상품 코드</th>
-                        <th class="px-8 py-2">원가</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr v-for="(product, index) in channelSalesProduct" :key="index">
-                        <td class="px-6"><input type="checkbox" v-model="selectedRows" :value="product"></td>
-                        <!-- <td class="px-7"><img :src="'data:image/png;base64,' + product.productImg"></td> -->
-                        <td class="px-6">{{ product.productName }}</td>
-                        <td class="px-6">{{ product.productCode }}</td>
-                        <td class="px-6">{{ formatCurrency(product.originalPrice) }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
+                <Modal title="상품등록" label="상품 등록" labelClass="btn-dark" ref="salesProductModal"
+                  modal-class="modal-position" :sizeClass="'max-w-4xl'">
+                  <div class="modal-content">
+                    <table class="modal-table">
+                      <thead>
+                        <tr>
+                          <th class="px-7">이미지</th>
+                          <th class="row-img">상품 이름</th>
+                          <th class="row-product">상품 코드</th>
+                          <th class="row-list-price">정가</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="(product, index) in channelSalesProduct" :key="index"
+                          @click="toggleSelection(product)" :v-model="selectedRows"
+                          :class="{ 'selected-row': isSelected(product) }" class="pointer">
+                          <td><img :src="product.productImg" class="channel-sales-product-img"></td>
+                          <td class="px-6">{{ product.productName }}</td>
+                          <td class="px-6">{{ product.productCode }}</td>
+                          <td class="px-6">{{ formatCurrency(product.originalPrice) }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                   <template v-slot:footer>
                     <Button text="상품 등록" btnClass="btn-primary btn-sm" @click="addSelectedProductsToTable" />
                   </template>
                 </Modal>
               </div>
             </div>
-            <div class="card rounded-md bg-white dark:bg-slate-800">
-              <div class="card-body flex flex-col p-6 overflow-auto">
-                <!-- <p>판매 상품 등록</p> -->
-                <!-- <hr class="section-divider"> -->
-                <table class="min-w-full">
-                  <thead>
-                    <tr class="text-left">
-                      <th class="px-6">상품 이름</th>
-                      <th class="px-6">상품 코드</th>
-                      <th class="px-9">정가</th>
-                      <th class="px-20">할인율 (%)</th>
-                      <th class="px-6">할인된 가격</th>
-                      <th class="px-10 py-3">추가</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="(product, index) in productsToRegister" :key="index">
-                      <td class="px-6 py-4">{{ product.name }}</td>
-                      <td class="px-6 py-4">{{ product.code }}</td>
-                      <td class="px-6 py-4">{{ formatCurrency(product.originalPrice) }}</td>
-                      <td class="px-6 py-4">
-                        <input type="number" v-model.number="product.discountRate" class="input-control" max="100">
-                        <Button @click="applyDiscount(index)"
-                          :disabled="product.discountRate > 100 || product.discountRate <= 0"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" type="button"
-                          text="적용" />
-                      </td>
-                      <td class="px-6 py-4">{{ formatCurrency(product.discountPrice) }}</td>
-                      <td class="px-6 py-4">
-                        <Button @click="registerProduct(index)"
-                          :disabled="product.discountRate > 100 || product.discountRate <= 0"
-                          btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5  btn-outline-dark" type="button"
-                          text="등록" />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-                <br>
-                <ul>
-                  <li v-for="(registered, idx) in registeredProducts" :key="idx"
-                    class="list-item flex items-center justify-between mt-1">
-                    <div class="bg-gray-100 p-2 rounded">
-                      <span class="registered-name">{{ registered.name }}</span>
-                      <span class="registered-code">({{ registered.code }})</span>
-                      방송 판매가 : <span class="registered-price"> {{ formatCurrency(registered.discountPrice) }}</span>
-                      <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" style="float: right;"
-                        class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
-                    </div>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <table class="min-w-full mt-7">
+              <thead>
+                <tr class="text-left">
+                  <th class="column-code">상품 코드</th>
+                  <th class="column-name">상품 이름</th>
+                  <th class="column-original-price">정가</th>
+                  <th class="column-discount-rate">할인율 (%)</th>
+                  <th class="column-sale-price">판매가</th>
+                  <th class="column-delete">삭제</th>
+                </tr>
+              </thead>
+            </table>
+            <br>
+            <ul>
+              <li v-for="(product, idx) in registeredProducts" :key="idx" class="registered-list">
+                <a class="registered-code">[{{ product.code }}]</a>
+                <a class="registered-name">{{ product.name }}</a>
+                <a class="registered-code">{{ product.originalPrice.toLocaleString() }}원</a>
+                <input type="number" v-model.number="product.discountRate" class="input-control"
+                  @input="validateDiscountRate(product.discountRate)">
+                <div class="discount-button" @click="applyDiscount(idx)">적용</div>
+                <a class="registered-price"> {{ formatCurrency(product.discountPrice) }}</a>
+                <Icon icon="heroicons:x-mark-20-solid" @click="deleteProduct(idx)" class="icon-delete" />
+              </li>
+            </ul>
           </Card>
         </div>
 
@@ -180,17 +149,14 @@
               <div class="flex items-center justify-between">
                 <Textinput label="공지 사항" type="text" name="newNotice" v-model="newNotice" placeholder="공지사항 입력"
                   class="mb-2 flex-grow" />
-                <Button @click="addNotice" type="button"
-                  btnClass="btn-primary inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark"
-                  text="추가"></Button>
+                <Button @click="addNotice" type="button" btnClass="btn-sm ml-2 mt-5 btn-outline-dark" text="추가" />
               </div>
               <ul>
                 <li v-for="(notice, index) in notices" :key="index"
                   class="list-item flex items-center justify-between mt-1">
                   <div class="bg-gray-100 p-2 rounded">
                     <span>{{ notice }}</span>
-                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" style="float: right;"
-                      class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteNotice(index)" class="list-icon-delete" />
                   </div>
                 </li>
               </ul>
@@ -200,16 +166,14 @@
               <div class="flex items-center justify-between">
                 <Textinput label="라이브 혜택" type="text" name="newBenefit" v-model="newBenefit" placeholder="라이브 혜택 입력"
                   class="mb-2 flex-grow" />
-                <Button @click="addBenefit" type="button"
-                  btnClass="btn inline-flex justify-center btn-sm ml-2 mt-5 btn-outline-dark" text="추가"></Button>
+                <Button @click="addBenefit" type="button" btnClass="btn-sm ml-2 mt-5 btn-outline-dark" text="추가" />
               </div>
               <ul>
                 <li v-for="(item, index) in benefits" :key="index"
                   class="list-item flex items-center justify-between mt-1">
                   <div class="bg-gray-100 p-2 rounded">
                     <span>{{ item }}</span>
-                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" style="float: right;"
-                      class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteBenefit(index)" class="list-icon-delete" />
                   </div>
                 </li>
               </ul>
@@ -218,22 +182,19 @@
             <div class="section mt-7">
               <div class="mb-4">
                 <div class="mb-2"> <!-- 질문 -->
-                  <Textinput label="질문" type="text" v-model="newQuestion" placeholder="질문을 입력해주세요" />
+                  <Textinput label="자주묻는 질문" type="text" v-model="newQuestion" placeholder="질문을 입력해주세요" />
                 </div>
                 <div class="mb-2"> <!-- 답변 -->
-                  <Textarea label="답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
+                  <Textarea label="자주묻는 답변" name="pn4" placeholder="답변을 입력해주세요" v-model="newAnswer" />
                 </div>
-                <div class="text-center mb-2"> <!-- 추가하기 버튼을 오른쪽 중간에 위치시키기 위해 text-center 추가 -->
-                  <Button @click="addAnswer" type="button"
-                    btnClass="btn inline-flex justify-center btn-sm justify-between btn-outline-dark"
-                    text="추가"></Button>
+                <div class="text-center mb-2">
+                  <Button @click="addAnswer" type="button" btnClass="btn-sm ml-2 mt-5 btn-outline-dark" text="추가" />
                 </div>
               </div>
               <dl>
                 <div v-for="(item, index) in qa" :key="index" class="faq-item mt-1">
                   <div class="bg-gray-100 p-2 rounded">
-                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" style="float: right;"
-                      class="bg-red-500 hover:bg-red-600 text-white rounded p-1" />
+                    <Icon icon="heroicons:x-mark-20-solid" @click="deleteQA(index)" class="list-icon-delete" />
                     <dt class="question">{{ item.questionTitle }}</dt>
                     <dd class="answer">{{ item.questionAnswer }}</dd>
                   </div>
@@ -242,8 +203,6 @@
             </div>
           </Card>
         </div>
-
-
 
 
         <!-- 하단 버튼 모음 -->
@@ -307,7 +266,6 @@ export default {
         title: "공지사항 등록",
       },
     ];
-    const toast = useToast();
     let stepNumber = ref(0);
 
     const prev = () => {
@@ -335,6 +293,7 @@ export default {
       liveTitle: '',
       liveSummary: '',
       liveDateTime: '',
+      minDateTime: '',
       imageFile: null,
       previewImage: "https://via.placeholder.com/90x160",
       categories: [], // 카테고리 목록을 담을 배열
@@ -346,12 +305,11 @@ export default {
           productSeq: '',
           productImg: '',
           productName: '',
-          productCode: '', //상품번호 추가
+          productCode: '',
           originalPrice: ''
         }],
       selectedRows: [], //모달에서 선택된 상품
-      productsToRegister: [], //모달에서 선택된 상품 목록만틈 다음 테이블에서 보여줌
-      registeredProducts: [], // 할인율이 적용된 상품들
+      registeredProducts: [],
 
       //step3
       notices: [],
@@ -366,6 +324,7 @@ export default {
   created() {
     this.loadCategories(); // 카테고리 목록 가져오기
     this.loadChannelSalesProduct(); // 판매자가 판매하는 제품 목록 가져오기
+    this.setMinDateTime();
   },
   methods: {
     // 카테고리 목록을 가져오는 API
@@ -387,6 +346,27 @@ export default {
     },
     handleCategoryChange() {
       console.log(this.selectedCategory); //확인용
+    },
+    setMinDateTime() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      const hours = String(now.getHours()).padStart(2, '0');
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      this.minDateTime = `${year}-${month}-${day}T${hours}:${minutes}`;
+    },
+    toggleSelection(product) {
+      const index = this.selectedRows.indexOf(product);
+      if (index === -1) {
+        this.selectedRows.push(product);
+      } else {
+        this.selectedRows.splice(index, 1);
+      }
+    },
+
+    isSelected(product) {
+      return this.selectedRows.includes(product);
     },
 
     // 판매자 판매 상품 목록을 가져오는 API
@@ -414,13 +394,9 @@ export default {
       this.modalOpen = true;
 
       this.selectedRows.forEach(product => {
-        // 이미 productsToRegister 배열에 존재하는지 확인
-        const isDuplicateInProductsToRegister = this.productsToRegister.some(item => item.code === product.productCode);
-        // 이미 registeredProducts 배열에 존재하는지 확인
         const isDuplicateInRegisteredProducts = this.registeredProducts.some(item => item.code === product.productCode);
-        if (!isDuplicateInProductsToRegister && !isDuplicateInRegisteredProducts) {
-          // productsToRegister 배열에 추가
-          this.productsToRegister.push({
+        if (!isDuplicateInRegisteredProducts) {
+          this.registeredProducts.push({
             productSeq: product.productSeq,
             name: product.productName,
             code: product.productCode,
@@ -428,16 +404,17 @@ export default {
           });
         }
       });
-
-      // 선택된 결과를 콘솔에 출력
-      console.log('선택된 상품 목록:', this.productsToRegister);
-
+      console.log('선택된 상품 목록:', this.registeredProducts);
       this.isOpen = true;
       this.$refs.salesProductModal.openModal();
     },
-
+    validateDiscountRate(rate) {
+      if (rate < 1 || rate > 99) {
+        alert("할인율은 1~99사이로 입력해주세요.")
+      }
+    },
     applyDiscount(index) {
-      const product = this.productsToRegister[index];
+      const product = this.registeredProducts[index];
       const discount = (product.originalPrice * product.discountRate) / 100;
       product.discountPrice = Math.round((product.originalPrice - discount) / 10) * 10;
     },
@@ -463,21 +440,6 @@ export default {
     formatCurrency(value) {
       if (!value) return '';
       return `${parseInt(value).toLocaleString('ko-KR')}원`;
-    },
-    registerProduct(index) {
-      const product = this.productsToRegister[index];
-      const discount = (product.originalPrice * product.discountRate) / 100;
-      let discountPrice = product.originalPrice - discount;
-
-      // 10원 단위로 반올림
-      discountPrice = Math.round(discountPrice / 10) * 10;
-
-      product.discountPrice = discountPrice;
-      this.registeredProducts.push(product);
-      this.productsToRegister.splice(index, 1);
-    },
-    deleteRegisteredProduct(index) {
-      this.registeredProducts.splice(index, 1);
     },
     addNotice() {
       if (this.newNotice.trim()) {
@@ -514,10 +476,6 @@ export default {
     registerBroadcast() {
       const toast = useToast();
 
-      toast.clear();
-      this.loading = true;
-      toast.info("방송 정보를 저장 중입니다");
-
       // JSON 형식의 데이터 구성
       const requestData = {
         broadcastTitle: this.liveTitle,
@@ -530,6 +488,42 @@ export default {
         benefits: this.benefits,
         image: this.imageSrc
       };
+
+      // 필수 필드가 비어 있는지 확인
+      const requiredFields = [
+        'broadcastTitle',
+        'broadcastSummary',
+        'broadcastScheduledTime',
+        'categoryCd',
+        'registeredProducts',
+        'notices',
+        'qa',
+        'benefits',
+        'image'
+      ];
+
+      // 필드 이름과 한글 이름 매핑
+      const fieldNamesInKorean = {
+        broadcastTitle: '라이브 제목',
+        broadcastSummary: '라이브 한줄 소개',
+        broadcastScheduledTime: '라이브 예정 시간',
+        categoryCd: '카테고리 ',
+        registeredProducts: '판매할 상품',
+        notices: '공지사항',
+        qa: '자주묻는 질문과 답변',
+        benefits: '라이브 혜택',
+        image: '썸네일'
+      };
+
+      for (const field of requiredFields) {
+        if (!requestData[field]) {
+          this.loading = false;
+          toast.info(`${fieldNamesInKorean[field]} 정보가 비어 있습니다.`, {
+            timeout: 2000,
+          });
+          return;
+        }
+      }
 
       console.log(requestData);
 
@@ -557,41 +551,194 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#span {
+span {
   color: black;
-}
-
-.box {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 20px;
-}
-
-.question {
-  font-weight: bold;
-}
-
-.registered-code,
-.registered-price {
-  margin-right: 30px;
-}
-
-.registered-name {
-  margin-right: 5px;
-  font-weight: bold;
-  color: #134010;
-}
-
-.registered-price {
-  font-weight: bold;
-}
-
-thead {
-  margin-bottom: 20px;
 }
 
 label {
   color: black;
+}
+
+.basic-card {
+  margin-top: 3.5rem;
+  border-top: 1px solid #f1f5f9;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  padding-top: 1.5rem;
+  margin-left: -1.5rem;
+  margin-right: -1.5rem;
+}
+
+.box {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2em;
+}
+
+.form-group label {
+  margin-right: 12px;
+  width: 200px;
+}
+
+.wide-input {
+  width: 1000px;
+}
+
+
+.modal-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.modal-table {
+  border-collapse: separate;
+  border-spacing: 0 15px;
+}
+
+.channel-sales-product-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  padding: 10px;
+}
+
+.selected-row {
+  background-color: rgba(28, 109, 22, 0.3);
+  color: black;
+}
+
+.selected-row td:first-child {
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+  margin-bottom: 5px;
+}
+
+.selected-row td:last-child {
+  border-top-right-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.row-img {
+  padding-left: 130px;
+}
+
+.row-product {
+  padding-left: 60px;
+}
+
+.row-list-price {
+  padding-left: 40px;
+}
+
+.column-code {
+  width: 130px;
+  text-align: center;
+  padding-right: 5rem;
+}
+
+.column-name {
+  width: 200px;
+  font-weight: bold;
+  text-align: center;
+  padding-left: 1.5rem;
+  padding-right: 7rem;
+}
+
+.column-original-price {
+  width: 130px;
+  text-align: center;
+  padding-left: 4rem;
+  padding-right: 1.5rem;
+}
+
+.column-discount-rate {
+  width: 130px;
+  text-align: center;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.column-sale-price {
+  width: 100px;
+  text-align: right;
+  font-weight: bold;
+  padding-left: 6rem;
+  // padding-right: 0.5rem;
+}
+
+.column-delete {
+  width: 100px;
+  text-align: center;
+  padding-left: 3.5rem;
+}
+
+.registered-list {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  background-color: #FAFAFA;
+  padding: 1rem;
+}
+
+.registered-code {
+  width: 130px;
+  text-align: center;
+}
+
+.registered-name {
+  font-weight: bold;
+  width: 450px
+}
+
+.registered-price {
+  width: 100px;
+  text-align: right;
+  font-weight: bold;
+  padding-right: 2rem;
+}
+
+.discount-button {
+  display: inline-flex;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.25;
+  background-color: #ECE6CC;
+  color: #111111;
+  width: 80px;
+  height: 30px;
+  border-radius: 0.45rem;
+}
+
+.icon-delete,
+.list-icon-delete {
+  float: right;
+  background-color: #f56565;
+  color: white;
+  border-radius: 0.25rem;
+  padding: 0.25rem;
+  transition: background-color 0.2s;
+  margin-right: 40px;
+}
+
+.list-icon-delete {
+  margin: 0;
+}
+
+.question {
+  font-weight: bold;
 }
 </style>

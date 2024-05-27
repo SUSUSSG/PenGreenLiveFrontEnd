@@ -5,7 +5,7 @@
     <div class="result-display" :class="[isBroadcasting ? 'red-style' : 'black-style']">{{ resultDispalyText }}
     </div>
     <div class="ml-3">
-      <div class="broadcast-title">{{ boradcastTitle }}</div>
+      <div class="broadcast-title">{{ broadcastTitle }}</div>
       <div class="broadcast-time">{{ "라이브 일시 : " + formattedLiveDateTime.current + " ~ " +
         formattedLiveDateTime.oneHourLater }}</div>
     </div>
@@ -46,7 +46,7 @@ export default {
     Button
   },
   props: {
-    boradcastTitle: String,
+    broadcastTitle: String,
     liveDateTime: String
   },
   data() {

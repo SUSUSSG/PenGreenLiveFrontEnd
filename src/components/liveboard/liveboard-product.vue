@@ -41,8 +41,8 @@
         </div>
         <!-- 후에 추가 구현 -->
         <div class="real-time-info">
-          <p>상품 재고: {{ selectedProduct.productStock }}원</p>
-          <p>남은 재고: {{ remainingStock }}원</p>
+          <p>상품 재고: {{ selectedProduct.productStock }}개</p>
+          <p>남은 재고: {{ remainingStock }}개</p>
           <p>주문 건수: {{ totalOrders }}건</p>
           <p>주문 금액: {{ totalOrderAmount.toLocaleString() }}원</p>
         </div>
