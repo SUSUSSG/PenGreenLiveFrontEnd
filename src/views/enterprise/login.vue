@@ -140,7 +140,7 @@
         try {
             console.log(username, password.value);
             await store.dispatch('auth/loginVendor', 
-            { username: username, password: password.value }, 
+            { username, password.value }, 
             // {
             //     headers: { 'Content-Type': 'application/json' }
             // }
