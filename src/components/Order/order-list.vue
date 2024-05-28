@@ -133,7 +133,7 @@ const submitReview = async () => {
   try {
     // 유해성 검사 요청
     const checkResponse = await axios.post(
-      "/api/openai/review-check",
+      "/openai/review-check",
       { reviewContent: reviewContent.value }
     );
     console.log("유해성 검사 응답:", checkResponse.data);
@@ -152,7 +152,7 @@ const submitReview = async () => {
       orderSeq: props.orderSeq,
     };
 
-    await axios.post("/api/reviews", reviewData);
+    await axios.post("/reviews", reviewData);
     alert("리뷰 등록이 완료되었습니다.");
     reviewContent.value = "";
     closeModal();
