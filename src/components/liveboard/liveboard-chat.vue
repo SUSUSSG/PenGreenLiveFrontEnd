@@ -371,7 +371,7 @@ export default {
       }
 
       if (this.newMessage === this.lastMessage) {
-        this.repeatCountthis.repeatCount++;
+        this.repeatCount++;
       } else {
         this.repeatCount = 1;
         this.lastMessage = this.newMessage;
