@@ -439,9 +439,8 @@ export default {
     },
 
     deleteSelectedProducts() {
-      const vendorSeq = 1;
       this.selectedProducts.forEach(productSeq => {
-        axios.delete(`/product/${vendorSeq}/${productSeq}`)
+        axios.delete(`/product/${productSeq}`)
           .then(response => {
             alert("Product successfully deleted");
             this.fetchProductsByVendorSeq();
@@ -461,7 +460,7 @@ export default {
         return;
       }
 
-      const url = `/products?vendorSeq=${this.addModalData.vendorSeq}&channelSeq=${this.addModalData.channelSeq}`;
+      const url = `/products?channelSeq=${this.addModalData.channelSeq}`;
 
       const productData = {
         productCd: this.addModalData.productCd,
@@ -481,7 +480,7 @@ export default {
 
       axios.post(url, productData)
         .then(response => {
-          alert("Product successfully registered");
+          alert("상품이 등록되었습니다.");
           this.$refs.modal1.closeModal();
           this.fetchProducts(this.addModalData.vendorSeq);
         })
