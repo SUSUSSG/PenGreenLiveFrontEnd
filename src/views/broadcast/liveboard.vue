@@ -409,6 +409,7 @@ export default {
   height: 100%;
   padding: 1rem;
   overflow: hidden;
+  margin-top: 15px;
 }
 
 .flex-row {
