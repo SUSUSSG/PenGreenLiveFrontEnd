@@ -26,7 +26,33 @@ const mutations = {
 const actions = {
   async login({ commit }, { username, password }) {
     try {
-      const response = await axios.post('/login', { username, password }, { withCredentials: true });
+      const response = await axios.post('/login', { "username": username, "password" : password }, 
+    //   {
+    //     withCredentials: true,
+    //     headers: {
+    //         'Content-Type': 'application/json'
+    //     }
+    // }
+    );
+      const userData = JSON.parse(response.data.user);
+      console.log("parsed user data", userData);
+
+      commit('setAuth', { 
+        isAuthenticated: true, 
+        userRole: userData.role,
+        userName: userData.name,
+        userUUID: userData.uuid,
+      });
+      console.log("login response ", response.data);
+      alert("로그인 성공");
+    } catch (error) {
+      console.error('Login failed', error);
+      alert("로그인 실패");
+    }
+  },
+  async loginVendor({ commit }, { username, password }) {
+    try {
+      const response = await axios.post('/vendor/login', { username, password }, { withCredentials: true });
       const userData = JSON.parse(response.data.user);
       console.log("parsed user data", userData);
 
