@@ -365,43 +365,8 @@ const formData = ref({
     revenue: null,
     faxNumber: '',
     websiteUrl: '',
-    optionalAgreementConsent: false
+    optionalAgreementConsent: false,
 });
-
-
-// const formData = ref({
-//     businessClassification: "일반과세자",
-//     businessId: "1234567890",
-//     businessType: "전자상거래업",
-//     channelSeq: null,
-//     companyAddress: "[01073] 서울 강북구 도봉로 315 (에피소드 수유 838)",
-//     companyNm: "그린컴퍼니",
-//     companyTel: "021234567",
-//     corporateNumber: "980316",
-//     enterpriseType: "중소기업",
-//     establishmentDt: "2024-05-02",
-//     faxNumber: "021234567",
-//     handledItems: "친환경 가정용품",
-//     industry: "제조업",
-//     optionalAgreementConsent: true,
-//     representativeNm: "장서윤",
-//     revenue: 10,
-//     vendorEmail: "seoy316@naver.com",
-//     vendorNm: "장서윤",
-//     vendorPw: "123456",
-//     vendorTel: "01096543115",
-//     websiteUrl: "http://green.com"
-// });
-
-// 예제: Axios를 사용하여 서버로 데이터 전송
-axios.post('/vendor/signup', formData)
-    .then(response => {
-        console.log('Form submitted successfully:', response.data);
-    })
-    .catch(error => {
-        console.error('Failed to submit the form:', error);
-    });
-
 
 const vendorPwCheck = ref(null);
 const agreement = ref(false);
