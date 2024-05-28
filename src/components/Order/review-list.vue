@@ -94,7 +94,7 @@ const deleteReview = async () => {
     if (props.reviewSeq === 0) {
       throw new Error('Invalid reviewSeq');
     }
-    await axios.delete(`/api/reviews/${props.reviewSeq}`, {
+    await axios.delete(`/reviews/${props.reviewSeq}`, {
       params: { productSeq: props.productSeq, orderSeq: props.orderSeq }
     });
     alert('리뷰 삭제가 완료되었습니다.');
