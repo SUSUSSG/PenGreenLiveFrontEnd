@@ -101,6 +101,7 @@
     const router = useRouter();
     const store = useStore();
     
+    const username = ref(null);
     const password = ref(null);
 
     const businessNumber = reactive({
@@ -139,7 +140,7 @@
 
         try {
             console.log(username, password.value);
-            await store.dispatch('auth/loginVendor', { username, password: password.value });
+            await store.dispatch('auth/loginVendor', { username: username.value, password: password.value });
             router.push("/");
             alert("로그인 성공.");
         } catch (error) {
