@@ -28,7 +28,6 @@ export default {
     return {
       previewImage: null,
       shopInfo: {
-        channelSeq: 1,
         channelNM: '',
         channelUrl: '',
         channelImage: null,
@@ -59,7 +58,7 @@ export default {
       return path.split('/').pop();
     },
     loadShopInfo() {
-      const url = `/shop/${this.shopInfo.channelSeq}`;
+      const url = `/shop`;
       axios.get(url)
         .then(response => {
           this.shopInfo.channelNM = response.data.channelNM;
@@ -79,7 +78,7 @@ export default {
         });
     },
     saveShopInfo() {
-      const url = `/shop/${this.shopInfo.channelSeq}`;
+      const url = `/shop`;
       const shopInfoToSend = {
         ...this.shopInfo,
         channelImage: this.shopInfo.channelImage || null, 
