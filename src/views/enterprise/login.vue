@@ -128,18 +128,16 @@
     }
 
     async function handleLogin() {
-
-        if (!loginValidate()) {
+        if (loginValidate()) {
             alert("아이디 또는 비밀번호를 입력해주세요.");
             return;
         }
         
-        const username = `${businessNumber.partOne}${businessNumber.partTwo}${businessNumber.partThree}`;
-
-        console.log("username ", username, password);
+        username.value = `${businessNumber.partOne}${businessNumber.partTwo}${businessNumber.partThree}`;
+        console.log("username ", username.value, password.value);
 
         try {
-            console.log(username, password.value);
+            console.log(username.value, password.value);
             await store.dispatch('auth/loginVendor', { username: username.value, password: password.value });
             router.push("/");
             alert("로그인 성공.");
