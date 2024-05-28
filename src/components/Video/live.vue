@@ -297,7 +297,7 @@ export default {
   color: white;
   font-size: 2rem;
   font-weight: bold;
-  margin-top: 350px;
+  margin-top: 400px;
   text-align: center;
 }
 
