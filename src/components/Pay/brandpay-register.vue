@@ -13,7 +13,8 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
-const customerKey = computed(() => store.getters.userUUID);
+const customerKey = computed(() => store.getters['auth/userUUID']);
+
 let brandpay = ref(null);
 let paymentMethodsWidget;
 const product = computed(()=> (store.getters.selectedProduct)).value;
@@ -28,7 +29,7 @@ onMounted(async () => {
     await loadTossPaymentsSDK();
   
     brandpay.value = window.BrandPay(clientKey, customerKey.value, {
-      redirectUrl: '/brandpay/callback-auth',
+      redirectUrl: `${import.meta.env.VITE_API_BASE_URL}/brandpay/callback-auth`,
     });
 
     const totalAmount = order.orderPayedPrice ? order.orderPayedPrice : 1;
