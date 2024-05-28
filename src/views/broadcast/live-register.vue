@@ -516,9 +516,11 @@ export default {
       };
 
       for (const field of requiredFields) {
-        if (!requestData[field]) {
+        if (!requestData[field] ||
+          (Array.isArray(requestData[field]) && requestData[field].length === 0) ||
+          (typeof requestData[field] === 'object' && !Array.isArray(requestData[field]) && Object.keys(requestData[field]).length === 0)) {
           this.loading = false;
-          toast.info(`${fieldNamesInKorean[field]} 정보가 비어 있습니다.`, {
+          toast.error(`${fieldNamesInKorean[field]} 정보가 비어 있습니다.`, {
             timeout: 2000,
           });
           return;
