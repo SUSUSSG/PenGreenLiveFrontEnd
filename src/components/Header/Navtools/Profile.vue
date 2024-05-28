@@ -4,7 +4,7 @@
       <div class="flex-1 ltr:mr-[10px] rtl:ml-[10px]">
         <div class="lg:h-8 lg:w-8 h-7 w-7 rounded-full">
           <img v-if="isAuthenticated" :src="profileImg" alt="Profile Image" class="block w-full h-full object-cover rounded-full"/>
-          <Icon v-else icon="heroicons-outline:login"/>
+          <img v-else/>
         </div>
       </div>
       <div
@@ -49,10 +49,10 @@ import { useStore } from 'vuex';
 import { MenuItem } from "@headlessui/vue";
 import Dropdown from "@/components/Dropdown";
 import Icon from "@/components/Icon";
-import defaultProfileImg from "@/assets/images/all-img/user.png";  // 기본 이미지 경로
 
 const router = useRouter();
 const store = useStore();
+const defaultProfileImg = "https://kr.object.ncloudstorage.com/susussg-img-bucket/user-profile/default-img.png";
 
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
 const userName = computed(() => store.getters['auth/userName']);
@@ -65,7 +65,7 @@ watch([userUUID, isAuthenticated], ([newUUID, isAuth]) => {
   console.log("userName ", userName.value);
 
   if (isAuth && newUUID) {
-    profileImg.value = `/src/assets/images/users/user-1.jpg`; 
+    profileImg.value = `https://kr.object.ncloudstorage.com/susussg-img-bucket/user-profile/default-img.png`; 
   } else {
     profileImg.value = defaultProfileImg;
   }
@@ -74,26 +74,10 @@ watch([userUUID, isAuthenticated], ([newUUID, isAuth]) => {
 const filteredMenu = computed(() => {
   return [
     {
-      label: "프로필",
+      label: "마이페이지",
       icon: "heroicons-outline:user",
       link: () => {
-        router.push("profile");
-      },
-      requiresAuth: true,
-    },
-    {
-      label: "주문 내역",
-      icon: "heroicons-outline:clipboard-list",
-      link: () => {
-        router.push("order-list");
-      },
-      requiresAuth: true,
-    },
-    {
-      label: "설정",
-      icon: "heroicons-outline:cog",
-      link: () => {
-        router.push("settings");
+        router.push("member/edit-profile");
       },
       requiresAuth: true,
     },
