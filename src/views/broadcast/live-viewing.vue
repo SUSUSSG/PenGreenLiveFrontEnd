@@ -619,7 +619,7 @@ ul.benefits-list li {
 }
 
 .tab-active {
-  border-color: #134010;
+  border-bottom: 1.5px solid #134010;
   color: #134010;
 }
 
