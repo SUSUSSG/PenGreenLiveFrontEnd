@@ -1,19 +1,18 @@
 <template>
   <div class="broadcast-card">
-    <p class="broadcast-time"> {{ formattedLiveDateTime }}</p>
+    <p class="broadcast-time">{{ formattedLiveDateTime }}</p>
     <h1 class="broadcast-title">{{ broadcastTitle }}</h1>
-    <div class="broadcast-image" :style="{ backgroundImage: 'url(' + thumbimageSrc + ')' }">
-    </div>
+    <div class="broadcast-image" :style="{ backgroundImage: 'url(' + thumbimageSrc + ')' }"></div>
 
     <div class="product-card-container">
-      <ProductCard :product-name="productName" :original-price="productPrice" :discount-rate="discountRate"
-        :product-img="productImg" :brand="false" />
+      <swiper :slides-per-view="1" :space-between="10" pagination>
+        <swiper-slide v-for="(product, index) in products" :key="index">
+          <ProductCard :product-name="product.productNm" :original-price="product.listPrice"
+            :discount-rate="product.discountRate" :product-img="product.productImage" :brand="false" />
+        </swiper-slide>
+      </swiper>
     </div>
 
-    <div>
-
-    </div>
-    <!-- 조건부 렌더링 -->
     <div v-if="isPrepareTime">
       <button class="action-button" @click="onClickRedirect()">방송 준비</button>
     </div>
@@ -24,10 +23,19 @@
 </template>
 
 <script>
+import { Swiper, SwiperSlide } from "swiper/vue";
+import SwiperCore, { Navigation, Pagination, Autoplay } from "swiper";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
 import ProductCard from "@/components/Card/product-card.vue";
+
+SwiperCore.use([Navigation, Pagination, Autoplay]);
 
 export default {
   components: {
+    Swiper,
+    SwiperSlide,
     ProductCard
   },
   name: 'BroadcastCard',
@@ -35,20 +43,14 @@ export default {
     broadcastId: Number,
     broadcastTitle: String,
     thumbimageSrc: String,
-    productImg: String,
-    productName: String,
-    productPrice: Number,
-    discountRate: Number,
-    liveDateTime: String
+    liveDateTime: String,
+    products: Array
   },
   computed: {
     formattedLiveDateTime() {
-      // 서버에서 받아온 방송 시작 시간
       const serverLiveTime = new Date(this.liveDateTime);
-
-      // 클라이언트의 시간대와 UTC 시간대의 차이를 보정
-      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000; // 밀리초 단위로 변환
-      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds); // 클라이언트의 시간대에 맞게 조정
+      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000;
+      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds);
 
       const year = adjustedServerLiveTime.getFullYear();
       const month = ('0' + (adjustedServerLiveTime.getMonth() + 1)).slice(-2);
@@ -60,25 +62,13 @@ export default {
     },
     isPrepareTime() {
       const now = new Date();
-      // 서버에서 받아온 방송 시작 시간을 클라이언트의 시간대에 맞게 조정
       const serverLiveTime = new Date(this.liveDateTime);
       const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000;
       const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds);
-      const prepareTime = new Date(adjustedServerLiveTime.getTime() - 15 * 60000); // 15분 전
-      const endTime = new Date(adjustedServerLiveTime.getTime() + 15 * 60000); // 방송 시작 후 15분 후
-      // 현재 시간이 방송 시작 15분 전부터 방송 시작 후 15분까지인지 확인
+      const prepareTime = new Date(adjustedServerLiveTime.getTime() - 15 * 60000);
+      const endTime = new Date(adjustedServerLiveTime.getTime() + 15 * 60000);
       return now >= prepareTime && now <= endTime;
-
-    },
-    discountedPrice() {
-      return this.productPrice - (this.productPrice * (this.discountRate / 100));
-    },
-    formattedOriginalPrice() {
-      return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(this.productPrice);
-    },
-    formattedDiscountedPrice() {
-      return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(this.discountedPrice);
-    },
+    }
   },
   methods: {
     onClickRedirect() {
@@ -91,7 +81,7 @@ export default {
 <style scoped>
 .broadcast-image {
   width: 100%;
-  height: 300px;
+  height: 350px;
   background-size: cover;
   background-position: center;
   border-radius: 5px;
@@ -127,19 +117,12 @@ export default {
   width: 100%;
   padding: 10px;
   background-color: #134010;
-  /* color: #111111; */
   color: white;
   border: none;
   cursor: pointer;
   margin-top: 10px;
   align-self: center;
   border-radius: 10px;
-}
-
-.product-card-container {
-  width: 100%;
-  display: flex;
-  justify-content: flex-start;
 }
 
 .product-card-container {
