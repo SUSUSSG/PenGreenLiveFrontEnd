@@ -57,7 +57,7 @@ export default {
 <style scoped>
 .slick-slide {
   float: left;
-  width: 400px;
+  width: 100%;
   padding: 0 0 10px 0;
   border-bottom: 1px solid #f0f1f4;
   padding-top: 5px;
