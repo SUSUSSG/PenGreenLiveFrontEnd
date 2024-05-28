@@ -161,8 +161,6 @@ export default {
         brand: '',
         imageSrc: null,
         previewImage: null,
-        vendorSeq: 1,
-        channelSeq: 1,
         categories: [],
         selectedCategory: '',
         labelIdSeq: 0,
@@ -260,20 +258,11 @@ export default {
     }
   },
   created() {
-    this.fetchProductsByVendorSeq();
     this.fetchCategories();
   },
   methods: {
-    fetchProductsByVendorSeq() {
-      const vendorSeq = 1;
-      if (vendorSeq) {
-        this.fetchProducts(vendorSeq);
-      } else {
-        console.error("No vendor sequence found in session");
-      }
-    },
-    fetchProducts(vendorSeq) {
-      axios.get(`/product-list-label?vendorSeq=${vendorSeq}`)
+    fetchProducts() {
+      axios.get(`/product-list-label`)
         .then(response => {
           this.products = response.data;
           console.log("products@@@", JSON.stringify(this.products, null, 2));
@@ -300,9 +289,6 @@ export default {
     },
     handleCategoryChange() {
       console.log(this.selectedCategory);
-    },
-    getVendorSeqFromSession() {
-      return sessionStorage.getItem('vendorSeq');
     },
     formatNumber(value) {
       console.log('Formatting number:', value);
@@ -430,7 +416,6 @@ export default {
         .then(response => {
           alert("상품 정보가 수정되었습니다.");
           this.$refs.editModal.closeModal();
-          this.fetchProductsByVendorSeq();
         })
         .catch(error => {
           console.error("Failed to update product:", error.response.data);
@@ -443,7 +428,6 @@ export default {
         axios.delete(`/product/${productSeq}`)
           .then(response => {
             alert("Product successfully deleted");
-            this.fetchProductsByVendorSeq();
           })
           .catch(error => {
             console.error("Failed to delete product:", error.response.data);
@@ -460,7 +444,7 @@ export default {
         return;
       }
 
-      const url = `/products?channelSeq=${this.addModalData.channelSeq}`;
+      const url = `/products`;
 
       const productData = {
         productCd: this.addModalData.productCd,
@@ -482,7 +466,6 @@ export default {
         .then(response => {
           alert("상품이 등록되었습니다.");
           this.$refs.modal1.closeModal();
-          this.fetchProducts(this.addModalData.vendorSeq);
         })
         .catch(error => {
           console.error("Failed to register product:", error.response.data);
@@ -543,8 +526,6 @@ export default {
       brand: '',
       imageSrc: null,
       previewImage: null,
-      vendorSeq: 1,
-      channelSeq: 1,
       categories: [],
       selectedCategory: '',
       labelIdSeq: 0,
