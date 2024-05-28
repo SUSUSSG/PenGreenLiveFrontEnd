@@ -23,9 +23,11 @@ const order = computed(()=> (store.getters.orderForm)).value;
 const emit = defineEmits(['paymentRequested']);
 
 onMounted(async () => {
+  console.log("customer key ", customerKey.value);
   try {
     await loadTossPaymentsSDK();
-    brandpay.value = window.BrandPay(clientKey, customerKey, {
+  
+    brandpay.value = window.BrandPay(clientKey, customerKey.value, {
       redirectUrl: '/brandpay/callback-auth',
     });
 
