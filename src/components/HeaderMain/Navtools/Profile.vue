@@ -55,16 +55,18 @@ const defaultProfileImg = "https://kr.object.ncloudstorage.com/susussg-img-bucke
 const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
 const userName = computed(() => store.getters['auth/userName']);
 const userUUID = computed(() => store.getters['auth/userUUID']);
+const userRole = computed(() => store.getters['auth/userRole'])
 const profileImg = ref(defaultProfileImg);
 
 watch([userUUID, isAuthenticated], ([newUUID, isAuth]) => {
   console.log("isAuthenticated ", isAuthenticated.value);
   console.log("userUUID ", userUUID.value);
   console.log("userName ", userName.value);
+  console.log("userRole ", userRole.value);
   
 
   if (isAuth && newUUID) {
-    profileImg.value = `/src/assets/images/users/user-1.jpg`; 
+    profileImg.value = defaultProfileImg; 
   } else {
     profileImg.value = defaultProfileImg;
   }
@@ -76,7 +78,7 @@ const filteredMenu = computed(() => {
       label: "마이페이지",
       icon: "heroicons-outline:user",
       link: () => {
-        router.push("member/edit-profile");
+        router.push("/member/edit-profile");
       },
       requiresAuth: true,
     },
@@ -84,9 +86,10 @@ const filteredMenu = computed(() => {
       label: "대시보드",
       icon: "heroicons-outline:home",
       link: () => {
-        router.push("dashboard");
+        router.push("review-statistics");
       },
       requiresAuth: true,
+      requiredRole: '[VENDOR]',
     },
     {
       label: "Logout",
@@ -97,7 +100,15 @@ const filteredMenu = computed(() => {
       },
       requiresAuth: true,
     },
-  ].filter(item => item.requiresAuth === isAuthenticated.value);
+    ].filter(item => {
+      if (item.requiresAuth && !isAuthenticated.value) {
+        return false;
+      }
+      if (item.requiredRole && item.requiredRole !== userRole.value) {
+        return false;
+      }
+      return true;
+    });
 });
 
 function handleLogin() {
