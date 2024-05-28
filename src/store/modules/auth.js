@@ -44,7 +44,6 @@ const actions = {
         userUUID: userData.uuid,
       });
       console.log("login response ", response.data);
-      alert("로그인 성공");
     } catch (error) {
       console.error('Login failed', error);
       alert("로그인 실패");
@@ -84,6 +83,7 @@ const actions = {
   },
   logout({ commit }) {
     commit('clearAuth');
+    alert("로그아웃 되었습니다.");
   }
 };
 
