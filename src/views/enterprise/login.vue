@@ -139,12 +139,7 @@
 
         try {
             console.log(username, password.value);
-            await store.dispatch('auth/loginVendor', 
-            { username: username, password: password.value }, 
-            // {
-            //     headers: { 'Content-Type': 'application/json' }
-            // }
-            );
+            await store.dispatch('auth/loginVendor', { username, password: password.value });
             router.push("/");
             alert("로그인 성공.");
         } catch (error) {

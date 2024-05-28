@@ -25,7 +25,7 @@ const emit = defineEmits(['paymentRequested']);
 onMounted(async () => {
   try {
     await loadTossPaymentsSDK();
-    brandpay.value = window.BrandPay(clientKey, customerKey, {
+    brandpay.value = window.BrandPay(clientKey, customerKey.value, {
       redirectUrl: '/brandpay/callback-auth',
     });
 
