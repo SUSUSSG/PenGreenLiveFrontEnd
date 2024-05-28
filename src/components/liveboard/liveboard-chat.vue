@@ -501,6 +501,7 @@ export default {
   background: white;
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  border-radius: 0.5rem;
 }
 
 .scroll-wrapper {

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white" id="broadCard">
+  <div class="broad-card">
     <div v-if="streamManager" class="video-player">
       <VideoPlayer :stream-manager="streamManager" :is-muted="true" :is-publisher="true"/>
     </div>
@@ -30,13 +30,14 @@ export default {
 </script>
 
 <style scoped>
-#broadCard {
-  height: 100%;
-  width: auto;
+.broad-card {
+  width: 100%;
+  height: 850px;
   display: flex;
   flex-direction: column;
   background: white;
   box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
 }
 
 .text-base {
@@ -51,12 +52,14 @@ export default {
 
 .broadcast-image {
   position: relative;
+  border-radius: 0.5rem;
 }
 
 
 .broadcast-image img {
   width: 1000px;
-  height: 849px;
+  height: 850px;
+  border-radius: 0.5rem;
 }
 
 .overlay {
@@ -68,6 +71,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.5); 
   justify-content: center;
   align-items: center;
+  border-radius: 0.5rem;
 }
 
 .overlay-text {
