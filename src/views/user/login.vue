@@ -90,24 +90,31 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
-  import { useRouter } from 'vue-router';
-  import { useStore } from 'vuex';
-  import Button from "@/components/Button";
-  import Checkbox from "@/components/Checkbox";
+    import { ref } from 'vue';
+    import { useRouter } from 'vue-router';
+    import { useStore } from 'vuex';
+    import Button from "@/components/Button";
+    import Checkbox from "@/components/Checkbox";
+
+    const router = useRouter();
+    const store = useStore();
+
+    const username = ref(null);
+    const password = ref(null);
   
-  const router = useRouter();
-  const store = useStore();
-  
-  const username = ref(null);
-  const password = ref(null);
-  
+    function loginValidate() {
+        return username.value && password.value;
+    }
+
   async function handleLogin() {
+    if (!loginValidate()) {
+        alert("아이디 또는 비밀번호를 입력해주세요.");
+        return;
+    }
+
     try {
       console.log(username.value, password.value);
       await store.dispatch('auth/login', { username: username.value, password: password.value });
-      router.push("/");
-      alert("로그인 성공.");
     } catch (error) {
       console.error('login error', error);
       if (error.response && error.response.status === 401) {

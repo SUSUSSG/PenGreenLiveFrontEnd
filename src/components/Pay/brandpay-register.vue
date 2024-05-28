@@ -10,11 +10,10 @@ import { ref, onMounted, defineProps, defineEmits, computed} from 'vue';
 import axios from "@/axios";
 import { nanoid } from "nanoid"; 
 import { useStore } from 'vuex';
-import "@/components/Pay/style.css";
 
 const store = useStore();
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
-const customerKey = 'CUSTOMER_KEY';
+const customerKey = computed(() => store.getters.userUUID);
 let brandpay = ref(null);
 let paymentMethodsWidget;
 const product = computed(()=> (store.getters.selectedProduct)).value;
@@ -27,7 +26,7 @@ onMounted(async () => {
   try {
     await loadTossPaymentsSDK();
     brandpay.value = window.BrandPay(clientKey, customerKey, {
-      redirectUrl: 'http://localhost:8090/api/brandpay/callback-auth',
+      redirectUrl: '/brandpay/callback-auth',
     });
 
     const totalAmount = order.orderPayedPrice ? order.orderPayedPrice : 1;

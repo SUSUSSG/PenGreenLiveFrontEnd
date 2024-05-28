@@ -271,6 +271,8 @@ import { useStore } from 'vuex';
 
 const store = useStore();
 const product = computed(() => (store.getters.selectedProduct));
+const userName = computed(() => store.getters.userName);
+
 
 const emit = defineEmits(['openTossPay']);
 
@@ -318,26 +320,26 @@ const selectedText = computed(() => {
 
 const paymentMethods = ref([
   { key: 'credit', method:'카드', flowMode: 'DIRECT', label: '신용·체크카드' },
-  { key: 'npay', method:'간편결제', flowMode: 'DIRECT', easyPay: '네이버페이', icon: '/src/assets/images/svg/pay/npay.svg'},
-  { key: 'kakaopay', method:'간편결제', flowMode: 'DIRECT', easyPay: '카카오페이', icon: '/src/assets/images/svg/pay/kakaopay.svg'},
-  { key: 'tosspay', method:'간편결제', flowMode: 'DIRECT', easyPay: '토스페이', icon: '/src/assets/images/svg/pay/tosspay.svg'},
-  { key: 'samsungpay', method:'간편결제', flowMode: 'DIRECT', easyPay: '삼성페이', icon: '/src/assets/images/svg/pay/samsungpay.svg'},
-  { key: 'ssgpay', method:'간편결제', flowMode: 'DIRECT', easyPay: 'SSG페이', icon: '/src/assets/images/svg/pay/ssgpay.svg'},
+  { key: 'npay', method:'간편결제', flowMode: 'DIRECT', easyPay: '네이버페이', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/npay.svg'},
+  { key: 'kakaopay', method:'간편결제', flowMode: 'DIRECT', easyPay: '카카오페이', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/kakaopay.svg'},
+  { key: 'tosspay', method:'간편결제', flowMode: 'DIRECT', easyPay: '토스페이', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/tosspay.svg'},
+  { key: 'samsungpay', method:'간편결제', flowMode: 'DIRECT', easyPay: '삼성페이', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/samsungpay.svg'},
+  { key: 'ssgpay', method:'간편결제', flowMode: 'DIRECT', easyPay: 'SSG페이', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/ssgpay.svg'},
 ]);
 
 const cardCompanys = [
-        { name: '신한', icon: '/src/assets/images/svg/pay/shinhan.svg'},
-        { name: '현대', icon: '/src/assets/images/svg/pay/hyundai.svg' },
-        { name: '삼성', icon: '/src/assets/images/svg/pay/samsungcard.svg' },
-        { name: '롯데', icon: '/src/assets/images/svg/pay/loca.svg' },
-        { name: '토스뱅크', icon: '/src/assets/images/svg/pay/tossbank.svg' },
-        { name: '하나', icon: '/src/assets/images/svg/pay/hana.svg' },
-        { name: '국민', icon: '/src/assets/images/svg/pay/kb.svg' },
-        { name: '비씨', icon: '/src/assets/images/svg/pay/bc.svg' },
-        { name: '농협', icon: '/src/assets/images/svg/pay/nh.svg' },
-        { name: '카카오뱅크', icon: '/src/assets/images/svg/pay/kakaobank.svg' },
-        { name: '케이뱅크', icon: '/src/assets/images/svg/pay/kbank.svg' },
-        { name: '더보기', icon: '/src/assets/images/svg/etc.svg' }
+        { name: '신한', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/shinhan.svg'},
+        { name: '현대', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/hyundai.svg' },
+        { name: '삼성', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/samsungcard.svg' },
+        { name: '롯데', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/loca.svg' },
+        { name: '토스뱅크', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/tossbank.svg' },
+        { name: '하나', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/hana.svg' },
+        { name: '국민', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/kb.svg' },
+        { name: '비씨', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/bc.svg' },
+        { name: '농협', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/nh.svg' },
+        { name: '카카오뱅크', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/kakaobank.svg' },
+        { name: '케이뱅크', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/kbank.svg' },
+        { name: '더보기', icon: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/logo/etc.svg' }
       ]
 
 function showAllPayment() {
@@ -376,7 +378,7 @@ const submittedData = ref(null);
 async function postPaymentInfo(orderId, amount) {
     const formData = {orderId, amount};
     try {
-        const response = await axios.post("/api/payments/hold-for-checkout", formData);
+        const response = await axios.post("/payments/hold-for-checkout", formData);
         submittedData.value = response.data;
     } catch (error) {
         console.error('Error submitting form:', error);
@@ -388,6 +390,12 @@ const brandPayComponent = ref(null);
 
 // 결제 요청 
 async function requestPayment() {
+
+    if (!checked.value) {
+        alert('결제 약관에 동의하세요');
+        return;
+    }
+
     const totalAmount = computed(() => store.getters.orderForm.orderPayedPrice).value;
     const orderId = generateOrderId();
     await store.dispatch('setOrderId', orderId);
@@ -406,7 +414,7 @@ async function requestPayment() {
                 amount: totalAmount,
                 orderId: orderId,
                 orderName: product.value.productName,
-                customerName: "김토스",
+                customerName: userName.value,
                 successUrl: window.location.origin + '/success',
                 failUrl: window.location.origin + '/fail',
                 flowMode: selectedPayment.value.flowMode,

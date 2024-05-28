@@ -34,9 +34,7 @@
                                             <div class="mb-5">
                                                 <div class="flex items-center">                                                        
                                                     <div class="flex items-center flex-grow-7">
-                                                        <input type="text" value="010" class=" w-[20%] mr-2 input-control focus:outline-none h-[40px]" readonly="" disabled="">
-                                                        <input v-model="form.userTel" :disabled="responseAuth" type="text" placeholder="휴대폰번호 (-없이 입력)" class="w-full input-control focus:outline-none h-[40px]"
-                                                        >
+                                                        <input v-model="form.userTel" :disabled="responseAuth" type="text" placeholder="휴대폰번호 (-없이 입력)" class="w-full input-control focus:outline-none h-[40px]">
                                                     </div>
                                                     <div class="w-[163px]">
                                                         <Button :disabled="responseAuth" @click="requestPhoneAuthCode" type="button" text="인증번호 받기" class="w-full"/>
@@ -239,9 +237,9 @@
     }
 
     async function requestPhoneAuthCode() {
-        const phoneNumber = `010${form.value.userTel}`;
+        const phoneNumber = `${form.value.userTel}`;
 
-        if (phoneNumber==="010") {
+        if (phoneNumber==="") {
             alert("휴대폰 번호를 입력하세요.");
             return;
         }
@@ -254,6 +252,7 @@
             phoneNumber: phoneNumber
         }
 
+        console.log(params);
         try {
             responseAuth.value = true;
             const response = await axios.post(`/sms/request-authcode`, null, {params});
@@ -272,7 +271,7 @@
     }
 
     async function verifyCode() {
-        const phoneNumber = `010${form.value.userTel}`;
+        const phoneNumber = `${form.value.userTel}`;
 
 
         if (inputAuthCode.value===null) {
@@ -390,11 +389,8 @@
             const { address, zonecode, buildingName } = event.data;
             addressForm.value.address = address;
             addressForm.value.zonecode = zonecode;
-            addressForm.value.detailAddress = `(${buildingName}) `;
-            form.value.userAddress = ` ${zonecode} ${address} ${addressForm.value.detailAddress}`;
+            addressForm.value.detailAddress = buildingName ? `(${buildingName}) `: '';
         });
-
-        console.log(form.value.userAddress);
     };
 
 
@@ -472,6 +468,8 @@
         if (emailValid && userIdValid && userPwValid && passwordsMatch) {
             console.log("유효성 검사 통과");
             try {
+                form.value.userAddress = `[${addressForm.value.zonecode}] ${addressForm.value.address} ${addressForm.value.detailAddress}`;
+
                 const response = await axios.post('/signup', form.value);
                 if (response.data === 'success') {
                     router.push('/');

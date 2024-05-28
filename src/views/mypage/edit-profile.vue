@@ -320,19 +320,18 @@
     async function updateUserProfile() {
         console.log(form.value);
   
-
-        // try {
-        //     const response = await axios.patch(`/user/address`, {
-        //         form
-        //     });
-        //     if (response.data) {
-        //     address.value = response.data;
-        //     } else {
-        //     address.value = null;
-        //     } 
-        // } catch(error) {
-        //     console.error("회원정보 변경 실패", error);
-        // }
+        try {
+            const response = await axios.patch(`/user`, {
+                form
+            });
+            if (response.data) {
+            address.value = response.data;
+            } else {
+            address.value = null;
+            } 
+        } catch(error) {
+            console.error("회원정보 변경 실패", error);
+        }
     }
 
     function openAddressPopup(data) {
@@ -372,7 +371,7 @@
     }
 
     // 프로필 이미지 변경
-    const defaultImage = '/src/assets/images/users/default-img.png';
+    const defaultImage = 'https://kr.object.ncloudstorage.com/susussg-img-bucket/user-profile/default-img.png';
     const fileInput = ref(null);
     const profilePic = ref(null);
 
@@ -381,35 +380,34 @@
         show.value = !show.value;
     };
 
-function selectImage() {
-  fileInput.value.click();
-}
-
-function changeDefaultImg() {
-    form.value.userProfileImgFile = defaultImage;
-}
-
-function onFileChange(event) {
-    const file = event.target.files[0];
-    if (file) {
-        if (!file.type.match("image/*")) {
-        alert("이미지 파일만 업로드할 수 있습니다.");
-        return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            form.value.userProfileImgFile = e.target.result;
-            const base64String = e.target.result.split(',')[1];
-            form.value.userProfileImgFile = base64String;
-        };
-        reader.readAsDataURL(file);
-    } else {
-        this.addModalData.previewImage = null;
-        this.addModalData.imageSrc = null;
+    function selectImage() {
+        fileInput.value.click();
     }
-}
 
+    function changeDefaultImg() {
+        form.value.userProfileImg = defaultImage;
+    }
+
+    function onFileChange(event) {
+        const file = event.target.files[0];
+        if (file) {
+            if (!file.type.match("image/*")) {
+            alert("이미지 파일만 업로드할 수 있습니다.");
+            return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                user.value.userProfileImg = e.target.result;
+                const base64String = e.target.result.split(',')[1];
+                form.value.userProfileImgFile = base64String;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            this.addModalData.previewImage = null;
+            this.addModalData.imageSrc = null;
+        }
+    }
 
 </script>
   
