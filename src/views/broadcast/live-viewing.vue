@@ -117,7 +117,7 @@ import { useStore } from 'vuex';
 const isBroadcasting = ref(true);
 
 // 방송 종료 이벤트 구독
-const subscribeToBroadcastEnd = () => {
+const subscribeToBroadcastEnd = async (retryCount = 5, delay = 3000) => {
   console.log("subscribeToBroadcastEnd 함수 호출됨");
   const eventSource = new EventSource(`${import.meta.env.VITE_API_BASE_URL}/subscribe`);
   const broadcastId = route.params.broadcastId;
@@ -127,10 +127,14 @@ const subscribeToBroadcastEnd = () => {
       console.log("Broadcast end event received for broadcastId:", broadcastId);
     }
   });
-
   eventSource.onerror = (error) => {
-    console.error('SSE error:', error);
-    eventSource.close();
+    if (retryCount > 0) {
+          console.log(`Retrying... Attempts left: ${retryCount}`);
+          setTimeout(() => subscribeToBroadcastEnd(retryCount - 1, delay), delay);
+    } else {
+      console.error('SSE error:', error);
+      eventSource.close();
+    }
   };
 };
 
