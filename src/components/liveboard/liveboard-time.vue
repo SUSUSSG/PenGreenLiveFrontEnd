@@ -156,20 +156,16 @@ export default {
       // 서버에서 받아온 방송 시작 시간
       const serverLiveTime = new Date(this.liveDateTime);
 
-      // 클라이언트의 시간대와 UTC 시간대의 차이를 보정
-      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000; // 밀리초 단위로 변환
-      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds); // 클라이언트의 시간대에 맞게 조정
-
-      const year = adjustedServerLiveTime.getFullYear();
-      const month = ('0' + (adjustedServerLiveTime.getMonth() + 1)).slice(-2);
-      const day = ('0' + adjustedServerLiveTime.getDate()).slice(-2);
-      const hours = ('0' + adjustedServerLiveTime.getHours()).slice(-2);
-      const minutes = ('0' + adjustedServerLiveTime.getMinutes()).slice(-2);
+      const year = serverLiveTime.getFullYear();
+      const month = ('0' + (serverLiveTime.getMonth() + 1)).slice(-2);
+      const day = ('0' + serverLiveTime.getDate()).slice(-2);
+      const hours = ('0' + serverLiveTime.getHours()).slice(-2);
+      const minutes = ('0' + serverLiveTime.getMinutes()).slice(-2);
 
       const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}`;
 
       // 한 시간 뒤의 시간 계산
-      const oneHourLater = new Date(adjustedServerLiveTime);
+      const oneHourLater = new Date(serverLiveTime);
       oneHourLater.setHours(oneHourLater.getHours() + 1);
 
       const laterHours = ('0' + oneHourLater.getHours()).slice(-2);

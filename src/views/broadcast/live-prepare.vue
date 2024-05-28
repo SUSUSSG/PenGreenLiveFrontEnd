@@ -1,10 +1,8 @@
 <template>
-  <div class="grid-container" v-if="!loading">
-    <SellerBroadcastSchedule v-for="(item, index) in broadcastInfo" :key="index" :broadcastId="item.broadcastSeq"
+  <div class="grid-container" v-if="!loading">      
+      <SellerBroadcastSchedule v-for="(item, index) in broadcastInfo" :key="index" :broadcastId="item.broadcastSeq"
       :broadcast-title="item.broadcastTitle" :thumbimage-src="item.broadcastImage"
-      :productImg="item.productImage" :product-name="item.productNm"
-      :product-price="item.listPrice" :discount-rate="item.discountRate" :discount-price="item.discountPrice"
-      :live-date-time="item.broadcastScheduledTime" />
+      :live-date-time="item.broadcastScheduledTime" :products="item.productList"/> 
   </div>
   <div v-else class="loading-container">
     <div class="spinner-container">
@@ -55,7 +53,6 @@ export default {
 .grid-container {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  /* Creates four columns */
   grid-gap: 20px;
   overflow: auto;
 }

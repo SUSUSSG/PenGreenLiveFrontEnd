@@ -525,12 +525,17 @@ export default {
         }
       }
 
+      const infoToast = toast.info("방송 정보를 등록 중입니다...", {
+        timeout: false,
+      });
+
       console.log(requestData);
 
       // JSON 형식의 데이터를 백엔드로 전송
       axios.post('/register-broadcast', requestData)
         .then(response => {
           this.loading = false;
+          toast.dismiss(infoToast);
           toast.success("방송 정보가 등록되었습니다.", {
             timeout: 1000,
           });
@@ -540,6 +545,7 @@ export default {
         })
         .catch(error => {
           this.loading = false;
+          toast.dismiss(infoToast);
           console.error("등록 실패 : ", error);
           toast.error("방송 등록에 실패했습니다.", {
             timeout: 2000,

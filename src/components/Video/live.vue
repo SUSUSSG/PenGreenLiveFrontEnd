@@ -2,8 +2,8 @@
   <div class="video-component" :style="{ width: width, height: height }">
     <div class="title-bar w-full flex items-center justify-between" v-if="showTitleBar">
       <div class="flex items-center">
-        <img :src="announceIconSrc" class="logo" style="width: 50%" />
-        <p class="broadcast-title">{{ broadcastTitle }}</p>
+        <!-- <img :src="announceIconSrc" class="logo" style="width: 50%" />
+        <p class="broadcast-title">{{ broadcastTitle }}</p> -->
       </div>
     </div>
 
@@ -278,8 +278,8 @@ export default {
 }
 
 .broadcast-image img {
-  width: 1000px;
-  height: 849px;
+  width: 700px;
+  height: 1000px;
 }
 
 .overlay {
@@ -297,7 +297,7 @@ export default {
   color: white;
   font-size: 2rem;
   font-weight: bold;
-  margin-top: 350px;
+  margin-top: 400px;
   text-align: center;
 }
 

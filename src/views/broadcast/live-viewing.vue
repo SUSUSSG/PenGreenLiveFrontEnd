@@ -4,7 +4,7 @@
                    :current-writer="'구매자'" :showDeleteIcon="false" :showEditButton="false"/>
 
     <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true" :stream-manager="mainStreamManager"
-      :broadcast-title="broadcastTitle" :broadcast-image="broadcastImage" />
+      :broadcast-image="broadcastImage" />
 
     <div class="live-section relative" :class="{ 'active-overlay': isOpen }">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
@@ -23,7 +23,7 @@
 
       <div v-if="!selectedProduct" class="contents-wrap">
         <header class="flex justify-between items-center pb-4 border-b">
-          <div></div> <!-- 좌측 공백 -->
+          <div class="broadcast-title">{{ broadcastTitle }}</div>
           <Button class="exit-button" @click="onClickRedirect()">나가기</Button>
         </header>
         <main class="main-content">
@@ -619,7 +619,7 @@ ul.benefits-list li {
 }
 
 .tab-active {
-  border-color: #134010;
+  border-bottom: 1.5px solid #134010;
   color: #134010;
 }
 
@@ -666,5 +666,10 @@ ul.benefits-list li {
 
 .home-button a {
   color: white;
+}
+
+.broadcast-title {
+  font-weight: bold;
+  margin-left: 10px;
 }
 </style>
