@@ -504,9 +504,6 @@ watch(boxHeight, calculateHeight);
   overflow-y: auto;
 }
 
-.purchase-container {
-  padding-bottom: 20px;
-}
 
 .purchase-section img {
   max-height: 70vh;
