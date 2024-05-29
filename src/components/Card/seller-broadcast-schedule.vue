@@ -49,24 +49,19 @@ export default {
   computed: {
     formattedLiveDateTime() {
       const serverLiveTime = new Date(this.liveDateTime);
-      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000;
-      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds);
-
-      const year = adjustedServerLiveTime.getFullYear();
-      const month = ('0' + (adjustedServerLiveTime.getMonth() + 1)).slice(-2);
-      const day = ('0' + adjustedServerLiveTime.getDate()).slice(-2);
-      const hours = ('0' + adjustedServerLiveTime.getHours()).slice(-2);
-      const minutes = ('0' + adjustedServerLiveTime.getMinutes()).slice(-2);
+      const year = serverLiveTime.getFullYear();
+      const month = ('0' + (serverLiveTime.getMonth() + 1)).slice(-2);
+      const day = ('0' + serverLiveTime.getDate()).slice(-2);
+      const hours = ('0' + serverLiveTime.getHours()).slice(-2);
+      const minutes = ('0' + serverLiveTime.getMinutes()).slice(-2);
 
       return `${year}-${month}-${day} ${hours}:${minutes}`;
     },
     isPrepareTime() {
       const now = new Date();
       const serverLiveTime = new Date(this.liveDateTime);
-      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000;
-      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds);
-      const prepareTime = new Date(adjustedServerLiveTime.getTime() - 15 * 60000);
-      const endTime = new Date(adjustedServerLiveTime.getTime() + 15 * 60000);
+      const prepareTime = new Date(serverLiveTime.getTime() - 15 * 60000);
+      const endTime = new Date(serverLiveTime.getTime() + 15 * 60000);
       return now >= prepareTime && now <= endTime;
     }
   },
