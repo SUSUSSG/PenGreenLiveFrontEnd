@@ -116,20 +116,18 @@ export default {
   methods: {
     async toggleLike() {
       this.isLiked = !this.isLiked;
-      if (this.isLiked) {
-        this.likesCount += 1;
-        await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
-          params: {
-            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
-          }
-        });
-      } else {
-        this.likesCount -= 1;
-        await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
-          params: {
-            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
-          }
-        });
+      try {
+        if (this.isLiked) {
+          this.likesCount += 1;
+          await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
+          });
+        } else {
+          this.likesCount -= 1;
+          await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
+          });
+        }
+      }catch (error){
+        alert("좋아요는 회원만 누를 수 있습니다!");
       }
     },
     toggleMute() {
@@ -150,7 +148,7 @@ export default {
       navigator.clipboard
           .writeText(currentUrl)
           .then(() => {
-            alert("Video URL copied to clipboard!");
+            alert("방송 주소가 복사 되었습니다.");
           })
           .catch((err) => {
             console.error("Failed to copy text: ", err);
@@ -169,8 +167,15 @@ export default {
         throw error;
       }
     },
-    async checkLikes(){
-      this.isLiked = axios.get(`/broadcasts/statistics/${this.$route.params.broadcastId}/likes/check`)
+    async checkLikes() {
+      try {
+        const response = await axios.get(`/broadcasts/statistics/${this.$route.params.broadcastId}/likes/check`);
+        this.isLiked = response.data;
+        console.log("좋아요 상태", response);
+        console.log("실제 좋아요 상태", this.isLiked);
+      } catch (error) {
+        console.error('Failed to check likes:', error);
+      }
     },
     async updateLikes() {
       try {

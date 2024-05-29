@@ -94,7 +94,9 @@ export default {
           this.updateStatistics();
         }, 15000);
         this.interval = setInterval(() => {
-          this.postViewerCount(this.liveViewers, new Date().toISOString());
+          const currentTime = this.getCurrentKST();
+          console.log("현재 시간", currentTime);
+          this.postViewerCount(this.liveViewers, currentTime);
         }, 60000)
         console.log("Interval set");
       } else if (this.interval) {
@@ -157,7 +159,6 @@ export default {
           averageViewers: this.averageViewers,
         });
         this.emitStatistics(); // Call emitStatistics here to ensure data is up-to-date
-        const currentTime = new Date().toISOString();
       } catch (error) {
         console.error("Error updating viewers:", error);
       }
@@ -185,6 +186,14 @@ export default {
         averageViewers: this.averageViewers,
       });
       this.$emit('update-statistics', {maxViewers: this.maxViewers, averageViewers: this.averageViewers});
+    },
+    // 한국 표준시로 시간을 변환하는 메서드 추가
+    getCurrentKST() {
+      const now = new Date();
+      const kstOffset = 9 * 60 * 60 * 1000; // 한국 표준시 오프셋 (+9시간)
+      const kstDate = new Date(now.getTime() + kstOffset);
+      console.log(kstDate.toISOString());
+      return kstDate.toISOString();
     }
   }
 };
@@ -205,11 +214,7 @@ export default {
 }
 
 .statistics-card {
-  /* display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(2, 1fr); */
   margin: auto 15px;
-
 }
 
 .basic-card,
