@@ -91,9 +91,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- 결제 약관 -->
-                <div class="p-grid consumer-cache-pypvcf ">
+            <!-- 결제 약관 -->
+            <div class="p-grid consumer-cache-pypvcf agreement-wrap">
                     <div class="p-grid-col p-grid-col12">
                         <div class="consumer-cache-0">
                             <div class="m-agreement-v3-agreement-wrapper">
@@ -249,10 +250,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
             <div class="pay-button w-full flex items-center justify-center payment-button">
-                <button @click="requestPayment" class="button w-full" id="payment-button">결제하기</button>
+                <button @click="requestPayment" class="button w-[65%]" id="payment-button">결제하기</button>
             </div>
         </section>
         </div>
@@ -1080,8 +1079,14 @@ input[type="radio"] {
 }
 
 .pay-button {
+    padding-bottom: 1rem;
     position: absolute;
     bottom: 0;
-    padding-bottom: 1rem;
+    left: 0;
+    right: 0;
+    background: white;
+}
+.agreement-wrap {
+    z-index: 0;
 }
 </style>
