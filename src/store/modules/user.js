@@ -30,7 +30,8 @@ const actions = {
   async loadRooms(context) {
 
     let response = await fetch(`/v1/room`, {
-        method: "GET"
+        method: "GET",
+        credentials: 'include',
     });
 
     const responseData = await response.json();
@@ -57,6 +58,7 @@ async loadEnteredRooms(context) {
 
     let response = await fetch(`/v1/room/joined?userId=${userId}`, {
         method: "GET",
+        credentials: 'include',
     });
 
     const responseData = await response.json();
