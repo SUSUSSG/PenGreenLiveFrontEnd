@@ -55,7 +55,8 @@ export default {
       const hours = ('0' + serverLiveTime.getHours()).slice(-2);
       const minutes = ('0' + serverLiveTime.getMinutes()).slice(-2);
 
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
+      const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+      return formattedTime;
     },
     isPrepareTime() {
       const now = new Date();
