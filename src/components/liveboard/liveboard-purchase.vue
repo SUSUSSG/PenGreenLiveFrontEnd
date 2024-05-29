@@ -278,6 +278,8 @@
     max-height: 100%; 
     overflow-y: auto;
     background: white;
+    overflow-x: hidden;
+    width: 100%
 }
 
 .overlay {

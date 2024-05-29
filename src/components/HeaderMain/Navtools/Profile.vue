@@ -91,7 +91,7 @@ const filteredMenu = computed(() => {
         router.push("review-statistics");
       },
       requiresAuth: true,
-      requiredRole: '[VENDOR]',
+      requiredRole: 'VENDOR',
     },
     {
       label: "Logout",
