@@ -95,6 +95,9 @@
     import { useStore } from 'vuex';
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
+    import { useToast } from "vue-toastification";
+
+    const toast = useToast();
 
     const router = useRouter();
     const store = useStore();
@@ -106,27 +109,34 @@
         return username.value && password.value;
     }
 
-  async function handleLogin() {
-    if (!loginValidate()) {
-        alert("아이디 또는 비밀번호를 입력해주세요.");
-        return;
+    async function handleLogin() {
+        if (!loginValidate()) {
+            alert("아이디 또는 비밀번호를 입력해주세요.");
+            return;
+        }
+
+        try {
+            console.log(username.value, password.value);
+            const result = await store.dispatch('auth/login', { username: username.value, password: password.value });
+
+            if (result) {
+                await router.push("/");
+                toast.success('로그인 되었습니다.');
+            } else {
+                toast.error('아이디 또는 비밀번호가 잘못되었습니다.');
+            }
+
+        } catch (error) {
+            console.error('login error', error);
+            if (error.response && error.response.status === 401) {
+                console.error('Authentication failed:', error.response.data);
+                alert("아이디 또는 비밀번호가 잘못되었습니다.");
+            } else {
+                alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
+            }
+        }
     }
 
-    try {
-      console.log(username.value, password.value);
-      await store.dispatch('auth/login', { username: username.value, password: password.value });
-      router.push("/");
-
-    } catch (error) {
-      console.error('login error', error);
-      if (error.response && error.response.status === 401) {
-        console.error('Authentication failed:', error.response.data);
-        alert("아이디 또는 비밀번호가 잘못되었습니다.");
-      } else {
-      alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
-    }
-    }
-  }
   </script>
 
 <style scoped>

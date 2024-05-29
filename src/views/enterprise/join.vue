@@ -483,6 +483,7 @@ import Button from "@/components/Button";
 import Checkbox from "@/components/Checkbox";
 import Textarea from "@/components/Textarea";
 import Map from "@/components/Map/map.vue";
+import router from "@/router";
 
 const formData = ref({
     vendorSeq: null,
@@ -599,7 +600,8 @@ async function submitForm() {
     formData.value.businessId = `${businessNumber1.value}${businessNumber2.value}${businessNumber3.value}`;
     console.log("회원가입 폼 ", formData.value);
     const response = await axios.post("/vendor/signup", formData.value);
-    alert("Form submitted successfully.");
+    alert("회원가입 성공!");
+    router.push("/");
   } catch (error) {
     alert("Failed to submit the form. Please try again.");
   }

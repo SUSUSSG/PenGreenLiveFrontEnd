@@ -259,6 +259,7 @@ export default {
   },
   created() {
     this.fetchCategories();
+    this.fetchProducts();
   },
   methods: {
     fetchProducts() {

@@ -115,17 +115,18 @@ export default {
   },
   methods: {
     async toggleLike() {
-      this.isLiked = !this.isLiked;
       try {
         if (this.isLiked) {
+          await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
+          });
           this.likesCount += 1;
-          await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
-          });
         } else {
-          this.likesCount -= 1;
           await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
           });
+          this.likesCount -= 1;
         }
+        this.isLiked = !this.isLiked;
+
       }catch (error){
         alert("좋아요는 회원만 누를 수 있습니다!");
       }

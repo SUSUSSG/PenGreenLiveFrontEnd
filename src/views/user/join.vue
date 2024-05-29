@@ -204,6 +204,10 @@
     import Textarea from "@/components/Textarea";
     import Map from "@/components/Map/map.vue";
 
+    import { useToast } from "vue-toastification";
+
+    const toast = useToast();
+
     const router = useRouter();
 
     const form = ref({
@@ -240,11 +244,11 @@
         const phoneNumber = `${form.value.userTel}`;
 
         if (phoneNumber==="") {
-            alert("휴대폰 번호를 입력하세요.");
+            toast.warning("휴대폰 번호를 입력하세요.");
             return;
         }
         else if (!phoneNumberCheck(phoneNumber)) {
-            alert("휴대폰번호 입력 형식이 다릅니다.");
+            toast.warning("휴대폰번호 입력 형식이 다릅니다.");
             return;
         } 
 
@@ -288,7 +292,7 @@
             const response = await axios.post('/sms/verify', null, {params});
             if (response.status === 200) {
                 console.log(response.data);
-                alert("인증되었습니다.");
+                toast.info("인증되었습니다.");
                 requestAuth.value = false;
                 userTelVerify.value = true;
             } else {
@@ -297,9 +301,9 @@
         } catch (error) {
             if (error.response) {
                 if (error.response.status === 401) {    // 인증번호 틀림
-                    alert(error.response.data);
+                    toast.warning("인증번호가 틀렸습니다.");
                 } else if(error.response.status === 410) {  // 인증시간 만료
-                    alert(error.response.data);
+                    toast.warning("인증시간이 만료되었습니다. 다시 시도해주세요.");
                     initPhoneNumberInput();
                 }
                 else {
@@ -325,16 +329,16 @@
         const id = form.value.userId;
 
         if (id==="") {
-            alert('아이디를 입력하세요.');
+            toast.warning('아이디를 입력하세요.');
             return;
         }
         try {
             const response = await axios.post(`/check-id`, {id});
             if (response.data==='available') {
-                alert("사용 가능한 아이디입니다.");
+                toast.info("사용 가능한 아이디입니다.");
                 userIdVerify.value = true;
             }
-            else alert("이미 사용 중인 아이디입니다.");
+            else toast.warning("이미 사용 중인 아이디입니다.");
         } catch (error) {
             console.error('Error checking id:', error);
         }
@@ -421,32 +425,32 @@
     // 공백 및 null 검사
     function validateFormFields() {
         for (const key in form.value) {
-            if (['optionalAgreementYn', 'userBirthDt', 'userNm'].includes(key)) {
+            if (['optionalAgreementYn', 'userBirthDt', 'userNm', 'userAddress'].includes(key)) {
                 continue;
             }
             const value = form.value[key];
             if (value === null || value === "" || value === undefined) {
-                alert(`${key} 필드는 필수입니다.`);
+                toast.warning('입력되지 않은 값이 있습니다.');
                 return false;
             }
         }
 
         if (form.value.userNm==="") {
-            alert('이름이 입력되지 않았습니다.');
+            toast.warning('이름이 입력되지 않았습니다.');
         }
 
         if (!userTelVerify.value) {
-            alert('휴대폰번호가 인증되지 않았습니다.');
+            toast.warning('휴대폰번호가 인증되지 않았습니다.');
             return false;
         }
 
         if (!userIdVerify.value) {
-            alert('아이디 중복 여부를 확인하세요.') ;
+            toast.warning('아이디 중복 여부를 확인하세요.') ;
             return false;
         }
 
         if (!allAgreed.value) {
-            alert('필수 약관에 동의되지 않았습니다.');
+            toast.warning('필수 약관에 동의되지 않았습니다.');
             return false;
         }
 
@@ -465,13 +469,13 @@
         const userPwValid = validateUserPw();
         const passwordsMatch = checkPasswordsMatch();
 
-        if (emailValid && userIdValid && userPwValid && passwordsMatch) {
-            console.log("유효성 검사 통과");
-            try {
-                form.value.userAddress = `[${addressForm.value.zonecode}] ${addressForm.value.address} ${addressForm.value.detailAddress}`;
+        form.value.userAddress = `[${addressForm.value.zonecode}] ${addressForm.value.address} ${addressForm.value.detailAddress}`;
 
+        if (emailValid && userIdValid && userPwValid && passwordsMatch) {
+            try {
                 const response = await axios.post('/signup', form.value);
                 if (response.data === 'success') {
+                    toast.success('회원가입 성공')
                     router.push('/');
                 }
             } catch (error) {
@@ -479,10 +483,10 @@
             }
         } else {
             console.error("유효성 검사 통과 x");
-            if (!emailValid) alert("이메일 형식이 잘못되었습니다.");
-            if (!userIdValid) alert("아이디는 5~12자의 영문과 숫자만 포함해야 합니다.");
-            if (!userPwValid) alert("비밀번호는 8~20자의 영문과 숫자만 포함해야 합니다.");
-            if (!passwordsMatch) alert("입력한 비밀번호가 서로 일치하지 않습니다.");
+            if (!emailValid) toast.warning("이메일 형식이 잘못되었습니다.");
+            if (!userIdValid) toast.warning("아이디는 5~12자의 영문과 숫자만 포함해야 합니다.");
+            if (!userPwValid) toast.warning("비밀번호는 8~20자의 영문과 숫자만 포함해야 합니다.");
+            if (!passwordsMatch) toast.warning("입력한 비밀번호가 서로 일치하지 않습니다.");
         }
     }
 

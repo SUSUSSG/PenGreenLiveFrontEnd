@@ -3,7 +3,7 @@
     <div class="flex items-center">
       <div class="flex-1 ltr:mr-[10px] rtl:ml-[10px]">
         <div class="lg:h-8 lg:w-8 h-7 w-7 rounded-full">
-          <img v-if="isAuthenticated" :src="profileImg" alt="Profile Image" class="block w-full h-full object-cover rounded-full"/>
+          <img v-if="isAuthenticated" :src="userProfileImg" alt="Profile Image" class="block w-full h-full object-cover rounded-full"/>
           <img v-else/>
         </div>
       </div>
@@ -58,7 +58,8 @@ const isAuthenticated = computed(() => store.getters['auth/isAuthenticated']);
 const userName = computed(() => store.getters['auth/userName']);
 const userUUID = computed(() => store.getters['auth/userUUID']);
 const userRole = computed(() => store.getters['auth/userRole'])
-const profileImg = ref(defaultProfileImg);
+const profileImg = computed(() => store.getters['auth/profileImg']);
+const userProfileImg = ref(null);
 
 watch([userUUID, isAuthenticated], ([newUUID, isAuth]) => {
   console.log("isAuthenticated ", isAuthenticated.value);
@@ -66,10 +67,10 @@ watch([userUUID, isAuthenticated], ([newUUID, isAuth]) => {
   console.log("userName ", userName.value);
   console.log("userRole ", userRole.value);
 
-  if (isAuth && newUUID) {
-    profileImg.value = `https://kr.object.ncloudstorage.com/susussg-img-bucket/user-profile/default-img.png`; 
+  if (isAuth && profileImg.value) {
+    userProfileImg.value = profileImg.value; 
   } else {
-    profileImg.value = defaultProfileImg;
+    userProfileImg.value = defaultProfileImg;
   }
 }, { immediate: true });
 

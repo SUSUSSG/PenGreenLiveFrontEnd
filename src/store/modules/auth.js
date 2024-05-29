@@ -6,6 +6,7 @@ const state = {
   userName: null,
   userUUID: null,
   channelSeq: null,
+  profileImg: null,
 };
 
 const mutations = {
@@ -23,6 +24,9 @@ const mutations = {
     state.userName = null;
     state.userUUID = null;
     state.channelSeq = null;
+  },
+  setUser(state, {profileImg}) {
+    state.profileImg = profileImg;
   }
 };
 
@@ -33,35 +37,47 @@ const actions = {
     );
       const userData = JSON.parse(response.data.user);
       console.log("parsed user data", userData);
+      const userRole = userData.role.replace(/[\[\]]/g, '');
 
       commit('setAuth', { 
         isAuthenticated: true, 
-        userRole: userData.role,
+        userRole: userRole,
         userName: userData.name,
         userUUID: userData.uuid,
       });
-      console.log("login response ", response.data);
+
+      commit('setUser', {
+        profileImg: userData.profileImg,
+      })
+
+      return true;
     } catch (error) {
-      console.error('Login failed', error);
-      alert("로그인 실패");
+      return false;
     }
   },
   async loginVendor({ commit }, { username, password }) {
     try {
       const response = await axios.post('/vendor/login', { username, password }, { withCredentials: true });
       const userData = JSON.parse(response.data.user);
+      const userRole = userData.role.replace(/[\[\]]/g, '');
+
       console.log("parsed user data", userData);
 
       commit('setAuth', { 
         isAuthenticated: true, 
-        userRole: userData.role,
+        userRole: userRole,
         userName: userData.name,
         userUUID: userData.uuid,
         channelSeq: userData.channelSeq
       });
-      console.log("login response ", response.data);
+
+      commit('setUser', {
+        profileImg: userData.profileImg,
+      })
+
+      console.log("로그인 성공", response.data);
     } catch (error) {
-      console.error('Login failed', error);
+      console.error('로그인 실패', error);
     }
   },
   async fetchUserRole({ commit }) {
@@ -91,6 +107,7 @@ const getters = {
   userName: state => state.userName,
   userUUID: state => state.userUUID,
   channelSeq: state => state.channelSeq,
+  profileImg: state => state.profileImg,
 };
 
 export default {
