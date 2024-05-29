@@ -115,21 +115,19 @@ export default {
   },
   methods: {
     async toggleLike() {
-      this.isLiked = !this.isLiked;
-      if (this.isLiked) {
-        this.likesCount += 1;
-        await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
-          params: {
-            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
-          }
-        });
-      } else {
-        this.likesCount -= 1;
-        await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
-          params: {
-            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
-          }
-        });
+      try {
+        if (this.isLiked) {
+          await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
+          });
+          this.likesCount += 1;
+        } else {
+          await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
+          });
+          this.likesCount -= 1;
+        }
+        this.isLiked = !this.isLiked;
+      }catch (error){
+        alert("좋아요는 회원만 누를 수 있습니다!");
       }
     },
     toggleMute() {
