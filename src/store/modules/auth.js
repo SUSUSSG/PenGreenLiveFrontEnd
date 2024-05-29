@@ -37,10 +37,11 @@ const actions = {
     );
       const userData = JSON.parse(response.data.user);
       console.log("parsed user data", userData);
+      const userRole = userData.role.replace(/[\[\]]/g, '');
 
       commit('setAuth', { 
         isAuthenticated: true, 
-        userRole: userData.role,
+        userRole: userRole,
         userName: userData.name,
         userUUID: userData.uuid,
       });
@@ -58,11 +59,13 @@ const actions = {
     try {
       const response = await axios.post('/vendor/login', { username, password }, { withCredentials: true });
       const userData = JSON.parse(response.data.user);
+      const userRole = userData.role.replace(/[\[\]]/g, '');
+
       console.log("parsed user data", userData);
 
       commit('setAuth', { 
         isAuthenticated: true, 
-        userRole: userData.role,
+        userRole: userRole,
         userName: userData.name,
         userUUID: userData.uuid,
         channelSeq: userData.channelSeq

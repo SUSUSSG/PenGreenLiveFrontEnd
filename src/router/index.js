@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 
+import store from '@/store';
 import routes from "./route";
 
 const router = createRouter({
@@ -25,6 +26,24 @@ router.beforeEach((to, from, next) => {
   document.title = "SUSUSSG";
 
   next();
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.requiresAuth)) {
+    if (!store.getters['auth/isAuthenticated']) {
+      next({
+        path: '/member/login',
+        query: { redirect: to.fullPath },
+      });
+    } else if (to.matched.some(record => record.meta.role) && store.getters['auth/userRole'] !== to.meta.role) {
+      alert('접근 권한이 없습니다.');
+      next();
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
 });
 
 router.afterEach(() => {
