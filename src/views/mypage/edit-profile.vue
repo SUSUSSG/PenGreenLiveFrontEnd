@@ -157,6 +157,9 @@
     import { onMounted, ref } from 'vue';
     import Map from "@/components/Map/map.vue";
     import { add } from "@amcharts/amcharts5/.internal/core/util/Time";
+    import { useToast } from "vue-toastification";
+
+    const toast = useToast();
 
     onMounted(() =>{
         getUserInfo();
@@ -179,8 +182,10 @@
             if (response.data) {
                 user.value = response.data;
                 console.log("유저 정보 ", response.data );
+                toast.success("회원정보 수정 완료")
             }
         } catch(error) {
+            toast.warning("회원정보 변경 실패");
             console.error("회원정보 변경 실패", error);
         }
     }
