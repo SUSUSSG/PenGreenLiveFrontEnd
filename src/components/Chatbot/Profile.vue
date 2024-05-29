@@ -12,7 +12,7 @@
         </ol>
       </div>
     </div>
-    <div class="card-button" @click="goToOrderList">
+    <div class="card-button" @click="goToProfile">
       <p class="card-text">수정하러 이동하기</p>
     </div>
   </div>
@@ -29,10 +29,10 @@ export default {
 
   methods: {
    
-    goToOrderList() {
+    goToProfile() {
       this.$el.querySelector(".card-button").classList.add("clicked");
       setTimeout(() => {
-        this.$router.push("/edit-profile");
+        this.$router.push("/member/edit-profile");
       }, 150);
     },
   },
