@@ -169,7 +169,7 @@
         userBirthDt: null,
         userTel: "",
         userEmail: "",
-        userAddress: "",
+        userAddress: null,
         userPw: "",
         userProfileImgFile: null,
     });
@@ -316,10 +316,16 @@
 
 
     async function updateUserProfile() {
+
+        if (addressForm.value.zonecode && addressForm.value.address && addressForm.value.detailAddress) {
+            user.value.userAddress = `[${zonecode}] ${address} ${detailAddress}`;
+        } else {
+            user.value.userAddress = null;
+        }   
         user.value.userProfileImgFile = form.value.userProfileImgFile || null;
         user.value.userBirthDt = form.value.userBirthDt || null;
         user.value.userEmail = form.value.userEmail || null;
-        user.value.userAddress = `${addressForm.value.zonecode} ${addressForm.value.address} ${addressForm.value.detailAddress}` || null;
+        // user.value.userAddress = `${addressForm.value.zonecode} ${addressForm.value.address} ${addressForm.value.detailAddress}` || null;
         user.value.userPw = form.value.userPw || null;
         user.value.userTel = form.value.userTel || null;
 
