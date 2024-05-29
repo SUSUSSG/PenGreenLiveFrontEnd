@@ -1,6 +1,6 @@
 <template>
   <div class="broadcast-card">
-    <p class="broadcast-time">{{ formattedLiveDateTime }}</p>
+    <p class="broadcast-time">{{ formattedLiveDateTime.current }}</p>
     <h1 class="broadcast-title">{{ broadcastTitle }}</h1>
     <div class="broadcast-image" :style="{ backgroundImage: 'url(' + thumbimageSrc + ')' }"></div>
 
@@ -49,26 +49,32 @@ export default {
   computed: {
     formattedLiveDateTime() {
       const serverLiveTime = new Date(this.liveDateTime);
-      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000;
-      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds);
-
-      const year = adjustedServerLiveTime.getFullYear();
-      const month = ('0' + (adjustedServerLiveTime.getMonth() + 1)).slice(-2);
-      const day = ('0' + adjustedServerLiveTime.getDate()).slice(-2);
-      const hours = ('0' + adjustedServerLiveTime.getHours()).slice(-2);
-      const minutes = ('0' + adjustedServerLiveTime.getMinutes()).slice(-2);
-
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
+      const year = serverLiveTime.getFullYear();
+      const month = ('0' + (serverLiveTime.getMonth() + 1)).slice(-2);
+      const day = ('0' + serverLiveTime.getDate()).slice(-2);
+      const hours = ('0' + serverLiveTime.getHours()).slice(-2);
+      const minutes = ('0' + serverLiveTime.getMinutes()).slice(-2);
+      
+      const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+      return {current: formattedTime};
     },
     isPrepareTime() {
       const now = new Date();
       const serverLiveTime = new Date(this.liveDateTime);
-      const offsetInMilliseconds = new Date().getTimezoneOffset() * 60000;
-      const adjustedServerLiveTime = new Date(serverLiveTime.getTime() + offsetInMilliseconds);
-      const prepareTime = new Date(adjustedServerLiveTime.getTime() - 15 * 60000);
-      const endTime = new Date(adjustedServerLiveTime.getTime() + 15 * 60000);
+      const prepareTime = new Date(serverLiveTime.getTime() - 15 * 60000);
+      const endTime = new Date(serverLiveTime.getTime() + 15 * 60000);
       return now >= prepareTime && now <= endTime;
     }
+  },
+  watch: {
+    liveDateTime(newVal, oldVal) {
+      const serverLiveTime = new Date(newVal);
+      console.log("Updated liveDateTime: ", serverLiveTime);
+    }
+  },
+  created() {
+    const serverLiveTime = new Date(this.liveDateTime);
+    console.log("받아오자마자 : ", serverLiveTime);
   },
   methods: {
     onClickRedirect() {
@@ -77,6 +83,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .broadcast-image {

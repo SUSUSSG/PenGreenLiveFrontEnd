@@ -166,7 +166,7 @@ const routes = [
       },
       {
         path: "live-prepare",
-        name: "실시간 라이브 준비",
+        name: "라이브 예정 목록",
         component: () => import("@/views/broadcast/live-prepare.vue"),
         meta: { requiresAuth: true, role: 'VENDOR' },
       },

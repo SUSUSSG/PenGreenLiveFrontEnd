@@ -193,7 +193,7 @@ export default defineComponent({
       this.$router.push({name: '라이브등록'}) // About 페이지로 이동}
     },
     gotoPreparePage(){
-      this.$router.push({name: '실시간 라이브 준비'}) // About 페이지로 이동}
+      this.$router.push({name: '라이브 예정 목록'}) // About 페이지로 이동}
     }
   }
 });
