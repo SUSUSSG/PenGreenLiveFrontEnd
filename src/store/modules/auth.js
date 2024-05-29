@@ -6,6 +6,7 @@ const state = {
   userName: null,
   userUUID: null,
   channelSeq: null,
+  profileImg: null,
 };
 
 const mutations = {
@@ -23,6 +24,9 @@ const mutations = {
     state.userName = null;
     state.userUUID = null;
     state.channelSeq = null;
+  },
+  setUser(state, {profileImg}) {
+    state.profileImg = profileImg;
   }
 };
 
@@ -40,6 +44,11 @@ const actions = {
         userName: userData.name,
         userUUID: userData.uuid,
       });
+
+      commit('setUser', {
+        profileImg: userData.profileImg,
+      })
+
       console.log("로그인 성공", response.data);
     } catch (error) {
       console.error('Login failed', error);
@@ -59,6 +68,11 @@ const actions = {
         userUUID: userData.uuid,
         channelSeq: userData.channelSeq
       });
+
+      commit('setUser', {
+        profileImg: userData.profileImg,
+      })
+
       console.log("로그인 성공", response.data);
     } catch (error) {
       console.error('로그인 실패', error);
@@ -91,6 +105,7 @@ const getters = {
   userName: state => state.userName,
   userUUID: state => state.userUUID,
   channelSeq: state => state.channelSeq,
+  profileImg: state => state.profileImg,
 };
 
 export default {

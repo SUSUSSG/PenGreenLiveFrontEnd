@@ -179,9 +179,7 @@
             if (response.data) {
                 user.value = response.data;
                 console.log("유저 정보 ", response.data );
-            } else {
-                address.value = null;
-            } 
+            }
         } catch(error) {
             console.error("회원정보 변경 실패", error);
         }
@@ -308,26 +306,35 @@
     const showMapModal =ref(false);
     const postalCode = ref('');
     const addressForm = ref({
-        address: null,
-        zonecode: null,
-        detailAddress: null,
+        address: '',
+        zonecode: '',
+        detailAddress: '',
     });
 
 
     async function updateUserProfile() {
+        user.value.userProfileImgFile = form.value.userProfileImgFile || null;
+        user.value.userBirthDt = form.value.userBirthDt || null;
+        user.value.userEmail = form.value.userEmail || null;
+        user.value.userAddress = `${addressForm.value.zonecode} ${addressForm.value.address} ${addressForm.value.detailAddress}` || null;
+        user.value.userPw = form.value.userPw || null;
+        user.value.userTel = form.value.userTel || null;
+
         console.log(form.value);
-  
+
         try {
-            const response = await axios.patch(`/user`, {
-                form
+            const response = await axios.patch(`/user`, user.value, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
             if (response.data) {
-            address.value = response.data;
+                console.log("유저 정보 업데이트 성공", response.data);
             } else {
-            address.value = null;
-            } 
+                console.log("유저 정보 업데이트 실패");
+            }
         } catch(error) {
-            console.error("회원정보 변경 실패", error);
+            console.error("서버 오류", error);
         }
     }
 
@@ -340,32 +347,9 @@
             const { address, zonecode, buildingName } = event.data;
             addressForm.value.address = address;
             addressForm.value.zonecode = zonecode;
-            addressForm.value.detailAddress = `(${buildingName}) `;
-            form.value.userAddress = ` ${zonecode} ${address} ${addressForm.value.detailAddress}`;
-
+            addressForm.value.detailAddress = buildingName ? `(${buildingName}) `: '';
         });
     };
-
-    function splitAddress(fullAddress) {
-        // 주소를 3개의 부분으로 나누는 정규 표현식
-
-        console.log("주소 ", fullAddress);
-        const regex = /^(\d{5})\s([\w\s가-힣]+)\s(\(.+\))$/;
-
-        // 정규 표현식을 사용하여 주소 매칭
-        const match = fullAddress.match(regex);
-
-        if (match) {
-            return {
-                postalCode: match[1], // 우편번호
-                streetAddress: match[2], // 기본 주소
-                detailAddress: match[3] // 상세 주소
-            };
-        } else {
-            // 정규 표현식에 맞지 않는 경우 에러 메시지 반환
-            return "주소 형식이 올바르지 않습니다.";
-        }
-    }
 
     // 프로필 이미지 변경
     const defaultImage = 'https://kr.object.ncloudstorage.com/susussg-img-bucket/user-profile/default-img.png';
@@ -382,7 +366,8 @@
     }
 
     function changeDefaultImg() {
-        form.value.userProfileImg = defaultImage;
+        user.value.userProfileImg = defaultImage;
+        form.value.userProfileImg = null;
     }
 
     function onFileChange(event) {
@@ -400,9 +385,6 @@
                 form.value.userProfileImgFile = base64String;
             };
             reader.readAsDataURL(file);
-        } else {
-            this.addModalData.previewImage = null;
-            this.addModalData.imageSrc = null;
         }
     }
 
