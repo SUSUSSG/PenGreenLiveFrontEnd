@@ -1,50 +1,50 @@
 <template>
-  <div class="all-card">
-    <div class="text-base ml-3">
+  <div className="all-card">
+    <div className="text-base ml-3">
       실시간 통계
     </div>
-    <div class="statistics-card">
+    <div className="statistics-card">
       <!-- Individual cards for each statistic -->
-      <div class="basic-card">
-        <Icon icon="heroicons:user-16-solid" class="icon-style" />
+      <div className="basic-card">
+        <Icon icon="heroicons:user-16-solid" class="icon-style"/>
         <div>
-          <div class="title">실시간 접속자</div>
-          <div class="result">{{ liveViewers }} 명</div>
+          <div className="title">실시간 접속자</div>
+          <div className="result">{{ liveViewers }} 명</div>
         </div>
       </div>
-      <div class="basic-card">
-        <Icon icon="heroicons:chart-bar-square-16-solid" class="icon-style" />
+      <div className="basic-card">
+        <Icon icon="heroicons:chart-bar-square-16-solid" class="icon-style"/>
         <div>
-          <div class="title">누적 주문 건수</div>
-          <div class="result">{{ totalOrders }} 건</div>
+          <div className="title">누적 주문 건수</div>
+          <div className="result">{{ totalOrders }} 건</div>
         </div>
       </div>
-      <div class="basic-long-card">
-        <Icon icon="heroicons:currency-dollar-20-solid" class="icon-style" />
+      <div className="basic-long-card">
+        <Icon icon="heroicons:currency-dollar-20-solid" class="icon-style"/>
         <div>
-          <div class="title">누적 주문 금액</div>
-          <div class="result">{{ totalOrderAmount.toLocaleString() }} 원</div>
+          <div className="title">누적 주문 금액</div>
+          <div className="result">{{ totalOrderAmount.toLocaleString() }} 원</div>
         </div>
       </div>
-      <div class="basic-card">
-        <Icon icon="heroicons:users-16-solid" class="icon-style" />
+      <div className="basic-card">
+        <Icon icon="heroicons:users-16-solid" class="icon-style"/>
         <div>
-          <div class="title">누적 접속자</div>
-          <div class="result">{{ totalViewers }} 명</div>
+          <div className="title">누적 접속자</div>
+          <div className="result">{{ totalViewers }} 명</div>
         </div>
       </div>
-      <div class="basic-card">
-        <Icon icon="heroicons:heart-16-solid" class="icon-style" />
+      <div className="basic-card">
+        <Icon icon="heroicons:heart-16-solid" class="icon-style"/>
         <div>
-          <div class="title">좋아요</div>
-          <div class="result">{{ totalLikes }}</div>
+          <div className="title">좋아요</div>
+          <div className="result">{{ totalLikes }}</div>
         </div>
       </div>
-      <div class="basic-long-card">
-        <Icon icon="heroicons:building-storefront-16-solid" class="icon-style" />
+      <div className="basic-long-card">
+        <Icon icon="heroicons:building-storefront-16-solid" class="icon-style"/>
         <div>
-          <div class="title">채널이름</div>
-          <div class="result">{{ channelNm }}</div>
+          <div className="title">채널이름</div>
+          <div className="result">{{ channelNm }}</div>
         </div>
       </div>
     </div>
@@ -81,17 +81,21 @@ export default {
       viewersHistory: [],
       maxViewers: 0,
       averageViewers: 0,
+      interval: null,
     }
   },
   watch: {
     startCheck(newVal) {
-      console.log("Watcher triggered:", { newVal });
+      console.log("Watcher triggered:", {newVal});
       this.updateStatistics();
       if (newVal) {
         this.interval = setInterval(() => {
-          this.updateViewer()
+          this.updateViewer();
           this.updateStatistics();
         }, 15000);
+        this.interval = setInterval(() => {
+          this.postViewerCount(this.liveViewers, new Date().toISOString());
+        }, 60000)
         console.log("Interval set");
       } else if (this.interval) {
         clearInterval(this.interval);
@@ -104,26 +108,41 @@ export default {
     getViewers(sessionId) {
       console.log(sessionId);
       return axios.get(`/sessions/${sessionId}/connections/count`)
-        .then(response => {
-          console.log('현재 시청자 수:', response.data);
-          return response.data;
-        })
-        .catch(error => {
-          console.error('시청자 수를 가져오지 못했습니다.', error);
-          throw error;
-        });
+          .then(response => {
+            console.log('현재 시청자 수:', response.data);
+            return response.data;
+          })
+          .catch(error => {
+            console.error('시청자 수를 가져오지 못했습니다.', error);
+            throw error;
+          });
     },
     // 방송 통계 정보를 가져오는 메서드 추가
     getStatistics(broadcastSeq) {
       return axios.get(`/broadcasts/statistics/${broadcastSeq}`)
-        .then(response => {
-          console.log('방송 통계:', response.data);
-          return response.data;
-        })
-        .catch(error => {
-          console.error('통계를 가져오지 못했습니다.', error);
-          throw error;
-        });
+          .then(response => {
+            console.log('방송 통계:', response.data);
+            return response.data;
+          })
+          .catch(error => {
+            console.error('통계를 가져오지 못했습니다.', error);
+            throw error;
+          });
+    },
+    // 방송 시청자 수와 시간을 서버에 전송하는 메서드
+    async postViewerCount(viewerCount, recordTime) {
+      const data = {
+        broadcastSeq: this.sessionId,
+        recordTime: recordTime,
+        viewerCount: viewerCount
+      };
+      return axios.post('/broadcast-viewer-count/add', data)
+          .then(response => {
+            console.log('Viewer count posted:', response.data);
+          })
+          .catch(error => {
+            console.error('Failed to post viewer count:', error);
+          });
     },
     async updateViewer() {
       try {
@@ -138,6 +157,7 @@ export default {
           averageViewers: this.averageViewers,
         });
         this.emitStatistics(); // Call emitStatistics here to ensure data is up-to-date
+        const currentTime = new Date().toISOString();
       } catch (error) {
         console.error("Error updating viewers:", error);
       }
@@ -164,7 +184,7 @@ export default {
         maxViewers: this.maxViewers,
         averageViewers: this.averageViewers,
       });
-      this.$emit('update-statistics', { maxViewers: this.maxViewers, averageViewers: this.averageViewers });
+      this.$emit('update-statistics', {maxViewers: this.maxViewers, averageViewers: this.averageViewers});
     }
   }
 };
@@ -189,7 +209,7 @@ export default {
   grid-template-columns: repeat(3, 1fr);
   grid-template-rows: repeat(2, 1fr); */
   margin: auto 15px;
-  
+
 }
 
 .basic-card,
