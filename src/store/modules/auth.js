@@ -49,10 +49,9 @@ const actions = {
         profileImg: userData.profileImg,
       })
 
-      console.log("로그인 성공", response.data);
+      return true;
     } catch (error) {
-      console.error('Login failed', error);
-      alert("로그인 실패");
+      return false;
     }
   },
   async loginVendor({ commit }, { username, password }) {
