@@ -49,7 +49,6 @@ export default {
   computed: {
     formattedLiveDateTime() {
       const serverLiveTime = new Date(this.liveDateTime);
-      console.log("받아오자마자 : ", serverLiveTime);
       const year = serverLiveTime.getFullYear();
       const month = ('0' + (serverLiveTime.getMonth() + 1)).slice(-2);
       const day = ('0' + serverLiveTime.getDate()).slice(-2);
@@ -57,7 +56,6 @@ export default {
       const minutes = ('0' + serverLiveTime.getMinutes()).slice(-2);
       
       const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}`;
-      console.log("변환후 : ", formattedTime);
       return {current: formattedTime};
     },
     isPrepareTime() {
@@ -68,6 +66,16 @@ export default {
       return now >= prepareTime && now <= endTime;
     }
   },
+  watch: {
+    liveDateTime(newVal, oldVal) {
+      const serverLiveTime = new Date(newVal);
+      console.log("Updated liveDateTime: ", serverLiveTime);
+    }
+  },
+  created() {
+    const serverLiveTime = new Date(this.liveDateTime);
+    console.log("받아오자마자 : ", serverLiveTime);
+  },
   methods: {
     onClickRedirect() {
       this.$router.push({ name: '라이브보드', params: { broadcastId: this.broadcastId } });
@@ -75,6 +83,7 @@ export default {
   }
 }
 </script>
+
 
 <style scoped>
 .broadcast-image {
