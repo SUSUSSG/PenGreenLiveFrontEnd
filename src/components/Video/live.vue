@@ -119,16 +119,10 @@ export default {
       if (this.isLiked) {
         this.likesCount += 1;
         await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
-          params: {
-            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
-          }
         });
       } else {
         this.likesCount -= 1;
         await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
-          params: {
-            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
-          }
         });
       }
     },
@@ -169,8 +163,15 @@ export default {
         throw error;
       }
     },
-    async checkLikes(){
-      this.isLiked = axios.get(`/broadcasts/statistics/${this.$route.params.broadcastId}/likes/check`)
+    async checkLikes() {
+      try {
+        const response = await axios.get(`/broadcasts/statistics/${this.$route.params.broadcastId}/likes/check`);
+        this.isLiked = response.data;
+        console.log("좋아요 상태", response);
+        console.log("실제 좋아요 상태", this.isLiked);
+      } catch (error) {
+        console.error('Failed to check likes:', error);
+      }
     },
     async updateLikes() {
       try {
