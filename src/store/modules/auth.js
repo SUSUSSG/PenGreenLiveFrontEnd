@@ -40,7 +40,7 @@ const actions = {
         userName: userData.name,
         userUUID: userData.uuid,
       });
-      console.log("login response ", response.data);
+      console.log("로그인 성공", response.data);
     } catch (error) {
       console.error('Login failed', error);
       alert("로그인 실패");
@@ -59,9 +59,9 @@ const actions = {
         userUUID: userData.uuid,
         channelSeq: userData.channelSeq
       });
-      console.log("login response ", response.data);
+      console.log("로그인 성공", response.data);
     } catch (error) {
-      console.error('Login failed', error);
+      console.error('로그인 실패', error);
     }
   },
   async fetchUserRole({ commit }) {
