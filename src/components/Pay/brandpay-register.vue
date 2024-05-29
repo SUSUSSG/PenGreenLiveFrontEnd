@@ -29,9 +29,9 @@ onMounted(async () => {
     await loadTossPaymentsSDK();
   
     brandpay.value = window.BrandPay(clientKey, customerKey.value, {
-      redirectUrl: `https://pengreen.live/brandpay/callback-auth`,
+      redirectUrl: `${import.meta.env.VITE_API_BASE_URL}/brandpay/callback-auth`,
     });
-
+    
     const totalAmount = order.orderPayedPrice ? order.orderPayedPrice : 1;
     paymentMethodsWidget = brandpay.value.createPaymentMethodsWidget({ amount: totalAmount});
     paymentMethodsWidget.render('#payment-methods-widget', {
