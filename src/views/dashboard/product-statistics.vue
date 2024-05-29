@@ -109,9 +109,7 @@ export default {
   methods: {
     async fetchAnalyticsData() {
       try {
-        const response = await axios.get('/products/statistics/sales-data', {
-          params: { channelSeq: 1 }
-        });
+        const response = await axios.get('/products/statistics/sales-data');
         const data = response.data;
         this.analyticsCards[0].result = `${data.totalSales}원`;
         this.analyticsCards[1].result = `${data.totalOrders}건`;
@@ -124,9 +122,7 @@ export default {
     },
     async fetchTopProducts() {
       try {
-        const response = await axios.get('/products/statistics/top-products', {
-          params: { channelSeq: 1 }
-        });
+        const response = await axios.get('/products/statistics/top-products');
         this.topProducts = response.data.map((product, index) => [
           `${index + 1}위`,
           product.productNm,
@@ -138,9 +134,7 @@ export default {
     },
     async fetchAllProducts() {
       try {
-        const response = await axios.get('/products/statistics/all-products', {
-          params: { channelSeq: 1 }
-        });
+        const response = await axios.get('/products/statistics/all-products');
         this.allProducts = response.data.map((product) => [
           product.productCd,
           product.productNm,

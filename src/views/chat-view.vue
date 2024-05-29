@@ -81,6 +81,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from "vue";
 import { useStore } from "vuex";
 import { Client } from "@stomp/stompjs";
+
 export default {
   name: "chat-view",
   setup() {
@@ -136,6 +137,9 @@ export default {
       const url = "ws://localhost:8090/ws/init";
       websocketClient.value = new Client({
         brokerURL: url,
+        connectHeaders: {
+          "withCredentials": true,
+        },
         onConnect: () => {
           websocketClient.value.subscribe(
             `/sub/room/${currentRoom.value.id}`,

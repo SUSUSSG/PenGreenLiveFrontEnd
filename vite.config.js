@@ -19,7 +19,7 @@ export default defineConfig({
     'process.env': process.env
   },
   resolve: {
-    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue", ".css"],
+    extensions: [".mjs", ".js", ".ts", ".jsx", ".tsx", ".json", ".vue", ".css", ".svg"],
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },

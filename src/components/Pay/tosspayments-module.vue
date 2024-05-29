@@ -474,6 +474,7 @@ function showInterestFreeInstallmentInfo() {
     -webkit-box-pack: start;
     justify-content: flex-start;
     padding: 24px;
+    background: white;
 }
 
 .consumer-cache-67e79o {

@@ -506,7 +506,7 @@ const formData = ref({
     revenue: null,
     faxNumber: '',
     websiteUrl: '',
-    optionalAgreementConsent: false
+    optionalAgreementConsent: false,
 });
 
 const vendorPwCheck = ref(null);

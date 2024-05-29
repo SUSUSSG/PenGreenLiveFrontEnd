@@ -115,6 +115,8 @@
     try {
       console.log(username.value, password.value);
       await store.dispatch('auth/login', { username: username.value, password: password.value });
+      router.push("/");
+
     } catch (error) {
       console.error('login error', error);
       if (error.response && error.response.status === 401) {

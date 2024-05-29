@@ -19,14 +19,30 @@
                                     </td>
                             
                                     <td class="vgt-left-align">
-                                        <div class="flex items-center space-x-3">
-                                            <input type="text" name="pn1" class="classinput input-control flex-item block focus:outline-none w-full h-[40px]">
-                                            <input type="text" name="pn2" class="classinput input-control flex-item block focus:outline-none w-full h-[40px]">
-                                            <input type="text" name="pn3" class="classinput input-control flex-item block focus:outline-none w-full h-[40px]">
-                                            <div class="button-container">
-                                                <Button text="조회" btnClass="btn-primary"/>
-                                            </div>
-                                        </div>
+                                        <div class="flex items-center space-x-2">
+                                                        <input 
+                                                            class="form-control py-2 h-[48px]"
+                                                            placeholder="사업자번호1"
+                                                            type="text"
+                                                            v-model="businessNumber.partOne"
+                                                            @input="moveFocus($event, 3, 'inputTwo')"
+                                                            maxlength="3">
+                                                        <input 
+                                                            class="form-control py-2 h-[48px]"
+                                                            placeholder="사업자번호2"
+                                                            type="text"
+                                                            v-model="businessNumber.partTwo"
+                                                            @input="moveFocus($event, 2, 'inputThree')"
+                                                            maxlength="2"
+                                                            ref="inputTwo">
+                                                        <input 
+                                                            class="form-control py-2 h-[48px]"
+                                                            placeholder="사업자번호3"
+                                                            type="text"
+                                                            v-model="businessNumber.partThree"
+                                                            maxlength="5"
+                                                            ref="inputThree">
+                                                    </div>
                                     </td>
                                     <td class="vgt-left-align essential">
                                         <span>담당자 성명</span>
@@ -43,7 +59,7 @@
                                     </td>
                                     <td class="vgt-left-align">
                                         <div class="relative">
-                                            <input type="password" name="pn5" placeholder="비밀번호 (8~20자 영문+숫자)" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn5">
+                                            <input type="password" placeholder="비밀번호 (8~20자 영문+숫자)" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn5">
                                         </div>
                                     </td>
                                     <td class="vgt-left-align"></td>
@@ -67,8 +83,7 @@
                                     </td>
                                     <td class="vgt-left-align">
                                         <div class="flex items-center space-x-3">
-                                            <input type="text" name="pn7" value="010" class="input-control focus:outline-none block w-[50px] h-[40px]" id="pn7" readonly>
-                                            <input type="text" name="pn8" placeholder="휴대폰번호 (-없이 입력)" class="input-control w-full focus:outline-none block h-[40px]" id="pn8">
+                                            <input type="text" placeholder="휴대폰번호 (-없이 입력)" class="input-control w-full focus:outline-none block h-[40px]" id="pn8">
                                         </div>
                                     </td>
                                     <td class="vgt-left-align essential">
@@ -76,7 +91,7 @@
                                     </td>
                                     <td class="vgt-left-align">
                                         <div class="relative">
-                                            <input type="email" name="pn9" placeholder="이메일 입력" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn9">
+                                            <input type="email" placeholder="이메일 입력" class="classinput input-control w-full block focus:outline-none h-[40px]" id="pn9">
                                         </div>
                                     </td>
                                 </tr>
@@ -98,9 +113,29 @@
 </template>
 
 <script setup>    
+    import {ref, reactive} from 'vue';
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
     import Textarea from "@/components/Textarea";
+
+    const businessNumber = reactive({
+        partOne: '',
+        partTwo: '',
+        partThree: ''
+    });
+
+    const inputTwo = ref(null);
+    const inputThree = ref(null);
+
+    function moveFocus(event, maxLength, nextInputRef) {
+        if (event.target.value.length >= maxLength) {
+            if (nextInputRef === 'inputTwo') {
+                inputTwo.value.focus();
+            } else if (nextInputRef === 'inputThree') {
+                inputThree.value.focus();
+            }
+        }
+    }
 
 </script>
   

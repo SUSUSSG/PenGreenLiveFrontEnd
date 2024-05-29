@@ -153,30 +153,29 @@ export default {
     },
     async fetchStatisticsByDateRange() {
       try {
-        const vendorSeq = 3;
         const startDate = this.startDate || "2000-01-01";
         const endDate = this.endDate || "2099-12-31";
 
         const avgBroadcastDurationResponse = await axios.get(`/broadcasts/statistics/average-broadcast-duration`, {
-          params: { vendorSeq, startDate, endDate }
+          params: { startDate, endDate }
         });
         const avgViewerCountResponse = await axios.get(`/broadcasts/statistics/average-viewer-count`, {
-          params: { vendorSeq, startDate, endDate }
+          params: { startDate, endDate }
         });
         const avgPurchaseQuantityResponse = await axios.get(`/broadcasts/statistics/average-purchase-quantity`, {
-          params: { vendorSeq, startDate, endDate }
+          params: { startDate, endDate }
         });
         const avgProductClicksResponse = await axios.get(`/broadcasts/statistics/average-product-clicks`, {
-          params: { vendorSeq, startDate, endDate }
+          params: { startDate, endDate }
         });
         const avgViewingTimeResponse = await axios.get(`/broadcasts/statistics/average-viewing-time`, {
-          params: { vendorSeq, startDate, endDate }
+          params: { startDate, endDate }
         });
         const avgLikesCountResponse = await axios.get(`/broadcasts/statistics/average-likes-count`, {
-          params: { vendorSeq, startDate, endDate }
+          params: { startDate, endDate }
         });
         const avgPurchaseAmountResponse = await axios.get(`/broadcasts/statistics/average-purchase-amount`, {
-          params: { vendorSeq, startDate, endDate }
+          params: { startDate, endDate }
         });
 
         this.cardDataList = [
@@ -229,11 +228,10 @@ export default {
     },
     async fetchBroadcastOptions() {
       try {
-        const vendorSeq = 3;
         const startDate = this.startDate || "2000-01-01";
         const endDate = this.endDate || "2099-12-31";
 
-        const response = await axios.get(`/vendor/${vendorSeq}/broadcasts`, {
+        const response = await axios.get(`/vendor/broadcasts`, {
           params: { startDate, endDate }
         });
 

@@ -58,9 +58,7 @@
                                             <div class="mb-5">
                                                 <div class="flex items-center">                                                        
                                                     <div class="flex items-center flex-grow-7">
-                                                        <input type="text" value="010" class=" w-[20%] mr-2 input-control focus:outline-none h-[40px]" readonly="" disabled="">
-                                                        <input v-model="form.userTel" :disabled="responseAuth" type="text" placeholder="휴대폰번호 (-없이 입력)" class="w-full input-control focus:outline-none h-[40px]"
-                                                        >
+                                                        <input v-model="form.userTel" :disabled="responseAuth" type="text" placeholder="휴대폰번호 (-없이 입력)" class="w-full input-control focus:outline-none h-[40px]">
                                                     </div>
                                                     <div class="w-[163px]">
                                                         <Button :disabled="responseAuth" @click="requestPhoneAuthCode" type="button" text="인증번호 받기" class="w-full"/>
@@ -159,7 +157,6 @@
     import { onMounted, ref } from 'vue';
     import Map from "@/components/Map/map.vue";
     import { add } from "@amcharts/amcharts5/.internal/core/util/Time";
-    // import imageCompression from 'browser-image-compression';
 
     onMounted(() =>{
         getUserInfo();
@@ -208,7 +205,7 @@
     }
 
     async function requestPhoneAuthCode() {
-        const phoneNumber = `010${form.value.userTel}`;
+        const phoneNumber = `${form.value.userTel}`;
 
         if (phoneNumber==="010") {
             alert("휴대폰 번호를 입력하세요.");
@@ -241,7 +238,7 @@
     }
 
     async function verifyCode() {
-        const phoneNumber = `010${form.value.userTel}`;
+        const phoneNumber = `${form.value.userTel}`;
 
         if (inputAuthCode.value===null) {
             alert("인증번호를 입력해주세요.");
