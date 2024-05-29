@@ -542,7 +542,7 @@ export default {
             timeout: 1000,
           });
           setTimeout(() => {
-            this.$router.push({ name: '실시간 라이브 준비' });
+            this.$router.push({ name: '라이브 예정 목록' });
           }, 2000);
         })
         .catch(error => {
