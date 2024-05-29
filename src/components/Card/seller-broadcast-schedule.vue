@@ -1,6 +1,6 @@
 <template>
   <div class="broadcast-card">
-    <p class="broadcast-time">{{ formattedLiveDateTime }}</p>
+    <p class="broadcast-time">{{ formattedLiveDateTime.current }}</p>
     <h1 class="broadcast-title">{{ broadcastTitle }}</h1>
     <div class="broadcast-image" :style="{ backgroundImage: 'url(' + thumbimageSrc + ')' }"></div>
 
@@ -49,14 +49,16 @@ export default {
   computed: {
     formattedLiveDateTime() {
       const serverLiveTime = new Date(this.liveDateTime);
+      console.log("받아오자마자 : ", serverLiveTime);
       const year = serverLiveTime.getFullYear();
       const month = ('0' + (serverLiveTime.getMonth() + 1)).slice(-2);
       const day = ('0' + serverLiveTime.getDate()).slice(-2);
       const hours = ('0' + serverLiveTime.getHours()).slice(-2);
       const minutes = ('0' + serverLiveTime.getMinutes()).slice(-2);
-
-      // const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}`;
-      return `${year}-${month}-${day} ${hours}:${minutes}`;
+      
+      const formattedTime = `${year}-${month}-${day} ${hours}:${minutes}`;
+      console.log("변환후 : ", formattedTime);
+      return {current: formattedTime};
     },
     isPrepareTime() {
       const now = new Date();
