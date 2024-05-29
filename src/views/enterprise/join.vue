@@ -600,7 +600,7 @@ async function submitForm() {
     formData.value.businessId = `${businessNumber1.value}${businessNumber2.value}${businessNumber3.value}`;
     console.log("회원가입 폼 ", formData.value);
     const response = await axios.post("/vendor/signup", formData.value);
-    alert("회원가입 성공");
+    alert("회원가입 성공!");
     router.push("/");
   } catch (error) {
     alert("Failed to submit the form. Please try again.");
