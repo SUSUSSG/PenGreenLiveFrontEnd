@@ -94,7 +94,6 @@
         }
 
         try {
-            console.log(username.value, password.value);
             const result = await store.dispatch('auth/login', { username: username.value, password: password.value });
 
             if (result) {
