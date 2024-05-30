@@ -193,6 +193,7 @@ let intervalId = ref(null);
 const joinSession = async () => {
 
   OV.value = new OpenVidu();
+  this.OV.enableProdMode(); // 로그 제거
   session.value = OV.value.initSession();
   session.value.on("streamCreated", ({ stream }) => {
     mainStreamManager.value = session.value.subscribe(stream);
