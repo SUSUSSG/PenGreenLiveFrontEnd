@@ -517,6 +517,7 @@
 .vgt-left-align {
     /* border-right: 1px solid #ddd; */
     background : #f5f5f5;
+    width: 20%;
 }
 
 </style>

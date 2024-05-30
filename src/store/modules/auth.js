@@ -49,7 +49,6 @@ const actions = {
       commit('setUser', {
         profileImg: userData.profileImg,
       })
-
       return true;
     } catch (error) {
       return false;
@@ -74,10 +73,9 @@ const actions = {
       commit('setUser', {
         profileImg: userData.profileImg,
       })
-
-      
+      return true;
     } catch (error) {
-      
+      return false;
     }
   },
   async fetchUserRole({ commit }) {

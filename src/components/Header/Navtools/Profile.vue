@@ -59,6 +59,7 @@ const userName = computed(() => store.getters['auth/userName']);
 const userUUID = computed(() => store.getters['auth/userUUID']);
 const userRole = computed(() => store.getters['auth/userRole'])
 const profileImg = computed(() => store.getters['auth/profileImg']);
+
 const userProfileImg = ref(null);
 
 watch([userUUID, isAuthenticated], ([newUUID, isAuth]) => {
@@ -83,6 +84,7 @@ const filteredMenu = computed(() => {
         router.push("/member/edit-profile");
       },
       requiresAuth: true,
+      requiredRole: 'USER',
     },
     {
       label: "대시보드",

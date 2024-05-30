@@ -158,8 +158,11 @@
     import Map from "@/components/Map/map.vue";
     import { add } from "@amcharts/amcharts5/.internal/core/util/Time";
     import { useToast } from "vue-toastification";
+    import { useStore } from 'vuex';
+
 
     const toast = useToast();
+    const store = useStore();
 
     onMounted(() =>{
         getUserInfo();
@@ -184,7 +187,6 @@
 
             }
         } catch(error) {
-
         }
     }
 
@@ -338,11 +340,17 @@
                 }
             });
             if (response.data) {
-                toast.success("회원정보 수정 완료");
+                await toast.success("회원정보 수정 완료", {timeout: 1000});
 
+                if (form.value.userProfileImgFile !== null) {
+                    await getUserInfo();
+                    await store.commit('auth/setUser', { profileImg: user.value.userProfileImg });
+                } 
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1300);
             } else {
-                toast.warning("회원정보 수정 실패")
-
+                toast.warning("회원정보 수정 실패", {timeout: 1000})
             }
         } catch(error) {
 
@@ -426,6 +434,7 @@
 .vgt-left-align {
     /* border-right: 1px solid #ddd; */
     background : #f5f5f5;
+    width: 20%;
 }
 
 
