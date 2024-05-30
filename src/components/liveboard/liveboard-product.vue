@@ -96,7 +96,7 @@ export default {
 
       axios.post(`/live-product-stats/${broadcastId}/${selectedProduct.productSeq}`)
         .then(response => {
-          console.log(response.data);
+
           this.remainingStock = response.data.remainingStock;
           this.totalOrders = response.data.totalOrders;
           this.totalOrderAmount = response.data.totalOrderAmount;
@@ -105,7 +105,7 @@ export default {
           this.$refs.showProductInfo.openModal();
         })
         .catch(error => {
-          console.log("실시간 방송 상품 stats 에러 : ", error);
+
         });
     }
   }

@@ -149,7 +149,7 @@ export default {
           this.isSubscribed = response.data;
         })
         .catch((error) => {
-          console.error("구독 정보 확인 실패:", error);
+
         });
     },
     handleSubscribe() {
@@ -166,7 +166,7 @@ export default {
             alert("구독이 취소되었습니다.");
           })
           .catch((error) => {
-            console.error("구독 취소 실패:", error);
+
             alert("구독 취소 중 오류가 발생했습니다.");
           });
       } else {
@@ -182,7 +182,7 @@ export default {
             alert("구독이 완료되었습니다.");
           })
           .catch((error) => {
-            console.error("구독 실패:", error);
+
             alert("구독 중 오류가 발생했습니다.");
           });
       }

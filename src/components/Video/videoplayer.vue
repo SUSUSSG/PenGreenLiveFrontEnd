@@ -99,8 +99,8 @@ export default {
       };
 
       this.websocketClient.onStompError = (frame) => {
-        console.error('Broker reported error: ' + frame.headers['message']);
-        console.error('Additional details: ' + frame.body);
+
+
       };
 
       this.websocketClient.activate();
@@ -114,7 +114,7 @@ export default {
     //       videoElement.muted = false;
     //     }, 1000);
     //   }).catch(error => {
-    //     console.error("음소거된 비디오 재생 실패:", error);
+    //
     //   });
     // },
   },

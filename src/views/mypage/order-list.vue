@@ -48,13 +48,13 @@ const reviewedOrders = ref([]);
 const fetchOrders = async () => {
   try {
     const unreviewedResponse = await axios.get(`/unreviewed-orders`);
-    console.log('Unreviewed Orders:', unreviewedResponse.data); 
+
     unreviewedOrders.value = unreviewedResponse.data;
 
     const reviewedResponse = await axios.get(`/reviewed-orders`);
     reviewedOrders.value = reviewedResponse.data;
   } catch (error) {
-    console.error("Error fetching orders:", error);
+
   }
 };
 

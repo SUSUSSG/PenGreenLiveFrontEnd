@@ -107,7 +107,7 @@ export default {
       };
 
       this.recognition.onerror = (event) => {
-        console.error("Speech recognition error", event);
+
       };
       this.recognition.onstart = () => {
         this.isListening = true; // 음성 인식 시작 시 상태 변경
@@ -120,9 +120,6 @@ export default {
         }
       };
     } else {
-      console.error(
-        "webkitSpeechRecognition is not supported in this browser."
-      );
     }
   },
   methods: {
@@ -224,11 +221,11 @@ export default {
             const [, Broadcastkeyword] = botMessageText.split(",");
 
             // 디버깅을 위해 console.log 추가
-            console.log("Broadcastkeyword:", Broadcastkeyword);
+
 
             // Broadcastkeyword가 정의되지 않았거나 빈 문자열일 때 기본 값을 설정합니다.
             const keyword = Broadcastkeyword?.trim() || "default_keyword";
-            console.log("keyword:", keyword);
+
 
             const botMessage = {
               id: this.messages.length + 1,
@@ -408,7 +405,7 @@ export default {
           }
           this.scrollToBottom();
         } catch (error) {
-          console.error("Error:", error);
+
           const errorMessage = {
             id: this.messages.length + 1,
             text: "응답을 받지 못했습니다. 다시 시도해 주세요.",
@@ -427,7 +424,7 @@ export default {
         this.recognition.start();
         this.isListening = true; // 음성 인식 시작 시 상태 변경
       } else {
-        console.error("Speech recognition not initialized.");
+
       }
     },
     scrollToBottom() {

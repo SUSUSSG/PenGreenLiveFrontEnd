@@ -63,10 +63,10 @@ const profileImg = computed(() => store.getters['auth/profileImg']);
 const userProfileImg = ref(null);
 
 watch([userUUID, isAuthenticated], ([newUUID, isAuth]) => {
-  console.log("isAuthenticated ", isAuthenticated.value);
-  console.log("userUUID ", userUUID.value);
-  console.log("userName ", userName.value);
-  console.log("userRole ", userRole.value);
+
+
+
+
 
   if (isAuth && profileImg.value) {
     userProfileImg.value = profileImg.value; 

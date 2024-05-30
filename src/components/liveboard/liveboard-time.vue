@@ -95,20 +95,20 @@ export default {
         time: time,
         action: action
       };
-      console.log("과연 시간은?", requestData);
+
 
       axios.patch('/update/broadcast-time', requestData)
         .then((response) => {
-          console.log(response.data);
+
 
           // 방송 종료 이벤트 전송 요청
           if (this.isBroadcasting) {
             axios.get(`/broadcast-end/${this.$route.params.broadcastId}`)
               .then(() => {
-                console.log("Broadcast end event sent successfully");
+
               })
               .catch(error => {
-                console.error("Failed to send broadcast end event:", error);
+
               });
           }
 
@@ -121,7 +121,7 @@ export default {
           this.updateResultDisplayText();
         })
         .catch(error => {
-          console.error('시간 update 실패: ', error);
+
         });
     },
     getCurrentTime() {

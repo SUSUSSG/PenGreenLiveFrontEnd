@@ -136,7 +136,7 @@ const submitReview = async () => {
       "/openai/review-check",
       { reviewContent: reviewContent.value }
     );
-    console.log("유해성 검사 응답:", checkResponse.data);
+
 
     // 유해성 검사 응답 확인
     if (checkResponse.data === true || checkResponse.data === "true") {

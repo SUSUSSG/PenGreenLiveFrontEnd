@@ -113,7 +113,7 @@
     const isOpen = ref(false);
     const openModal = () => {
         isOpen.value = true;
-        console.log("방송 ID ", route.params.broadcastId);
+
     };
 
     const updateModal = (value) => {
@@ -150,9 +150,9 @@
                 ...review,
                 reviewTime: formatDate(review.reviewTime)
             })); 
-            console.log('Fetched reviews:', reviews.value); 
+
         } catch (error) {
-            console.error('리뷰를 가져오는 중 오류 발생:', error);
+
         }
     };
 
@@ -167,7 +167,7 @@
             );
             reviewSummary.value = response.data;
         } catch (error) {
-            console.error("Error fetching review summary:", error);
+
             reviewSummary.value = "리뷰가 없습니다";
         }
     };
@@ -175,10 +175,10 @@
 
     onMounted(() => {
         if (!product.value || !product.value.price) {
-            console.log('No product selected');
+
             return;
         }
-        console.log("product.value ", product.value);
+
         fetchReviews();
         fetchReviewSummary(product.value.productSeq);
     });

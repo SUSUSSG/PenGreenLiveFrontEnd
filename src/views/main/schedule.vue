@@ -156,7 +156,7 @@ export default {
           }));
         }
       } catch (error) {
-        console.error("Error fetching live data:", error);
+
       } finally {
         this.loading = false;
       }

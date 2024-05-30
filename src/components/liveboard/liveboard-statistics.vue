@@ -86,7 +86,7 @@ export default {
   },
   watch: {
     startCheck(newVal) {
-      console.log("Watcher triggered:", {newVal});
+
       this.updateStatistics();
       if (newVal) {
         this.interval = setInterval(() => {
@@ -95,27 +95,27 @@ export default {
         }, 15000);
         this.interval = setInterval(() => {
           const currentTime = this.getCurrentKST();
-          console.log("현재 시간", currentTime);
+
           this.postViewerCount(this.liveViewers, currentTime);
         }, 60000)
-        console.log("Interval set");
+
       } else if (this.interval) {
         clearInterval(this.interval);
-        console.log("Interval cleared");
+
       }
     }
   },
   methods: {
     // 현재 시청자 수를 가져옴
     getViewers(sessionId) {
-      console.log(sessionId);
+
       return axios.get(`/sessions/${sessionId}/connections/count`)
           .then(response => {
-            console.log('현재 시청자 수:', response.data);
+
             return response.data;
           })
           .catch(error => {
-            console.error('시청자 수를 가져오지 못했습니다.', error);
+
             throw error;
           });
     },
@@ -123,11 +123,11 @@ export default {
     getStatistics(broadcastSeq) {
       return axios.get(`/broadcasts/statistics/${broadcastSeq}`)
           .then(response => {
-            console.log('방송 통계:', response.data);
+
             return response.data;
           })
           .catch(error => {
-            console.error('통계를 가져오지 못했습니다.', error);
+
             throw error;
           });
     },
@@ -140,10 +140,10 @@ export default {
       };
       return axios.post('/broadcast-viewer-count/add', data)
           .then(response => {
-            console.log('Viewer count posted:', response.data);
+
           })
           .catch(error => {
-            console.error('Failed to post viewer count:', error);
+
           });
     },
     async updateViewer() {
@@ -153,14 +153,9 @@ export default {
         this.viewersHistory.push(this.liveViewers);
         this.maxViewers = Math.max(...this.viewersHistory);
         this.averageViewers = (this.viewersHistory.reduce((a, b) => a + b, 0) / this.viewersHistory.length).toFixed(2);
-        console.log('Updated viewers:', {
-          liveViewers: this.liveViewers,
-          maxViewers: this.maxViewers,
-          averageViewers: this.averageViewers,
-        });
         this.emitStatistics(); // Call emitStatistics here to ensure data is up-to-date
       } catch (error) {
-        console.error("Error updating viewers:", error);
+
       }
     },
     async updateStatistics() {
@@ -170,21 +165,11 @@ export default {
         this.totalLikes = statistics.likesCount;
         this.totalOrders = statistics.totalSalesQty;
         this.totalOrderAmount = statistics.totalSalesAmount;
-        console.log('Updated statistics:', {
-          totalViewers: this.totalViewers,
-          totalLikes: this.totalLikes,
-          totalOrders: this.totalOrders,
-          totalOrderAmount: this.totalOrderAmount,
-        });
       } catch (error) {
-        console.error("Error updating statistics:", error);
+
       }
     },
     emitStatistics() {
-      console.log('Emitting statistics:', {
-        maxViewers: this.maxViewers,
-        averageViewers: this.averageViewers,
-      });
       this.$emit('update-statistics', {maxViewers: this.maxViewers, averageViewers: this.averageViewers});
     },
     // 한국 표준시로 시간을 변환하는 메서드 추가
@@ -192,7 +177,7 @@ export default {
       const now = new Date();
       const kstOffset = 9 * 60 * 60 * 1000; // 한국 표준시 오프셋 (+9시간)
       const kstDate = new Date(now.getTime() + kstOffset);
-      console.log(kstDate.toISOString());
+
       return kstDate.toISOString();
     }
   }

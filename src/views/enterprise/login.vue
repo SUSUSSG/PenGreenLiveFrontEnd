@@ -136,7 +136,6 @@
         }
         
         username.value = `${businessNumber.partOne}${businessNumber.partTwo}${businessNumber.partThree}`;
-
         try {
             const result = await store.dispatch('auth/loginVendor', { username: username.value, password: password.value });
             if (result) {
@@ -149,7 +148,6 @@
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
-                console.error('Authentication failed:', error.response.data);
                 toast.warning("아이디 또는 비밀번호가 잘못되었습니다.", {timeout: 1500});
             } else {
                 toast.error("로그인 중 오류가 발생했습니다. 다시 시도해주세요.", {timeout: 1500});

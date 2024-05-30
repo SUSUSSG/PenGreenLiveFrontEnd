@@ -30,7 +30,7 @@ export default {
           animationData: animationData,
         });
       } catch (error) {
-        console.error("Error loading Lottie animation:", error);
+
       }
     },
   },

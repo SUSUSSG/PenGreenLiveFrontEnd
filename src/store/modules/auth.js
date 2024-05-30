@@ -16,7 +16,7 @@ const mutations = {
     state.userName = userName;
     state.userUUID = userUUID;
     state.channelSeq = channelSeq;
-    console.log("setAuth mutation called", state.isAuthenticated, state.userName, state.userUUID, state.channelSeq); // 상태 업데이트 확인
+     // 상태 업데이트 확인
   },
   clearAuth(state) {
     state.isAuthenticated = false;
@@ -36,7 +36,7 @@ const actions = {
       const response = await axios.post('/login', { "username": username, "password" : password }, 
     );
       const userData = JSON.parse(response.data.user);
-      console.log("parsed user data", userData);
+      
       const userRole = userData.role.replace(/[\[\]]/g, '');
 
       commit('setAuth', { 
@@ -60,7 +60,7 @@ const actions = {
       const userData = JSON.parse(response.data.user);
       const userRole = userData.role.replace(/[\[\]]/g, '');
 
-      console.log("parsed user data", userData);
+      
 
       commit('setAuth', { 
         isAuthenticated: true, 
@@ -73,10 +73,8 @@ const actions = {
       commit('setUser', {
         profileImg: userData.profileImg,
       })
-
       return true;
     } catch (error) {
-      console.error('로그인 실패', error);
       return false;
     }
   },
@@ -91,7 +89,7 @@ const actions = {
         userUUID: response.data.uuid,
       });
     } catch (error) {
-      console.error('Failed to fetch user role', error);
+      
       commit('clearAuth');
     }
   },
