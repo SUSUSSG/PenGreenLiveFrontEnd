@@ -134,7 +134,7 @@ export default {
     },
     startRecognition() {
       if (!('webkitSpeechRecognition' in window)) {
-        alert('WebkitSpeechRecognition is not supported in this browser.');
+        alert('해당 브라우저에서 자막 기능을 지원하지 않습니다.');
         return;
       }
       this.recognition = new webkitSpeechRecognition();

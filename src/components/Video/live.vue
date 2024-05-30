@@ -10,7 +10,12 @@
     <div class="video-and-sidebar-wrapper">
       <div v-if="streamManager">
         <div class="video-player-wrapper" v-if="streamManager">
-          <VideoPlayer :stream-manager="streamManager" :is-muted="isMuted" :subtitles-active="subtitlesActive"></VideoPlayer>
+          <VideoPlayer
+              :stream-manager="streamManager"
+              :is-muted="isMuted"
+              :subtitles-active="subtitlesActive"
+              :translate-subtitles="translateSubtitles"
+          ></VideoPlayer>
         </div>
         <div class="icons-sidebar" v-if="showIconSideBar">
           <div class="icon-wrapper" @click="toggleLike">
@@ -29,6 +34,10 @@
             <img :src="subtitlesActive ? subtitlesActiveIconSrc : subtitlesInactiveIconSrc" class="subtitles-icon" />
             <span class="icon-label">자막</span>
           </div>
+          <div class="icon-wrapper" @click="toggleTranslate">
+            <img :src="translateSubtitles ? translateInactiveIcon : translateActiceIcon" class="subtitles-icon" />
+            <span class="icon-label">번역</span>
+          </div>
         </div>
       </div>
       <div v-else class="broadcast-image">
@@ -43,6 +52,7 @@
     </div>
   </div>
 </template>
+
 
 <script>
 import axios from "@/axios";
@@ -94,13 +104,16 @@ export default {
       shareIconSrc: shareIcon,
       subtitlesActiveIconSrc: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/broadcast-icon/free-icon-subtitles-active.png',
       subtitlesInactiveIconSrc: 'https://kr.object.ncloudstorage.com/susussg-img-bucket/broadcast-icon/free-icon-subtitles-inactive.png',
+      translateInactiveIcon : 'https://kr.object.ncloudstorage.com/susussg-img-bucket/broadcast-icon/free-icon-hangul-12925351.png',
+      translateActiceIcon : 'https://kr.object.ncloudstorage.com/susussg-img-bucket/broadcast-icon/free-icon-letter-a-7436978.png',
       languageIconSrc: undefined,
       showLanguageMenu: false,
       OV: null,
       session: null,
       likeQueue: [],
       likeTimeout: null,
-      likesUpdateInterval:null
+      likesUpdateInterval:null,
+      translateSubtitles: true
     };
   },
   async mounted() {
@@ -137,12 +150,8 @@ export default {
     toggleSubtitles() {
       this.subtitlesActive = !this.subtitlesActive;
     },
-    toggleLanguageMenu() {
-      this.showLanguageMenu = !this.showLanguageMenu;
-    },
-    setLanguage(language) {
-      alert(`Language set to ${language}`);
-      this.showLanguageMenu = false;
+    toggleTranslate() {
+      this.translateSubtitles = !this.translateSubtitles;
     },
     share() {
       const currentUrl = window.location.href;
