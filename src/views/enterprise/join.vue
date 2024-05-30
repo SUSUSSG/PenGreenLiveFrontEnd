@@ -409,14 +409,14 @@
                   </div>
                 </td>
                 <td class="vgt-left-align essential">
-                  <span>자본금/매출규모</span>
+                  <span>매출규모</span>
                 </td>
                 <td class="vgt-left-align">
                   <div class="relative">
                     <input
                       v-model="formData.revenue"
                       type="text"
-                      placeholder="10억/100억"
+                      placeholder="100(억)"
                       class="classinput input-control w-full block focus:outline-none h-[40px]"
                     />
                   </div>
