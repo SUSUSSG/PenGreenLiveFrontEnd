@@ -13,7 +13,7 @@
           <div class="flex gap-4 ml-5 w-full">
             <div class="input-wrapper">
               <span for="startDate">시작일:</span>
-              <input type="date" id="startDate" v-model="startDate" />
+              <input type="date" id="startDate" v-model="startDate"/>
             </div>
             <div class="input-wrapper">
               <span for="endDate">종료일:</span>
@@ -95,8 +95,8 @@ export default {
     return {
       broadcastOptions: [],
       selectedBroadcastTitleOption: null,
-      startDate: "",
-      endDate: "",
+      startDate: undefined,
+      endDate: undefined,
       selectedBroadcastTitle: "",
       cardDataList: [],
       totalStats: true,
@@ -225,6 +225,7 @@ export default {
       } catch (error) {
         console.error("Error fetching statistics by vendor and date range:", error);
       }
+      await this.fetchBroadcastOptions();
     },
     async fetchBroadcastOptions() {
       try {
