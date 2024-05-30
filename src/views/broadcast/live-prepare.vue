@@ -35,13 +35,13 @@ export default {
     loadUpcomingBroadcastInfo() {
       axios.get("/prepare-broadcasts")
         .then((response) => {
-          console.log(response.data);
+
           this.broadcastInfo = response.data;
           this.loading = false;
-          console.log("broadcast info data : ", this.broadcastInfo);
+
         })
         .catch(error => {
-          console.error('방송 예정 목록 load 실패 : ', error);
+
           this.loading = false;
         })
     }

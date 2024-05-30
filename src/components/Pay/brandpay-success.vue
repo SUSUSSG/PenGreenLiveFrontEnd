@@ -44,14 +44,14 @@ const totalAmount = ref(null);
 async function verifyPayment(requestData) {
   try {
     const response = await axios.post("/payments/verify", requestData);
-    console.log("검증 결과 ", response.data);
+
     if (response.data === "denied") {
       router.push(`/fail?message=Payment verification failed&code=401`);
     }
     submittedData.value = response.data;
     return true;
   } catch (error) {
-    console.error('Verification failed:', error);
+
     router.push(`/fail?message=${error.message}&code=${error.response.status}`);
     return false;
   }
@@ -80,12 +80,12 @@ async function confirmPayment(requestData) {
 
       await saveOrder(orderForm);
 
-      console.log('Payment confirmed:', jsonData.value);
+
     } else {
-      console.log(`Unexpected status code: ${response.status}`);
+
     }
   } catch (error) {
-    console.error('Confirmation failed:', error);
+
     router.push(`/fail?message=${error.response.data.message}&code=${error.response.status}`);
   }
 }
@@ -96,13 +96,13 @@ async function saveOrder(paymentData) {
       headers: { "Content-Type": "application/json" }
     });
     if (orderResponse.status === 200) {
-      console.log('Order saved successfully:', orderResponse.data);
+
       localStorage.removeItem(paymentData.orderId);
     } else {
-      console.log(`Unexpected status code: ${orderResponse.status}`);
+
     }
   } catch (error) {
-    console.error('Order saving failed:', error);
+
   }
 }
 
@@ -114,12 +114,12 @@ onMounted(async () => {
   const { orderId, amount, paymentKey } = route.query;
 
   if (!orderId || !amount || !paymentKey) {
-    console.error('Missing query parameters:', { orderId, amount, paymentKey });
+
     return;
   }
   
   const requestData = { orderId, amount, paymentKey };
-  console.log("brandpay success ", requestData);
+
 
   if (await verifyPayment(requestData)) {
     await confirmPayment(requestData);

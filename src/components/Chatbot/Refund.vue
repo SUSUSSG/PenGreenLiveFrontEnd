@@ -61,7 +61,7 @@ export default {
           this.orders = response.data;
         })
         .catch((error) => {
-          console.error("There was an error fetching the orders:", error);
+
         });
     },
     formatDate(dateString) {

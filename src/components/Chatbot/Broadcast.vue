@@ -75,27 +75,27 @@ export default {
 
   mounted() {
     if (this.keyword) {
-      console.log("Initial keyword:", this.keyword);
+
       this.fetchBroadcasts(this.keyword);
     }
   },
   methods: {
     fetchBroadcasts(keyword) {
       if (!keyword) {
-        console.error("Keyword is undefined or empty");
+
         return;
       }
-      console.log("Fetching broadcasts for keyword:", keyword);
+
       axios
         .get(`/openai/broadcast-keyword`, {
           params: { keyword },
         })
         .then((response) => {
-          console.log("Broadcasts response:", response.data);
+
           this.broadcasts = response.data;
         })
         .catch((error) => {
-          console.error("There was an error fetching the orders:", error);
+
         });
     },
     formatDate(dateString) {

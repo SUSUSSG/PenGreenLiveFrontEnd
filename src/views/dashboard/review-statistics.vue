@@ -107,7 +107,7 @@ export default {
           product.productSeq,
         ]);
       } catch (error) {
-        console.error("Error fetching all products:", error);
+
       }
     },
     async fetchProductDetails(productCd) {
@@ -134,7 +134,7 @@ export default {
           category: product.categoryNm,
         };
       } catch (error) {
-        console.error("Error fetching product details:", error);
+
       }
     },
     async fetchReviewImage(productSeq) {
@@ -156,15 +156,15 @@ export default {
         }
         this.reviewImage = imageData;
       } catch (error) {
-        console.error("Error fetching review image:", error);
+
         if (error.response) {
-          console.error("Response data:", error.response.data);
-          console.error("Response status:", error.response.status);
-          console.error("Response headers:", error.response.headers);
+
+
+
         } else if (error.request) {
-          console.error("Request data:", error.request);
+
         } else {
-          console.error("Error message:", error.message);
+
         }
         this.reviewImage = null;
       } finally {
@@ -173,9 +173,6 @@ export default {
     },
 
     async handleProductClick(productCd, productSeq) {
-      console.log(
-        `Product Clicked - productCd: ${productCd}, productSeq: ${productSeq}`
-      );
       this.loading = true;
       this.reviewImage = null;
       this.reviewsList = [];
@@ -184,13 +181,13 @@ export default {
 
       await this.fetchProductDetails(productCd);
       if (productSeq) {
-        console.log("상품 코드 있음: " + productSeq);
+
         await this.fetchReviewImage(productSeq);
         await this.fetchReviewSummary(productSeq);
         await this.fetchReviewsList(productSeq);
         await this.fetchDailySentiments(productSeq); // 일별 감정 분석 결과를 가져오는 메서드 호출
       } else {
-        console.log("상품 코드 없음: " + productSeq);
+
         this.loading = false;
         this.reviewImage = null;
         this.reviewsList = [];
@@ -207,7 +204,7 @@ export default {
         );
         this.reviewSummary = response.data;
       } catch (error) {
-        console.error("Error fetching review summary:", error);
+
         this.reviewSummary = "리뷰가 없습니다";
       }
     },
@@ -218,7 +215,7 @@ export default {
         });
         this.reviewsList = response.data;
       } catch (error) {
-        console.error("Error fetching reviews list:", error);
+
         this.reviewsList = [];
       }
     },
@@ -232,7 +229,7 @@ export default {
         );
         this.dailySentiments = response.data;
       } catch (error) {
-        console.error("Error fetching daily sentiments:", error);
+
         this.dailySentiments = {};
       }
     },

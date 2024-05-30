@@ -61,12 +61,12 @@ export default {
           headers: { "Content-Type": "application/json" },
         });
         if (response.status === 200) {
-          console.log("Order saved successfully:", response.data);
+          
         } else {
-          console.log(`Unexpected status code: ${response.status}`);
+          
         }
       } catch (error) {
-        console.error("Order saving failed:", error);
+        
       }
     },
     async setOrderId({ commit }, orderId) {

@@ -24,7 +24,7 @@ const order = computed(()=> (store.getters.orderForm)).value;
 const emit = defineEmits(['paymentRequested']);
 
 onMounted(async () => {
-  console.log("customer key ", customerKey.value);
+
   try {
     await loadTossPaymentsSDK();
   
@@ -48,7 +48,7 @@ onMounted(async () => {
       },
     });
   } catch (error) {
-    console.error('BrandPay 라이브러리 로드 실패', error);
+
   }
 });
 
@@ -62,7 +62,7 @@ async function getBrandPayMethods() {
     });
     submittedData.value = response.data;
   } catch (error) {
-    console.log(error);
+
   }
 }
 

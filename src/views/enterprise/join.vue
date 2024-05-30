@@ -546,7 +546,7 @@ const checkBusinessNumber = async () => {
   
   try {
     const response = await axios.post("/vendor/check-business-number", { businessNumber });
-    console.log("Response:", response);
+
     if (response.status === 200 && response.data) {
       businessInfo.value = response.data;
       if (response.data.b_stt_cd === "01") {
@@ -564,7 +564,7 @@ const checkBusinessNumber = async () => {
       alert("사업자번호 조회에 실패했습니다.");
     }
   } catch (error) {
-    console.error(error);
+
     validationStatus.value = "조회 실패";
     isBusinessNumberValidated.value = false;
     alert("사업자번호 조회에 실패했습니다.");
@@ -598,7 +598,7 @@ async function submitForm() {
   try {
     formData.value.companyAddress = `${addressForm.value.address} ${addressForm.value.detailAddress}`;
     formData.value.businessId = `${businessNumber1.value}${businessNumber2.value}${businessNumber3.value}`;
-    console.log("회원가입 폼 ", formData.value);
+
     const response = await axios.post("/vendor/signup", formData.value);
     alert("회원가입 성공!");
     router.push("/");

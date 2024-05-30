@@ -83,7 +83,7 @@ async function getAddress() {
       address.value = null;
     } 
   } catch(error) {
-    console.error("주소 로딩 실패", error);
+
   }
 }
 
@@ -96,7 +96,7 @@ const close = () => {
 function triggerTossPay() {
   store.commit('updateQuantity', quantity.value);
   store.commit('updateTotalAmount', totalPrice.value);
-  console.log("store ", store.getters.orderForm);
+
   emit('openTossPay'); 
 }
 

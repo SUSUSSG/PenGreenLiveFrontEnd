@@ -293,11 +293,11 @@ export default {
             `/sub/room/${this.currentRoom.id}`,
             (msg) => {
               try {
-                console.log("메시지 파싱 전");
+
                 const parsedMessage = JSON.parse(msg.body); // JSON 파싱
                 this.speakMessage(parsedMessage.message); // TTS로 메시지 읽기
 
-                console.log("메시지 파싱 후", parsedMessage);
+
 
                 // 메시지 객체에 작성자와 메시지 내용을 분리하여 추가
                 this.chatMessages.push({
@@ -310,7 +310,7 @@ export default {
                   }), // 현재 시간 정보
                 });
               } catch (e) {
-                console.error("메시지 파싱 중 에러 발생:", e);
+
                 // 파싱 에러 발생 시 기본 정보로 메시지 추가
                 this.chatMessages.push({
                   seq: this.messageIdCounter++,
@@ -330,7 +330,7 @@ export default {
           });
         },
         onWebSocketError: (error) => {
-          console.error("WebSocket Error:", error);
+
         },
       });
       this.websocketClient.activate();
@@ -435,7 +435,7 @@ export default {
     submitForbiddenword() {
       if (this.forbiddenword.trim()) {
         this.forbiddenwordList.push(this.forbiddenword);
-        console.log("현재 방송 번호 :" + this.currentRoom.id);
+
         axios
           .post("/forbidden-words", null, {
             params: {
@@ -444,11 +444,11 @@ export default {
             },
           })
           .then((response) => {
-            console.log("금칙어 등록 성공:", response);
+
             this.forbiddenword = ""; // 입력 필드 초기화
           })
           .catch((error) => {
-            console.error("금칙어 등록 실패:", error);
+
           });
       }
     },

@@ -116,7 +116,7 @@
         }
 
         try {
-            console.log(username.value, password.value);
+
             const result = await store.dispatch('auth/login', { username: username.value, password: password.value });
 
             if (result) {
@@ -127,9 +127,9 @@
             }
 
         } catch (error) {
-            console.error('login error', error);
+
             if (error.response && error.response.status === 401) {
-                console.error('Authentication failed:', error.response.data);
+
                 alert("아이디 또는 비밀번호가 잘못되었습니다.");
             } else {
                 alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");

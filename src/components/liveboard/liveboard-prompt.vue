@@ -62,7 +62,7 @@ export default {
         );
         this.promptText = response.data;
       } catch (error) {
-        console.error("Error fetching prompt:", error);
+
         alert("프롬프트를 불러오는 중 오류가 발생했습니다.");
       } finally {
         this.loading = false;

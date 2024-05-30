@@ -266,11 +266,11 @@ export default {
       axios.get(`/product-list-label`)
         .then(response => {
           this.products = response.data;
-          console.log("products@@@", JSON.stringify(this.products, null, 2));
-          console.log("Vendor-specific products loaded", this.products);
+
+
         })
         .catch(error => {
-          console.error("Error loading vendor-specific products:", error.response.data);
+
         });
     },
     fetchCategories() {
@@ -285,14 +285,14 @@ export default {
           });
         })
         .catch(error => {
-          console.error("카테고리 목록 가져오는 동안 에러 발생 : ", error);
+
         });
     },
     handleCategoryChange() {
-      console.log(this.selectedCategory);
+
     },
     formatNumber(value) {
-      console.log('Formatting number:', value);
+
       if (!value) return '0';
       return value.toLocaleString();
     },
@@ -309,7 +309,7 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.addModalData.previewImage = e.target.result;
-          console.log("Loaded Image Data:", this.addModalData.previewImage);
+
           const base64String = e.target.result.split(',')[1];
           this.addModalData.imageSrc = base64String;
         };
@@ -325,14 +325,14 @@ export default {
         const reader = new FileReader();
         reader.onload = (e) => {
           this.editModalData.previewImage = e.target.result;
-          console.log("Loaded Image Data for Edit:", this.editModalData.previewImage);
+
           const base64String = e.target.result.split(',')[1];
           this.editModalData.imageSrc = base64String;
         };
         reader.readAsDataURL(file);
       } else {
         this.editModalData.previewImage = this.editModalData.productImage;
-        console.log("No new image selected for edit, using existing image.");
+
         this.editModalData.imageSrc = null;
       }
     },
@@ -340,7 +340,7 @@ export default {
       try {
         return atob(encodedString);
       } catch (e) {
-        console.error("Failed to decode Base64 string:", e);
+
         return encodedString; // fallback to original string
       }
     },
@@ -364,7 +364,7 @@ export default {
         certificationCode: row.certificationCode
       };
       this.prodRsstValid = row.brand === "01";
-      console.log("Edit modal opened for product with image data: ", this.editModalData.previewImage);
+
       this.$refs.editModal.openModal();
     },
     closeEditModal() {
@@ -419,7 +419,7 @@ export default {
           this.$refs.editModal.closeModal();
         })
         .catch(error => {
-          console.error("Failed to update product:", error.response.data);
+
           alert("Failed to update product: " + error.response.data.message);
         });
     },
@@ -431,16 +431,16 @@ export default {
             alert("Product successfully deleted");
           })
           .catch(error => {
-            console.error("Failed to delete product:", error.response.data);
+
             alert("Failed to delete product: " + error.response.data.message);
           });
       });
     },
     registerProduct() {
-      console.log("녹색인증 : " + this.prodRsstValid);
+
 
       if (this.prodRsstValid === false) {
-        console.log("녹색인증 : " + this.prodRsstValid);
+
         alert("녹색제품 통합ID 인증이 필요합니다.");
         return;
       }
@@ -461,7 +461,7 @@ export default {
         certificationExpirationDate: this.addModalData.certificationExpirationDate
       };
 
-      console.log("Sending product data to server:", productData);
+
 
       axios.post(url, productData)
         .then(response => {
@@ -469,28 +469,28 @@ export default {
           this.$refs.modal1.closeModal();
         })
         .catch(error => {
-          console.error("Failed to register product:", error.response.data);
+
           alert("Failed to register product: " + error.response.data.message);
         });
     },
     authenticateProduct(modalType) {
       const greenProductId = modalType === 'add' ? this.addModalData.greenProductId : this.editModalData.greenProductId;
-      console.log("Authenticating product with ID:", greenProductId);
+
       axios.get(`/green-product?prodIxid=${greenProductId}`)
         .then(response => {
-          console.log("Product authentication response:", response.data);
+
           const productInfo = response.data.productInfo; // productInfo 객체로 변경
 
           if (productInfo.prodRsst !== "01") {
             alert("인증할 수 없는 제품입니다.");
             this.prodRsstValid = false;
-            console.log("녹색인증 : " + this.prodRsstValid);
+
 
             return;
           }
 
           this.prodRsstValid = true;
-          console.log("녹색인증 : " + this.prodRsstValid);
+
 
           if (modalType === 'add') {
             this.addModalData.productNm = productInfo.prodPrnm;
@@ -512,7 +512,7 @@ export default {
           }
         })
         .catch(error => {
-          console.error("Error during product authentication:", error);
+
           alert("Failed to authenticate product: " + error.response.data.message);
         });
     },

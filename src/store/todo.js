@@ -259,7 +259,7 @@ export const useTodoStore = defineStore("todo", {
     OPEN_EDIT_MODAL(itemId) {
       this.editModal = true;
       this.eidtModalId = itemId;
-      //console.log(itemId); // find data id
+      // // find data id
     },
     closeEditModal() {
       this.editModal = false;
@@ -304,7 +304,7 @@ export const useTodoStore = defineStore("todo", {
           });
         }
       });
-      // console.log(todo, "to theke patahano");
+      // 
     },
     removeTodo(todo) {
       var todos = this.todos;

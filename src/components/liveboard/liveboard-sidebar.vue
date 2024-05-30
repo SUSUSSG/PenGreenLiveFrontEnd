@@ -143,14 +143,14 @@ export default {
     toggleIcon(item) {
       // 아이콘 활성화 상태를 토글
       item.isActive = !item.isActive;
-      console.log("일단 접근");
+
 
       // 조건에 따라 상위 컴포넌트로 이벤트 발송
       if (item.icon === "material-symbols:hangout-video") {
-        console.log("Video 비활성화 혹은 활성화");
+
         this.$emit('toggle-video', item.isActive);
       } else if (item.icon === "material-symbols:mic") {
-        console.log("Audio 비활성화 혹은 활성화");
+
         this.$emit('toggle-audio', item.isActive);
       }
     },
@@ -180,18 +180,18 @@ export default {
         noticeContent: noticeContent
       }
 
-      console.log(requestData)
+
 
       axios.post('/live-notice/add', requestData)
         .then(response => {
           // 아래 목록에 추가
           const newNotice = response.data;
-          console.log("newNotice", newNotice);
+
           this.notices.push(newNotice);
           this.noticeContent = '';
         })
         .catch(error => {
-          console.error("공지 추가 실패 : ", error);
+
           toast.error("공지 사항 추가 실패", { timeout: 1000 })
         })
     },
@@ -204,7 +204,7 @@ export default {
           }
         })
         .catch(error => {
-          console.error("공지 삭제 실패 : ", error);
+
           toast.error("공지 사항 삭제 실패", { timeout: 1000 })
         })
     },
@@ -220,13 +220,13 @@ export default {
       axios.post('/live-faq/add', requestData)
         .then(response => {
           const newFaq = response.data;
-          console.log("newFaq", newFaq);
+
           this.faqs.push(newFaq);
           this.questionTitle = '';
           this.questionAnswer = '';
         })
         .catch(error => {
-          console.error("자주묻는 질문 및 답변 추가 실패 : ", error);
+
           toast.error("자주묻는 질문 및 답변  추가 실패", { timeout: 1000 })
         })
     },
@@ -239,7 +239,7 @@ export default {
           }
         })
         .catch(error => {
-          console.error("자주묻는 질문과 답 삭제 실패 : ", error);
+
           toast.error("자주묻는 질문과 답  삭제 실패", { timeout: 1000 })
         })
     },

@@ -341,11 +341,11 @@ export default {
           });
         })
         .catch(error => {
-          console.error('카테고리 목록 가져오는 동안 에러 발생 : ', error);
+
         });
     },
     handleCategoryChange() {
-      console.log(this.selectedCategory); //확인용
+       //확인용
     },
     setMinDateTime() {
       const now = new Date();
@@ -375,7 +375,7 @@ export default {
 
       axios.get(url)
         .then(response => {
-          console.log(response.data);
+
           this.channelSalesProduct = response.data.map(product => ({
             productSeq: product.productSeq,
             productImg: product.productImage,
@@ -385,7 +385,7 @@ export default {
           }));
         })
         .catch(error => {
-          console.error('판매자 판매 상품 목록 가져올 때 에러 발생 : ', error)
+
         })
     },
 
@@ -404,7 +404,7 @@ export default {
           });
         }
       });
-      console.log('선택된 상품 목록:', this.registeredProducts);
+
       this.isOpen = true;
       this.$refs.salesProductModal.openModal();
     },
@@ -531,7 +531,7 @@ export default {
         timeout: false,
       });
 
-      console.log(requestData);
+
 
       // JSON 형식의 데이터를 백엔드로 전송
       axios.post('/register-broadcast', requestData)
@@ -548,7 +548,7 @@ export default {
         .catch(error => {
           this.loading = false;
           toast.dismiss(infoToast);
-          console.error("등록 실패 : ", error);
+
           toast.error("방송 등록에 실패했습니다.", {
             timeout: 2000,
           });

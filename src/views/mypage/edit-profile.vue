@@ -181,10 +181,10 @@
             const response = await axios.get(`/user`);
             if (response.data) {
                 user.value = response.data;
-                console.log("유저 정보 ", response.data );
+
             }
         } catch(error) {
-            console.error("회원정보 변경 실패", error);
+
         }
     }
 
@@ -226,10 +226,10 @@
             const response = await axios.post(`/sms/request-authcode`, null, {params});
 
             if (response.status===200) {
-                console.log(response.statusText);
+
                 requestAuth.value = true;
             } else {
-                console.log(response.statusText);
+
             }
         } catch (error) {
             alert('Error :', error.response.data);
@@ -254,7 +254,7 @@
         try {
             const response = await axios.post('/sms/verify', null, {params});
             if (response.status === 200) {
-                console.log(response.data);
+
                 alert("인증되었습니다.");
                 requestAuth.value = false;
                 userTelVerify.value = true;
@@ -276,10 +276,10 @@
                     form.value.userTel = "";
                 }
             } else if (error.request) {
-                console.error('Error request:', error.request);
+
                 alert('네트워크 오류가 발생했습니다. 나중에 다시 시도해주세요.');
             } else {
-                console.error('Error message:', error.message);
+
                 alert('알 수 없는 오류가 발생했습니다. 나중에 다시 시도해주세요.');
             }
         }
@@ -329,7 +329,7 @@
         user.value.userPw = form.value.userPw || null;
         user.value.userTel = form.value.userTel || null;
 
-        console.log(form.value);
+
 
         try {
             const response = await axios.patch(`/user`, user.value, {
@@ -339,13 +339,13 @@
             });
             if (response.data) {
                 toast.success("회원정보 수정 완료");
-                console.log("유저 정보 업데이트 성공", response.data);
+
             } else {
                 toast.warning("회원정보 수정 실패")
-                console.log("유저 정보 업데이트 실패");
+
             }
         } catch(error) {
-            console.error("서버 오류", error);
+
         }
     }
 

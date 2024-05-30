@@ -305,10 +305,10 @@ export default {
         .then((response) => {
           this.carousels = response.data;
           this.loadingCarousels = false; // 데이터 로드 완료 후 로딩 상태 false
-          console.log("Main carousels data:", this.carousels);
+
         })
         .catch((error) => {
-          console.error("Failed to fetch main carousels:", error);
+
         });
     },
     fetchScheduledBroadcasts() {
@@ -322,10 +322,10 @@ export default {
         .get("/schedule", { params: params })
         .then((response) => {
           this.cardsData = response.data;
-          console.log("Scheduled broadcasts data:", this.cardsData);
+
         })
         .catch((error) => {
-          console.error("Failed to fetch scheduled broadcasts:", error);
+
         });
     },
     startHideTitleTimer() {
@@ -365,10 +365,10 @@ export default {
         .get("/live-chance", { params: params })
         .then((response) => {
           this.liveItems = response.data;
-          console.log("Live chance carousels data:", this.liveItems);
+
         })
         .catch((error) => {
-          console.error("Failed to fetch live chance carousels:", error);
+
         });
     },
     navigateToBroadcast(broadcastSeq) {

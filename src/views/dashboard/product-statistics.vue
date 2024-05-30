@@ -117,7 +117,7 @@ export default {
         this.analyticsCards[3].result = `${data.avgBuyersPerProduct}명`;
         this.analyticsCards[4].result = `${data.avgQuantityPerProduct}개`;
       } catch (error) {
-        console.error('Error fetching analytics data:', error);
+
       }
     },
     async fetchTopProducts() {
@@ -129,7 +129,7 @@ export default {
           product.totalSales,
         ]);
       } catch (error) {
-        console.error('Error fetching top products:', error);
+
       }
     },
     async fetchAllProducts() {
@@ -141,7 +141,7 @@ export default {
           product.totalSales,
         ]);
       } catch (error) {
-        console.error('Error fetching all products:', error);
+
       }
     },
     async fetchProductDetails(productCd) {
@@ -162,7 +162,7 @@ export default {
           category: product.categoryNm,
         };
       } catch (error) {
-        console.error('Error fetching product details:', error);
+
       }
     },
   },

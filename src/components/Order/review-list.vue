@@ -90,7 +90,7 @@ const formatDate = (dateString: string): string => {
 
 const deleteReview = async () => {
   try {
-    console.log('Deleting review with reviewSeq:', props.reviewSeq);
+
     if (props.reviewSeq === 0) {
       throw new Error('Invalid reviewSeq');
     }

@@ -42,7 +42,7 @@ const fetchSubscribedChannels = async () => {
       subscribedChannels.value = response.data;
     }
   } catch (error) {
-    console.error("Error fetching subscribed channels:", error);
+
   }
 };
 
@@ -61,7 +61,7 @@ const unsubscribe = async (channelSeq) => {
       );
     }
   } catch (error) {
-    console.error("Error unsubscribing:", error);
+
   }
 };
 

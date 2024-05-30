@@ -161,7 +161,7 @@ export default {
             alert("방송 주소가 복사 되었습니다.");
           })
           .catch((err) => {
-            console.error("Failed to copy text: ", err);
+
           });
     },
     async fetchLikes() {
@@ -173,7 +173,7 @@ export default {
         });
         return response.data;
       } catch (error) {
-        console.error('Failed to fetch likes:', error);
+
         throw error;
       }
     },
@@ -181,10 +181,10 @@ export default {
       try {
         const response = await axios.get(`/broadcasts/statistics/${this.$route.params.broadcastId}/likes/check`);
         this.isLiked = response.data;
-        console.log("좋아요 상태", response);
-        console.log("실제 좋아요 상태", this.isLiked);
+
+
       } catch (error) {
-        console.error('Failed to check likes:', error);
+
       }
     },
     async updateLikes() {
@@ -192,7 +192,7 @@ export default {
         const statistics = await this.fetchLikes();
         this.likesCount = statistics.likesCount;
       } catch (error) {
-        console.error('Failed to update likes:', error);
+
       }
     }
   },
