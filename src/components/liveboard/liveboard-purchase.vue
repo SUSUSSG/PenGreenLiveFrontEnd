@@ -1,7 +1,9 @@
 <template>
   <div :class="{'active-overlay': isOpen}">
         <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
-        <img :src="product.productImg"/>
+        <div class="w-[100%] h-[100%] p-[1rem] flex justify-center">
+            <img class="product-img" :src="product.productImg"/>
+        </div>
         <div class="product-header">
             <div class="brand-name">{{ product.brand }}</div>
                 <div class="product-name">{{ product.productName }}</div>  
@@ -236,7 +238,7 @@
     font-weight: 400;
     line-height: 20px;
     color: #000;
-    overflow-wrap: break-all;
+    word-break: break-all;
 }
 
 .purchase-container .discounted-price {
@@ -294,5 +296,10 @@
     flex-grow: 1;
     overflow-y: auto;
     height: 100%;
+}
+
+.product-img {
+    width: 70%;
+    height: auto;
 }
 </style>

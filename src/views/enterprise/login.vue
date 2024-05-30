@@ -126,12 +126,12 @@
     }
 
     function loginValidate() {
-        return username.value && password.value;
+        return !username.value || !password.value;
     }
 
     async function handleLogin() {
         if (loginValidate()) {
-            toast.warning("아이디 또는 비밀번호를 입력해주세요.",);
+            toast.warning("아이디 또는 비밀번호를 입력해주세요.", {timeout: 1500});
             return;
         }
         
@@ -145,14 +145,14 @@
                     window.location.reload();
                 }, 1300);
             } else {
-                toast.warning('아이디 또는 비밀번호가 잘못되었습니다.', {timeout: 1000});
+                toast.warning('아이디 또는 비밀번호가 잘못되었습니다.', {timeout: 1500});
             }
         } catch (error) {
             if (error.response && error.response.status === 401) {
                 console.error('Authentication failed:', error.response.data);
-                toast.warning("아이디 또는 비밀번호가 잘못되었습니다.", {timeout: 1000});
+                toast.warning("아이디 또는 비밀번호가 잘못되었습니다.", {timeout: 1500});
             } else {
-                toast.error("로그인 중 오류가 발생했습니다. 다시 시도해주세요.", {timeout: 1000});
+                toast.error("로그인 중 오류가 발생했습니다. 다시 시도해주세요.", {timeout: 1500});
             }
         }
     }
