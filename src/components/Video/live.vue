@@ -132,11 +132,11 @@ export default {
         if (this.isLiked) {
           await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
           });
-          this.likesCount += 1;
+          this.likesCount -= 1;
         } else {
           await axios.patch(`/broadcasts/statistics/${this.broadcastId}/likes/toggle`, {}, {
           });
-          this.likesCount -= 1;
+          this.likesCount += 1;
         }
         this.isLiked = !this.isLiked;
 
