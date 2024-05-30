@@ -500,8 +500,8 @@ watch(boxHeight, calculateHeight);
 
 /* 구매 영역 */
 .scroll-wrapper {
-  max-height: calc(80vh - 67px);
   overflow-y: auto;
+  height: 32rem;
 }
 
 

@@ -34,11 +34,6 @@
                 <TabPanels>
                     <TabPanel>
                         <div class="text-slate-600 dark:text-slate-400 text-sm font-normal">
-                            <img src="/src/assets/images/all-img/product-explain-sample.jpg">
-                        </div>
-                    </TabPanel>
-                    <TabPanel>
-                        <div class="text-slate-600 dark:text-slate-400 text-sm font-normal">
                             <div class="mb-[2rem] flex items-center justify-center">
                                 <div data-v-dc744160="" class="w-[99%] card-text h-full">
                                     <div class="flex space-x-3 rtl:space-x-reverse p-5">
@@ -206,9 +201,6 @@
             return {
                 activeTab: 'description',
                 buttons: [
-                    {
-                        title: '상품정보',
-                    },
                     {
                         title: '리뷰',
                     },
