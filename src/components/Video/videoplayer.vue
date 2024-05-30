@@ -23,6 +23,10 @@ export default {
     subtitlesActive: {
       type: Boolean,
       default: true
+    },
+    translateSubtitles: {
+      type: Boolean,
+      default : true
     }
   },
 
@@ -63,10 +67,19 @@ export default {
             (msg) => {
               try {
                 const parsedMessage = JSON.parse(msg.body);
-                const subtitle = {
-                  text: parsedMessage.text,
-                  timestamp: parsedMessage.timestamp
-                };
+                let subtitle = undefined;
+                if(this.translateSubtitles){
+                  subtitle = {
+                    text: parsedMessage.text,
+                    timestamp: parsedMessage.timestamp
+                  };
+                }
+                else{
+                  subtitle = {
+                    text: parsedMessage.translatedText,
+                    timestamp: parsedMessage.timestamp
+                  };
+                }
                 this.subtitles.push(subtitle);
                 setTimeout(() => {
                   this.subtitles = this.subtitles.filter(sub => sub.timestamp !== subtitle.timestamp);
