@@ -49,7 +49,6 @@ const actions = {
       commit('setUser', {
         profileImg: userData.profileImg,
       })
-
       return true;
     } catch (error) {
       return false;
@@ -75,9 +74,10 @@ const actions = {
         profileImg: userData.profileImg,
       })
 
-      console.log("로그인 성공", response.data);
+      return true;
     } catch (error) {
       console.error('로그인 실패', error);
+      return false;
     }
   },
   async fetchUserRole({ commit }) {

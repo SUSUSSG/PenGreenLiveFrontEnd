@@ -83,6 +83,7 @@ const filteredMenu = computed(() => {
         router.push("/member/edit-profile");
       },
       requiresAuth: true,
+      requiredRole: 'USER',
     },
     {
       label: "대시보드",

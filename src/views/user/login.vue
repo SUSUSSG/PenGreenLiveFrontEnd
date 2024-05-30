@@ -16,7 +16,7 @@
                                         </div>
                                         <div class="text-left 2xl:mb-10 mb-4">
                                             <h4 class="font-medium">PenGreenLive 로그인</h4>
-                                            <div class="text-slate-500 dark:text-slate-400 text-base">Sign in to your account to start using Dashcode</div>
+                                            <div class="text-slate-500 dark:text-slate-400 text-base">로그인 후 다양한 서비스를 이용해보세요!</div>
                                         </div>
                                         <form class="space-y-4" @submit.prevent="handleLogin">
                                             <div class="fromGroup       ">
@@ -46,33 +46,11 @@
                                                 </span>
                                             </button>
                                         </form>
-                                        <div class=" relative border-b-[#9AA2AF] border-opacity-[16%] border-b pt-6">
-                                            <div class=" absolute inline-block  bg-white dark:bg-slate-800 left-1/2 top-1/2 transform -translate-x-1/2 px-4 min-w-max text-sm  text-slate-500  dark:text-slate-400font-normal ">SNS계정으로 간편 로그인/회원가입</div>
-                                        </div>
-                                        <div class="mx-auto mt-8 w-full">
-                                            <ul class="flex space-x-3" >
-                                                <li class="flex-1">
-                                                    <div id="kakao-login"></div>
-                                                    <button class="kakao h-[44px] w-full">
-                                                        <img src="/src/assets/images/logo/kakao-logo.png" alt="kakao">
-                                                        <span>카카오 로그인</span>
-                                                    </button>
-                                                </li>
-                                                <li class="flex-1">
-                                                    <div id="naver-login"></div>
-                                                    <button class="naver h-[44px] w-full">
-                                                        <img src="/src/assets/images/logo/naver-logo.png" alt="naver">
-                                                        <span>네이버 로그인</span>
-                                                    </button>
-                                                </li>
-                                            </ul>
-                                        </div>
+            
                                         <div class="md:max-w-[345px] mt-6 mx-auto font-normal text-slate-500 dark:text-slate-400mt-12 uppercase text-sm">아직 회원이 아니신가요?
-                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/join-first">회원가입하기</a>
+                                            <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/join">회원가입하기</a>
                                         </div>
-
                                         <div class="font-normal text-slate-500 dark:text-slate-400 mt-12 text-sm text-right">
-                                            <!-- <div class="mt-12"></div> -->
                                             <a class="text-slate-900 dark:text-white font-medium hover:underline" href="/login">판매자 로그인</a>
                                         </div>
                                     </div>
@@ -116,7 +94,6 @@
         }
 
         try {
-            console.log(username.value, password.value);
             const result = await store.dispatch('auth/login', { username: username.value, password: password.value });
 
             if (result) {

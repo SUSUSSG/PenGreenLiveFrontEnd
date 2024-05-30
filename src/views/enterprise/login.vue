@@ -97,7 +97,9 @@
     import Button from "@/components/Button";
     import Checkbox from "@/components/Checkbox";
     import creditCard from "@/components/InputGroup";
+    import { useToast } from "vue-toastification";
 
+    const toast = useToast();
     const router = useRouter();
     const store = useStore();
     
@@ -124,30 +126,33 @@
     }
 
     function loginValidate() {
-        return username.value && password.value;
+        return !username.value || !password.value;
     }
 
     async function handleLogin() {
         if (loginValidate()) {
-            alert("아이디 또는 비밀번호를 입력해주세요.");
+            toast.warning("아이디 또는 비밀번호를 입력해주세요.", {timeout: 1500});
             return;
         }
         
         username.value = `${businessNumber.partOne}${businessNumber.partTwo}${businessNumber.partThree}`;
-        console.log("username ", username.value, password.value);
 
         try {
-            console.log(username.value, password.value);
-            await store.dispatch('auth/loginVendor', { username: username.value, password: password.value });
-            router.push("/");
-            alert("로그인 성공.");
+            const result = await store.dispatch('auth/loginVendor', { username: username.value, password: password.value });
+            if (result) {
+                toast.success('로그인 되었습니다.', {timeout: 1000});
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1300);
+            } else {
+                toast.warning('아이디 또는 비밀번호가 잘못되었습니다.', {timeout: 1500});
+            }
         } catch (error) {
-            console.error('login error', error);
             if (error.response && error.response.status === 401) {
                 console.error('Authentication failed:', error.response.data);
-                alert("아이디 또는 비밀번호가 잘못되었습니다.");
+                toast.warning("아이디 또는 비밀번호가 잘못되었습니다.", {timeout: 1500});
             } else {
-                alert("로그인 중 오류가 발생했습니다. 다시 시도해주세요.");
+                toast.error("로그인 중 오류가 발생했습니다. 다시 시도해주세요.", {timeout: 1500});
             }
         }
     }
