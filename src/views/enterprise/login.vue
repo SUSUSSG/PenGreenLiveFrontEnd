@@ -125,15 +125,8 @@
         }
     }
 
-    function loginValidate() {
-        return !username.value || !password.value;
-    }
-
     async function handleLogin() {
-        if (loginValidate()) {
-            toast.warning("아이디 또는 비밀번호를 입력해주세요.", {timeout: 1500});
-            return;
-        }
+
         
         username.value = `${businessNumber.partOne}${businessNumber.partTwo}${businessNumber.partThree}`;
         try {
