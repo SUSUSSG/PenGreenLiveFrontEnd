@@ -193,12 +193,11 @@ let intervalId = ref(null);
 const joinSession = async () => {
 
   OV.value = new OpenVidu();
-  this.OV.enableProdMode(); // 로그 제거
+  OV.value.enableProdMode();  // 프로덕션 모드 활성화
   session.value = OV.value.initSession();
   session.value.on("streamCreated", ({ stream }) => {
     mainStreamManager.value = session.value.subscribe(stream);
   });
-
   const token = await getToken(mySessionId.value);
   await session.value.connect(token, { clientData: myUserName });
 
