@@ -117,26 +117,28 @@ import { useStore } from 'vuex';
 const isBroadcasting = ref(true);
 
 // 방송 종료 이벤트 구독
-const subscribeToBroadcastEnd = async (retryCount = 5, delay = 3000) => {
-
+const subscribeToBroadcastEnd = async (retryCount = 5, delay = 3000, attempt = 1) => {
   const eventSource = new EventSource(`${import.meta.env.VITE_API_BASE_URL}/subscribe`);
   const broadcastId = route.params.broadcastId;
-  eventSource.addEventListener('broadcast-end', (event) => {
-    if(event.data === broadcastId){
-      isBroadcasting.value = false;
 
+  eventSource.addEventListener('broadcast-end', (event) => {
+    if (event.data === broadcastId) {
+      isBroadcasting.value = false;
+      eventSource.close();
     }
   });
-  eventSource.onerror = (error) => {
-    if (retryCount > 0) {
 
-          setTimeout(() => subscribeToBroadcastEnd(retryCount - 1, delay), delay);
+  eventSource.onerror = (error) => {
+    eventSource.close();
+    if (retryCount > 0) {
+      const nextDelay = delay * Math.pow(2, attempt);
+      setTimeout(() => subscribeToBroadcastEnd(retryCount - 1, delay, attempt + 1), nextDelay);
     } else {
 
-      eventSource.close();
     }
   };
 };
+
 
 // 라우트 및 환경변수 설정
 const route = useRoute();
