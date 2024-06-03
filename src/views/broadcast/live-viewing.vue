@@ -134,7 +134,7 @@ const subscribeToBroadcastEnd = async (retryCount = 5, delay = 3000, attempt = 1
       const nextDelay = delay * Math.pow(2, attempt);
       setTimeout(() => subscribeToBroadcastEnd(retryCount - 1, delay, attempt + 1), nextDelay);
     } else {
-      console.error('Max retry attempts reached. Stopping reconnection attempts.');
+
     }
   };
 };
