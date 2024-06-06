@@ -203,7 +203,7 @@ const routes = [
       {
         path: "payment-register",
         name: "결제수단 등록",
-        component: () => import("@/components/Pay/brandpay-register.vue"),
+        component: () => import("@/components/Pay/brandpay-setting.vue"),
         meta: { requiresAuth: true, role: 'USER' },
       },
       {
