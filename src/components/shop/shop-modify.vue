@@ -73,7 +73,7 @@ export default {
           }
         })
         .catch(error => {
-          console.error('상점 정보 로드 실패:', error);
+
           alert('상점 정보 로드 중 오류가 발생했습니다.');
         });
     },
@@ -93,7 +93,7 @@ export default {
           this.loadShopInfo(); 
         })
         .catch(error => {
-          console.error('상점 정보 업데이트 실패:', error);
+
           alert('상점 정보 업데이트 중 오류가 발생했습니다.');
         });
     },

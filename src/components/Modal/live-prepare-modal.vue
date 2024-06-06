@@ -79,7 +79,7 @@ export default {
           });
           this.$refs.cameraFeed.srcObject = stream;
         } catch (error) {
-          console.error('Error accessing camera stream:', error);
+
           // Handle error (e.g., camera not available or permission denied)
         }
       }
@@ -114,10 +114,10 @@ export default {
               deviceId: device.deviceId
             }));
 
-        console.log('Cameras found:', this.cameraOptions);
-        console.log('Microphones found:', this.microphoneOptions);
+
+
       } catch (error) {
-        console.error('Error accessing media devices:', error);
+
         // Handle the error gracefully, consider user feedback
       }
     },
@@ -129,7 +129,7 @@ export default {
           });
           this.setupMicrophoneVolumeDetection(stream);
         } catch (error) {
-          console.error('Error accessing microphone:', error);
+
         }
       }
     },
@@ -146,7 +146,7 @@ export default {
           source.connect(this.audioContext.destination); // Connect to speakers
           this.setupMicrophoneVolumeDetection(this.microphoneStream); // Start volume monitoring
         } catch (error) {
-          console.error('Error accessing microphone:', error);
+
           this.monitorActive = false; // Reset the toggle if there was an error
         }
       } else {

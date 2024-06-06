@@ -49,7 +49,7 @@ async function verifyPayment(requestData) {
     submittedData.value = response.data;
     return true;
   } catch (error) {
-    console.error('Verification failed:', error);
+
     router.push(`/fail?message=${error.message}&code=${error.response.status}`);
     return false;
   }
@@ -79,12 +79,12 @@ async function confirmPayment(requestData) {
       await saveOrder(orderForm);
 
 
-      console.log('Payment confirmed:', jsonData.value);
+
     } else {
-      console.log(`Unexpected status code: ${response.status}`);
+
     }
   } catch (error) {
-    console.error('Confirmation failed:', error);
+
     router.push(`/fail?message=${error.response.data.message}&code=${error.response.status}`);
   }
 }
@@ -95,13 +95,13 @@ async function saveOrder(paymentData) {
       headers: { "Content-Type": "application/json" }
     });
     if (orderResponse.status === 200) {
-      console.log('Order saved successfully:', orderResponse.data);
+
       localStorage.removeItem(paymentData.orderId);
     } else {
-      console.log(`Unexpected status code: ${orderResponse.status}`);
+
     }
   } catch (error) {
-    console.error('Order saving failed:', error);
+
   }
 }
 
@@ -112,7 +112,7 @@ function goBack() {
 onMounted(async () => {
   const { orderId, amount, paymentKey } = route.query;
   if (!orderId || !amount || !paymentKey) {
-    console.error('Missing query parameters:', { orderId, amount, paymentKey });
+
     return;
   }
   

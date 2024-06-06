@@ -111,7 +111,7 @@ export default {
         rooms.value = store.getters["user/rooms"];
         enteredRooms.value = store.getters["user/enteredRooms"];
       } catch (error) {
-        console.log(error);
+
       }
     };
     const activeTab = (tab) => {

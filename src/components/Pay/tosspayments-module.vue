@@ -380,7 +380,7 @@ async function postPaymentInfo(orderId, amount) {
         const response = await axios.post("/payments/hold-for-checkout", formData);
         submittedData.value = response.data;
     } catch (error) {
-        console.error('Error submitting form:', error);
+
         submittedData.value = `Error: ${error.message}`;
     }
 }
@@ -432,7 +432,7 @@ async function requestPayment() {
             });
 
         } catch (error) {
-            console.error('Payment request failed:', error);
+
         }
     }
 }

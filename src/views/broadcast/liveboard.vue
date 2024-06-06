@@ -87,19 +87,19 @@ export default {
     handleDeviceChange({camera, microphone}) {
       // 카메라 변경
       if (camera) {
-        console.log("카메라");
-        console.log(camera);
+
+
         navigator.mediaDevices
             .getUserMedia({
               video: {deviceId: camera, width: 900, height: 1600} // 새로운 해상도 설정
             })
             .then((newVideoStream) => {
-              console.log(camera);
+
               const videoTrack = newVideoStream.getVideoTracks()[0];
               this.publisher.replaceTrack(videoTrack);
             })
             .catch((error) => {
-              console.error('Error accessing camera stream:', error);
+
             });
       }
 
@@ -112,24 +112,24 @@ export default {
               this.publisher.replaceTrack(audioTrack);
             })
             .catch((error) => {
-              console.error('Error accessing microphone:', error);
+
             });
       }
     },
     //Video와 Audio출력을 활성/비활성합니다.
     toggleVideo(isActive) {
       if (this.publisher) {
-        console.log(!isActive);
+
         this.publisher.publishVideo(!isActive);
       } else {
-        console.error('Publisher is not initialized');
+
       }
     },
     toggleAudio(isActive) {
       if (this.publisher) {
         this.publisher.publishAudio(!isActive);
       } else {
-        console.error('Publisher is not initialized');
+
       }
     },
     startRecognition() {
@@ -146,7 +146,7 @@ export default {
         this.sendSubtitle(transcript);
       };
       this.recognition.onerror = (event) => {
-        console.error('Recognition error:', event.error);
+
       };
       this.recognition.start();
     },
@@ -164,17 +164,17 @@ export default {
       });
 
       this.stompClient.onConnect = (frame) => {
-        console.log('Connected: ' + frame);
+
         this.stompClient.subscribe(`/sub/subtitles/${this.broadcastId}`, (message) => {
           const subtitle = JSON.parse(message.body);
           this.subtitles.push(subtitle);
-          console.log('Received subtitle:', subtitle);
+
         });
       };
 
       this.stompClient.onStompError = (frame) => {
-        console.error('Broker reported error: ' + frame.headers['message']);
-        console.error('Additional details: ' + frame.body);
+
+
       };
 
       this.stompClient.activate();
@@ -190,18 +190,19 @@ export default {
           destination: `/pub/subtitles/${this.broadcastId}`,
           body: JSON.stringify(subtitle),
         });
-        console.log("자막 성공", subtitle);
+
       }
     },
 
     //세션을 생성하고 publisher 입장에서 방송을 송출합니다.
     joinSession() {
       if (this.isSessionActive) {
-        console.log("세션은 이미 활성화 상태입니다.");
+
         return;
       }
       // this.createProductClicks(this.$route.params.broadcastId);
       this.OV = new OpenVidu();
+      this.OV.enableProdMode(); // 로그 제거
       this.session = this.OV.initSession();
       this.session.on("streamCreated", ({stream}) => {
         const subscriber = this.session.subscribe(stream);
@@ -212,9 +213,6 @@ export default {
         if (index >= 0) {
           this.subscribers.splice(index, 1);
         }
-      });
-      this.session.on("exception", ({exception}) => {
-        console.warn(exception);
       });
       this.getToken(this.mySessionId).then(token => {
         this.session.connect(token, {clientData: this.myUserName})
@@ -234,24 +232,18 @@ export default {
               this.startRecognition(); // 방송 시작 시 자막 인식 시작
             })
             .catch(error => {
-              console.log("There was an error connecting to the session:", error.code, error.message);
+
             });
       });
       this.isSessionActive = true;
       this.readyToCheck = true;  // 방송을 시작할 때 true로 설정
-      console.log(this.readyToCheck);
+
       window.addEventListener("beforeunload", this.leaveSession);
     },
     //세션을 종료합니다.
     async handleStopBroadcast(elapsedTime) {
       const maxViewerCount = this.maxViewers;
       const avgViewerCount = Math.round(this.averageViewers);
-
-      console.log('Final statistics before axios request:', {
-        maxViewerCount,
-        avgViewerCount,
-        elapsedTime,
-      });
 
       await this.updateProductClicks(this.mySessionId);
       // 평균 시청자수와 최대 시청자수, 방송 진행시간을 db에 반영하는 axios 요청
@@ -268,10 +260,10 @@ export default {
     },
     leaveSession() {
       if (!this.isSessionActive) {
-        console.log("세션은 이미 종료되었습니다.");
+
         return;
       }
-      console.log("세션 끝");
+
       // --- 7) Leave the session by calling 'disconnect' method over the Session object ---
       if (this.session) this.session.disconnect();
 
@@ -307,16 +299,10 @@ export default {
       try{
         const response = axios.post(`/product-clicks/updateConversionRates/${broadcastSeq}`)
       }catch (error){
-        console.log("구매 전환률 업데이트 실패", error);
+
       }
     },
     async updateBroadcastStatistics({maxViewerCount, avgViewerCount, broadcastDuration}) {
-      console.log('Updating broadcast statistics:', {
-        maxViewerCount,
-        avgViewerCount,
-        broadcastDuration,
-        mySessionId: this.mySessionId
-      });
 
       try {
         const response = await axios.patch(`/broadcasts/statistics/${this.mySessionId}`, {
@@ -324,48 +310,44 @@ export default {
           avgViewerCount,
           broadcastDuration
         });
-        console.log('Statistics updated:', response.data);
+
       } catch (error) {
-        console.error('Error updating statistics:', error.response ? error.response.data : error.message);
+
       }
     },
     async calculateAndDeleteWatchTime(broadcastSeq) {
       try {
         const response = await axios.post(`/watch-times/calculate/${broadcastSeq}`);
-        console.log('Watch time calculated and deleted:', response.data);
+
       } catch (error) {
-        console.error('Error calculating and deleting watch time:', error.response ? error.response.data : error.message);
+
       }
     },
     async updateProductClicks(broadcastSeq){
       try{
         const response = await axios.post(`/product-clicks/broadcast/${broadcastSeq}/update-average-clicks`)
-        console.log(`성공적 클릭수 업데이트`);
+
       } catch (error){
-        console.error('클릭수 업데이트 실패', error.response ? error.response.data : error.message);
+
       }
     },
     updateStatistics({maxViewers, averageViewers}) {
-      console.log('Updating parent statistics:', {
-        maxViewers,
-        averageViewers,
-      });
       this.maxViewers = maxViewers;
       this.averageViewers = averageViewers;
     },
     // 라이브 방송 정보 불러오기
     loadLiveBroadcastInfo() {
       const broadcastId = this.$route.params.broadcastId;
-      console.log("해당 방송 id : " + broadcastId);
+
       axios.get(`/live-broadcast-info/${broadcastId}`)
           .then((response) => {
-            console.log(response.data);
+
             this.liveBroadcastInfo = response.data;
             this.loading = false;
-            console.log("broadcast info data : ", this.liveBroadcastInfo);
+
           })
           .catch(error => {
-            console.error('방송 예정 목록 load 실패 : ', error);
+
             this.loading = false;
           })
     },
@@ -373,15 +355,15 @@ export default {
     // 라이브 판매상품 불러오기
     loadLiveBroadcastProduct() {
       const broadcastId = this.$route.params.broadcastId;
-      console.log("해당 방송 id : " + broadcastId);
+
       axios.get(`/live-broadcast-product/${broadcastId}`)
           .then((response) => {
-            console.log(response.data);
+
             this.liveBoradcastProduct = response.data;
-            console.log("product info data : ", this.liveBoradcastProduct);
+
           })
           .catch(error => {
-            console.error('방송 판매 상품 load 실패 : ', error);
+
           })
     }
   },

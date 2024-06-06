@@ -13,7 +13,7 @@
           <div class="flex gap-4 ml-5 w-full">
             <div class="input-wrapper">
               <span for="startDate">시작일:</span>
-              <input type="date" id="startDate" v-model="startDate" />
+              <input type="date" id="startDate" v-model="startDate"/>
             </div>
             <div class="input-wrapper">
               <span for="endDate">종료일:</span>
@@ -95,8 +95,8 @@ export default {
     return {
       broadcastOptions: [],
       selectedBroadcastTitleOption: null,
-      startDate: "",
-      endDate: "",
+      startDate: undefined,
+      endDate: undefined,
       selectedBroadcastTitle: "",
       cardDataList: [],
       totalStats: true,
@@ -223,8 +223,9 @@ export default {
           },
         ];
       } catch (error) {
-        console.error("Error fetching statistics by vendor and date range:", error);
+
       }
+      await this.fetchBroadcastOptions();
     },
     async fetchBroadcastOptions() {
       try {
@@ -245,7 +246,7 @@ export default {
           label: broadcast.broadcastTitle,
         }));
       } catch (error) {
-        console.error("Error fetching broadcast options:", error);
+
       }
     },
     async fetchBroadcastDetails() {
@@ -312,7 +313,7 @@ export default {
 
         this.toggleResult();
       } catch (error) {
-        console.error("Error fetching broadcast details:", error);
+
       }
     },
     formatDuration(seconds) {
@@ -336,16 +337,16 @@ export default {
         this.lineChartOptions.xaxis.categories = viewerCountData.map(data => new Date(data.recordTime).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }));
         this.lineChartData[0].data = viewerCountData.map(data => data.viewerCount);
       } catch (error) {
-        console.error("Error fetching viewer count data:", error);
+
       }
     },
     async loadBroadcastProduct() {
       if (!this.selectedBroadcastTitleOption) return;
       const broadcastId = this.selectedBroadcastTitleOption;
-      console.log("해당 방송 id : " + broadcastId);
+
       try {
         const response = await axios.get(`/live-broadcast-product/${broadcastId}`);
-        console.log(response.data);
+
         this.products = response.data.map(product => {
           return {
             nm: product.productNm,
@@ -356,9 +357,9 @@ export default {
             conversionRate: product.conversionRate
           };
         });
-        console.log("product info data : ", this.products);
+
       } catch (error) {
-        console.error('판매 상품 목록 load 실패 : ', error);
+
       }
     }
   },

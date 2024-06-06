@@ -75,11 +75,11 @@ export default {
       axios
         .get(`/recently-viewed/broadcasts`)
         .then((response) => {
-          console.log("Broadcasts response:", response.data);
+
           this.broadcasts = response.data;
         })
         .catch((error) => {
-          console.error("There was an error fetching the orders:", error);
+
         });
     },
     formatDate(dateString) {

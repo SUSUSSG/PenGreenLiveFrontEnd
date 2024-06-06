@@ -62,7 +62,7 @@ onMounted(async () => {
     getBrandPayMethods();
     totalAmount.value = order.orderPayedPrice ? order.orderPayedPrice : 1;
   } catch (error) {
-    console.error('BrandPay 라이브러리 로드 실패', error);
+
   }
 });
 

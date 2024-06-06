@@ -117,26 +117,28 @@ import { useStore } from 'vuex';
 const isBroadcasting = ref(true);
 
 // 방송 종료 이벤트 구독
-const subscribeToBroadcastEnd = async (retryCount = 5, delay = 3000) => {
-  console.log("subscribeToBroadcastEnd 함수 호출됨");
+const subscribeToBroadcastEnd = async (retryCount = 5, delay = 3000, attempt = 1) => {
   const eventSource = new EventSource(`${import.meta.env.VITE_API_BASE_URL}/subscribe`);
   const broadcastId = route.params.broadcastId;
+
   eventSource.addEventListener('broadcast-end', (event) => {
-    if(event.data === broadcastId){
+    if (event.data === broadcastId) {
       isBroadcasting.value = false;
-      console.log("Broadcast end event received for broadcastId:", broadcastId);
+      eventSource.close();
     }
   });
+
   eventSource.onerror = (error) => {
+    eventSource.close();
     if (retryCount > 0) {
-          console.log(`Retrying... Attempts left: ${retryCount}`);
-          setTimeout(() => subscribeToBroadcastEnd(retryCount - 1, delay), delay);
+      const nextDelay = delay * Math.pow(2, attempt);
+      setTimeout(() => subscribeToBroadcastEnd(retryCount - 1, delay, attempt + 1), nextDelay);
     } else {
-      console.error('SSE error:', error);
-      eventSource.close();
+
     }
   };
 };
+
 
 // 라우트 및 환경변수 설정
 const route = useRoute();
@@ -193,11 +195,11 @@ let intervalId = ref(null);
 const joinSession = async () => {
 
   OV.value = new OpenVidu();
+  OV.value.enableProdMode();  // 프로덕션 모드 활성화
   session.value = OV.value.initSession();
   session.value.on("streamCreated", ({ stream }) => {
     mainStreamManager.value = session.value.subscribe(stream);
   });
-
   const token = await getToken(mySessionId.value);
   await session.value.connect(token, { clientData: myUserName });
 
@@ -205,7 +207,7 @@ const joinSession = async () => {
 
   // 시청 시작 시간 기록
   watchStartTime.value = new Date().toISOString();
-  console.log('Watch start time recorded:', watchStartTime.value);
+
 };
 
 const leaveSession = () => {
@@ -213,7 +215,7 @@ const leaveSession = () => {
 
   // 시청 종료 시간 기록
   watchEndTime.value = new Date().toISOString();
-  console.log('Watch end time recorded:', watchEndTime.value);
+
 
   sendWatchTime();
   cleanSessionProperties();
@@ -237,9 +239,9 @@ const sendWatchTime = async () => {
 
   try {
     const response = await axios.post(`/watch-times`, watchTime);
-    console.log('Watch time successfully sent:', response.data);
+
   } catch (error) {
-    console.error('Error adding watch time:', error);
+
   }
 };
 const incrementProductClicks = async (broadcastSeq, productSeq) => {
@@ -275,28 +277,28 @@ const calculateHeight = () => {
 // 방송 정보 가져오기
 const loadLiveBroadcastInfo = async () => {
   const broadcastId = route.params.broadcastId;
-  console.log("해당 방송 id : " + broadcastId);
+
   try {
     const response = await axios.get(`/live-broadcast-info/${broadcastId}`);
-    console.log(response.data);
+
     liveBroadcastInfo.value = response.data;
-    console.log("broadcast info data : ", liveBroadcastInfo.value);
+
   } catch (error) {
-    console.error('방송 예정 목록 load 실패 : ', error);
+
   }
-  console.log("여기야~~ " + liveBroadcastInfo.value.broadcast.broadcastTitle);
+
 };
 
 // 상품 정보 가져오기
 const loadBroadcastProduct = async () => {
   const broadcastId = route.params.broadcastId;
-  console.log("해당 방송 id : " + broadcastId);
+
   try {
     const response = await axios.get(`/live-broadcast-product/${broadcastId}`);
-    console.log(response.data);
+
     productList.value = response.data.map(product => {
       const labelImagesArray = product.labelImages.split(',').map(image => image.trim());
-      console.log("labelImagesArray:", labelImagesArray);
+
       return {
         productName: product.productNm,
         brand: product.brand,
@@ -307,9 +309,9 @@ const loadBroadcastProduct = async () => {
         productSeq: product.productSeq
       };
     });
-    console.log("product info data : ", productList.value);
+
   } catch (error) {
-    console.error('판새 상품 목록 load 실패 : ', error);
+
   }
 };
 
@@ -321,7 +323,7 @@ const loadLiveBroadcastDetails = async () => {
     liveBroadcastInfo.value.notices = response.data.notices;
     liveBroadcastInfo.value.faqs = response.data.faqs;
   } catch (error) {
-    console.error('방송 디테일 정보 load 실패 : ', error);
+
   }
 }
 
@@ -339,13 +341,13 @@ const saveUserBroadcastHistory = async () => {
     viewedDate: viewedDate
   }
 
-  console.log("시청정보!!!" + JSON.stringify(requestData, null, 2));
+
 
   try {
     const response = await axios.post(`/user/view-history`, requestData)
-    console.log(response.data);
+
   } catch (error) {
-    console.error("시청 기록 저장 실패: ", error);
+
   }
 }
 
@@ -372,7 +374,7 @@ const handleDiscountedPrice = (discountedPrice, product) => {
   product.discountedPrice = discountedPrice;
 };
 const incrementViewsCount = async (sessionId) => {
-  console.log("세션 id", sessionId);
+
   await axios.patch(`/broadcasts/statistics/${sessionId}/viewsCount`,
       { withCredentials: true }
   );

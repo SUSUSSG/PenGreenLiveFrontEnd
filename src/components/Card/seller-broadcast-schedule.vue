@@ -69,12 +69,12 @@ export default {
   watch: {
     liveDateTime(newVal, oldVal) {
       const serverLiveTime = new Date(newVal);
-      console.log("Updated liveDateTime: ", serverLiveTime);
+
     }
   },
   created() {
     const serverLiveTime = new Date(this.liveDateTime);
-    console.log("받아오자마자 : ", serverLiveTime);
+
   },
   methods: {
     onClickRedirect() {
