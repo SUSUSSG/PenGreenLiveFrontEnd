@@ -109,7 +109,7 @@
 }
 
 .card-number {
-    position: fixed;
+    position: absolute;
     bottom: 0;
     margin: 1rem;
 }
