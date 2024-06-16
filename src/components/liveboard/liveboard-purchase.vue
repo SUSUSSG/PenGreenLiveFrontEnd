@@ -1,6 +1,5 @@
 <template>
-  <div :class="{'active-overlay': isOpen}">
-        <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
+  <div>
         <div class="w-[100%] h-[100%] p-[1rem] flex justify-center">
             <img class="product-img" :src="product.productImg"/>
         </div>
@@ -76,7 +75,7 @@
             </TabGroup>
         </div>
 
-        <div class="sticky bottom-0 flex justify-between items-center pt-4">
+        <div class="sticky bottom-0 mb-[1.5rem]">
           <Button class="w-full order-button" text="구매하기" @click="openModal"/>
         </div>
         
@@ -88,14 +87,14 @@
 
         <div v-if="showTossPay" class="toss-modal flex justify-between modal-adjust z-50">
             <div class="scroll">
-                <TossPay  @openTossPay="close"></TossPay>
+                <TossPay @openTossPay="close"></TossPay>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { ref, computed, defineProps, onMounted } from 'vue';
+    import { ref, computed, defineProps, onMounted, defineEmits } from 'vue';
     import Button from "@/components/Button";
     import PurchaseModal from "@/components/Modal/purchase-modal.vue";
     import TossPay from "@/components/Pay/tosspayments-module.vue";
@@ -105,19 +104,26 @@
 
     const route = useRoute();
     const store = useStore();
-
+    const userState = store.getters['auth/isAuthenticated'];
     const product = computed(() => store.getters.selectedProduct || {});
     const formattedPrice = computed(() => product.value.price ? product.value.price.toLocaleString() : '');
     const formattedDiscountedPrice = computed(() => store.getters.discountedPrice ? store.getters.discountedPrice.toLocaleString() : '');
 
+    const emit = defineEmits(['openPurchaseModal']);
+
     const isOpen = ref(false);
     const openModal = () => {
+        if (!userState) {
+            alert("로그인 후 이용할 수 있습니다.");
+            return;
+        }
         isOpen.value = true;
-
+        emit('openPurchaseModal', isOpen.value);
     };
 
     const updateModal = (value) => {
         isOpen.value = value;
+        emit('openPurchaseModal', isOpen.value);
     };
 
     const showTossPay = ref(false);

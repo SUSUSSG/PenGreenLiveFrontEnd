@@ -58,9 +58,8 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref, computed, defineProps, defineEmits } from 'vue';
 import Button from "@/components/Button";
-import { ref, computed, defineProps } from 'vue';
 import { useStore } from 'vuex';
 import axios from '@/axios';
 
@@ -86,7 +85,6 @@ async function getAddress() {
 
   }
 }
-
 
 
 const close = () => {

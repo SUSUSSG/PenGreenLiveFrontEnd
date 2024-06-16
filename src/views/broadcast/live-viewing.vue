@@ -15,7 +15,7 @@
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-            <LiveBoardPurchase class="purchase-section">
+            <LiveBoardPurchase class="purchase-section" @openPurchaseModal="handlePurchaseModal">
             </LiveBoardPurchase>
           </div>
         </div>
@@ -341,8 +341,6 @@ const saveUserBroadcastHistory = async () => {
     viewedDate: viewedDate
   }
 
-
-
   try {
     const response = await axios.post(`/user/view-history`, requestData)
 
@@ -352,8 +350,13 @@ const saveUserBroadcastHistory = async () => {
 }
 
 // 모달 및 제품 선택 제어
+
+function handlePurchaseModal(value) {
+  isOpen.value = value;
+  console.log("모달 ", isOpen.value);
+}
+
 const openModal = () => {
-  isOpen.value = true;
 };
 const updateModal = (value) => {
   isOpen.value = value;
@@ -365,9 +368,6 @@ const showProductDetails = (product) => {
 };
 const closePurchaseModal = () => {
   selectedProduct.value = null;
-  // store.commit('setSelectedProduct', {});
-  // selectedProduct.value = {};
-  // isOpen.value = false;
 };
 
 const handleDiscountedPrice = (discountedPrice, product) => {
