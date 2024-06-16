@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-content w-[100%] h-[100%] bg-white">
+  <div class="purchase-modal-content w-[100%] h-[100%] bg-white">
     <div class="purchase-wrap px-[20px]">
       <div class="modal-handle-area w-full h-[2.5rem] flex justify-center items-center" @click="close">
         <span class="modal-handle mt-[1rem]">
@@ -86,7 +86,6 @@ async function getAddress() {
   }
 }
 
-
 const close = () => {
   emit('update:isOpen', false);
 };
@@ -122,7 +121,7 @@ const formattedTotalPrice = computed(() => totalPrice.value.toLocaleString());
 
 <style scoped>
 
-.modal-content {
+.purchase-modal-content {
   border-radius: 16px 16px 0 0;
 }
 
