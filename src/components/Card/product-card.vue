@@ -4,8 +4,8 @@
       <img :src="productImg" alt="상품 이미지" class="product-image" />
     </div>
     <div class="info flex items-center">
-      <a class="a_detail" name="Curation2">
-        <dl>
+      <a class="a_detail w-full" name="Curation2">
+        <dl class="w-full">
           <div v-if="brand" class="brand">{{ "[" + brand + "]" }}</div>
           <dt class="tit original-name" :data-tooltipe=productName>{{ productName }}</dt>
           <div class="price-info">
@@ -58,17 +58,23 @@ export default {
 
 <style scoped>
 .slick-slide {
+  position: relative;
   float: left;
   width: 100%;
   padding: 0 0 10px 0;
   border-bottom: 1px solid #f0f1f4;
   padding-top: 5px;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 
 .product-card .thum {
   position: relative;
   float: left;
-  width: 80px;
+  /* width: 80px; */
+  width: 30%;
   cursor: pointer;
   text-align: center;
 }
@@ -82,17 +88,14 @@ export default {
 
 .product-card .info {
   position: relative;
-  width: 190px;
-  height: 80px;
-  margin-left: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  width: 70%;
+  height: 30%;
 }
 
 .product-card .info .tit {
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -101,6 +104,7 @@ export default {
   max-height: 36px;
   color: #131518;
   font-size: 14px;
+  display: block;
 }
 
 .product-card .info .tit:hover::after {
@@ -145,17 +149,10 @@ export default {
 }
 
 .product-card .label-images {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-top: 10px;
+  position: absolute;
+  right: 0;
+  bottom: 5px;
 }
-
-.product-image {
-  margin: 10px;
-  border-radius: 5px;
-}
-
 
 .label-image {
   width: 30px;
