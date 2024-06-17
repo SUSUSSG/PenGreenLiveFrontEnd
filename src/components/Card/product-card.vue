@@ -11,9 +11,11 @@
           <div class="price-info">
             <div class="prices">
               <del class="original-price">{{ formattedOriginalPrice }}</del>
-              <p class="discount-rate">{{ discountRate }}%</p>
+              <div class="discount-price-wrap">
+                <p class="discount-rate">{{ discountRate }}%</p>
+                <strong class="discounted-price">{{ formattedDiscountedPrice }}</strong>
+              </div>
             </div>
-            <strong class="discounted-price">{{ formattedDiscountedPrice }}</strong>
           </div>
         </dl>
       </a>
@@ -166,7 +168,9 @@ export default {
   margin-bottom: 5px;
 }
 
-.discounted-price {
-  margin-left: 20px;
+.discount-price-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }
 </style>
