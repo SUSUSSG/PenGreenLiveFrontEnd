@@ -394,9 +394,18 @@ const showProductDetails = (product) => {
   incrementProductClicks(mySessionId.value, product.productSeq) // 프로덕트 seq 동적으로 바꿔야함
   selectedProduct.value = product;
 };
+
 const closePurchaseModal = () => {
   selectedProduct.value = null;
 };
+
+function handleOpenTossPay() {
+    showTossPay.value = true; 
+}
+
+function close() {
+    showTossPay.value = false; 
+}
 
 const handleDiscountedPrice = (discountedPrice, product) => {
   product.discountedPrice = discountedPrice;

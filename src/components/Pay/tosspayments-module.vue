@@ -28,7 +28,7 @@
                 <input type="radio" id="generalPay" value="GENERALPAY" v-model="selectedPaymentMethod">
                 <label class="generalpay-label" for="susussgpay">일반결제</label>
             </div>
-            <div v-show="selectedPaymentMethod === 'GENERALPAY'">
+            <div class="generalpay-wrap element" v-show="selectedPaymentMethod === 'GENERALPAY'">
                 <div class="p-grid consumer-cache-67e79o">
                     <template v-for="method in paymentMethods" :paymentMethods="paymentMethods">
                         <div class="p-grid-col p-grid-col6">
@@ -251,7 +251,7 @@
                     </div>
                 </div>
             <div class="pay-button w-full flex items-center justify-center payment-button">
-                <button @click="requestPayment" class="button w-[65%]" id="payment-button">결제하기</button>
+                <button @click="requestPayment" class="button" id="payment-button">결제하기</button>
             </div>
         </section>
         </div>
@@ -271,7 +271,6 @@ import { useStore } from 'vuex';
 const store = useStore();
 const product = computed(() => (store.getters.selectedProduct));
 const userName = computed(() => store.getters.userName);
-
 
 const emit = defineEmits(['openTossPay']);
 
@@ -444,11 +443,16 @@ function showInterestFreeInstallmentInfo() {
   window.open(url, "_blank", windowFeatures);
 }
 
-
 </script>
 
 
 <style scoped>
+
+.element::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+
 .consumer-cache-1cchlll {
     height: 100%;
     align-items: flex-start;
@@ -518,7 +522,7 @@ function showInterestFreeInstallmentInfo() {
 }
 
 .consumer-cache-pypvcf {
-    margin: -10px;
+    margin-top: -10px;
     padding: 0px;
 }
 
@@ -946,10 +950,11 @@ button, input, optgroup, select, textarea {
     color: #191f28;
 }
 
-.font-size--15, .typography-t6 {
-    font-size: 15px;
-    line-height: 1.5;
+.typography-t6 {
+    font-size: 14px;
+    line-height: 1.3;
 }
+
 .adaptive-grey700-text {
     color: #4e5968;
 }

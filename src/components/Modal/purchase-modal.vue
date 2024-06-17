@@ -131,15 +131,6 @@ const formattedTotalPrice = computed(() => totalPrice.value.toLocaleString());
   height: 6px;
   background-color: #fff;  
   border-radius: 3px;
-
-  /* display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  width: 100%;
-  height: 30px;
-  
-  border-radius: 18px 18px 0 0; */
 }
 
 /* 구매 정보 */

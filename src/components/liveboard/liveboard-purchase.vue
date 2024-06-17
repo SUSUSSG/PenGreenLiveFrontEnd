@@ -96,21 +96,6 @@
         isOpen: Boolean,
     });
 
-    const updateModal = () => {
-        emit('openPurchaseModal', false);
-    };
-
-    const showTossPay = ref(false);
-
-    function handleOpenTossPay() {
-        showTossPay.value = true; 
-    }
-
-    function close() {
-        showTossPay.value = false; 
-    }
-
-    const quantity = ref(1);
     const reviews = ref([]);
     const reviewSummary = ref("");
 
@@ -155,7 +140,6 @@
 
     onMounted(() => {
         if (!product.value || !product.value.price) {
-
             return;
         }
 
