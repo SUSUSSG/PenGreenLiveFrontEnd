@@ -271,6 +271,7 @@ import { useStore } from 'vuex';
 const store = useStore();
 const product = computed(() => (store.getters.selectedProduct));
 const userName = computed(() => store.getters.userName);
+const route = useRoute();
 
 const emit = defineEmits(['openTossPay']);
 
@@ -355,9 +356,18 @@ function selectCardCompany(cardCompany) {
   
 const tossPayments = ref(null);
 
+async function holdStock() {
+    const order = computed(() => store.getters.orderForm).value;
+    const response = await axios.patch(`/order/product/${order.productSeq}/stock`, {
+        quantity: order.orderQty,
+        broadcastSeq: route.params.broadcastId,
+    });
+}
+
 onMounted(async() => {
     loadTossPaymentsSDK().then(() => {
         tossPayments.value = TossPayments(clientKey);
+        holdStock();
     });
 });
 
