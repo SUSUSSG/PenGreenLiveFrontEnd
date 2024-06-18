@@ -61,7 +61,10 @@
 import { onMounted, ref, computed, defineProps, defineEmits } from 'vue';
 import Button from "@/components/Button";
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import axios from '@/axios';
+
+const route = useRoute();
 
 onMounted(() => {
     getAddress();
@@ -90,11 +93,26 @@ const close = () => {
   emit('update:isOpen', false);
 };
 
-function triggerTossPay() {
-  store.commit('updateQuantity', quantity.value);
-  store.commit('updateTotalAmount', totalPrice.value);
+async function triggerTossPay() {
+  try {
+    const response = await axios.get(`/order/product/${product.value.productSeq}/stock`, {
+      params: {
+        broadcastSeq: route.params.broadcastId,
+        quantity: quantity.value
+      }
+    });
 
-  emit('openTossPay'); 
+    if (response.data) {
+      store.commit('updateQuantity', quantity.value);
+      store.commit('updateTotalAmount', totalPrice.value);
+      emit('openTossPay'); 
+    } else {
+      alert("재고가 부족합니다.");
+      return
+    }
+  } catch(error) {
+    alert("server error");
+  }
 }
 
 const props = defineProps({
