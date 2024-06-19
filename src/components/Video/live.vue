@@ -166,14 +166,9 @@ export default {
     },
     async fetchLikes() {
       try {
-        const response = await axios.get(`/broadcasts/statistics/${this.broadcastId}`, {
-          params:{
-            'USER_UUID': '95224537-18d7-11ef-8fe3-f220affc9a21'
-          }
-        });
+        const response = await axios.get(`/broadcasts/statistics/${this.broadcastId}`);
         return response.data;
       } catch (error) {
-
         throw error;
       }
     },
@@ -181,8 +176,6 @@ export default {
       try {
         const response = await axios.get(`/broadcasts/statistics/${this.$route.params.broadcastId}/likes/check`);
         this.isLiked = response.data;
-
-
       } catch (error) {
 
       }

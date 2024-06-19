@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-content w-[100%] h-[100%] bg-white">
+  <div class="purchase-modal-content w-[100%] h-[100%] bg-white">
     <div class="purchase-wrap px-[20px]">
       <div class="modal-handle-area w-full h-[2.5rem] flex justify-center items-center" @click="close">
         <span class="modal-handle mt-[1rem]">
@@ -58,11 +58,13 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, ref, computed, defineProps, defineEmits } from 'vue';
 import Button from "@/components/Button";
-import { ref, computed, defineProps } from 'vue';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 import axios from '@/axios';
+
+const route = useRoute();
 
 onMounted(() => {
     getAddress();
@@ -87,17 +89,30 @@ async function getAddress() {
   }
 }
 
-
-
 const close = () => {
   emit('update:isOpen', false);
 };
 
-function triggerTossPay() {
-  store.commit('updateQuantity', quantity.value);
-  store.commit('updateTotalAmount', totalPrice.value);
+async function triggerTossPay() {
+  try {
+    const response = await axios.get(`/order/product/${product.value.productSeq}/stock`, {
+      params: {
+        broadcastSeq: route.params.broadcastId,
+        quantity: quantity.value
+      }
+    });
 
-  emit('openTossPay'); 
+    if (response.data) {
+      store.commit('updateQuantity', quantity.value);
+      store.commit('updateTotalAmount', totalPrice.value);
+      emit('openTossPay'); 
+    } else {
+      alert("재고가 부족합니다.");
+      return
+    }
+  } catch(error) {
+    alert("server error");
+  }
 }
 
 const props = defineProps({
@@ -124,7 +139,7 @@ const formattedTotalPrice = computed(() => totalPrice.value.toLocaleString());
 
 <style scoped>
 
-.modal-content {
+.purchase-modal-content {
   border-radius: 16px 16px 0 0;
 }
 
@@ -134,15 +149,6 @@ const formattedTotalPrice = computed(() => totalPrice.value.toLocaleString());
   height: 6px;
   background-color: #fff;  
   border-radius: 3px;
-
-  /* display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  width: 100%;
-  height: 30px;
-  
-  border-radius: 18px 18px 0 0; */
 }
 
 /* 구매 정보 */

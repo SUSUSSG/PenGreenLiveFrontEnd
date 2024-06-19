@@ -6,7 +6,7 @@
     <Live class="live-section-broad" show-icon-side-bar="true" show-title-bar="true" :stream-manager="mainStreamManager"
       :broadcast-image="broadcastImage" />
 
-    <div class="live-section relative" :class="{ 'active-overlay': isOpen }">
+    <div class="live-section-purchase" :class="{ 'active-overlay': isOpen }">
       <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
       <div v-if="selectedProduct">
         <header class="flex justify-between pb-4">
@@ -15,9 +15,24 @@
         </header>
         <div class="scroll-wrapper overflow-auto">
           <div class="purchase-container flex flex-col justify-end">
-            <LiveBoardPurchase class="purchase-section">
+            <LiveBoardPurchase class="purchase-section" @openPurchaseModal="handlePurchaseModal" :isOpen="isOpen">
             </LiveBoardPurchase>
           </div>
+        </div>
+        <div class="pt-4">
+          <Button class="w-full order-button" text="구매하기" @click="openModal"/>
+        </div>
+      </div>
+      
+      <div class="modal z-30" v-show="isOpen">
+        <PurchaseModal 
+          @update:isOpen="updateModal"     
+          @openTossPay="handleOpenTossPay"/>
+      </div>
+
+      <div v-if="showTossPay" class="toss-modal flex justify-between modal-adjust z-50">
+        <div class="scroll">
+            <TossPay @openTossPay="close"></TossPay>
         </div>
       </div>
 
@@ -91,6 +106,7 @@
         </main>
       </div>
     </div>
+
     <div v-if="!isBroadcasting" class="modal-overlay">
       <div class="modal-content">
         <p>방송이 종료되었습니다.</p>
@@ -112,6 +128,9 @@ import ProductCard from "@/components/Card/product-card.vue";
 import Button from "@/components/Button";
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useStore } from 'vuex';
+import PurchaseModal from "@/components/Modal/purchase-modal.vue";
+import TossPay from "@/components/Pay/tosspayments-module.vue";
+
 
 // 방송 종료 여부
 const isBroadcasting = ref(true);
@@ -341,8 +360,6 @@ const saveUserBroadcastHistory = async () => {
     viewedDate: viewedDate
   }
 
-
-
   try {
     const response = await axios.post(`/user/view-history`, requestData)
 
@@ -352,23 +369,43 @@ const saveUserBroadcastHistory = async () => {
 }
 
 // 모달 및 제품 선택 제어
-const openModal = () => {
-  isOpen.value = true;
+const userState = store.getters['auth/isAuthenticated'];
+const showTossPay = ref(false);
+
+function handlePurchaseModal(value) {
+  isOpen.value = value;
+  console.log("모달 ", isOpen.value);
+}
+
+const openModal = (value) => {
+  if (!userState) {
+      alert("로그인 후 이용할 수 있습니다.");
+      return;
+  }
+  isOpen.value = value;
 };
+
 const updateModal = (value) => {
   isOpen.value = value;
 };
+
 const showProductDetails = (product) => {
   store.commit('setSelectedProduct', product);
   incrementProductClicks(mySessionId.value, product.productSeq) // 프로덕트 seq 동적으로 바꿔야함
   selectedProduct.value = product;
 };
+
 const closePurchaseModal = () => {
   selectedProduct.value = null;
-  // store.commit('setSelectedProduct', {});
-  // selectedProduct.value = {};
-  // isOpen.value = false;
 };
+
+function handleOpenTossPay() {
+    showTossPay.value = true; 
+}
+
+function close() {
+    showTossPay.value = false; 
+}
 
 const handleDiscountedPrice = (discountedPrice, product) => {
   product.discountedPrice = discountedPrice;
@@ -451,6 +488,17 @@ watch(boxHeight, calculateHeight);
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
 }
 
+.live-section-purchase {
+  position: relative;
+  width:100%;
+  flex: 1;
+  min-width: 0;
+  padding: 20px;
+  margin: 10px;
+  background-color: #fff;
+  overflow: hidden;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+}
 
 .contents-wrap {
   height: 100%;
@@ -503,12 +551,11 @@ watch(boxHeight, calculateHeight);
 /* 구매 영역 */
 .scroll-wrapper {
   overflow-y: auto;
-  height: 75vh;
+  height: 63vh;
 }
 
-
 .purchase-section img {
-  max-height: 70vh;
+  max-height: 63vh;
   width: auto;
   display: block;
   margin: 0 auto;
@@ -535,6 +582,28 @@ watch(boxHeight, calculateHeight);
   text-align: center;
   font-size: 20px;
   color: red;
+}
+
+.modal {
+    position: absolute;
+    bottom: 0;
+    left:0;
+    right:0;
+}
+
+.toss-modal {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex; 
+    flex-direction: column;
+    max-height: 100%; 
+    overflow-y: auto;
+    background: white;
+    overflow-x: hidden;
+    width: 100%
 }
 
 /* 구매 영역 끝 */

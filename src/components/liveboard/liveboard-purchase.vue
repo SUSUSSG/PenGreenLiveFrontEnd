@@ -1,6 +1,5 @@
 <template>
-  <div :class="{'active-overlay': isOpen}">
-        <div class="overlay" v-show="isOpen" :style="{ zIndex: isOpen ? 20 : -1 }"></div>
+  <div class="scroll-auto">
         <div class="w-[100%] h-[100%] p-[1rem] flex justify-center">
             <img class="product-img" :src="product.productImg"/>
         </div>
@@ -26,7 +25,7 @@
                         :class="[
                             selected ? 'text-primary-500 before:w-full' : 'text-slate-500 before:w-0 dark:text-slate-300',
                         ]"
-                        class="flex-1 text-sm font-medium mb-7 capitalize dark:bg-slate-800 ring-0 focus:ring-0 focus:outline-none px-2 transition duration-150 before:transition-all before:duration-150 relative before:absolute before:left-1/2 before:bottom-[-6px] before:h-[1.5px] before:bg-primary-500 before:-translate-x-1/2"
+                        class="flex-1 text-sm font-medium mb-7 capitalize dark:bg-slate-800 ring-0 focus:ring-0 focus:outline-none px-2 transition duration-150 before:transition-all before:duration-150 before:absolute before:left-1/2 before:bottom-[-6px] before:h-[1.5px] before:bg-primary-500 before:-translate-x-1/2"
                         >
                         {{ item.title }}
                         </button>
@@ -76,61 +75,27 @@
             </TabGroup>
         </div>
 
-        <div class="sticky bottom-0 flex justify-between items-center pt-4">
-          <Button class="w-full order-button" text="구매하기" @click="openModal"/>
-        </div>
-        
-        <div class="modal flex justify-between items-center modal-adjust z-30" v-show="isOpen">
-          <PurchaseModal 
-            @update:isOpen="updateModal"     
-            @openTossPay="handleOpenTossPay"/>
-        </div>
-
-        <div v-if="showTossPay" class="toss-modal flex justify-between modal-adjust z-50">
-            <div class="scroll">
-                <TossPay  @openTossPay="close"></TossPay>
-            </div>
-        </div>
     </div>
 </template>
 
 <script setup>
-    import { ref, computed, defineProps, onMounted } from 'vue';
-    import Button from "@/components/Button";
-    import PurchaseModal from "@/components/Modal/purchase-modal.vue";
-    import TossPay from "@/components/Pay/tosspayments-module.vue";
+    import { ref, computed, defineProps, onMounted, defineEmits } from 'vue';
     import "@/components/Pay/style.css";
     import {useRoute, useRouter} from 'vue-router';
     import { useStore } from 'vuex';
 
     const route = useRoute();
     const store = useStore();
-
+    const userState = store.getters['auth/isAuthenticated'];
     const product = computed(() => store.getters.selectedProduct || {});
     const formattedPrice = computed(() => product.value.price ? product.value.price.toLocaleString() : '');
     const formattedDiscountedPrice = computed(() => store.getters.discountedPrice ? store.getters.discountedPrice.toLocaleString() : '');
 
-    const isOpen = ref(false);
-    const openModal = () => {
-        isOpen.value = true;
+    const emit = defineEmits(['openPurchaseModal']);
+    const props = defineProps({
+        isOpen: Boolean,
+    });
 
-    };
-
-    const updateModal = (value) => {
-        isOpen.value = value;
-    };
-
-    const showTossPay = ref(false);
-
-    function handleOpenTossPay() {
-        showTossPay.value = true; 
-    }
-
-    function close() {
-        showTossPay.value = false; 
-    }
-
-    const quantity = ref(1);
     const reviews = ref([]);
     const reviewSummary = ref("");
 
@@ -175,7 +140,6 @@
 
     onMounted(() => {
         if (!product.value || !product.value.price) {
-
             return;
         }
 
@@ -250,31 +214,7 @@
     font-weight: 700;
 }
 
-.modal {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex; 
-    flex-direction: column;
-    max-height: 100%; 
-    overflow-y: auto; 
-}
 
-.toss-modal {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex; 
-    flex-direction: column;
-    max-height: 100%; 
-    overflow-y: auto;
-    background: white;
-    overflow-x: hidden;
-    width: 100%
-}
 
 .overlay {
   min-width: 0;
@@ -285,13 +225,12 @@
   left: 0;
   right: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  /* display: none; */
 }
 
-.live-section.active-overlay {
-  position: relative;
-  z-index: 2; /* 오버레이가 필요할 때만 적용 */
+.scroll-auto{
+  overflow-y : auto;
 }
+
 .scroll {
     flex-grow: 1;
     overflow-y: auto;
