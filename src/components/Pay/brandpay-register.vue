@@ -13,11 +13,11 @@
             :key="index" 
             :class="{'brandpay-37ztg0': true, 'selected': selectedIndex === index}"
             @click="selectCard(index)">
-            <PaymentMethodItem :cardItem="item" :index="index" />
+              <PaymentMethodItem :cardItem="item" :index="index" />
           </li>
           <li class="w-[100%]">
             <div>
-              <button type="button" class="btn-register" onclick="HpointPayUtils.methodReg();">은행계좌 / 신용카드 등록</button>
+              <button type="button" class="btn-register" @click="addMethod">은행계좌 / 신용카드 등록</button>
             </div>
           </li>
         </ul>
@@ -100,6 +100,20 @@ async function getBrandPayMethods() {
   } catch (error) {
     console.error('BrandPay 메서드를 가져오는 중 오류 발생:', error);
   }
+}
+
+// 결제 수단 등록
+function addMethod() {
+  brandpay.value
+    .addPaymentMethod();
+    // .then(function (methods) {
+    //   // 성공 처리
+    // })
+    // .catch(function (error) {
+    //   if (error.code === "USER_CANCEL") {
+    //     // 사용자가 결제창을 닫은 경우 처리
+    //   }
+    // });
 }
 
 
