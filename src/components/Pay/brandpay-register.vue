@@ -12,9 +12,13 @@
             v-for="(item, index) in cards" 
             :key="index" 
             :class="{'brandpay-37ztg0': true, 'selected': selectedIndex === index}"
-            @click="selectCard(index)"
-          >
+            @click="selectCard(index)">
             <PaymentMethodItem :cardItem="item" :index="index" />
+          </li>
+          <li class="w-[100%]">
+            <div>
+              <button type="button" class="btn-register" onclick="HpointPayUtils.methodReg();">은행계좌 / 신용카드 등록</button>
+            </div>
           </li>
         </ul>
       </div>
@@ -33,10 +37,11 @@ import axios from "@/axios";
 import { nanoid } from "nanoid"; 
 import { useStore } from 'vuex';
 import PaymentMethodItem from "@/components/Pay/payment-method-item";
+import brandPayTerms from "@/components/Pay/brandpay-terms.vue"; 
 
 const store = useStore();
 const clientKey = "test_ck_vZnjEJeQVxangqX9pAnMrPmOoBN0";
-const customerKey = computed(() => store.getters['auth/userUUID']);
+const customerKey = computed(() => store.getters['auth/userUUID']).value;
 const cards = ref([]);
 
 let brandpay = ref(null);
@@ -55,7 +60,10 @@ onMounted(async () => {
   try {
     await loadTossPaymentsSDK();
 
-    brandpay.value = window.BrandPay(clientKey, customerKey.value, {
+    const tosspayments = window.TossPayments(clientKey);
+
+    brandpay.value = tosspayments.brandpay({
+      customerKey,
       redirectUrl: `${import.meta.env.VITE_API_BASE_URL}/brandpay/callback-auth`,
     });
     
@@ -69,7 +77,7 @@ onMounted(async () => {
 function loadTossPaymentsSDK() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = 'https://js.tosspayments.com/v1/brandpay';
+    script.src = 'https://js.tosspayments.com/v2/standard';
     script.onload = resolve;
     script.onerror = reject;
     document.head.appendChild(script);
@@ -77,32 +85,41 @@ function loadTossPaymentsSDK() {
 }
 
 async function getBrandPayMethods() {
-    try {
-      const result = await brandpay.value.getPaymentMethods();
-      const cardsData = result.cards; 
-      if (cardsData && cardsData.length > 0) {
-        cards.value = cardsData;
-      } else {
-        console.error('카드 정보가 없습니다.');
-      }
-    } catch (error) {
-      console.error('BrandPay 메서드를 가져오는 중 오류 발생:', error);
+
+  try {
+    const response = await axios.get('/brandpay/payments/methods');
+    const data = response.data;
+    console.log(data);
+
+    const cardsData = data.cards;
+    if (cardsData && cardsData.length > 0) {
+      cards.value = cardsData;
+    } else {
+      console.error('카드 정보가 없습니다.');
     }
+  } catch (error) {
+    console.error('BrandPay 메서드를 가져오는 중 오류 발생:', error);
   }
+}
 
 
 // 결제 하기
 async function handleSubmit() {
     const orderId=  computed(()=> (store.getters.orderForm.orderId)).value;
-    const widgetPaymentParams = {"amount": totalAmount.value, "methodId": cards.value[selectedIndex.value].id, "useCardPoint": false};
     localStorage.setItem(orderId, JSON.stringify(order));
 
     await brandpay.value.requestPayment({
+        amount: {
+          currency: 'KRW',
+          value: totalAmount.value,
+        },
+        methodId: cards.value[selectedIndex.value].id, 
+        useCardPoint: false,
+
         orderId: orderId,
         orderName: product.productName,
         successUrl: window.location.origin + '/brandpay/success',
         failUrl: window.location.origin + '/brandpay/fail',
-        ...widgetPaymentParams,
     });
     emit('paymentRequested');
 }
@@ -203,5 +220,35 @@ defineExpose({
     max-width: 814px;
     margin: 0px auto;
     overflow: hidden;
+}
+
+
+.btn-register {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 170px;
+    background: #fff;
+    border-radius: 15px;
+    border: 2px dashed #ddd;
+}
+
+.btn-register::before {
+    display: block;
+    content: '';
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    border-radius: 16px;
+    background: url('@/assets/images/icon/add.png') 50% no-repeat;
+    background-size: contain;
+    margin-bottom: 10px;
+}
+
+.brandpay-wxffyt {
+  width: 100%;
+  height: 100%;
 }
 </style>
