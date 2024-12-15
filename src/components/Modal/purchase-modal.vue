@@ -95,11 +95,10 @@ const close = () => {
 
 async function triggerTossPay() {
   try {
-    const response = await axios.get(`/order/product/${product.value.productSeq}/stock`, {
-      params: {
-        broadcastSeq: route.params.broadcastId,
-        quantity: quantity.value
-      }
+
+    const response = await axios.patch(`/order/product/${product.value.productSeq}/stock`, {
+      broadcastSeq: +route.params.broadcastId,
+      quantity: quantity.value
     });
 
     if (response.data) {
@@ -110,10 +109,11 @@ async function triggerTossPay() {
       alert("재고가 부족합니다.");
       return
     }
-  } catch(error) {
+  } catch (error) {
     alert("server error");
   }
 }
+
 
 const props = defineProps({
   isOpen: Boolean,
