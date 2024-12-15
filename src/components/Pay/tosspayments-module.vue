@@ -364,9 +364,15 @@ async function holdStock() {
     });
 }
 
+const customerKey = computed(() => store.getters['auth/userUUID']).value;
+
+
 onMounted(async() => {
     loadTossPaymentsSDK().then(() => {
-        tossPayments.value = TossPayments(clientKey);
+        const tossPayments_ = TossPayments(clientKey);
+        tossPayments.value = tossPayments_.payment({
+            customerKey,
+        });
         holdStock();
     });
 });
@@ -374,7 +380,7 @@ onMounted(async() => {
 function loadTossPaymentsSDK() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = 'https://js.tosspayments.com/v1/payment';
+    script.src = 'https://js.tosspayments.com/v2/standard';
     script.onload = resolve;
     script.onerror = reject;
     document.head.appendChild(script);
@@ -398,7 +404,6 @@ const brandPayComponent = ref(null);
 
 // 결제 요청 
 async function requestPayment() {
-
     if (!checked.value) {
         alert('결제 약관에 동의하세요');
         return;
@@ -408,43 +413,48 @@ async function requestPayment() {
     const orderId = generateOrderId();
     await store.dispatch('setOrderId', orderId);
 
-    if (brandPayComponent.value && selectedPaymentMethod.value==="SUSUSSGPAY") {
+    if (brandPayComponent.value && selectedPaymentMethod.value === "SUSUSSGPAY") {
         postPaymentInfo(orderId, totalAmount);
         await brandPayComponent.value.handleSubmit();
-    }
-    else {
+    } else {
         postPaymentInfo(orderId, totalAmount);
         const order = computed(() => store.getters.orderForm).value;
         localStorage.setItem(orderId, JSON.stringify(order));
 
         try {
             const defaultRequestPaymentData = ref({
-                amount: totalAmount,
                 orderId: orderId,
                 orderName: product.value.productName,
-                customerName: userName.value,
                 successUrl: window.location.origin + '/success',
                 failUrl: window.location.origin + '/fail',
-                flowMode: selectedPayment.value.flowMode,
-            })
-
-            if (selectedPayment.value.method === '간편결제') {
-            defaultRequestPaymentData.value.easyPay = selectedPayment.value.easyPay;
-            }
-
-            else if (selectedPayment.value.method === '카드') {
-            defaultRequestPaymentData.value.cardCompany = selectedCardCompany.value;
-            }
-
-            await tossPayments.value.requestPayment('카드', {
-                ...defaultRequestPaymentData.value,
+                customerName: userName.value,
             });
 
-        } catch (error) {
+            const card = {
+                flowMode: selectedPayment.value.flowMode,
+                ...(selectedPayment.value.method === '간편결제' && {
+                    easyPay: selectedPayment.value.easyPay,
+                }),
+                ...(selectedPayment.value.method === '카드' && {
+                    cardCompany: selectedCardCompany.value,
+                }),
+            };
 
+            await tossPayments.value.requestPayment({
+                method: "CARD",
+                amount: {
+                    currency: "KRW",
+                    value: totalAmount,
+                },
+                ...defaultRequestPaymentData.value,
+                card,
+            });
+        } catch (error) {
+            console.error('결제 요청 중 오류 발생:', error);
         }
     }
 }
+
 
 
 function showInterestFreeInstallmentInfo() {
